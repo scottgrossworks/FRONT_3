@@ -1,0 +1,133 @@
+ /* GLOBAL VARIABLES */
+ :root {
+
+    --CENTER-WIDTH: 46vw;
+
+    --LEEDZ_BKG: white;
+    --LEEDZ_GRAY:rgb(239, 242, 247);
+    --LEEDZ_DARKGRAY: rgb(181, 181, 185);
+    --LEEDZ_LIGHTGREEN:rgb(215, 240, 230);
+    --LEEDZ_GREEN: rgb(97, 234, 178);
+    --LEEDZ_DARKGREEN: #04AA6D;
+ 
+
+    --FONT_1: "Ebrima";
+    --FONT_2: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --FONT_3: "Lato", sans-serif;
+    
+ }
+
+ @font-face { 
+    font-family: "Ebrima";
+    src: url("../fonts/ebrima.ttf");
+  }
+  .ebrima_font { font-family: "Ebrima"; }
+  
+  @font-face { 
+    font-family: "Ebrima_bold";
+    src: url("../fonts/ebrima-bold.ttf");
+  }
+  .ebrima_bold { 
+    font-family: "Ebrima_bold";
+    line-height: 1.5em;
+   }
+  
+  
+ 
+
+      
+   html {
+      
+    font-size: 14px;
+    line-height: 1.2;
+    font-family: var(--FONT_3);
+    color: black;
+    } 
+
+
+
+
+   * {
+    padding: 0;
+    margin: 0;
+
+    }
+
+
+   body {
+    background-color: white;
+  
+  }
+
+
+
+  .column  {
+   flex-basis: 100%;
+  }
+
+
+
+
+.row {
+  
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    border:0;
+
+    width:100%;
+    justify-content: space-around;
+
+}
+
+
+  ._1 {
+  flex: 1;
+  }
+
+
+  ._15 {
+  flex: 1.5;
+  }  
+
+
+  ._2 {
+  flex: 2;
+  }
+
+  ._25 {
+  flex: 2.5;
+  }
+
+  ._3 {
+    flex: 3;
+    }
+
+  ._35 {
+  flex: 3.5;
+  }
+
+  ._4 {
+  flex: 4;
+  }
+
+  ._45 {
+  flex: 4.5;
+  }
+
+  ._5 {
+  flex: 5;
+  }
+
+  ._6 {
+    flex: 6;
+  }
+    
+  ._7 {
+    flex: 7;
+  }
+
+  ._8 {
+    flex: 8;
+  }

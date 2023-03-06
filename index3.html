@@ -1,0 +1,397 @@
+<!-- 
+    --
+    --
+    -->
+   
+   <!DOCTYPE html>
+   <html lang="en">
+   
+   <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <title>INDEX 3</title>
+    
+        
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="/img/favicon.png"> 
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+
+
+        <link rel="stylesheet" href="css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="css/styles_sm.css" type="text/css" />
+        <link rel="stylesheet" href="css/styles_med.css" type="text/css" />
+        <link rel="stylesheet" href="css/styles_lg.css" type="text/css" />
+
+        <link rel="stylesheet" href="css/trades.css" type="text/css" />
+        <link rel="stylesheet" href="css/calendar.css" type="text/css" />
+        <link rel="stylesheet" href="css/month_chooser.css" type="text/css" />
+        <link rel="stylesheet" href="css/distance_chooser.css" type="text/css" />
+        <link rel="stylesheet" href="css/action_panel.css" type="text/css" />
+
+
+        <script src="./js/trades.js" type="module" defer></script>
+        <script src="./js/calendar.js" type="module" defer></script>
+        <script src="./js/months.js" type="module" defer></script>
+
+  </head>  
+   
+  <body>
+   
+    <div class="row">       
+      
+      
+      <!-- LEFT COLUMN
+        -- TRADES PANEL 
+        -->
+      <div id="trades_column" class="column _2">
+        
+
+        
+        
+        <!-- all of the trades code -->
+        <div id="side_panel" class="trades_side">
+
+    
+
+            <!-- CLOSE BUTTON -->
+            <a href="javascript:void(0)"  id="close_side_btn" class="closebtn" onclick="closeNav()">&#8678;</a>
+
+          <BR>
+
+                    <!-- distance radius chooser -->
+        <div id="distance_chooser">
+          <span id="distance_label">DISTANCE CHOOSER</span>
+
+        </div>
+
+
+
+          <BR>
+
+           <div class="trades" >
+             <ul id="trades_list">
+          
+          
+               <template id="template_each_trade">
+                 <li class="each_trade">
+                   <input type="checkbox" class="trade_checkbox" />
+                   <button class="trade_radio"></button>
+                   <label></label><sup></sup>
+                 </li>
+               </template>          
+   
+             </ul>
+           </div>
+   
+           <BR>
+
+
+
+
+          </div>  
+        
+        <!-- OPEN SIDEBAR BUTTON -->
+        <button id="open_side_btn" class="openbtn" onclick="openNav()">&#9776;</button>
+      </div>
+
+
+       
+      <!-- CENTER COLUMN  -->      
+      <div id="calendar_main" class="column _5" >
+
+           <!-- MONTH CHOOSER --> 
+        <div id="months" class="row month_chooser">
+          
+          <div class="column _1" id="month-left"></div>
+          <div class="column _7"><span id="month_label"></span></div>
+          <div class="column _1" id="month-right"></div>
+
+        </div>
+    
+        <!-- CALENDAR PANEL -->
+        <div id="calendar_panel" class="row trades_calendar">
+            <ul id="calendar_list">
+
+              <template id="template_each_day">
+                <li class="each_day">
+                
+                <div class="dateSquare"><span></span></div>                
+                </li>
+              </template>          
+            
+            </ul>
+
+
+          <div class="leed_thumbnail"></div>
+        </div>
+        
+      </div>
+        
+
+
+
+      <!-- RIGHT COLUMN
+        -- ACTION PANEL 
+        -->
+      <div id="action_panel" class="column _3">
+
+
+        <div class="leed_info_container">
+          <div class="row lic_row" id="leed_title">
+            <div class="column lic_column" id="leed_trade"></div>
+            <div class="column lic_column" id="leed_date"></div>
+          </div>
+
+
+          <div class="row lic_row" id="zip_code">
+            <div class="column lic_column" id="zip_code_label">Zip Code</div>
+            <div class="column lic_column" id="zip_code_value">90034</div>
+          </div>
+
+          <div class="row lic_row" id="start-end">
+            <div class="column lic_column" id="start-end_label">Start-End</div>
+            <div class="column lic_column" id="start-end_value">4PM - 6PM</div>
+          </div>
+
+          
+          <div class="row lic_row" id="event_info">
+            <div class="column lic_column" id="event_info_label">Event Info</div>
+            <div class="column lic_column" id="event_info_value">30th Birthday Party</div>
+          </div>
+
+        </div>
+
+        <BR>
+
+        <div class="row">
+          <button class="button buy_button">Buy<img id="shopping_cart" src="img/shopping-cart.png"></button>
+        </div>
+
+      </div>
+      
+    </div>
+
+  </body>
+   
+     <script>
+
+
+        /* Set the width of the sidebar to 250px (show it) */
+        function openNav() {
+            document.getElementById("side_panel").style.width = "max-content";
+        }
+
+        /* Set the width of the sidebar to 0 (hide it) */
+        function closeNav() {
+            document.getElementById("side_panel").style.width = "0";
+        }
+
+
+     </script>
+  
+  
+     <script type="module" charset=”utf-8″>
+   
+     import { initTradesColumn } from "./js/trades.js";   
+     import { initCalendarPanel } from "./js/calendar.js";
+     import { initMonthChooser } from "./js/months.js";
+   
+     const trades = [
+     
+     
+     
+     {
+       trade_name: "caricatures",
+       total_leedz: 5,
+       user_subscribed: true,
+     },
+   
+   
+     
+     {
+       trade_name: "dancer",
+       total_leedz: 3,
+       user_subscribed: true,
+     },
+   
+   
+     
+     {
+       trade_name: "deejay",
+       total_leedz: 15,
+       user_subscribed: true,
+     },
+   
+   
+   
+     
+     {
+       trade_name: "eeeeeee",
+       total_leedz: 3,
+       user_subscribed: true,
+     },
+   
+   
+   
+     {
+       trade_name: "firebreather",
+       total_leedz: 12,
+       user_subscribed: true,
+     },
+   
+   
+   
+   
+     
+     {
+       trade_name: "flame thrower",
+       total_leedz: 32,
+       user_subscribed: false,
+     },
+   
+   
+   
+   
+   
+     {
+       trade_name: "ggggggg",
+       total_leedz: 32,
+       user_subscribed: false,
+     },
+   
+   
+   
+     
+     {
+       trade_name: "hhhhhhhhh",
+       total_leedz: 2,
+       user_subscribed: false,
+     },
+   
+   
+     {
+       trade_name: "mmmmmm",
+       total_leedz: 5,
+       user_subscribed: false,
+     },
+   
+   
+   
+     
+     {
+       trade_name: "oooooooooooo",
+       total_leedz: 5,
+       user_subscribed: false,
+     },
+   
+   
+   
+   
+     {
+       trade_name: "something else",
+       total_leedz: 7,
+       user_subscribed: false
+     },
+   
+   
+   
+     {
+       trade_name: "xxxxx",
+       total_leedz: 3,
+       user_subscribed: false,
+     },
+   
+     {
+       trade_name: "yyyyyyyy",
+       total_leedz: 3,
+       user_subscribed: false,
+     },
+   
+     
+     {
+       trade_name: "zzzzzzzzz",
+       total_leedz: 3,
+       user_subscribed: false,
+     },
+   
+     
+     {
+       trade_name: "taco table",
+       total_leedz: 5,
+       user_subscribed: false,
+     },
+   
+   
+     {
+       trade_name: "taco123123 table",
+       total_leedz: 5,
+       user_subscribed: false,
+     },
+   
+   
+     {
+       trade_name: "xx123123xxx",
+       total_leedz: 3,
+       user_subscribed: false,
+     },
+   
+     {
+       trade_name: "yyy123yyyyy",
+       total_leedz: 3,
+       user_subscribed: false,
+     },
+   
+     
+     {
+       trade_name: "zzzz123zzzzz",
+       total_leedz: 3,
+       user_subscribed: false,
+     },
+   
+   
+     
+     {
+       trade_name: "to23 678tab",
+       total_leedz: 5,
+       user_subscribed: false,
+     },
+   
+   
+     {
+       trade_name: "xx12312 3678xxx",
+       total_leedz: 3,
+       user_subscribed: false,
+     },
+   
+     {
+       trade_name: "yyy123y 678yyyy",
+       total_leedz: 3,
+       user_subscribed: false,
+     },
+   
+     
+     {
+       trade_name: "zz123678zz",
+       total_leedz: 3,
+       user_subscribed: false,
+     },
+   
+   
+   ];
+
+     initCalendarPanel();
+     initTradesColumn( trades );
+     initMonthChooser();
+
+
+   
+
+
+   </script>
+   
+   
+   
+   
+   </body>
+     </html>

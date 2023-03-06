@@ -1,0 +1,139 @@
+/* 
+ * calendar.css 
+ */
+  
+
+
+ #calendar_main {
+  background-color: white;
+ }
+ 
+ .trades_calendar {
+
+    position:relative;
+
+    list-style-type: none;
+
+    height:100vh;    
+  }
+
+
+
+ 
+.trades_calendar > * {
+
+    display:grid;
+    position:absolute;
+
+}
+
+
+
+  #calendar_panel {
+
+    padding-top:10px;
+    padding-bottom:30px;
+  
+  }
+
+
+
+
+
+
+  #calendar_list {
+    
+    position:absolute;
+    
+    width:100%;
+
+    left:0;
+    height:100%;
+    overflow-y: scroll;    
+  }
+
+  
+  
+  .each_day {
+  
+    display:inline-flex;
+    
+    border-radius: 10px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--LEEDZ_DARKGRAY);
+    background-color: var(--LEEDZ_GRAY);
+
+    margin: 4px 0px;
+    padding: 6px;
+
+    width:95%;
+  }
+
+
+
+
+  button.trade_radio {
+    margin-top: 14px;
+    margin-left:4px;
+  }
+
+
+
+
+.leed_thumbnail {
+
+    z-index:900;
+    position:absolute;
+
+    display:inline-block;
+
+    opacity: 0;
+
+    width: max-content;
+    height: 25px;
+    padding: 16px;
+
+    color:black;
+    background-color:white;
+    border-radius: 20px;
+
+    font-size: small;
+}
+
+
+
+  .each_day > .dateSquare {
+
+    display:grid;
+    width: max-content;
+    justify-content: center;
+    text-align: center;
+    
+    background-color:var(--LEEDZ_GREEN);
+    border-radius: 6px;
+
+    margin-right:10px;
+
+    padding-bottom:6px;
+    padding-left:6px;
+    padding-right:8px;
+    padding-top:4px;
+
+    color:black;
+    font-size:2em;
+    font-weight: bold;
+
+    width:50px !important;
+}
+
+
+  .each_day > .dateSquare > span {
+    font-size:small;
+    color:black;
+    font-weight:400;
+  }
+
+
+  
+

@@ -1,0 +1,100 @@
+/* action_panel.css */
+
+@import "./globals.css";
+
+  
+
+#action_panel {
+    
+    /* screen size-dependent -->  display:flex; */
+    flex-direction: column;
+    background-color: white;
+    border-left:1px solid var(--LEEDZ_DARKGRAY);
+
+    vertical-align: middle;
+    align-items: center;
+
+}
+
+
+
+.leed_info_container {
+
+    display:flex;
+    flex-direction: column;
+
+    
+    width:90%;
+    height:fit-content;
+
+    padding:10px;
+
+    background-color:var(--LEEDZ_GRAY);
+    margin:10px;
+    border-radius: 6px;
+    border: 2px solid var(--LEEDZ_DARKGREEN);
+
+    font-size:1.2em;
+}
+
+.lic_row {
+    
+    width:auto;
+    padding:0;
+    margin:4px;
+}
+
+
+.lic_column {
+    padding:8px;
+    border: 1px solid var(--LEEDZ_DARKGRAY);
+}
+
+
+#leed_title {
+    background-color: white;
+    border: 1px solid var(--LEEDZ_DARKGRAY);
+}  
+
+#leed_trade, #leed_date  {
+    border:0;
+}
+
+.buy_button {
+
+    position:relative;
+
+    background-color: var(--LEEDZ_GREEN);
+    border: none;
+    color: black;
+   
+    text-decoration: none;
+    display: flex;
+
+    font-size:2.4em;
+    font-weight: bolder;
+
+    width:max-content;
+    height:max-content;
+
+    padding-top:25px;
+    padding-bottom:20px;
+    padding-left:30px;
+    padding-right:30px;
+ 
+    border-radius: 20px;
+
+    
+}
+
+
+
+img#shopping_cart {
+
+    width:40px;
+    height:40px;
+    padding: 4px;
+
+    transform: translateY(-4px);
+
+}

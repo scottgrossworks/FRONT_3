@@ -1,0 +1,90 @@
+
+/*
+ * LARGE SCREENS
+ */
+
+ @import "./globals.css";
+
+
+ 
+@media screen and (min-width: 900px) {
+
+
+      
+    html {
+      
+      max-width: 1600px;
+
+    font-size: 14px;
+    line-height: 1.2;
+    font-family: var(--FONT_3);
+    color: black;
+    } 
+
+
+
+ 
+    
+
+
+
+
+    #open_side_btn {
+      opacity:0;
+    }    
+    #close_side_btn {
+      opacity:0;
+    }    
+
+
+
+
+    
+
+/* The sidepanel menu */
+.trades_side {
+
+
+  height: 100%; /* Specify a height */  
+  width: max-content;
+
+  position: fixed; /* Stay in place */
+  
+  z-index: 300; /* Stay on top */   
+  
+  top: 0;
+  left: 0;
+  
+  background-color: var(--LEEDZ_GRAY);
+  overflow-x: hidden; 
+  overflow-y: scroll;
+
+  border-right: 1px solid lightgray;
+
+}
+
+
+
+
+/* The sidepanel links */
+.trades_side a {
+  text-decoration: none;
+}
+
+
+  #calendar_main {
+    margin-left:-10px;
+    padding-right:10px;
+  }
+
+
+
+
+  
+
+  #action_panel {
+    display:flex;
+  }
+
+
+}

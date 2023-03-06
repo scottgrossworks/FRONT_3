@@ -1,0 +1,121 @@
+
+/*
+ *
+ *
+ */
+
+@import "./globals.css";
+
+
+  #trades_column {
+
+    min-width:60px;
+    z-index:500;
+  }
+
+  
+
+
+
+    .trades {
+  
+      z-index:300;
+
+      width:max-content;
+      min-width: 60px;
+      
+      line-height: 1.6em;
+      padding-bottom: 25px;
+      padding-left:10px;
+      padding-right:20px;
+    }
+    
+  
+  
+    #trades_list {
+  
+      list-style-type: none;
+  
+    }
+
+    
+
+
+    .each_trade {
+        
+        display: flex;
+        flex-direction:row;
+        justify-content: left;
+
+        margin-top:4px 0px;
+
+        padding:2px;
+
+        font-weight:400;
+    }
+  
+
+
+  
+    .trade_checkbox {
+        cursor:pointer;
+        
+        accent-color: green;
+        color:white;
+    
+        transform: translateY(2.5px);
+    }
+  
+ 
+
+
+    .trade_radio {
+  
+        display: inline-block;
+      
+
+        cursor:pointer;
+
+        margin-left: 8px;
+        margin-right:5px;
+        transform: translateY(-4.5px);
+        top:0;
+        
+        content: '';
+    
+        height: 16px;
+        width: 16px;
+        
+        background-color: white;
+        
+        border: 0px solid var(--LEEDZ_DARKGRAY);
+        border-radius: 50%;
+
+        outline:none;
+    }
+
+    
+
+  
+    .trade_active * {
+        
+        color:black !important;
+        border: 0px;
+    }
+  
+   
+    .each_trade > label {      
+      font-size: 1em;
+      transform: translateY(6px);
+
+    }
+
+
+  
+  .each_trade > sup {
+      font-size:smaller;
+      color: var(--LEEDZ_DARKGREEN);
+      padding-left:4px;
+  }
+  
+   

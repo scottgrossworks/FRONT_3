@@ -1,39 +1,10 @@
 import { loadCalendarLeedz } from "./calendar.js";
 
-
-
-  
-const leedzFromDB = [
-                
-  {
-    id: 55555,
-    start_date: new Date("2023-03-05T01:00:00"),
-    end_date: new Date("2023-03-05T03:30:00"),
-    note: "Bar Mitzvah",
-  },
-
-
-  {
-    id: 77777,
-    start_date: new Date("2023-03-07T18:00:00"),
-    end_date: new Date("2023-03-07T21:00:00"),
-    note: "Wedding",
-  },
-
-
-
-  {
-    id: 99999,
-    start_date: new Date("2023-03-11T15:30:00"),
-    end_date: new Date("2023-03-11T18:30:00"),
-    note: "Corporate Event",
-  },
-
-];
+import { DATE_SHOWING } from "./months.js";
 
 
 /*
- * initialize the trades column with date from the DB
+ * initialize the trades column with DATE_SHOWING from the DB
  *
  * all_trades is the array 
  * 
@@ -264,15 +235,9 @@ function getTradeColor( tradeName ) {
   return hexColor;
 }
 
-/*
- * 2/19
- * should I create a separate data structure for the trades date
- * separate from the DOM 
- * should I save that date to sessionStorage
- * how much should be updated when the browser is refrreshed 
- * with a new call to the DB
- * 
-*/
+
+
+
 
 /*
  *
@@ -296,24 +261,21 @@ function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
   }
 
   
-  // color the radio button
+
   // FIXME 2/2023 FIXME 
   // should all be done in css but the initial setting doesn't persist
 
   // color the radio button
   radioButton.style.backgroundColor = theColor;
+  radioButton.classList.add("trade_active");
 
   // recolor the label
   theLabel.style.color = "black";
 
-  radioButton.classList.add("trade_active");
 
-
-  
-  // FIXME FIXME FIXME
-  // 
-  //        
-  loadCalendarLeedz(radioButton.style.backgroundColor, leedzFromDB);
+  // ask the DB for all the leedz for this trade, color in the UI, and the current month showing
+  //
+  loadCalendarLeedz(trade_name, radioButton.style.backgroundColor, DATE_SHOWING);
 }
 
 

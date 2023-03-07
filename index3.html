@@ -33,6 +33,7 @@
         <script src="./js/trades.js" type="module" defer></script>
         <script src="./js/calendar.js" type="module" defer></script>
         <script src="./js/months.js" type="module" defer></script>
+        <script src="./js/action.js" type="module" defer></script>
 
   </head>  
    
@@ -139,26 +140,33 @@
 
         <div class="leed_info_container">
           <div class="row lic_row" id="leed_title">
-            <div class="column lic_column" id="leed_trade"></div>
-            <div class="column lic_column" id="leed_date"></div>
+            
+            <div class="column lic_column" id="lic_color">
+                <button id="lic_trade_radio" class="trade_radio"></button>
+            </div>
+
+            <div class="column lic_column" id="lic_trade"></div>
+            <div class="column lic_column" id="lic_date"></div>
+          </div>
+
+          <div class="row lic_row" id="event_info">
+            <div class="column lic_column _4" id="event_info_label">Event Info</div>
+            <div class="column lic_column _6" id="event_info_value"></div>
           </div>
 
 
-          <div class="row lic_row" id="zip_code">
-            <div class="column lic_column" id="zip_code_label">Zip Code</div>
-            <div class="column lic_column" id="zip_code_value">90034</div>
-          </div>
 
           <div class="row lic_row" id="start-end">
-            <div class="column lic_column" id="start-end_label">Start-End</div>
-            <div class="column lic_column" id="start-end_value">4PM - 6PM</div>
+            <div class="column lic_column _4" id="start-end_label">Start-End</div>
+            <div class="column lic_column _6" id="start-end_value"></div>
           </div>
 
-          
-          <div class="row lic_row" id="event_info">
-            <div class="column lic_column" id="event_info_label">Event Info</div>
-            <div class="column lic_column" id="event_info_value">30th Birthday Party</div>
+          <div class="row lic_row" id="zip_code">
+            <div class="column lic_column _4" id="zip_code_label">Zip Code</div>
+            <div class="column lic_column _6" id="zip_code_value"></div>
           </div>
+          
+
 
         </div>
 
@@ -380,12 +388,13 @@
    
    ];
 
-     initCalendarPanel();
-     initTradesColumn( trades );
-     initMonthChooser();
+     
 
 
-   
+      initCalendarPanel();
+      initTradesColumn( trades );
+      initMonthChooser();
+
 
 
    </script>

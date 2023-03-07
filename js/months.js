@@ -1,7 +1,70 @@
 import { loadCalendar } from "./calendar.js";
 
 
-let DATE_SHOWING = null;
+export let DATE_SHOWING = null;
+
+
+
+
+
+/*
+ * 
+ */
+export function daysInMonth ( month, year ) { 
+
+    // why +1?  I don't know
+    let numDays = new Date(year, month + 1, 0).getDate();
+    return numDays;
+  }
+
+
+/*
+ * return the first three letters of the monthname from the index
+ * Jan == January
+ */
+export function getShortMonthname( month_index ) {
+
+    let monthname = getMonthname( month_index);
+    let shortname = monthname.slice(0, 3);
+    return shortname;
+}
+
+  
+/*
+ * return month name from index
+ * 0 = January
+ */
+export function getMonthname( month_index ) {
+
+    switch (month_index) {
+
+        case 0:
+            return "January";
+        case 1:
+            return "February";
+        case 2:
+            return "March";
+        case 3:
+            return "April";
+        case 4:
+            return "May";
+        case 5:
+            return "June";   
+        case 6:
+            return "July";
+        case 7:
+            return "August";
+        case 8:
+            return "September";
+        case 9:
+            return "October";
+        case 10:
+            return "November";            
+        default:
+            return "December";
+    }
+}
+
 
 
 
@@ -92,7 +155,7 @@ function getPrevMonth() {
     return new Date( theYear, theMonth, theDay );
 }
 
-
+ 
 /*
  *
  */
@@ -112,65 +175,5 @@ function getNextMonth() {
     const theDay = 1;
 
     return new Date( theYear, theMonth, theDay );
-}
-
-
-
-/*
- * 
- */
-function daysInMonth ( month, year ) { 
-
-    // why +1?  I don't know
-    let numDays = new Date(year, month + 1, 0).getDate();
-    return numDays;
-  }
-
-
-/*
- * return the first three letters of the monthname from the index
- * Jan == January
- */
-function getShortMonthname( month_index ) {
-
-    let monthname = getMonthname( month_index);
-    let shortname = monthname.slice(0, 2);
-    return shortname;
-}
-
-  
-/*
- * return month name from index
- * 0 = January
- */
-function getMonthname( month_index ) {
-
-    switch (month_index) {
-
-        case 0:
-            return "January";
-        case 1:
-            return "February";
-        case 2:
-            return "March";
-        case 3:
-            return "April";
-        case 4:
-            return "May";
-        case 5:
-            return "June";   
-        case 6:
-            return "July";
-        case 7:
-            return "August";
-        case 8:
-            return "September";
-        case 9:
-            return "October";
-        case 10:
-            return "November";            
-        default:
-            return "December";
-    }
 }
 

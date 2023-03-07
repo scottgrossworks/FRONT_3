@@ -202,7 +202,7 @@ const DB_LEEDZ = [
  */
 export function loadCalendarLeedz( trade_name, trade_color, thisDate ) {
 
-
+   
     //
     // GET DB_LEEDZ 
     // 
@@ -212,7 +212,8 @@ export function loadCalendarLeedz( trade_name, trade_color, thisDate ) {
 
     // the UI contains all the each_date days
     const theList = document.querySelector("#calendar_list");
-    
+
+
     // for each (date sorted) lead coming in from the DB
     for (const leed_fromDB of DB_LEEDZ) {
 
@@ -221,9 +222,12 @@ export function loadCalendarLeedz( trade_name, trade_color, thisDate ) {
             // because the leedz are sorted by date, skip ahead to date of last leed
 
             let each_day = theList.children[ counter ];
+
+
             // each element is an LI each_day
             let theDate = each_day.style.getPropertyValue("--leedz_date");
-            
+
+
             // skip the template
             if (theDate == "") {
                 continue;
@@ -235,6 +239,7 @@ export function loadCalendarLeedz( trade_name, trade_color, thisDate ) {
             
             // date row in calendar corresponds to date in leed_fromDB
             if ( sameDate(leed_fromDB.start_date, new Date(theDate)) ) {
+
                 createCalendarLeed( each_day, trade_color, leed_fromDB);
                 dateIndex = counter; 
                 break;
@@ -244,6 +249,29 @@ export function loadCalendarLeedz( trade_name, trade_color, thisDate ) {
 }
 
 
+/*
+ * FIXME FIXME FIXME
+ */
+export function removeCalendarLeedz( trade_name ) {
+
+    const theDays = document.querySelectorAll("#each_day")
+    for (var each_day of theDays) {
+
+        // check each day for leedz matching trade_name
+        for ( var theChild of each_day.children ) {
+            if (theChild.className == "trade_radio") {
+                var test_trade = theChild.style.getProperty("--trade_name");
+                if (test_trade == trade_name) {
+                    // remove leed from calendar
+                    each_day.removeChild( theChild );
+                }
+            }
+        }
+
+    }
+
+}
+
     
  
 
@@ -252,10 +280,12 @@ export function loadCalendarLeedz( trade_name, trade_color, thisDate ) {
 
 /*
  * are two dates functionally ==
- * FIXME FIXME FIXME
+ * hour/min will NOT match so do not use Date() == Date() to test
+* FIXME FIXME FIXME
  * could changing the order of comparison optimize for most cases in practice
  */
 function sameDate(date_1, date_2) {
+
 
     let isTheSame = (
         (date_1.getDate() == date_2.getDate()) &&
@@ -263,7 +293,9 @@ function sameDate(date_1, date_2) {
         (date_1.getFullYear() == date_2.getFullYear())
     );
 
-    
+
+
+    //console.log('returning=' + isTheSame);
     return isTheSame;
 }
 
@@ -273,9 +305,14 @@ function sameDate(date_1, date_2) {
  */
 function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
+   
     const newLeed = document.createElement("button");
     newLeed.className = "trade_radio";
     newLeed.style.backgroundColor = trade_color;
+
+    // each leed knows what trade it came c
+    newLeed.style.setProperty("--trade_name", leed_fromDB.trade);
+
 
     // LEED DATE
     // get Date() object from leed -> start_date    
@@ -290,18 +327,12 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     let thumbnail = document.querySelector(".leed_thumbnail");
     newLeed.addEventListener("mouseenter", function( event ) {
 
-        // FIXME FIXME FIXME
-        // placing the thumbnail 
-        // var rect = eachDay.getBoundingClientRect();
-        // var x = rect.left; //x position within the element.
-        // var y = rect.top;  //y position within the element.
-        // let thumb_html = "cx=" + event.clientX + " x=" + x + "cy=" + event.clientY + " y=" + y;
-
 
         // THUMBNAIL contains leed info preview
         let thumb_html = leed_fromDB.note + "<BR>" + startTime + "--" + endTime;
         thumbnail.innerHTML =thumb_html;     
 
+        // PLACE the thumbnail
         thumbnail.style.left = (event.clientX + 10) + "px"
         thumbnail.style.top = (event.clientY - 70) + "px";
         thumbnail.style.border = "2px solid " + trade_color;
@@ -313,7 +344,7 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     //
     newLeed.addEventListener("mouseout", function( event ) {
     
-        //thumbnail.style.opacity = 0;
+        thumbnail.style.opacity = 0;
     });
   
 
@@ -328,11 +359,13 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
         // turn off the old leed
         if (CURRENT_LEED != null) {
 
-            CURRENT_LEED.className = CURRENT_LEED.className.replace(" current_leed", "");
+            CURRENT_LEED.classList.remove("trade_active");
+            //CURRENT_LEED.className = CURRENT_LEED.className.replace(" current_leed", "");
         } 
 
         CURRENT_LEED = newLeed;
-        CURRENT_LEED.className += " current_leed";
+        //CURRENT_LEED.className += " current_leed";
+        CURRENT_LEED.classList.add("trade_active");
 
         // FIXME FIXME FIXME
         // what if action panel not showing

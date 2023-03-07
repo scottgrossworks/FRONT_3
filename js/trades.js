@@ -1,4 +1,4 @@
-import { loadCalendarLeedz } from "./calendar.js";
+import { loadCalendarLeedz, removeCalendarLeedz } from "./calendar.js";
 
 import { DATE_SHOWING } from "./months.js";
 
@@ -279,6 +279,7 @@ function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
 }
 
 
+
 /*
  *
  */
@@ -300,6 +301,10 @@ function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
   // in case user turns trade back on -- same color will appear
   // window.sessionStorage.setItem(trade_name, null);
   radioButton.classList.remove("trade_active");
+
+  
+  // remove all leedz from calendar for this trade
+   removeCalendarLeedz(trade_name);
 }
 
 

@@ -3,7 +3,7 @@
  *
  */
 
-import { daysInMonth } from "./months.js";
+import { daysInMonth, DATE_SHOWING } from "./months.js";
 import { showLeedAction } from "./action.js";
 
 
@@ -96,65 +96,33 @@ export function loadCalendar( theDate ) {
 
 
 /*
- * Each trade is responsible for populating the calendar
- * with its leedz for each date
+ *
  */
 export function initCalendarPanel() {
 
-    // import DOM elements from html
-    const theList = document.querySelector("#calendar_list");
-    const theTemplate = document.querySelector("#template_each_day");
+    // display calendar for DATE_SHOWING
 
-    //
-    // FIXME FIXME FIXME
-    // where does this info come from
-    // session storage -- last month viewed?
-    // new Date() -- today's date?
-    let theYear = 2023;
-    let theMonth = 2; // JAN == 0
-    let days_in_month = 30;
-    let start_date = 1;
-    let weekday = 0; // sunday = 0
-    
+    // the month_chooser is the keeper of the current Date() object showing
+    // should NOT be null if month_chooser initialized first
+    if (DATE_SHOWING == null) {
+        // check session storage for a previously-viewed calendar
+        let sessionDate = window.sessionStorage.getItem( "DATE_SHOWING" );
+        if (sessionDate != null) {
+            DATE_SHOWING = sessionDate;
+        } else {
+            DATE_SHOWING = new Date();  // use today's date
+        }
+    }  // else...DATE_SHOWING still set in months.js
 
-    for (var i = start_date; i <= days_in_month; i++) {
+    loadCalendar( DATE_SHOWING );
 
-        // clone a new node
-        let theClone = theTemplate.content.cloneNode(true);
-        let eachDay = theClone.querySelector(".each_day");
-
-        // each day in the DOM knows its date
-        let theDate = new Date(theYear, theMonth, i);
-        eachDay.style.setProperty("--leedz_date", theDate);
-
-        // inside the dateSquare
-        // set the date number
-        let dateSquare = theClone.querySelector(".dateSquare");
-        dateSquare.textContent = i;
-        
-        // add the day of the week
-        //
-        let daySpan = document.createElement("span");
-        daySpan.textContent = getWeekday( weekday );
-        weekday = ++weekday % 7;
-        dateSquare.appendChild( daySpan ); 
-
-        // add the li to the growing vertical ul
-        theList.appendChild( eachDay );
-
-
-    }
-    
 }
-
-
-
 
 
 
 /* FIXME FIXME FIXME
  * 2/19
- * should I create a separate data structure for the trades date
+ * should I create a separate data structure for the leedz data
  * separate from the DOM 
  * should I save that date to sessionStorage
  * how much should be updated when the browser is refrreshed 
@@ -162,58 +130,175 @@ export function initCalendarPanel() {
  * 
 */
 
-const DB_LEEDZ = [
+
+
+
+
+
+
+
+    const DB_CARICATURES = [
                 
-    {
-      id: 55555,
-      trade: "caricatures",
-      start_date: new Date("2023-03-05T01:00:00"),
-      end_date: new Date("2023-03-05T03:30:00"),
-      note: "Bar Mitzvah",
-    },
-    
-    
-    {
-      id: 77777,
-      trade: "photographer",
-      start_date: new Date("2023-03-07T18:00:00"),
-      end_date: new Date("2023-03-07T21:00:00"),
-      note: "Wedding",
-    },
-    
-    
-    
-    {
-      id: 99999,
-      trade: "DJ",
-      start_date: new Date("2023-03-11T15:30:00"),
-      end_date: new Date("2023-03-11T18:30:00"),
-      note: "Corporate Event",
-    },
-    
+        {
+          id: 11111,
+          trade: "caricatures",
+          start_date: new Date("2023-03-03T01:00:00"),
+          end_date: new Date("2023-03-03T03:30:00"),
+          note: "Caricatures 1",
+        },
+        
+        
+        {
+          id: 22222,
+          trade: "caricatures",
+          start_date: new Date("2023-03-04T18:00:00"),
+          end_date: new Date("2023-03-04T21:30:00"),
+          note: "Caricatures 2",
+        },
+        
+        
+        
+        {
+          id: 33333,
+          trade: "caricatures",
+          start_date: new Date("2023-05-11T15:30:00"),
+          end_date: new Date("2023-05-11T18:30:00"),
+          note: "Caricatures 3",
+        },
+        
+        ];
+
+
+
+
+        
+
+    const DB_DANCER = [
+                
+        {
+          id: 44444,
+          trade: "dancer",
+          start_date: new Date("2023-03-04T01:00:00"),
+          end_date: new Date("2023-03-04T03:30:00"),
+          note: "dancer 1",
+        },
+        
+        
+        {
+          id: 55555,
+          trade: "dancer",
+          start_date: new Date("2023-03-14T18:00:00"),
+          end_date: new Date("2023-03-14T21:30:00"),
+          note: "dancer 2",
+        },
+        
+        
+        
+        {
+          id: 66666,
+          trade: "dancer",
+          start_date: new Date("2023-05-12T15:30:00"),
+          end_date: new Date("2023-05-12T18:30:00"),
+          note: "dancer 3",
+        },
+        
+        ];
+
+
+
+        
+        
+
+    const DB_DEEJAY = [
+                
+        {
+          id: 77777,
+          trade: "deejay",
+          start_date: new Date("2023-03-03T06:00:00"),
+          end_date: new Date("2023-03-03T09:30:00"),
+          note: "deejay 1",
+        },
+        
+        
+        {
+          id: 88888,
+          trade: "deejay",
+          start_date: new Date("2023-03-06T18:30:00"),
+          end_date: new Date("2023-03-06T20:30:00"),
+          note: "deejay 2",
+        },
+        
+        
+        
+        {
+          id: 99999,
+          trade: "deejay",
+          start_date: new Date("2023-05-12T15:30:00"),
+          end_date: new Date("2023-05-12T18:30:00"),
+          note: "deejay 3",
+        },
+        
+        ];
+
+
+        
+        
+
+    const DB_ERROR = [
+                
+        {
+          id: 121212,
+          trade: "ERROR",
+          start_date: new Date("2023-03-03T06:00:00"),
+          end_date: new Date("2023-03-03T09:30:00"),
+          note: "ERROR",
+        },
     ];
 
 
 
 /*
- * FIXME FIXME FIXME
+ * 
  *
  * 
  */
 export function loadCalendarLeedz( trade_name, trade_color, thisDate ) {
 
+
+    // FIXME FIXME FIXME
+    // cache leedz?
+    
    
     //
     // GET DB_LEEDZ 
-    // 
+    // need thisDate for query
     //
 
-    let dateIndex = 1;
+    let DB_LEEDZ = [];
+
+    switch (trade_name) {
+
+        case "caricatures" :
+            DB_LEEDZ = DB_CARICATURES;
+            break;
+
+        case "dancer" :
+            DB_LEEDZ = DB_DANCER;
+            break;
+
+        case "deejay" :
+            DB_LEEDZ = DB_DEEJAY;
+            break;
+   
+        default:
+            DB_LEEDZ = DB_ERROR;
+    }
+
+
 
     // the UI contains all the each_date days
     const theList = document.querySelector("#calendar_list");
-
-
+    let dateIndex = 1;
     // for each (date sorted) lead coming in from the DB
     for (const leed_fromDB of DB_LEEDZ) {
 
@@ -254,23 +339,30 @@ export function loadCalendarLeedz( trade_name, trade_color, thisDate ) {
  */
 export function removeCalendarLeedz( trade_name ) {
 
-    const theDays = document.querySelectorAll("#each_day")
-    for (var each_day of theDays) {
 
-        // check each day for leedz matching trade_name
-        for ( var theChild of each_day.children ) {
-            if (theChild.className == "trade_radio") {
-                var test_trade = theChild.style.getProperty("--trade_name");
-                if (test_trade == trade_name) {
-                    // remove leed from calendar
-                    each_day.removeChild( theChild );
-                }
+    const theDays = document.querySelectorAll(".each_day");
+    // get all the days of the current month showing
+    for (var i = 0; i < theDays.length; i++) {
+
+        // for each day
+        var each_day = theDays[i];
+        
+        // iterate over all children looking leedz with matching trade_name
+        for ( var c = 1; c < each_day.children.length; c++) {
+            // start with 1 to skip the date square
+            var theChild = each_day.children[c];
+
+            var test_trade = theChild.style.getPropertyValue("--trade_name");
+                
+            if (test_trade == trade_name) {
+                // remove leed from calendar
+                each_day.removeChild( theChild );
             }
+            
         }
 
     }
-
-}
+ }
 
     
  
@@ -293,9 +385,6 @@ function sameDate(date_1, date_2) {
         (date_1.getFullYear() == date_2.getFullYear())
     );
 
-
-
-    //console.log('returning=' + isTheSame);
     return isTheSame;
 }
 
@@ -305,12 +394,13 @@ function sameDate(date_1, date_2) {
  */
 function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
-   
+
+    // create the DOM node
     const newLeed = document.createElement("button");
     newLeed.className = "trade_radio";
     newLeed.style.backgroundColor = trade_color;
 
-    // each leed knows what trade it came c
+    // each leed knows what trade it comes from
     newLeed.style.setProperty("--trade_name", leed_fromDB.trade);
 
 
@@ -359,13 +449,15 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
         // turn off the old leed
         if (CURRENT_LEED != null) {
 
-            CURRENT_LEED.classList.remove("trade_active");
-            //CURRENT_LEED.className = CURRENT_LEED.className.replace(" current_leed", "");
+            // CURRENT_LEED.classList.remove("trade_active");
+            // CURRENT_LEED.className = CURRENT_LEED.className.replace(" trade_active", "");
+            CURRENT_LEED.style.border = 0;
         } 
 
         CURRENT_LEED = newLeed;
-        //CURRENT_LEED.className += " current_leed";
-        CURRENT_LEED.classList.add("trade_active");
+        CURRENT_LEED.style.border = "2px solid black";
+        // CURRENT_LEED.classList.add("trade_active"); doesn't work
+        // CURRENT_LEED.className += " trade_active"; doesn't work
 
         // FIXME FIXME FIXME
         // what if action panel not showing
@@ -374,8 +466,6 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
         showLeedAction( trade_color, leed_fromDB );
         
     });
-
-
 
     eachDay.appendChild( newLeed );
 

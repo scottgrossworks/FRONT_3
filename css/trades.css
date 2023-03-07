@@ -107,7 +107,7 @@
     .each_trade > label {      
       font-size: 1em;
       transform: translateY(6px);
-
+      color: gray;
     }
 
 

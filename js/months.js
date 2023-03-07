@@ -73,13 +73,15 @@ export function initMonthChooser() {
     // is the current date set from a previous session
     let sessionDate = window.sessionStorage.getItem( "DATE_SHOWING" );
     
+    // if not use today's date
     if (sessionDate == null) {
         DATE_SHOWING = new Date(); // today
-        window.sessionStorage.setItem("DATE_SHOWING", DATE_SHOWING); // save for browser close/refresh
-    
     } else {
         DATE_SHOWING = new Date( sessionDate );
-    }
+    }    
+    // save in case of browser close / refresh
+    window.sessionStorage.setItem("DATE_SHOWING", DATE_SHOWING);
+
 
     let theMonth = DATE_SHOWING.getMonth();
     let theYear = DATE_SHOWING.getFullYear();
@@ -88,9 +90,6 @@ export function initMonthChooser() {
     let theLabel = months.querySelector("#month_label");
 
     theLabel.textContent = getMonthname(theMonth) + ", " + theYear;
-
-
-
 
 
     /*
@@ -105,7 +104,10 @@ export function initMonthChooser() {
         let theYear = prevMonth.getFullYear();
 
         theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
+        
         DATE_SHOWING = prevMonth;
+        // save in case of browser close / refresh
+        window.sessionStorage.setItem("DATE_SHOWING", DATE_SHOWING);
 
         loadCalendar( DATE_SHOWING );
     });
@@ -124,7 +126,10 @@ export function initMonthChooser() {
         let theYear = nextMonth.getFullYear();
 
         theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
+
         DATE_SHOWING = nextMonth;
+        // save in case of browser close / refresh
+        window.sessionStorage.setItem("DATE_SHOWING", DATE_SHOWING);
 
         loadCalendar( DATE_SHOWING );
     });

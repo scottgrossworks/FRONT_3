@@ -41,15 +41,11 @@ export function initTradesColumn( all_trades ) {
     let checkBox = newNode.querySelector(".trade_checkbox");
     let radioButton = newNode.querySelector(".trade_radio");
   
-    
 
     // is the user subscribed to this trade?
     if (trade.user_subscribed) {
       turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
-    }  else {
-      turnTrade_Off(checkBox, radioButton, theLabel, trade.trade_name);
     }
-   
     
     //
     // click listener for the checkbox
@@ -57,6 +53,7 @@ export function initTradesColumn( all_trades ) {
     checkBox.addEventListener("click", function( event ) {
     
       if ( trade.user_subscribed ) { // checkbox is ON
+
         trade.user_subscribed = false;
         turnTrade_Off(checkBox, radioButton, theLabel, trade.trade_name);
 
@@ -302,7 +299,6 @@ function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
   // window.sessionStorage.setItem(trade_name, null);
   radioButton.classList.remove("trade_active");
 
-  
   // remove all leedz from calendar for this trade
    removeCalendarLeedz(trade_name);
 }

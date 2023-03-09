@@ -5,7 +5,10 @@
 
 
  #calendar_main {
-  background-color: white;
+
+  left:0;
+  padding-left:6px;
+
  }
  
  .trades_calendar {

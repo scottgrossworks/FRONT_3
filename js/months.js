@@ -1,11 +1,30 @@
 import { loadCalendar } from "./calendar.js";
 
 
-export let DATE_SHOWING = null;
+let DATE_SHOWING = null;
 
 
 
+/*
+ * 
+ */
+export function getDateShowing() {
 
+    // DATE_SHOWING is the current Date() object showing
+    // should NOT be null if month_chooser initialized
+    if (DATE_SHOWING == null) {
+        // check session storage for a previously-viewed calendar
+        let sessionDate = window.sessionStorage.getItem( "DATE_SHOWING" );
+        if (sessionDate != null) {
+            DATE_SHOWING = sessionDate;
+        } else {
+            DATE_SHOWING = new Date();  // use today's date
+        }
+    }  // else...DATE_SHOWING is set
+
+    return DATE_SHOWING;
+
+}
 
 /*
  * 
@@ -76,6 +95,7 @@ export function initMonthChooser() {
     // if not use today's date
     if (sessionDate == null) {
         DATE_SHOWING = new Date(); // today
+
     } else {
         DATE_SHOWING = new Date( sessionDate );
     }    

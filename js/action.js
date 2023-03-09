@@ -14,6 +14,7 @@ let LEED_DETAILS = {
 // FIXME FIXME FIXME
 // local caching and changes on DB / race conditions
 // cache by id?
+//
 
 /*
  * Show full leed details in the action window

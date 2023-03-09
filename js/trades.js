@@ -1,10 +1,51 @@
-import { loadCalendarLeedz, removeCalendarLeedz } from "./calendar.js";
-
-import { DATE_SHOWING } from "./months.js";
+import { loadLeedzForTrade, removeLeedzForTrade } from "./calendar.js";
 
 
-/*
- * initialize the trades column with DATE_SHOWING from the DB
+
+
+
+/**
+ * @param String name of trade
+ * @returns boolean true if the radio button for trade_name is turned in
+ */
+export function isSubscribed( trade_name ) {
+
+  const theList = document.querySelector("#trades_list");
+  
+  // start with 1 -- skip the template
+  for (var i = 1; i < theList.children.length; i++) {
+    let each_trade = theList.children[i];
+
+    console.log("i["+i+"]=" + each_trade);
+
+    let isSub = each_trade.getAttribute("SUB");
+    if (isSub == true) return true;  // should only retun true for "1"
+  }
+
+  
+  return false;
+}
+
+
+/**
+ * 
+ * @param String name of trade
+ * @returns String color corresponding to it in the trades column
+ */
+export function getColorForTrade(trade_name) {
+
+  for (var i = 0; i < COLORS_TO_TRADES.length; i++) {
+    var thePair = COLORS_TO_TRADES[i];
+    if (thePair[1] == trade_name) {
+      return thePair[0];
+    }
+  }
+  return "var(--LEEDZ_GRAY)";
+}
+
+
+
+/**
  *
  * all_trades is the array 
  * 
@@ -44,7 +85,12 @@ export function initTradesColumn( all_trades ) {
 
     // is the user subscribed to this trade?
     if (trade.user_subscribed) {
+      // each trade knows that it is subscribed to
+      newNode.setAttribute("SUB", "1");
       turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
+    
+    } else {
+       newNode.setAttribute("SUB", "0");
     }
     
     //
@@ -54,11 +100,11 @@ export function initTradesColumn( all_trades ) {
     
       if ( trade.user_subscribed ) { // checkbox is ON
 
-        trade.user_subscribed = false;
+        newNode.setAttribute("SUB", "0");
         turnTrade_Off(checkBox, radioButton, theLabel, trade.trade_name);
 
       } else { // checkbox is OFF
-        trade.user_subscribed = true;
+        newNode.setAttribute("SUB", "1");
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
 
       }
@@ -73,12 +119,12 @@ export function initTradesColumn( all_trades ) {
     
       if ( trade.user_subscribed ) { // radio button is ON
 
-        trade.user_subscribed = false;
+        newNode.setAttribute("SUB", "0");
         turnTrade_Off(checkBox, radioButton, theLabel, trade.trade_name);
 
       } else { // radio button is OFF
 
-        trade.user_subscribed = true;
+        newNode.setAttribute("SUB", "1");
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
 
       }
@@ -93,12 +139,12 @@ export function initTradesColumn( all_trades ) {
     
       if ( trade.user_subscribed ) { // radio button is ON
 
-        trade.user_subscribed = false;
+        newNode.setAttribute("SUB", "0");
         turnTrade_Off(checkBox, radioButton, theLabel, trade.trade_name);
 
       } else { // radio button is OFF
 
-        trade.user_subscribed = true;
+        newNode.setAttribute("SUB", "1");
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
 
       }
@@ -112,8 +158,8 @@ export function initTradesColumn( all_trades ) {
   });
 
 
-  // for DEBUG purposes
- // printColorMap();
+  // DEBUG DEBUG DEBUG
+  //printColorMap();
 }
 
 
@@ -129,7 +175,7 @@ const COLORS_TO_TRADES = Array();
 function createColor(numOfSteps, step) {
   // This function generates vibrant, "evenly spaced" colours (i.e. no clustering). This is ideal for creating easily distinguishable vibrant markers in Google Maps and other apps.
   // Adam Cole, 2011-Sept-14
-  // HSV to RBG adapted from: http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
+
   var r, g, b;
   var h = step / numOfSteps;
   var i = ~~(h * 6);
@@ -259,9 +305,8 @@ function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
 
   
 
-  // FIXME 2/2023 FIXME 
+  // FIXME 2/2023 
   // should all be done in css but the initial setting doesn't persist
-
   // color the radio button
   radioButton.style.backgroundColor = theColor;
   radioButton.classList.add("trade_active");
@@ -270,9 +315,9 @@ function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
   theLabel.style.color = "black";
 
 
-  // ask the DB for all the leedz for this trade, color in the UI, and the current month showing
+  // ask the DB for all the leedz for this trade / color in the UI
   //
-  loadCalendarLeedz(trade_name, radioButton.style.backgroundColor, DATE_SHOWING);
+  loadLeedzForTrade(trade_name, radioButton.style.backgroundColor);
 }
 
 
@@ -300,7 +345,7 @@ function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
   radioButton.classList.remove("trade_active");
 
   // remove all leedz from calendar for this trade
-   removeCalendarLeedz(trade_name);
+   removeLeedzForTrade(trade_name);
 }
 
 

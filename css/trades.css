@@ -10,6 +10,7 @@
   #trades_column {
 
     min-width:60px;
+    width:fit-content;
     z-index:500;
   }
 

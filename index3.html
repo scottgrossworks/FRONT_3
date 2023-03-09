@@ -45,7 +45,7 @@
       <!-- LEFT COLUMN
         -- TRADES PANEL 
         -->
-      <div id="trades_column" class="column _2">
+      <div id="trades_column" class="column _15">
         
 
         
@@ -134,7 +134,7 @@
       <!-- RIGHT COLUMN
         -- ACTION PANEL 
         -->
-      <div id="action_panel" class="column _3">
+      <div id="action_panel" class="column _35">
 
 
         <div class="leed_info_container">
@@ -201,8 +201,8 @@
      <script type="module" charset=”utf-8″>
    
      import { initTradesColumn } from "./js/trades.js";   
-     import { initCalendarPanel } from "./js/calendar.js";
-     import { initMonthChooser } from "./js/months.js";
+     import { loadCalendar } from "./js/calendar.js";
+     import { initMonthChooser, getDateShowing } from "./js/months.js";
    
      const trades = [
      
@@ -390,7 +390,13 @@
      
 
       initMonthChooser();
-      initCalendarPanel();
+
+      // display calendar for either today's date
+      // or previous viewied calendar from session storage
+      let dateShowing = getDateShowing();
+      loadCalendar( dateShowing );
+
+
       initTradesColumn( trades );
 
 

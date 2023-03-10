@@ -3,9 +3,9 @@
  *
  */
 
-import { daysInMonth, getDateShowing } from "./months.js";
+import { daysInMonth, getShortDate, getShortDateString, getWeekday, getDay, getMonth, getYear  } from "./dates.js";
 import { showLeedAction } from "./action.js";
-import { getColorForTrade, isSubscribed } from "./trades.js";
+import { getColorForTrade, isSubscribed, printColorMap } from "./trades.js";
 
 
 const CACHE_DELIM = "|";
@@ -18,8 +18,8 @@ const DB_CARICATURES = [
     {
       id: 11111,
       trade: "caricatures",
-      start: new Date("2023-03-03T01:00:00").toISOString(),
-      end: new Date("2023-03-03T03:30:00").toISOString(),
+      start: new Date("2023-03-03T15:00:00").toISOString(),
+      end: new Date("2023-03-03T17:30:00").toISOString(),
       note: "Caricatures 1"
     },
     
@@ -50,8 +50,8 @@ const DB_DANCER = [
     {
       id: 44444,
       trade: "dancer",
-      start: new Date("2023-03-04T01:00:00").toISOString(),
-      end: new Date("2023-03-04T03:30:00").toISOString(),
+      start: new Date("2023-03-04T11:00:00").toISOString(),
+      end: new Date("2023-03-04T13:30:00").toISOString(),
       note: "dancer 1",
     },
     
@@ -82,8 +82,8 @@ const DB_DEEJAY = [
     {
       id: 77777,
       trade: "deejay",
-      start: new Date("2023-03-03T06:00:00").toISOString(),
-      end: new Date("2023-03-03T09:30:00").toISOString(),
+      start: new Date("2023-03-03T20:00:00").toISOString(),
+      end: new Date("2023-03-03T22:30:00").toISOString(),
       note: "deejay 1",
     },
     
@@ -124,17 +124,17 @@ const DB_ERROR = [
 
 
 /*
- * Build the calendar UI for each month
+ * Build the calendar UI for τƒOWING
  * does not load leedz
  * session storage is the leed cache
  *      key    : date
  *      value  : delimited string of JSON-stringified leed objects
  */
-export function loadCalendar( theDate ) {
+export function loadCalendar() {
 
-    let theYear = theDate.getFullYear();
-    let theMonth = theDate.getMonth();
-    let weekday = theDate.getDay();
+    let theYear = getYear();
+    let theMonth = getMonth();
+    let weekday = getDay();
 
     let days_in_month = daysInMonth(theMonth, theYear);
 
@@ -180,9 +180,7 @@ export function loadCalendar( theDate ) {
         // CACHE
         // are there leedz in the cache for this date?
         let leedz_cache = window.sessionStorage.getItem(dateString);
-        if ((leedz_cache == null) || (leedz_cache == "") || (leedz_cache == CACHE_DELIM)) {
-            // DO NOTHING
-        } else {
+        if ((leedz_cache != null) && (leedz_cache != "") && (leedz_cache != CACHE_DELIM)) {
             // leedz_cache contains delimited list of leed objects 
             loadLeedzFromCache(eachDay, leedz_cache);
         }
@@ -205,7 +203,6 @@ function loadLeedzFromCache( theDay, JSON_leedz ) {
     for (var i = 0; i < theLeedz.length; i++) {
   
         var theJSON = theLeedz[i];
-
         if ((theJSON == null) || (theJSON == "") || (theJSON == CACHE_DELIM)) continue;
 
         // (re)create leed node using cache data
@@ -213,6 +210,7 @@ function loadLeedzFromCache( theDay, JSON_leedz ) {
    
         // is the user stil subscribed to leedz of this trade?
         if ( isSubscribed( theLeed.trade ) ) {
+            
             // get the color and create a leed
             var trade_color = getColorForTrade( theLeed.trade );
             createCalendarLeed( theDay, trade_color, theLeed);
@@ -300,20 +298,9 @@ export function loadLeedzForTrade( trade_name, trade_color ) {
 
                 // CACHE LEED FOR THIS DATE
                 //
-                // leedz_cache --> delimited list of JSON-stringified leed objects
-                let leedJSON = JSON.stringify( leed_fromDB );
+                cacheLeed( leed_fromDB, theDate );
                 
-                // is there already a cache for this date?
-                let leedz_cache = window.sessionStorage.getItem( theDate );
-
-                if (leedz_cache == null) {
-                   leedz_cache = "";
-                    // null becomes the string 'null' -- causes problems
-                }
-
-                // { leed JSON }|{ leed JSON }|{ leed JSON }|....
-                leedz_cache = leedz_cache + leedJSON + CACHE_DELIM;
-                window.sessionStorage.setItem(theDate, leedz_cache);
+                
                    
                 dateIndex = counter; 
                 // reset so on next iteration
@@ -324,6 +311,43 @@ export function loadLeedzForTrade( trade_name, trade_color ) {
     }
 }
 
+
+
+/**
+ * 
+ * look leedz already mapped to this date in session storage
+ * if cache exists, check if it already contains leed_fromDB
+ * if not, add it to the cache
+ */
+function cacheLeed( leed_fromDB, theDate ) {
+
+
+    let leedJSON = JSON.stringify( leed_fromDB );
+
+    // is there already a cache for this date?
+    // leedz_cache --> delimited list of JSON-stringified leed objects
+    let leedz_cache = window.sessionStorage.getItem( theDate );
+
+    if (leedz_cache == null) {
+        // no cache found for this date
+        leedz_cache = "";  // null becomes the string 'null' -- causes problems below
+    
+    } else {
+        // cache IS found -- look for leed
+        var leedFound = leedz_cache.indexOf( leedJSON );
+        if (leedFound != -1) {
+            // leed already in cache for this date
+            return;
+        }
+    }
+
+    // cache exists and leed is not in it
+    // append the new leed to the end of the cache and add DELIM
+    // { leed JSON }|{ leed JSON }|{ leed JSON }|....
+    leedz_cache = leedz_cache + leedJSON + CACHE_DELIM;
+
+    window.sessionStorage.setItem(theDate, leedz_cache);
+}
 
 
 
@@ -358,64 +382,6 @@ export function removeLeedzForTrade( trade_name ) {
  }
 
     
-
-
-/*
- * return weekday name from day index
- * 0 = sunday
- * 6 = saturday
- */
-export function getWeekday( day_index ) {
-
-    switch (day_index) {
-
-        case 1:
-            return "Mon";
-        case 2:
-            return "Tues";
-        case 3:
-            return "Wed";
-        case 4:
-            return "Thurs";
-        case 5:
-            return "Fri";
-        case 6:
-            return "Sat";
-        default:
-            return "Sun";
-    }
-}
-
-
-
-
-
-
-/** 
- * @param Date object
- * trim time / timezone info off date and return it as a string
- */
-function getShortDate( theDate ) {
-
-    var theString = theDate.toISOString().substring(0, 10);
-    return theString;
-
-}
-
-
-
-/** 
- * @param dateString Date().toISOString() String with time appended
- * trim time / timezone info off and return substring
- */
-function getShortDateString( dateString ) {
-
-    var theString = dateString.substring(0, 10);
-    return theString;
-
-}
-
-
 
 /*
  *
@@ -497,41 +463,6 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
 }
 
-
-/**
- * FIXME: this seems to be very roundabout and inefficient
- * 
- * @param isoString Date().toISOString() string
- *  "2011-10-05T14:48:00.000Z"
- * 
- * returns [hour,AM/PM] tuple array
- */
-function getHours( isoString ) {
-    
-    // trim hours
-    let totalHours = isoString.substring(11,13);
-
-     // convert the input string to a number
-    var theHour = Number( totalHours );
-
-      // check if the hour is before 12, return "AM" if true, "PM" otherwise
-    if (theHour < 12) {
-        return [ String(theHour), "AM" ];
-    } else {
-        return [ String(theHour), "PM" ];
-    }
-    
-}
-
-
-
-/**
- * @param isoString Date().toISOString() string
- */
-function getMinutes( isoString ) {
-
-    return isoString.substring(14,16);
-}
 
 
 

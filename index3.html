@@ -30,6 +30,7 @@
         <link rel="stylesheet" href="css/action_panel.css" type="text/css" />
 
 
+        <script src="./js/dates.js" type="module" defer></script>
         <script src="./js/trades.js" type="module" defer></script>
         <script src="./js/calendar.js" type="module" defer></script>
         <script src="./js/months.js" type="module" defer></script>
@@ -202,7 +203,8 @@
    
      import { initTradesColumn } from "./js/trades.js";   
      import { loadCalendar } from "./js/calendar.js";
-     import { initMonthChooser, getDateShowing } from "./js/months.js";
+     import { initMonthChooser } from "./js/months.js";
+    
    
      const trades = [
      
@@ -391,11 +393,7 @@
 
       initMonthChooser();
 
-      // display calendar for either today's date
-      // or previous viewied calendar from session storage
-      let dateShowing = getDateShowing();
-      loadCalendar( dateShowing );
-
+      loadCalendar();
 
       initTradesColumn( trades );
 

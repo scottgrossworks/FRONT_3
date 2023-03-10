@@ -1,110 +1,14 @@
 import { loadCalendar } from "./calendar.js";
+import { setDateShowing, getMonth, getYear, getMonthname } from "./dates.js";
 
-
-let DATE_SHOWING = null;
-
-
-
-/*
- * 
- */
-export function getDateShowing() {
-
-    // DATE_SHOWING is the current Date() object showing
-    // should NOT be null if month_chooser initialized
-    if (DATE_SHOWING == null) {
-        // check session storage for a previously-viewed calendar
-        let sessionDate = window.sessionStorage.getItem( "DATE_SHOWING" );
-        if (sessionDate != null) {
-            DATE_SHOWING = sessionDate;
-        } else {
-            DATE_SHOWING = new Date();  // use today's date
-        }
-    }  // else...DATE_SHOWING is set
-
-    return DATE_SHOWING;
-
-}
-
-/*
- * 
- */
-export function daysInMonth ( month, year ) { 
-
-    // why +1?  I don't know
-    let numDays = new Date(year, month + 1, 0).getDate();
-    return numDays;
-  }
-
-
-/*
- * return the first three letters of the monthname from the index
- * Jan == January
- */
-export function getShortMonthname( month_index ) {
-
-    let monthname = getMonthname( month_index);
-    let shortname = monthname.slice(0, 3);
-    return shortname;
-}
-
-  
-/*
- * return month name from index
- * 0 = January
- */
-export function getMonthname( month_index ) {
-
-    switch (month_index) {
-
-        case 0:
-            return "January";
-        case 1:
-            return "February";
-        case 2:
-            return "March";
-        case 3:
-            return "April";
-        case 4:
-            return "May";
-        case 5:
-            return "June";   
-        case 6:
-            return "July";
-        case 7:
-            return "August";
-        case 8:
-            return "September";
-        case 9:
-            return "October";
-        case 10:
-            return "November";            
-        default:
-            return "December";
-    }
-}
 
 
 
 
 export function initMonthChooser() {
 
-    // is the current date set from a previous session
-    let sessionDate = window.sessionStorage.getItem( "DATE_SHOWING" );
-    
-    // if not use today's date
-    if (sessionDate == null) {
-        DATE_SHOWING = new Date(); // today
-
-    } else {
-        DATE_SHOWING = new Date( sessionDate );
-    }    
-    // save in case of browser close / refresh
-    window.sessionStorage.setItem("DATE_SHOWING", DATE_SHOWING);
-
-
-    let theMonth = DATE_SHOWING.getMonth();
-    let theYear = DATE_SHOWING.getFullYear();
+    let theMonth = getMonth();
+    let theYear = getYear();
 
     let months = document.querySelector(".month_chooser");
     let theLabel = months.querySelector("#month_label");
@@ -125,11 +29,9 @@ export function initMonthChooser() {
 
         theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
         
-        DATE_SHOWING = prevMonth;
-        // save in case of browser close / refresh
-        window.sessionStorage.setItem("DATE_SHOWING", DATE_SHOWING);
+        setDateShowing( prevMonth );
 
-        loadCalendar( DATE_SHOWING );
+        loadCalendar();
     });
 
 
@@ -147,11 +49,9 @@ export function initMonthChooser() {
 
         theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
 
-        DATE_SHOWING = nextMonth;
-        // save in case of browser close / refresh
-        window.sessionStorage.setItem("DATE_SHOWING", DATE_SHOWING);
+       setDateShowing( nextMonth );
 
-        loadCalendar( DATE_SHOWING );
+       loadCalendar();
     });
 
 
@@ -164,12 +64,12 @@ export function initMonthChooser() {
  */
 function getPrevMonth() {
 
-    let theMonth = DATE_SHOWING.getMonth();
-    let theYear = DATE_SHOWING.getFullYear();
+    let theMonth = getMonth();
+    let theYear = getYear();
 
-    if (theMonth == 0) {
+    if (theMonth == 1) {
         theYear--;
-        theMonth = 11;
+        theMonth = 12;
     
     } else {
         theMonth--;
@@ -186,12 +86,12 @@ function getPrevMonth() {
  */
 function getNextMonth() {
 
-    let theMonth = DATE_SHOWING.getMonth();
-    let theYear = DATE_SHOWING.getFullYear();
+    let theMonth = getMonth();
+    let theYear = getYear();
 
-    if (theMonth == 11) {
+    if (theMonth == 12) {
         theYear++;
-        theMonth = 0;
+        theMonth = 1;
     
     } else {
         theMonth++;

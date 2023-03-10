@@ -3,6 +3,10 @@ import { loadLeedzForTrade, removeLeedzForTrade } from "./calendar.js";
 
 
 
+const COLORS_TO_TRADES = Array();
+let SUBSCRIBED = [];
+
+
 
 /**
  * @param String name of trade
@@ -10,36 +14,38 @@ import { loadLeedzForTrade, removeLeedzForTrade } from "./calendar.js";
  */
 export function isSubscribed( trade_name ) {
 
-  const theList = document.querySelector("#trades_list");
+  const equalsTrade = (element) => (element == trade_name);
+  var index = SUBSCRIBED.findIndex( equalsTrade );
   
-  // start with 1 -- skip the template
-  for (var i = 1; i < theList.children.length; i++) {
-    let each_trade = theList.children[i];
-
-    console.log("i["+i+"]=" + each_trade);
-
-    let isSub = each_trade.getAttribute("SUB");
-    if (isSub == true) return true;  // should only retun true for "1"
-  }
-
+  return (index > -1); // true if index is 0,1,2....
   
-  return false;
 }
 
 
 /**
+ * mapping colors->trade persists even when trade unselected -- so that
+ * if it is turned back on you get the same color again
  * 
  * @param String name of trade
  * @returns String color corresponding to it in the trades column
  */
 export function getColorForTrade(trade_name) {
 
+  /*
   for (var i = 0; i < COLORS_TO_TRADES.length; i++) {
     var thePair = COLORS_TO_TRADES[i];
     if (thePair[1] == trade_name) {
       return thePair[0];
     }
   }
+  return "var(--LEEDZ_GRAY)";
+  */
+
+  let cacheColor = window.sessionStorage.getItem( trade_name );
+  if (cacheColor != null) {
+    return cacheColor;
+  }
+
   return "var(--LEEDZ_GRAY)";
 }
 
@@ -62,6 +68,10 @@ export function initTradesColumn( all_trades ) {
   // initialize the spectrum of colors
   seedColorMap( all_trades );
 
+  // recover list of subscriptions if any
+  let cachedSubs = sessionStorage.getItem("SUBS");
+  if (cachedSubs != null) SUBSCRIBED = cachedSubs.split(',');
+
   // import DOM elements from html
   const theList = document.querySelector("#trades_list");
   const theTemplate = document.querySelector("#template_each_trade");
@@ -83,28 +93,29 @@ export function initTradesColumn( all_trades ) {
     let radioButton = newNode.querySelector(".trade_radio");
   
 
+    // trade is the JSON object coming from DB
     // is the user subscribed to this trade?
     if (trade.user_subscribed) {
-      // each trade knows that it is subscribed to
-      newNode.setAttribute("SUB", "1");
+      saveSubscription( trade.trade_name );
       turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
-    
-    } else {
-       newNode.setAttribute("SUB", "0");
     }
     
+
     //
     // click listener for the checkbox
     //
     checkBox.addEventListener("click", function( event ) {
-    
-      if ( trade.user_subscribed ) { // checkbox is ON
+     
+      console.log("CHECKBOX SUBSCRIBED=" + trade.user_subscribed);
 
-        newNode.setAttribute("SUB", "0");
+      if ( isSubscribed( trade.trade_name)  ) { // checkbox is ON
+        console.error("TURNING OFF");
+        removeSubscription( trade.trade_name );
         turnTrade_Off(checkBox, radioButton, theLabel, trade.trade_name);
 
       } else { // checkbox is OFF
-        newNode.setAttribute("SUB", "1");
+        console.error("!!!TURNING ON");
+        saveSubscription( trade.trade_name );
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
 
       }
@@ -116,15 +127,16 @@ export function initTradesColumn( all_trades ) {
     // click listener for the radio button
     //
     radioButton.addEventListener("click", function( event ) {
-    
-      if ( trade.user_subscribed ) { // radio button is ON
 
-        newNode.setAttribute("SUB", "0");
+
+      if ( isSubscribed( trade.trade_name) ) { // radio button is ON
+
+        removeSubscription( trade.trade_name );
         turnTrade_Off(checkBox, radioButton, theLabel, trade.trade_name);
 
       } else { // radio button is OFF
 
-        newNode.setAttribute("SUB", "1");
+        saveSubscription( trade.trade_name );
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
 
       }
@@ -137,14 +149,14 @@ export function initTradesColumn( all_trades ) {
     //
     theLabel.addEventListener("click", function( event ) {
     
-      if ( trade.user_subscribed ) { // radio button is ON
+      if ( isSubscribed( trade.trade_name) ) { // radio button is ON
 
-        newNode.setAttribute("SUB", "0");
+        removeSubscription( trade.trade_name );
         turnTrade_Off(checkBox, radioButton, theLabel, trade.trade_name);
 
       } else { // radio button is OFF
 
-        newNode.setAttribute("SUB", "1");
+        saveSubscription( trade.trade_name );
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
 
       }
@@ -159,12 +171,42 @@ export function initTradesColumn( all_trades ) {
 
 
   // DEBUG DEBUG DEBUG
-  //printColorMap();
+  // printColorMap();
 }
 
 
 
-const COLORS_TO_TRADES = Array();
+/**
+ * 
+ */
+
+
+/**
+ * 
+ * @param String trade_name 
+ */
+function saveSubscription( trade_name ) {
+
+  if (SUBSCRIBED.indexOf(trade_name) == -1) { // not in list already
+    SUBSCRIBED.push( trade_name );
+    window.sessionStorage.setItem("SUBS", SUBSCRIBED);
+  }
+}
+
+
+/**
+ * 
+ * @param String trade_name 
+ */
+function removeSubscription( trade_name ) {
+
+  SUBSCRIBED.splice( SUBSCRIBED.indexOf(trade_name), 1);
+  window.sessionStorage.setItem("SUBS", SUBSCRIBED);
+}
+
+
+
+
 
 
 
@@ -199,7 +241,10 @@ function createColor(numOfSteps, step) {
  * Seed the COLORS_TO_TRADES map
  * generate a spectrum of evenly-spaced colors and assign them to 
  * boxes of a 2-dimensional array, with each color paired to a trade_name
- * if no trade name has been assigned, the second element will be null
+ * 
+ * [ [color1, trade_name], [color2, null], .... ]
+ * 
+ * number of colors == number of trades
  * 
  * all_trades is the array 
  * 
@@ -211,41 +256,32 @@ function createColor(numOfSteps, step) {
  * }, .... 
  * ]
  * 
- * 
- * modifies COLORS_TO_TRADES
- * [ [color1, trade_name], [color2, null], .... ]
  */
 function seedColorMap( all_trades ) {
 
     var num_trades = all_trades.length;
     
+    // for each trade....
     for (let i = 0; i < num_trades; i++ ) {
-      
+      // create a color and seed the map
       var theColor = createColor( num_trades, i );
-      var theTrade = all_trades[i].trade_name;
-
-      // see if this color was already assigned to a trade
-      // on a previous page load
-      var colorAssigned = window.sessionStorage.getItem( theTrade );
-      if (colorAssigned != null) {
-        // assign this color to a trade name
-        COLORS_TO_TRADES.push( new Array( theColor, theTrade)  ); 
-      } else {
-        // assign a null to this color
-        COLORS_TO_TRADES.push( new Array( theColor, null)  );
-      }
+      COLORS_TO_TRADES.push( new Array(theColor, null) );
+    
     }
-}
+  }
+
+
 
 
 
 /*
  *
  */
-function printColorMap() {
+export function printColorMap() {
   for (let i = 0; i < COLORS_TO_TRADES.length; i++) {
       var theColor = COLORS_TO_TRADES[i][0];
-      var theString = i + ":" + theColor;
+      var theTrade = COLORS_TO_TRADES[i][1];
+      var theString = i + ":" + theColor + "==>" + theTrade;
       console.log("%c" + theString, "color: " + theColor + ";"); 
   }
 }
@@ -257,25 +293,24 @@ function printColorMap() {
  * 
  * COLORS_TO_TRADES[ index ][color, tradeName]
  */
-function getTradeColor( tradeName ) {
+function chooseTradeColor( tradeName ) {
 
-  // choose a random index into COLORS_TO_TRADES
-  let index = Math.floor(Math.random() * COLORS_TO_TRADES.length);
-  // console.log("RANDOM INDEX=" + index + " OF " + COLORS_TO_TRADES.length);
+    // choose a random index into COLORS_TO_TRADES
+    let index = Math.floor(Math.random() * COLORS_TO_TRADES.length);
 
-  let hexColor = COLORS_TO_TRADES[index][0];
-  let isAssigned = ( COLORS_TO_TRADES[index][1] !== null );
+    // if color is in use - recurse and try again
+    let isAssigned = ( COLORS_TO_TRADES[index][1] != null );
+      if (isAssigned) {
+        return chooseTradeColor( tradeName );
+      }
+    
+    // == null, no assignment yet
+    // assign this trade to a color and return the color
+    COLORS_TO_TRADES[index][1] = tradeName;
+     
 
-  // if color is in use - recurse and try again
-  if (isAssigned) {
-    return getTradeColor( tradeName );
-  }
-  
-  // else -- 
-  // assign this color to a trade and return it
-  COLORS_TO_TRADES[index][1] = tradeName;
-  
-  return hexColor;
+    let hexColor = COLORS_TO_TRADES[index][0];
+    return hexColor;
 }
 
 
@@ -287,6 +322,7 @@ function getTradeColor( tradeName ) {
  */
 function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
 
+
   // turn on the check box and the radio button
   checkBox.checked = true;
   radioButton.checked = true;
@@ -294,16 +330,19 @@ function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
   // has the color already been set from a previous load
   //
   var theColor = window.sessionStorage.getItem(trade_name);
-  
   if (theColor == null) {
-    
-    // NO  -- generate a new random color and
-    // map it in session storage to the trade name
-    theColor = getTradeColor( trade_name );
-    window.sessionStorage.setItem(trade_name, theColor);
-  }
 
-  
+    // NO -- color has not been assigned
+    // generate a new random color and map it in session storage to the trade name
+    theColor = chooseTradeColor( trade_name );
+    window.sessionStorage.setItem(trade_name, theColor);
+
+  } 
+
+  // DEBUG
+  var theString = "TURN ON=" + trade_name;
+  console.log("%c" + theString, "color: " + theColor + ";"); 
+
 
   // FIXME 2/2023 
   // should all be done in css but the initial setting doesn't persist
@@ -315,9 +354,9 @@ function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
   theLabel.style.color = "black";
 
 
-  // ask the DB for all the leedz for this trade / color in the UI
+  // ask the cache/DB for all the leedz for this trade and add them to UI
   //
-  loadLeedzForTrade(trade_name, radioButton.style.backgroundColor);
+  loadLeedzForTrade(trade_name, theColor);
 }
 
 

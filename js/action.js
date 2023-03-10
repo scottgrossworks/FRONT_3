@@ -1,7 +1,6 @@
 /* action.js */
 
-import { getWeekday } from "./calendar.js";
-import { getShortMonthname } from "./months.js";
+import { getWeekday, getHours, getMinutes, getShortMonthname } from "./dates.js";
 
 
 let LEED_DETAILS = {
@@ -24,8 +23,8 @@ leed_fromDB
     {   
       id: 99999,
       trade: "firebreather",
-      start_date: new Date("2023-03-11T15:30:00"),
-      end_date: new Date("2023-03-11T18:30:00"),
+      start_date: Date().toISOString(),
+      end_date: Date().toISOString(),
       note: "Corporate Event",
     }
 
@@ -34,13 +33,26 @@ export function showLeedAction( trade_color, leed_fromDB ) {
 
     // GOTO DB to get full leed details
     // leed_fromDB.id
+    console.log("ACTION PANEL=" + leed_fromDB.start);
+
+    const startDate = new Date(leed_fromDB.start);
+
     
-    const leed_weekday = getWeekday( leed_fromDB.start_date.getDay() );
-    const leed_monthname = getShortMonthname( leed_fromDB.start_date.getMonth() );
-    const leed_date = leed_fromDB.start_date.getDate();
-    const leed_year = leed_fromDB.start_date.getFullYear();
-    const start_time = leed_fromDB.start_date.getHours() + ":" + leed_fromDB.start_date.getMinutes();
-    const end_time = leed_fromDB.end_date.getHours() + ":" + leed_fromDB.end_date.getMinutes();
+
+    const leed_weekday = getWeekday( startDate.getDay() );
+    
+    const leed_monthname = getShortMonthname( leed_fromDB.start.substring(5, 7) ); 
+    const leed_date = leed_fromDB.start.substring(8, 10);
+    const leed_year = leed_fromDB.start.substring(0, 4);
+    
+    // returns array [ hours(12) , AM/PM ]  
+    let hours_start = getHours(leed_fromDB.start);
+    let hours_end = getHours(leed_fromDB.end);
+
+    const start_time = hours_start[0] + ":" + getMinutes(leed_fromDB.start) + hours_start[1];
+    const end_time = hours_end[0] + ":" + getMinutes(leed_fromDB.end) + hours_end[1];
+
+
     
 
     // leed_title

@@ -48,18 +48,14 @@
   height: 100%; /* Specify a height */  
   width: max-content;
 
-  position: fixed; /* Stay in place */
   
   z-index: 300; /* Stay on top */   
   
-  top: 0;
   left: 0;
   
   background-color: var(--LEEDZ_GRAY);
-  overflow-x: hidden; 
-  overflow-y: scroll;
 
-  border-right: 1px solid lightgray;
+  border-right: 2px solid lightgray;
 
 }
 

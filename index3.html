@@ -23,6 +23,7 @@
         <link rel="stylesheet" href="css/styles_med.css" type="text/css" />
         <link rel="stylesheet" href="css/styles_lg.css" type="text/css" />
 
+        <link rel="stylesheet" href="css/user_panel.css" type="text/css" />        
         <link rel="stylesheet" href="css/trades.css" type="text/css" />
         <link rel="stylesheet" href="css/calendar.css" type="text/css" />
         <link rel="stylesheet" href="css/month_chooser.css" type="text/css" />
@@ -40,21 +41,27 @@
    
   <body>
    
-    <div class="row">       
+    <div class="row" id="user_panel">
+
+      <div class="column _20" id="user_profile"><label><a href="">scottgross.works</a></label></div>
+      <div class="column _7"></div>
+      <div class="column _1" id="user_panel_logo"><span><img src="./img/logo_wide.png"></span></div>
+
+      
+    </div>
+
+
+
+    <div class="row" id="main_panel">       
       
       
       <!-- LEFT COLUMN
         -- TRADES PANEL 
         -->
       <div id="trades_column" class="column _15">
-        
-
-        
-        
+            
         <!-- all of the trades code -->
         <div id="side_panel" class="trades_side">
-
-    
 
             <!-- CLOSE BUTTON -->
             <a href="javascript:void(0)"  id="close_side_btn" class="closebtn" onclick="closeNav()">&#8678;</a>

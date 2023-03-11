@@ -103,6 +103,7 @@
     background-color:white;
     border-radius: 20px;
 
+    font-family: var(--FONT_1);
     font-size: small;
 }
 
@@ -125,6 +126,8 @@
     padding-right:8px;
     padding-top:4px;
 
+    
+    font-family: var(--FONT_1);
     color:black;
     font-size:2em;
     font-weight: bold;

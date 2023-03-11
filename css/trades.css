@@ -9,9 +9,16 @@
 
   #trades_column {
 
+    display: flex;
+    flex-direction: column;
+
     min-width:60px;
     width:fit-content;
-    z-index:500;
+ 
+
+    align-items: flex-start;
+    overflow-x: hidden; 
+    overflow-y: hidden;
   }
 
   
@@ -20,23 +27,27 @@
 
     .trades {
   
-      z-index:300;
-
       width:max-content;
       min-width: 60px;
       
       line-height: 1.6em;
       padding-bottom: 25px;
       padding-left:10px;
-      padding-right:20px;
+      padding-right:0px;
+
+
     }
     
   
   
     #trades_list {
   
+      padding-right:10px;
+
       list-style-type: none;
-  
+      
+      overflow-x: hidden; 
+      overflow-y: scroll !important; 
     }
 
     
@@ -106,8 +117,11 @@
   
    
     .each_trade > label {      
+
+      font-family: var(--FONT_3);
       font-size: 1em;
-      transform: translateY(6px);
+      transform: translate(-2px, 6px);
+   
       color: gray;
     }
 

@@ -4,7 +4,7 @@
     --CENTER-WIDTH: 46vw;
 
     --LEEDZ_BKG: white;
-    --LEEDZ_GRAY:rgb(239, 242, 247);
+    --LEEDZ_GRAY:rgb(239, 242, 247); 
     --LEEDZ_DARKGRAY: rgb(181, 181, 185);
     --LEEDZ_LIGHTGREEN:rgb(215, 240, 230);
     --LEEDZ_GREEN: rgb(97, 234, 178);
@@ -57,6 +57,8 @@
 
    body {
     background-color: white;
+    display: flex;
+    flex-direction: column;
   
   }
 
@@ -80,6 +82,21 @@
     justify-content: space-around;
 
 }
+
+
+
+
+#main_panel {
+  display:flex;
+  top:0;
+  align-items:flex-start;
+}
+
+
+
+._05 {
+  flex: .5;
+  }  
 
 
   ._1 {

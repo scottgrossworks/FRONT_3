@@ -9,7 +9,8 @@
     /* screen size-dependent -->  display:flex; */
     flex-direction: column;
     background-color: white;
-    border-left:1px solid var(--LEEDZ_DARKGRAY);
+
+    border-left:2px solid lightgray;
 
     vertical-align: middle;
     align-items: center;

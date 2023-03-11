@@ -3,7 +3,7 @@ import { loadLeedzForTrade, removeLeedzForTrade } from "./calendar.js";
 
 
 
-const COLORS_TO_TRADES = Array();
+const COLORS = Array();
 let SUBSCRIBED = [];
 
 
@@ -31,16 +31,6 @@ export function isSubscribed( trade_name ) {
  */
 export function getColorForTrade(trade_name) {
 
-  /*
-  for (var i = 0; i < COLORS_TO_TRADES.length; i++) {
-    var thePair = COLORS_TO_TRADES[i];
-    if (thePair[1] == trade_name) {
-      return thePair[0];
-    }
-  }
-  return "var(--LEEDZ_GRAY)";
-  */
-
   let cacheColor = window.sessionStorage.getItem( trade_name );
   if (cacheColor != null) {
     return cacheColor;
@@ -66,7 +56,7 @@ export function getColorForTrade(trade_name) {
 export function initTradesColumn( all_trades ) {
 
   // initialize the spectrum of colors
-  seedColorMap( all_trades );
+  seedColors( all_trades );
 
   // recover list of subscriptions if any
   let cachedSubs = sessionStorage.getItem("SUBS");
@@ -171,7 +161,7 @@ export function initTradesColumn( all_trades ) {
 
 
   // DEBUG DEBUG DEBUG
-  // printColorMap();
+  // printColors();
 }
 
 
@@ -238,16 +228,10 @@ function createColor(numOfSteps, step) {
 
 
 /*
- * Seed the COLORS_TO_TRADES map
- * generate a spectrum of evenly-spaced colors and assign them to 
- * boxes of a 2-dimensional array, with each color paired to a trade_name
- * 
- * [ [color1, trade_name], [color2, null], .... ]
- * 
+ * Seed the COLORS
  * number of colors == number of trades
  * 
- * all_trades is the array 
- * 
+ * all_trades:
  * [
  * {
     trade_name: "caricatures",
@@ -257,7 +241,7 @@ function createColor(numOfSteps, step) {
  * ]
  * 
  */
-function seedColorMap( all_trades ) {
+function seedColors( all_trades ) {
 
     var num_trades = all_trades.length;
     
@@ -265,7 +249,7 @@ function seedColorMap( all_trades ) {
     for (let i = 0; i < num_trades; i++ ) {
       // create a color and seed the map
       var theColor = createColor( num_trades, i );
-      COLORS_TO_TRADES.push( new Array(theColor, null) );
+      COLORS.push( theColor );
     
     }
   }
@@ -277,11 +261,10 @@ function seedColorMap( all_trades ) {
 /*
  *
  */
-export function printColorMap() {
-  for (let i = 0; i < COLORS_TO_TRADES.length; i++) {
-      var theColor = COLORS_TO_TRADES[i][0];
-      var theTrade = COLORS_TO_TRADES[i][1];
-      var theString = i + ":" + theColor + "==>" + theTrade;
+export function printColors() {
+  for (let i = 0; i < COLORS.length; i++) {
+      var theColor = COLORS[i];
+      var theString = i + ":" + theColor;
       console.log("%c" + theString, "color: " + theColor + ";"); 
   }
 }
@@ -289,27 +272,25 @@ export function printColorMap() {
 
 /*
  * return an UNUSED randomly generated color
- * assign tradeName to color in COLORS_TO_TRADES
  * 
- * COLORS_TO_TRADES[ index ][color, tradeName]
+ * COLORS[ index ] == available color, or null if color is in use
  */
 function chooseTradeColor( tradeName ) {
 
-    // choose a random index into COLORS_TO_TRADES
-    let index = Math.floor(Math.random() * COLORS_TO_TRADES.length);
+    // choose a random index into COLORS
+    let index = Math.floor(Math.random() * COLORS.length);
 
     // if color is in use - recurse and try again
-    let isAssigned = ( COLORS_TO_TRADES[index][1] != null );
+    let isAssigned = ( COLORS[index]== null ); // null means it's in use
       if (isAssigned) {
         return chooseTradeColor( tradeName );
       }
     
-    // == null, no assignment yet
-    // assign this trade to a color and return the color
-    COLORS_TO_TRADES[index][1] = tradeName;
+    // != null, color still available 
+    // replace this color with null and return it
+    let hexColor = COLORS[index];
+    COLORS[index] = null;
      
-
-    let hexColor = COLORS_TO_TRADES[index][0];
     return hexColor;
 }
 

@@ -3,9 +3,10 @@
  *
  */
 
-import { daysInMonth, getShortDate, getShortDateString, getWeekday, getDay, getMonth, getYear  } from "./dates.js";
+import { daysInMonth, getNewDate, getShortDate, getShortDateString, getWeekday,
+         getDay, getMonth, getYear, getHours, getMinutes, twoDigitInt  } from "./dates.js";
 import { showLeedAction } from "./action.js";
-import { getColorForTrade, isSubscribed, printColorMap } from "./trades.js";
+import { getColorForTrade, isSubscribed } from "./trades.js";
 
 
 const CACHE_DELIM = "|";
@@ -18,8 +19,8 @@ const DB_CARICATURES = [
     {
       id: 11111,
       trade: "caricatures",
-      start: new Date("2023-03-03T15:00:00").toISOString(),
-      end: new Date("2023-03-03T17:30:00").toISOString(),
+      start: new Date("2023-03-03T15:00:00Z").toISOString(),
+      end: new Date("2023-03-03T17:30:00Z").toISOString(),
       note: "Caricatures 1"
     },
     
@@ -27,8 +28,8 @@ const DB_CARICATURES = [
     {
       id: 22222,
       trade: "caricatures",
-      start: new Date("2023-03-04T18:00:00").toISOString(),
-      end: new Date("2023-03-04T21:30:00").toISOString(),
+      start: new Date("2023-03-04T18:00:00Z").toISOString(),
+      end: new Date("2023-03-04T21:30:00Z").toISOString(),
       note: "Caricatures 2",
     },
     
@@ -37,8 +38,8 @@ const DB_CARICATURES = [
     {
       id: 33333,
       trade: "caricatures",
-      start: new Date("2023-05-11T15:30:00").toISOString(),
-      end: new Date("2023-05-11T18:30:00").toISOString(),
+      start: new Date("2023-05-05T15:30:00Z").toISOString(),
+      end: new Date("2023-05-05T18:30:00Z").toISOString(),
       note: "Caricatures 3",
     },
     
@@ -50,8 +51,8 @@ const DB_DANCER = [
     {
       id: 44444,
       trade: "dancer",
-      start: new Date("2023-03-04T11:00:00").toISOString(),
-      end: new Date("2023-03-04T13:30:00").toISOString(),
+      start: new Date("2023-03-04T11:00:00Z").toISOString(),
+      end: new Date("2023-03-04T13:30:00Z").toISOString(),
       note: "dancer 1",
     },
     
@@ -59,8 +60,8 @@ const DB_DANCER = [
     {
       id: 55555,
       trade: "dancer",
-      start: new Date("2023-03-14T18:00:00").toISOString(),
-      end: new Date("2023-03-14T21:30:00").toISOString(),
+      start: new Date("2023-03-14T18:00:00Z").toISOString(),
+      end: new Date("2023-03-14T21:30:00Z").toISOString(),
       note: "dancer 2",
     },
     
@@ -69,8 +70,8 @@ const DB_DANCER = [
     {
       id: 66666,
       trade: "dancer",
-      start: new Date("2023-05-12T15:30:00").toISOString(),
-      end: new Date("2023-05-12T18:30:00").toISOString(),
+      start: new Date("2023-05-02T15:30:00Z").toISOString(),
+      end: new Date("2023-05-02T18:30:00Z").toISOString(),
       note: "dancer 3",
     },
     
@@ -82,8 +83,8 @@ const DB_DEEJAY = [
     {
       id: 77777,
       trade: "deejay",
-      start: new Date("2023-03-03T20:00:00").toISOString(),
-      end: new Date("2023-03-03T22:30:00").toISOString(),
+      start: new Date("2023-03-03T20:00:00Z").toISOString(),
+      end: new Date("2023-03-03T22:30:00Z").toISOString(),
       note: "deejay 1",
     },
     
@@ -91,8 +92,8 @@ const DB_DEEJAY = [
     {
       id: 88888,
       trade: "deejay",
-      start: new Date("2023-03-06T18:30:00").toISOString(),
-      end: new Date("2023-03-06T20:30:00").toISOString(),
+      start: new Date("2023-03-06T18:30:00Z").toISOString(),
+      end: new Date("2023-03-06T20:30:00Z").toISOString(),
       note: "deejay 2",
     },
     
@@ -101,8 +102,8 @@ const DB_DEEJAY = [
     {
       id: 99999,
       trade: "deejay",
-      start: new Date("2023-05-12T15:30:00").toISOString(),
-      end: new Date("2023-05-12T18:30:00").toISOString(),
+      start: new Date("2023-05-04T15:30:00Z").toISOString(),
+      end: new Date("2023-05-04T18:30:00Z").toISOString(),
       note: "deejay 3",
     },
     
@@ -114,8 +115,8 @@ const DB_ERROR = [
     {
       id: 121212,
       trade: "ERROR",
-      start: new Date("2023-03-03T06:00:00").toISOString(),
-      end: new Date("2023-03-03T09:30:00").toISOString(),
+      start: new Date("2023-03-03T06:00:00Z").toISOString(),
+      end: new Date("2023-03-03T09:30:00Z").toISOString(),
       note: "ERROR",
     },
 ];
@@ -134,8 +135,6 @@ export function loadCalendar() {
 
     let theYear = getYear();
     let theMonth = getMonth();
-    let weekday = getDay();
-
     let days_in_month = daysInMonth(theMonth, theYear);
 
     // import DOM elements from html
@@ -156,8 +155,12 @@ export function loadCalendar() {
 
         
         // each day in the DOM knows its date
-        let theDate = new Date(theYear, theMonth, i);
-        let dateString = getShortDate( theDate );
+        // Date() uses 0 indexing for month so -1
+        // ISODate format -> 2012-07-14T00:00:00Z
+        //
+        // let theDate = getNewDate(theYear, theMonth, i);
+        // 
+        let dateString = theYear + "-" + twoDigitInt(theMonth) + "-" + twoDigitInt(i);
         eachDay.setAttribute("LEEDZ_DATE", dateString);
  
 
@@ -169,8 +172,8 @@ export function loadCalendar() {
         // add the day of the week
         //
         let daySpan = document.createElement("span");
-        daySpan.textContent = getWeekday( weekday );
-        weekday = ++weekday % 7;
+        // this will be a local timezone day of week
+        daySpan.textContent = getWeekday( dateString );
         dateSquare.appendChild( daySpan ); 
 
     
@@ -215,7 +218,7 @@ function loadLeedzFromCache( theDay, JSON_leedz ) {
             var trade_color = getColorForTrade( theLeed.trade );
             createCalendarLeed( theDay, trade_color, theLeed);
         } 
-        // else -- FIXME FIXME FIXME -- remove it from the cache?
+        // else -- FIXME -- remove it from the cache?
                 
     }
 
@@ -268,6 +271,8 @@ export function loadLeedzForTrade( trade_name, trade_color ) {
     // for each (date sorted) leed coming in from the DB
     for (const leed_fromDB of DB_LEEDZ) {
 
+        console.error("LOADING LEED=" + leed_fromDB.trade + "--" + getShortDateString(leed_fromDB.start));
+
         // starting at date last visited (skipping template index:0 )
         // iterate through the calendar and find the corresponding date
         for (var counter = dateIndex; counter < theList.children.length; counter++) {
@@ -281,33 +286,30 @@ export function loadLeedzForTrade( trade_name, trade_color ) {
 
             // this should NEVER be null
             if (theDate == null) {
-                console.error("--leedz_date not being set for each day");
-                theDate = new Date();
-                each_day.setAttribute("LEEDZ_DATE", getShortDate( theDate) );   
+                console.error("LEEDZ_DATE attribute not being set for each day");
+                console.error("Unable to load leedz for " + leed_fromDB.trade);
+                return;  
             }
 
             // if date row in calendar corresponds to date in leed_fromDB
             // both should be Date.toISOString() 
             if ( getShortDateString(leed_fromDB.start) == theDate ) {
 
-
                 // CREATE CALENDAR LEED
                 //
                 createCalendarLeed( each_day, trade_color, leed_fromDB);
                 
-
-                // CACHE LEED FOR THIS DATE
-                //
-                cacheLeed( leed_fromDB, theDate );
-                
-                
-                   
                 dateIndex = counter; 
                 // reset so on next iteration
                 // skip ahead to date of this leed
                 break; // leed will only have one corresponding calendar day
+            
             } 
         }
+        // before we move on to next leed
+        // CACHE this one in sessionStorage -- might be future date not displayed
+        // console.log("CACHING LEED FOR=" + getShortDateString(leed_fromDB.start));
+        cacheLeed( leed_fromDB, getShortDateString(leed_fromDB.start) );
     }
 }
 
@@ -461,6 +463,8 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
     eachDay.appendChild( newLeed );
 
+    
+    console.log("CREATING CALENDAR LEED=" + leed_fromDB.trade + "==" + leed_fromDB.start);
 }
 
 

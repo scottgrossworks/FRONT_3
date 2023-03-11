@@ -1,10 +1,63 @@
-/* dates.js */
+/**
+ * ALL DATES ARE UTC
+ * The system imagines everyone lives in the same timezone
+ * dates.js brokers all date requests from the UI for consistent display no matter the client timezone
+ * 
+ */
+
 
 const DATE_KEY = "DS";
+
+// DATE_SHOWING is the current Date() object showing on the calendar
 let DATE_SHOWING = null;
 
 
-// DATE_SHOWING is the current Date() object showing on the calendar
+/**
+ *
+ * 
+ */
+export function getNewDate( theYear, theMonth, theDay) {
+
+    const theDate = new Date( Date.UTC(theYear, theMonth - 1, theDay) );
+    return theDate;
+}
+
+
+/**
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date
+ * Date-only strings (e.g. "1970-01-01") are treated as UTC <=== WHAT WE WANT
+ * while date-time strings (e.g. "1970-01-01T12:00") are treated as local. 
+ * 
+ */
+export function getISODate( isoString ) {
+    const theDate = new Date( isoString );
+    return theDate;
+}
+
+
+/**
+ * (25) ===> '25'
+ *  (9) ===> '09'
+ */
+export function twoDigitInt( d ) {
+
+    return (d < 10) ? '0' + d.toString() : d.toString();
+}
+
+
+/**
+ *
+ */
+function getTodayUTC() {
+
+    let today = new Date();
+    let utcDate = new Date(Date.UTC(today.getUTCFullYear(), 
+                                     today.getUTCMonth(), 
+                                     today.getUTCDate()));
+
+    return utcDate;
+}
+
 
 /**
  * 
@@ -19,7 +72,8 @@ export function isDateSet() {
 export function setDateShowing( theDate ) {
 
     DATE_SHOWING = theDate;
-    window.sessionStorage.setItem(DATE_KEY, DATE_SHOWING);
+    window.sessionStorage.setItem(DATE_KEY, getShortDateString(DATE_SHOWING.toISOString()));
+
 }
 
 
@@ -34,16 +88,18 @@ export function getDateShowing() {
 
     // if not set
     // check session storage for a previously-viewed calendar
-    let sessionDate = window.sessionStorage.getItem( DATE_KEY );
+    const sessionDate = window.sessionStorage.getItem( DATE_KEY );
     if (sessionDate != null) {
-        DATE_SHOWING = new Date(sessionDate);
-    
-    
+
+        let shortDate = getShortDateString(sessionDate);
+        DATE_SHOWING = new Date(shortDate);
+        
     } else {
         // show today's date
-        DATE_SHOWING = new Date();
+        DATE_SHOWING = getTodayUTC();
         // save in case of browser close / refresh
-        window.sessionStorage.setItem( DATE_KEY, DATE_SHOWING); 
+        let shortDate = getShortDate( DATE_SHOWING );
+        window.sessionStorage.setItem( DATE_KEY, shortDate ); 
     }
     
     return DATE_SHOWING;
@@ -58,6 +114,7 @@ export function getDay() {
 
     if (DATE_SHOWING == null) getDateShowing();        
     let day = DATE_SHOWING.getDay();
+
     return day;
 }
 
@@ -72,8 +129,8 @@ export function getDay() {
 export function getMonth() {
 
     if (DATE_SHOWING == null) getDateShowing();        
-    let month = DATE_SHOWING.getMonth();
-    return month + 1;
+    let month = DATE_SHOWING.getUTCMonth() + 1;
+    return month;
 }
 
 
@@ -90,13 +147,19 @@ export function getYear() {
 
 
 
+
+
+
+
+
+
 /*
- * 
+ * This uses LOCAL timezone
+ * NOT UTC
  */
 export function daysInMonth ( month, year ) { 
 
-    // why +1?  I don't know
-    let numDays = new Date(year, month + 1, 0).getDate();
+    let numDays = new Date(year, month, 0).getDate();
     return numDays;
   }
 
@@ -178,8 +241,7 @@ export function getHours( isoString ) {
     if (theHour < 12) {
         return [ String(theHour), "AM" ];
     } else {
-        //theHour %= 12;
-        return [ String(theHour), "PM" ];
+        return [ String(theHour % 12), "PM" ];
     }
     
 }
@@ -199,29 +261,20 @@ export function getMinutes( isoString ) {
 
 
 /*
- * return weekday name from day index
- * 0 = sunday
- * 6 = saturday
+ * @param String ISO short date YYYY-MM-DD
+ *
+ * FORCE LOCAL TIME
+ * Use time format:  THH:MM:SS     (no trailing Z) 
+ * returns LOCAL day of week -- converts to LOCAL timezone
+ * NOT UTC
  */
-export function getWeekday( day_index ) {
+export function getWeekday( shortDate ) {
 
-    switch (day_index) {
+    let longDate = shortDate + "T00:01:00";
+    let localDate = new Date( longDate );
+    let dateStr = localDate.toString().substring(0, 3);
 
-        case 1:
-            return "Mon";
-        case 2:
-            return "Tues";
-        case 3:
-            return "Wed";
-        case 4:
-            return "Thurs";
-        case 5:
-            return "Fri";
-        case 6:
-            return "Sat";
-        default:
-            return "Sun";
-    }
+    return dateStr;
 }
 
 
@@ -235,7 +288,9 @@ export function getWeekday( day_index ) {
  */
 export function getShortDate( theDate ) {
 
-    var theString = theDate.toISOString().substring(0, 10);
+    let theISO = theDate.toISOString();
+    var theString = theISO.substring(0, 10);
+
     return theString;
 
 }

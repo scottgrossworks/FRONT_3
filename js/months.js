@@ -1,5 +1,5 @@
 import { loadCalendar } from "./calendar.js";
-import { setDateShowing, getMonth, getYear, getMonthname } from "./dates.js";
+import { setDateShowing, getMonth, getYear, getMonthname, getNewDate } from "./dates.js";
 
 
 
@@ -24,7 +24,9 @@ export function initMonthChooser() {
     
         let prevMonth = getPrevMonth();
 
-        let theMonth = prevMonth.getMonth();
+        let theMonth = prevMonth.getUTCMonth() + 1;
+        console.log("CHECKING MONTH=" + theMonth);
+
         let theYear = prevMonth.getFullYear();
 
         theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
@@ -44,8 +46,12 @@ export function initMonthChooser() {
   
         let nextMonth = getNextMonth();
 
-        let theMonth = nextMonth.getMonth();
+        console.error("GOT NEXT MONT=" + nextMonth.toISOString());
+
+        let theMonth = nextMonth.getUTCMonth() + 1;
         let theYear = nextMonth.getFullYear();
+
+        console.log("*****theMonth=" + theMonth + "*****theYear=" + theYear);
 
         theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
 
@@ -75,9 +81,11 @@ function getPrevMonth() {
         theMonth--;
     }
 
+    console.log("getPrevMonth=" + theMonth + "=" + theYear);
+
     const theDay = 1;
 
-    return new Date( theYear, theMonth, theDay );
+    return getNewDate( theYear, theMonth, theDay );
 }
 
  
@@ -89,6 +97,9 @@ function getNextMonth() {
     let theMonth = getMonth();
     let theYear = getYear();
 
+    
+    console.log("getNextMonth START=" + theMonth + "=" + theYear)
+
     if (theMonth == 12) {
         theYear++;
         theMonth = 1;
@@ -97,8 +108,12 @@ function getNextMonth() {
         theMonth++;
     }
 
+    
+
+    console.log("getNextMonth END=" + theMonth + "=" + theYear);
+
     const theDay = 1;
 
-    return new Date( theYear, theMonth, theDay );
+    return getNewDate( theYear, theMonth, theDay );
 }
 

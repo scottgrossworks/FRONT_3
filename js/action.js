@@ -1,6 +1,6 @@
 /* action.js */
 
-import { getWeekday, getHours, getMinutes, getShortMonthname } from "./dates.js";
+import { getWeekday, getHours, getMinutes, getShortMonthname, getNewDate, getISODate } from "./dates.js";
 
 
 let LEED_DETAILS = {
@@ -33,19 +33,12 @@ export function showLeedAction( trade_color, leed_fromDB ) {
 
     // GOTO DB to get full leed details
     // leed_fromDB.id
-    console.log("ACTION PANEL=" + leed_fromDB.start);
-
-    const startDate = new Date(leed_fromDB.start);
-
-    
-
-    const leed_weekday = getWeekday( startDate.getDay() );
-    
+   
+    const leed_weekday = getWeekday( leed_fromDB.start.substring(0, 10) );    
     const leed_monthname = getShortMonthname( leed_fromDB.start.substring(5, 7) ); 
     const leed_date = leed_fromDB.start.substring(8, 10);
     const leed_year = leed_fromDB.start.substring(0, 4);
     
-    // returns array [ hours(12) , AM/PM ]  
     let hours_start = getHours(leed_fromDB.start);
     let hours_end = getHours(leed_fromDB.end);
 

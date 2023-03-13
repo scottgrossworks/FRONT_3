@@ -35,6 +35,8 @@
     #open_side_btn {
      visibility:visible;
      left:0;
+    font-size: small;
+    padding:10px;
     }
 
 
@@ -42,7 +44,7 @@
 
 #calendar_main {
 position: relative;
-  margin-left:-120px !important;
+  margin-left:-110px !important;
 
 }
 

@@ -43,6 +43,7 @@
     line-height: 1.2;
     font-family: var(--FONT_3);
     color: black;
+    overflow-y: hidden;
     } 
 
 
@@ -159,6 +160,12 @@
   border: none;
 }
 
+
+#calendar_main {
+  position: relative;
+  left:auto;
+  padding-left:0;
+}
 
 
 

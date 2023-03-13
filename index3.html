@@ -65,7 +65,7 @@
           
         
         <!-- OPEN SIDEBAR BUTTON -->
-        <button id="open_side_btn" class="openbtn" onclick="openNav()">&#10140;</button>
+        <button id="open_side_btn" class="openbtn" onclick="openClose()"></button>
       </div>
 
         <!-- all of the trades code -->
@@ -203,23 +203,29 @@
       if (small_screen == "1") {
         IS_OPEN = false;
       }  
+
+        function openNav() {
+          side.style.width = "max-content";
+          open.style.left = side.clientWidth + "px";
+          open.innerHTML = "&#10140;"
+        }
       
+        function closeNav() {
+          side.style.width = "0";
+          open.style.left = 0;
+          open.innerHTML = "&#9776;"
+        }
 
 
         /* Set the width of the sidebar to 250px (show it) */
-        function openNav() {
-            
-
+        function openClose() {
+          
             if (IS_OPEN) {
-              side.style.width = "0";
-              open.style.left = 0;
-              open.innerHTML = "&#9776;"
+              closeNav();
               IS_OPEN = false;
             
             } else {
-              side.style.width = "max-content";
-              open.style.left = side.clientWidth + "px";
-              open.innerHTML = "&#10140;"
+              openNav();
               IS_OPEN = true;
             }
 
@@ -428,19 +434,13 @@
       initTradesColumn( trades );
 
       
-     if (IS_OPEN) {
-      side.style.width = "max-content";
-      open.style.left = side.clientWidth + "px";
-      open.innerHTML = "&#10140;"
-
-     } else {
-      side.style.width = "0";
-      open.style.left = 0;
-      open.innerHTML = "&#9776;";
-     }
+      if (IS_OPEN) {
+          openNav();
+      } else {
+          closeNav();
+      }
 
   
-    
 
 
    </script>

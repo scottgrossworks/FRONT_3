@@ -79,7 +79,7 @@
     border:0;
 
     width:100%;
-    justify-content: space-around;
+    justify-content:space-around;
 
 }
 
@@ -87,10 +87,78 @@
 
 
 #main_panel {
+  height: 100%;
   display:flex;
   top:0;
-  align-items:flex-start;
 }
+
+
+
+
+/* The sidepanel menu */
+.trades_side {
+
+  height: 100%;   
+  width: max-content; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 900; /* Stay on top */
+
+
+  left: 0;
+ 
+  overflow-x: hidden; 
+  overflow-y: hidden; 
+
+  background-color: var(--LEEDZ_GRAY);
+  border-right: 2px solid lightgray;
+
+}
+
+
+
+
+/* The sidepanel links */
+.trades_side a {
+  text-decoration: none;
+}
+
+
+
+
+.closebtn {
+
+  font-size: 50px;
+  font-weight:600;
+  cursor: pointer;
+  color: green;
+
+  margin-top:0px;
+  margin-left:0;
+
+  
+}
+
+
+.openbtn {
+
+  
+  position:fixed;
+  z-index: 900;
+ 
+  left:200px;
+  top:auto;
+
+  transform: rotate(180deg);
+  
+  font-size: 20px;
+  font-weight:600;
+  cursor: pointer;
+  background-color: var(--LEEDZ_GRAY);
+  color: green;
+  padding: 10px 15px;
+  border: none;
+}
+
 
 
 
@@ -105,7 +173,7 @@
 
 
   ._15 {
-  flex: 1.5;
+flex: 1.5;
   }  
 
 

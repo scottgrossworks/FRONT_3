@@ -29,20 +29,18 @@
 }
 
 
+#up_left_column {
 
-#user_profile {
-
-    padding-left:10px;
+    padding-left:20px;
     font-size: 20px;
     font-weight: 400;
     line-height: 1.3;
     font-family: var(--FONT_1);
-
 }
 
 
+#up_right_column {
 
-#user_panel_logo {
     display: flex;
     margin-right:20px;
     align-items: center;
@@ -52,9 +50,11 @@
 
 
 
-#user_panel span img {
+#up_logo img {
     padding:4px;
     vertical-align: middle;
     width:80px;
-
+    margin-right:0px;
 }
+
+

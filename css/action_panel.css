@@ -58,10 +58,12 @@
 
 
 #leed_title {
+
+    align-items: start;
     background-color: white;
     border: 1px solid var(--LEEDZ_DARKGRAY);
-    font-size: smaller;
     padding:0px;
+    font-weight: bolder;
 }  
 
 #lic_color {
@@ -80,7 +82,7 @@
 #lic_trade {
     display: block;
     text-align: center;
-    vertical-align: auto;
+
     
     border:0;
     padding:0px;
@@ -92,13 +94,12 @@
 
 #lic_date {
 
-    display: block;
-    text-align: center;
-    vertical-align:auto;
-
+    display:block;
     border:0;
     padding:0px;
-    margin: auto 0;
+    margin-top:auto;
+    margin-bottom:auto;
+    margin-left:10px;
 
     width: max-content;
 }

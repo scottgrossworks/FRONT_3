@@ -16,82 +16,34 @@
       line-height: 1.2;
       color: black;
       font-family: var(--FONT_3);
-    } 
+
+    }   
 
 
 
 
 
-/* The sidepanel menu */
-.trades_side {
-  height: 100%; /* Specify a height */
-  width: 0; /* 0 width - change this with JavaScript */
-  position: fixed; /* Stay in place */
-  
-  z-index: 300; /* Stay on top */
-  
-  top: 0;
-  left: 0;
-  
-  background-color: var(--LEEDZ_GRAY);
-  overflow-x: hidden; /* Disable horizontal scroll */
-  overflow-y: scroll;
+    
+    #side_panel {
+      
+      --is_small: 1;
+      width:0
 
-  
-  border: 2px solid var(--LEEDZ_DARKGRAY);
+    }
+    
 
-}
+    #open_side_btn {
+     visibility:visible;
+     left:0;
+    }
 
 
-
-
-/* The sidepanel links */
-.trades_side a {
-  text-decoration: none;
-}
-
-
-#close_side_btn {
-  opacity: 1;
-  z-index: 500;
-}
-
-.closebtn {
-
-
-  font-size: 50px;
-  font-weight:600;
-  cursor: pointer;
-  color: green;
-
-  top:0;
-  margin-top:-5px;
-  margin-bottom:20px;
-  margin-left: 4px;
-
-}
-
-
-#open_side_btn {
-  opacity: 1;
-  z-index: 500;
-}
-
-.openbtn {
-
-  font-size: 20px;
-  font-weight:600;
-  cursor: pointer;
-  background-color: var(--LEEDZ_GRAY);
-  color: green;
-  padding: 10px 15px;
-  border: none;
-}
 
 
 #calendar_main {
-
+position: relative;
   margin-left:-120px !important;
+
 }
 
 

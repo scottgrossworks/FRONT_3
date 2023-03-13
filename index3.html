@@ -43,9 +43,11 @@
    
     <div class="row" id="user_panel">
 
-      <div class="column _20" id="user_profile"><label><a href="">scottgross.works</a></label></div>
+      <div class="column _20" id="up_left_column"><label><a href="">scottgross.works</a></label></div>
       <div class="column _7"></div>
-      <div class="column _1" id="user_panel_logo"><span><img src="./img/logo_wide.png"></span></div>
+      <div class="column _1" id="up_right_column">
+        <span id="up_logo"><img src="./img/logo_wide.png"></span>
+      </div>
 
       
     </div>
@@ -59,12 +61,16 @@
         -- TRADES PANEL 
         -->
       <div id="trades_column" class="column _15">
-            
+          
+          
+        
+        <!-- OPEN SIDEBAR BUTTON -->
+        <button id="open_side_btn" class="openbtn" onclick="openNav()">&#10140;</button>
+      </div>
+
         <!-- all of the trades code -->
         <div id="side_panel" class="trades_side">
-
-            <!-- CLOSE BUTTON -->
-            <a href="javascript:void(0)"  id="close_side_btn" class="closebtn" onclick="closeNav()">&#8678;</a>
+        
 
           <BR>
 
@@ -99,15 +105,12 @@
 
 
           </div>  
-        
-        <!-- OPEN SIDEBAR BUTTON -->
-        <button id="open_side_btn" class="openbtn" onclick="openNav()">&#9776;</button>
-      </div>
+          
 
 
        
       <!-- CENTER COLUMN  -->      
-      <div id="calendar_main" class="column _5" >
+      <div id="calendar_main" class="column _5">
 
            <!-- MONTH CHOOSER --> 
         <div id="months" class="row month_chooser">
@@ -191,23 +194,45 @@
    
      <script>
 
+      
+      let side = document.getElementById("side_panel");
+      let open = document.getElementById("open_side_btn");
+      
+      let IS_OPEN = true;
+      let small_screen = getComputedStyle( side ).getPropertyValue('--is_small').trim();
+      if (small_screen == "1") {
+        IS_OPEN = false;
+      }  
+      
+
 
         /* Set the width of the sidebar to 250px (show it) */
         function openNav() {
-            document.getElementById("side_panel").style.width = "max-content";
+            
+
+            if (IS_OPEN) {
+              side.style.width = "0";
+              open.style.left = 0;
+              open.innerHTML = "&#9776;"
+              IS_OPEN = false;
+            
+            } else {
+              side.style.width = "max-content";
+              open.style.left = side.clientWidth + "px";
+              open.innerHTML = "&#10140;"
+              IS_OPEN = true;
+            }
+
         }
 
-        /* Set the width of the sidebar to 0 (hide it) */
-        function closeNav() {
-            document.getElementById("side_panel").style.width = "0";
-        }
 
 
      </script>
   
   
      <script type="module" charset=”utf-8″>
-   
+
+      
      import { initTradesColumn } from "./js/trades.js";   
      import { loadCalendar } from "./js/calendar.js";
      import { initMonthChooser } from "./js/months.js";
@@ -396,15 +421,26 @@
    
    ];
 
-     
-
       initMonthChooser();
 
       loadCalendar();
 
       initTradesColumn( trades );
 
+      
+     if (IS_OPEN) {
+      side.style.width = "max-content";
+      open.style.left = side.clientWidth + "px";
+      open.innerHTML = "&#10140;"
 
+     } else {
+      side.style.width = "0";
+      open.style.left = 0;
+      open.innerHTML = "&#9776;";
+     }
+
+  
+    
 
 
    </script>

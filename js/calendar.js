@@ -137,6 +137,8 @@ export function loadCalendar() {
     let theMonth = getMonth();
     let days_in_month = daysInMonth(theMonth, theYear);
 
+    console.error(days_in_month + "DAYS in MONTH=" + theMonth);
+
     // import DOM elements from html
     const theList = document.querySelector("#calendar_list");
     const theTemplate = document.querySelector("#template_each_day");
@@ -176,10 +178,10 @@ export function loadCalendar() {
         daySpan.textContent = getWeekday( dateString );
         dateSquare.appendChild( daySpan ); 
 
-    
         // add the li to the growing vertical ul
         theList.appendChild( eachDay );
 
+ 
         // CACHE
         // are there leedz in the cache for this date?
         let leedz_cache = window.sessionStorage.getItem(dateString);

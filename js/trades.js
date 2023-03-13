@@ -1,25 +1,12 @@
 import { loadLeedzForTrade, removeLeedzForTrade } from "./calendar.js";
-
+import { isSubscribed, saveSubscription, removeSubscription } from "./user.js";
 
 
 
 const COLORS = Array();
-let SUBSCRIBED = [];
 
 
 
-/**
- * @param String name of trade
- * @returns boolean true if the radio button for trade_name is turned in
- */
-export function isSubscribed( trade_name ) {
-
-  const equalsTrade = (element) => (element == trade_name);
-  var index = SUBSCRIBED.findIndex( equalsTrade );
-  
-  return (index > -1); // true if index is 0,1,2....
-  
-}
 
 
 /**
@@ -48,8 +35,7 @@ export function getColorForTrade(trade_name) {
  * [
  * {
    trade_name: "caricatures",
-   total_leedz: 5,
-   user_subscribed: true,
+   total_leedz: 5
  * }, .... 
  * ]
 */
@@ -58,15 +44,20 @@ export function initTradesColumn( all_trades ) {
   // initialize the spectrum of colors
   seedColors( all_trades );
 
-  // recover list of subscriptions if any
-  let cachedSubs = sessionStorage.getItem("SUBS");
-  if (cachedSubs != null) SUBSCRIBED = cachedSubs.split(',');
-
   // import DOM elements from html
   const theList = document.querySelector("#trades_list");
   const theTemplate = document.querySelector("#template_each_trade");
 
-  // for each trade object that comes from the DB
+
+  
+  // FIXME FIXME FIXME
+  // SORT TRADES
+  // place the subscribed trades at the top of the list
+
+
+
+
+  // for JSON each trade object that comes from the DB
   all_trades.forEach(( trade ) => {     
 
     // clone a new node
@@ -82,12 +73,12 @@ export function initTradesColumn( all_trades ) {
     let checkBox = newNode.querySelector(".trade_checkbox");
     let radioButton = newNode.querySelector(".trade_radio");
   
-
-    // trade is the JSON object coming from DB
+    // check SUBSCRIPTIONS
     // is the user subscribed to this trade?
-    if (trade.user_subscribed) {
-      saveSubscription( trade.trade_name );
+    var is_sub = false;
+    if ( isSubscribed( trade.trade_name ) ) {
       turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
+      is_sub = true;
     }
     
 
@@ -96,8 +87,6 @@ export function initTradesColumn( all_trades ) {
     //
     checkBox.addEventListener("click", function( event ) {
      
-      console.log("CHECKBOX SUBSCRIBED=" + trade.user_subscribed);
-
       if ( isSubscribed( trade.trade_name)  ) { // checkbox is ON
         console.error("TURNING OFF");
         removeSubscription( trade.trade_name );
@@ -153,10 +142,13 @@ export function initTradesColumn( all_trades ) {
     });
   
 
-
-
-    theList.appendChild( newNode );
-
+    
+    if (is_sub) {
+      theList.prepend( newNode );
+    } else {
+      theList.appendChild( newNode );
+    }
+    
   });
 
 
@@ -169,30 +161,6 @@ export function initTradesColumn( all_trades ) {
 /**
  * 
  */
-
-
-/**
- * 
- * @param String trade_name 
- */
-function saveSubscription( trade_name ) {
-
-  if (SUBSCRIBED.indexOf(trade_name) == -1) { // not in list already
-    SUBSCRIBED.push( trade_name );
-    window.sessionStorage.setItem("SUBS", SUBSCRIBED);
-  }
-}
-
-
-/**
- * 
- * @param String trade_name 
- */
-function removeSubscription( trade_name ) {
-
-  SUBSCRIBED.splice( SUBSCRIBED.indexOf(trade_name), 1);
-  window.sessionStorage.setItem("SUBS", SUBSCRIBED);
-}
 
 
 
@@ -236,7 +204,6 @@ function createColor(numOfSteps, step) {
  * {
     trade_name: "caricatures",
     total_leedz: 5,
-    user_subscribed: true,
  * }, .... 
  * ]
  * 

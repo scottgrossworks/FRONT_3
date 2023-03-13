@@ -3,10 +3,10 @@
  *
  */
 
-import { daysInMonth, getNewDate, getShortDate, getShortDateString, getWeekday,
-         getDay, getMonth, getYear, getHours, getMinutes, twoDigitInt  } from "./dates.js";
+import { daysInMonth, getShortDateString, getWeekday, getMonth, getYear, getHours, getMinutes, twoDigitInt  } from "./dates.js";
 import { showLeedAction } from "./action.js";
-import { getColorForTrade, isSubscribed } from "./trades.js";
+import { getColorForTrade } from "./trades.js";
+import { isSubscribed } from "./user.js";
 
 
 const CACHE_DELIM = "|";
@@ -133,12 +133,12 @@ const DB_ERROR = [
  */
 export function loadCalendar() {
 
+    // load the current date showing
     let theYear = getYear();
     let theMonth = getMonth();
     let days_in_month = daysInMonth(theMonth, theYear);
 
-    console.error(days_in_month + "DAYS in MONTH=" + theMonth);
-
+   
     // import DOM elements from html
     const theList = document.querySelector("#calendar_list");
     const theTemplate = document.querySelector("#template_each_day");
@@ -184,11 +184,7 @@ export function loadCalendar() {
  
         // CACHE
         // are there leedz in the cache for this date?
-        let leedz_cache = window.sessionStorage.getItem(dateString);
-        if ((leedz_cache != null) && (leedz_cache != "") && (leedz_cache != CACHE_DELIM)) {
-            // leedz_cache contains delimited list of leed objects 
-            loadLeedzFromCache(eachDay, leedz_cache);
-        }
+        loadLeedzFromCache( eachDay );
     }
 
 }
@@ -199,16 +195,26 @@ export function loadCalendar() {
  * 
  *
  */
-function loadLeedzFromCache( theDay, JSON_leedz ) {
+function loadLeedzFromCache( theDay ) {
 
+    // GET CACHE 
+    let dateString = theDay.getAttribute("LEEDZ_DATE");
+    
+    // lists of JSON leedz are cached to dateStrings
+    let JSON_leedz = window.sessionStorage.getItem(dateString);
     if (JSON_leedz == null || JSON_leedz == "" || JSON_leedz == CACHE_DELIM) return;
 
-    const theLeedz = JSON_leedz.split( CACHE_DELIM );
 
+    // LOAD LEEDZ
+    // load the cache leedz for this dateString
+    const theLeedz = JSON_leedz.split( CACHE_DELIM );
+    console.error("loadLeedzFromCache()=" + theLeedz.length);
+    
+    // for each JSON leed loaded from CACHE
     for (var i = 0; i < theLeedz.length; i++) {
   
         var theJSON = theLeedz[i];
-        if ((theJSON == null) || (theJSON == "") || (theJSON == CACHE_DELIM)) continue;
+        if ((theJSON == null) || (theJSON == "") || (theJSON == CACHE_DELIM)) continue; // just be safe
 
         // (re)create leed node using cache data
         var theLeed = JSON.parse( theJSON );
@@ -219,11 +225,25 @@ function loadLeedzFromCache( theDay, JSON_leedz ) {
             // get the color and create a leed
             var trade_color = getColorForTrade( theLeed.trade );
             createCalendarLeed( theDay, trade_color, theLeed);
-        } 
-        // else -- FIXME -- remove it from the cache?
-                
+        
+        } else {
+            // user has unsubscribed since last cache save
+            // remove leed from cache and DO NOT add to calendar
+            theLeedz[i] = null;
+        }
     }
 
+    // RESET ACHE
+
+    JSON_leedz = ""; // start wtih fresh JSON
+    // only save back to cache leedz that have not been nulled out (unsubscribed)
+    theLeedz.forEach( (leed) => {
+        if (leed != null) JSON_leedz = JSON_leedz + JSON.stringify(leed) + CACHE_DELIM;
+    });
+
+    // put JSON back where it came from
+    window.sessionStorage.setItem(dateString, JSON_leedz);
+    
 }
 
 
@@ -235,10 +255,9 @@ function loadLeedzFromCache( theDay, JSON_leedz ) {
  */
 export function loadLeedzForTrade( trade_name, trade_color ) {
 
-    // FIXME FIXME FIXME
-    // before we go back to DB
-    // does the cache ALREADY contain leedz for getDateShowing()
-    //
+    console.error("loadLeedzForTrade()");
+
+
     //
     // GET DB_LEEDZ 
     // need thisDate for query
@@ -281,7 +300,6 @@ export function loadLeedzForTrade( trade_name, trade_color ) {
          
             let each_day = theList.children[ counter ];
 
-
             // compare the date for this row in the calendar to the date of the leed
             // theDate is a String
             let theDate = each_day.getAttribute("LEEDZ_DATE");
@@ -296,6 +314,12 @@ export function loadLeedzForTrade( trade_name, trade_color ) {
             // if date row in calendar corresponds to date in leed_fromDB
             // both should be Date.toISOString() 
             if ( getShortDateString(leed_fromDB.start) == theDate ) {
+
+
+                // FIXME FIXME FIXME
+                // these are fresh leedz from DB with possibly altered leed details
+                // overwrite any matching leed
+                removeMatchingLeed( each_day, leed_fromDB.id );
 
                 // CREATE CALENDAR LEED
                 //
@@ -385,9 +409,30 @@ export function removeLeedzForTrade( trade_name ) {
     }
  }
 
-    
 
-/*
+ 
+/**
+ * 
+ *
+ */
+function removeMatchingLeed( each_day, leed_id ) {
+
+    // start with 1 to skip the date square
+    for (var i = 1; i < each_day.children.length; i++ ) {
+        var testLeed = each_day.children[i];
+        var id = testLeed.getAttribute("ID");
+        if (id == leed_id) {
+            console.log("REMOVING MATCHING CACHE LEED=" + each_day.getAttribute("TRADE_NAME"));
+            each_day.removeChild( testLeed );
+            break;
+        }
+    }
+    
+}
+
+
+
+/** 
  *
  */
 function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
@@ -398,8 +443,10 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     newLeed.className = "trade_radio";
     newLeed.style.backgroundColor = trade_color;
 
-    // each leed knows what trade it comes from
+    // copy info from JSON into DOM node
+    // each leed knows what trade it comes 
     newLeed.setAttribute("TRADE_NAME", leed_fromDB.trade);
+    newLeed.setAttribute("ID", leed_fromDB.id); // unique ID
 
 
     // LEED DATE

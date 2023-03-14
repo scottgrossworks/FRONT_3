@@ -83,11 +83,11 @@
         
         <!-- OPEN SIDEBAR BUTTON -->
         <button id="open_side_btn" class="openbtn" onclick="openClose()"></button>
-      </div>
+
 
         <!-- all of the trades code -->
         <div id="side_panel" class="trades_side">
-        
+
 
           <BR>
 
@@ -101,28 +101,30 @@
 
           <BR>
 
-           <div class="trades" >
-             <ul id="trades_list">
+            <div class="trades" >
+              <ul id="trades_list">
           
           
-               <template id="template_each_trade">
-                 <li class="each_trade">
-                   <input type="checkbox" class="trade_checkbox" />
-                   <button class="trade_radio"></button>
-                   <label></label><sup></sup>
-                 </li>
-               </template>          
-   
-             </ul>
-           </div>
-   
-           <BR>
+                <template id="template_each_trade">
+                  <li class="each_trade">
+                    <input type="checkbox" class="trade_checkbox" />
+                    <button class="trade_radio"></button>
+                    <label></label><sup></sup>
+                  </li>
+                </template>          
+
+              </ul>
+            </div>
+
+            <BR>
 
 
 
 
           </div>  
-          
+
+        
+        </div>      
 
 
        
@@ -224,7 +226,7 @@
    
      <script>
 
-      
+      let col = document.getElementById("trades_column");      
       let side = document.getElementById("side_panel");
       let open = document.getElementById("open_side_btn");
       
@@ -248,7 +250,6 @@
           open.style.left = side.clientWidth + "px";
           open.innerHTML = "&#10140;"
 
-          let col = document.getElementById("trades_column");
           col.style.marginLeft = "0";
         }
       
@@ -258,7 +259,6 @@
           open.style.left = 0;
           open.innerHTML = "&#9776;"
 
-          let col = document.getElementById("trades_column");
           col.style.marginLeft = "-120px";
         }
 

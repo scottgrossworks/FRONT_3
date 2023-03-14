@@ -24,11 +24,13 @@
         <link rel="stylesheet" href="css/styles_lg.css" type="text/css" />
 
         <link rel="stylesheet" href="css/user_panel.css" type="text/css" />        
+        <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
         <link rel="stylesheet" href="css/trades.css" type="text/css" />
         <link rel="stylesheet" href="css/calendar.css" type="text/css" />
         <link rel="stylesheet" href="css/month_chooser.css" type="text/css" />
         <link rel="stylesheet" href="css/distance_chooser.css" type="text/css" />
         <link rel="stylesheet" href="css/action_panel.css" type="text/css" />
+
 
 
         <script src="./js/user.js" type="module" defer></script>
@@ -46,8 +48,17 @@
 
       <div class="column _20" id="up_left_column"><label><a id="user_href" href=""></a></label></div>
       <div class="column _7"></div>
-      <div class="column _1" id="up_right_column">
-        <span id="up_logo"><img src="./img/logo_wide.png"></span>
+      <div class="column _1 dropdown" id="up_right_column">
+        <span id="up_logo"><a href="javascript:dropdownMenu();"><img src="./img/logo_wide.png"></a></span>
+        <div id="dropdown_menu" class="dropdown-content">
+          <a href="#">Account</a>
+                    
+          <a href="#">How To</a>
+          <a href="#">About</a>
+
+          <a href="#">Contact</a>
+          <a href="#">Log Out</a>
+        </div>
       </div>
 
       
@@ -204,10 +215,10 @@
       let side = document.getElementById("side_panel");
       let open = document.getElementById("open_side_btn");
       
-      let IS_OPEN = true;
+      let SIDE_OPEN = true;
       let small_screen = getComputedStyle( side ).getPropertyValue('--is_small').trim();
       if (small_screen == "1") {
-        IS_OPEN = false;
+        SIDE_OPEN = false;
       }  
 
         function openNav() {
@@ -226,16 +237,54 @@
         /* Set the width of the sidebar to 250px (show it) */
         function openClose() {
           
-            if (IS_OPEN) {
+            if (SIDE_OPEN) {
               closeNav();
-              IS_OPEN = false;
+              SIDE_OPEN = false;
             
             } else {
               openNav();
-              IS_OPEN = true;
+              SIDE_OPEN = true;
             }
 
         }
+
+
+        let DROP_DOWN = false;
+
+        /* When the user clicks on the button,
+        toggle between hiding and showing the dropdown content */
+        function dropdownMenu() {
+          
+
+          console.log("DROPDOWN START =" + DROP_DOWN);          
+
+          document.getElementById("dropdown_menu").classList.toggle("show");
+          DROP_DOWN ^= 1; // flip flag
+
+          console.log("DROPDOWN DONE=" + DROP_DOWN);
+        }
+
+
+          // Close the dropdown menu if the user clicks outside of it
+          window.onclick = function(event) {
+
+            console.log("CLICK=" + event.target);
+            console.log(event);
+
+            if (event.target.matches('a')) {
+              console.log("GOT A LINK!");
+            }
+
+            /**
+            if (! event.target.matches('.dropdown')) {
+              var dropdown = document.getElementById("dropdown_menu");
+              dropdown.classList.remove("show");
+              
+          }
+          */
+        };
+        
+
 
 
 
@@ -443,7 +492,7 @@
     initTradesColumn( trades );
 
     // set the trades sidebar      
-    if (IS_OPEN) {
+    if (SIDE_OPEN) {
         openNav();
     } else {
         closeNav();

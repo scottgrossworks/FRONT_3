@@ -206,7 +206,6 @@ function loadLeedzFromCache( theDay ) {
     // LOAD LEEDZ
     // load the cache leedz for this dateString
     const theLeedz = JSON_leedz.split( CACHE_DELIM );
-    console.error("loadLeedzFromCache()=" + theLeedz.length);
     
     // for each JSON leed loaded from CACHE
     for (var i = 0; i < theLeedz.length; i++) {

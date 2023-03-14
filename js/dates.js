@@ -304,7 +304,7 @@ export function getWeekday( dateString ) {
             return "Friday";
     }
 
-    switch (shortDay.charAt[1]) {
+    switch (shortDay[1]) {
 
         case 'u':
             return "Tuesday";

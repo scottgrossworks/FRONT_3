@@ -14,7 +14,7 @@ export function initUser() {
     // SUBSCRIBED.push("caricatures");
     let user_href = document.getElementById("user_href");
     user_href.setAttribute("href", "http://scottgross.works");
-    user_href.innerHTML = "scooby.doo";
+    user_href.innerHTML = "scottgross.works";
 
 
 

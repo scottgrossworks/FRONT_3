@@ -27,7 +27,7 @@
     #side_panel {
       
       --is_small: 1;
-      width:0
+      width:0;
 
     }
     
@@ -45,7 +45,7 @@
 
 #calendar_main {
 position: relative;
-  margin-left:-110px !important;
+  margin-left:10px !important;
 
 }
 

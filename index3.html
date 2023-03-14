@@ -27,6 +27,7 @@
         <link rel="stylesheet" href="css/month_chooser.css" type="text/css" />
         <link rel="stylesheet" href="css/distance_chooser.css" type="text/css" />
         <link rel="stylesheet" href="css/action_panel.css" type="text/css" />
+        <link rel="stylesheet" href="css/modal.css" type="text/css" />
 
         <link rel="stylesheet" href="css/styles_sm.css" type="text/css" />
         <link rel="stylesheet" href="css/styles_med.css" type="text/css" />
@@ -207,9 +208,17 @@
           <button class="button buy_button">Buy<img id="shopping_cart" src="img/shopping-cart.png"></button>
         </div>
 
+        
+        <a class="modal_close" href="#">X</a>
       </div>
       
     </div>
+
+
+
+
+
+
 
   </body>
    
@@ -223,18 +232,34 @@
       let small_screen = getComputedStyle( side ).getPropertyValue('--is_small').trim();
       if (small_screen == "1") {
         SIDE_OPEN = false;
+
+        /**
+        let action = document.getElementById("action_panel");
+        action.classList.add(".modal");
+        
+        let closeButton = document.getElementById("a.modal_close");
+        closeButton.setAttribute("visibility", "visibile");
+        */
       }  
 
         function openNav() {
           side.style.width = "max-content";
+     
           open.style.left = side.clientWidth + "px";
           open.innerHTML = "&#10140;"
+
+          let col = document.getElementById("trades_column");
+          col.style.marginLeft = "0";
         }
       
         function closeNav() {
           side.style.width = "0";
+
           open.style.left = 0;
           open.innerHTML = "&#9776;"
+
+          let col = document.getElementById("trades_column");
+          col.style.marginLeft = "-120px";
         }
 
 
@@ -269,7 +294,11 @@
 
 
           // Close the dropdown menu if the user clicks outside of it
-          window.onclick = function(event) {
+          window.addEventListener( "click", (event) => {
+
+            console.log("GOT CLICK target=" + event.target);
+            let theDiv = event.target;
+            console.log(theDiv);  
 
             if (event.target.matches('a')) {
               console.log("A=" + event.target);
@@ -279,12 +308,15 @@
 
             } else if (! (event.target.matches('img'))) {
               // click -- not on a link and not on the dropdown image
+              // HIDE THE DROPDOWN
               var dropdown = document.getElementById("dropdown_menu");
               dropdown.classList.remove("show");
 
             }
+          }, true);
 
-        };
+      
+          
         
 
 

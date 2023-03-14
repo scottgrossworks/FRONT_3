@@ -422,7 +422,7 @@ function removeMatchingLeed( each_day, leed_id ) {
         var testLeed = each_day.children[i];
         var id = testLeed.getAttribute("ID");
         if (id == leed_id) {
-            console.log("REMOVING MATCHING CACHE LEED=" + each_day.getAttribute("TRADE_NAME"));
+            // console.log("REMOVING MATCHING CACHE LEED=" + testLeed.getAttribute("TRADE_NAME"));
             each_day.removeChild( testLeed );
             break;
         }
@@ -511,9 +511,7 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     });
 
     eachDay.appendChild( newLeed );
-
-    
-    console.log("CREATING CALENDAR LEED=" + leed_fromDB.trade + "==" + leed_fromDB.start);
+    // console.log("CREATING CALENDAR LEED=" + leed_fromDB.trade + "==" + leed_fromDB.start);
 }
 
 

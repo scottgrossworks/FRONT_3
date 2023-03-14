@@ -8,6 +8,16 @@ export const SUBSCRIBED = [];
 
 export function initUser() {
 
+    // FIXME FIXME FIXME
+    // load user profile info
+    // load user subscriptions from DB
+    // SUBSCRIBED.push("caricatures");
+    let user_href = document.getElementById("user_href");
+    user_href.setAttribute("href", "http://scottgross.works");
+    user_href.innerHTML = "scooby.doo";
+
+
+
     // recover cached list of subscriptions if any
     let cachedSubs = sessionStorage.getItem("SUBS");
     let cache = [];
@@ -15,10 +25,6 @@ export function initUser() {
     // add each one to SUBSCRIBED
     cache.forEach( sub => SUBSCRIBED.push( sub ) );
        
-
-    // FIXME FIXME FIXME
-    // load user subscriptions from DB
-    // SUBSCRIBED.push("caricatures");
 
     // save to session storage in case of refresh
     window.sessionStorage.setItem("SUBS", SUBSCRIBED);

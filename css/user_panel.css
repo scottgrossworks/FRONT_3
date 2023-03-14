@@ -20,9 +20,8 @@
 
     padding:0px;
 
-
-
 }
+
 
 #user_panel label a {
     color: green;
@@ -37,6 +36,19 @@
     line-height: 1.3;
     font-family: var(--FONT_1);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #up_right_column {
@@ -56,5 +68,8 @@
     width:80px;
     margin-right:0px;
 }
+
+
+
 
 

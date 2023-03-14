@@ -252,10 +252,7 @@ function loadLeedzFromCache( theDay ) {
  */
 export function loadLeedzForTrade( trade_name, trade_color ) {
 
-    console.error("loadLeedzForTrade()");
-
-
-    //
+    // FIXME FIXME FIXME
     // GET DB_LEEDZ 
     // need thisDate for query
     //

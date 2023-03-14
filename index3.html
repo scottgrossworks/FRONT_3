@@ -19,9 +19,6 @@
 
 
         <link rel="stylesheet" href="css/globals.css" type="text/css" />
-        <link rel="stylesheet" href="css/styles_sm.css" type="text/css" />
-        <link rel="stylesheet" href="css/styles_med.css" type="text/css" />
-        <link rel="stylesheet" href="css/styles_lg.css" type="text/css" />
 
         <link rel="stylesheet" href="css/user_panel.css" type="text/css" />        
         <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
@@ -31,7 +28,9 @@
         <link rel="stylesheet" href="css/distance_chooser.css" type="text/css" />
         <link rel="stylesheet" href="css/action_panel.css" type="text/css" />
 
-
+        <link rel="stylesheet" href="css/styles_sm.css" type="text/css" />
+        <link rel="stylesheet" href="css/styles_med.css" type="text/css" />
+        <link rel="stylesheet" href="css/styles_lg.css" type="text/css" />
 
         <script src="./js/user.js" type="module" defer></script>
         <script src="./js/dates.js" type="module" defer></script>
@@ -49,15 +48,20 @@
       <div class="column _20" id="up_left_column"><label><a id="user_href" href=""></a></label></div>
       <div class="column _7"></div>
       <div class="column _1 dropdown" id="up_right_column">
+        
+        <span id="up_addLeed"><a href="#add_leed" title="+ Sell Leed">+</a></span>
+        
         <span id="up_logo"><a href="javascript:dropdownMenu();"><img src="./img/logo_wide.png"></a></span>
         <div id="dropdown_menu" class="dropdown-content">
-          <a href="#">Account</a>
-                    
-          <a href="#">How To</a>
+          <a href="#" id="dd_account">Account</a>
+
+          <a href="#" id="dd_howto">How To</a>
           <a href="#">About</a>
 
           <a href="#">Contact</a>
-          <a href="#">Log Out</a>
+
+
+          <a href="#" id="dd_logout">Log Out</a>
         </div>
       </div>
 
@@ -249,39 +253,37 @@
         }
 
 
+
+
+        /**
+         * DROP DOWN MENU
+         */
         let DROP_DOWN = false;
 
         /* When the user clicks on the button,
         toggle between hiding and showing the dropdown content */
         function dropdownMenu() {
-          
-
-          console.log("DROPDOWN START =" + DROP_DOWN);          
-
           document.getElementById("dropdown_menu").classList.toggle("show");
           DROP_DOWN ^= 1; // flip flag
-
-          console.log("DROPDOWN DONE=" + DROP_DOWN);
         }
 
 
           // Close the dropdown menu if the user clicks outside of it
           window.onclick = function(event) {
 
-            console.log("CLICK=" + event.target);
-            console.log(event);
-
             if (event.target.matches('a')) {
-              console.log("GOT A LINK!");
-            }
+              console.log("A=" + event.target);
+              //
+              // FIXME FIXME FIXME
+              // event.target will be http link
 
-            /**
-            if (! event.target.matches('.dropdown')) {
+            } else if (! (event.target.matches('img'))) {
+              // click -- not on a link and not on the dropdown image
               var dropdown = document.getElementById("dropdown_menu");
               dropdown.classList.remove("show");
-              
-          }
-          */
+
+            }
+
         };
         
 

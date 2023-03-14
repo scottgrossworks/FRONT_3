@@ -45,12 +45,6 @@
 
 
 
-
-
-
-
-
-
 #up_right_column {
 
     display: flex;
@@ -60,12 +54,39 @@
 }
 
 
+#up_addLeed {
+    display: block;
+    height: 34px;
+    width: 34px;
+    border-radius: 50%;
+    background-color: var(--LEEDZ_DARKGREEN);
+    color:white;
+    font-size:30px;
+    font-weight: bolder;
+
+    margin: 0;
+    padding:2px;
+    border:none;
+
+    text-align: center;;
+    vertical-align: middle;
+
+    margin-right:20px;
+}
+
+
+
+#up_addLeed a {
+
+    text-decoration: none;
+    color:white;
+}
 
 
 #up_logo img {
     padding:4px;
     vertical-align: middle;
-    width:80px;
+    width:72px;
     margin-right:0px;
 }
 

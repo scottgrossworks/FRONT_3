@@ -62,7 +62,7 @@
 
     align-items: start;
     background-color: white;
-    border: 1px solid var(--LEEDZ_DARKGRAY);
+    border-bottom: 1px solid var(--LEEDZ_DARKGRAY);
     padding:0px;
     font-weight: bolder;
 }  

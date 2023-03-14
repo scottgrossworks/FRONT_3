@@ -268,13 +268,56 @@ export function getMinutes( isoString ) {
  * returns LOCAL day of week -- converts to LOCAL timezone
  * NOT UTC
  */
-export function getWeekday( shortDate ) {
+export function getShortWeekday( shortDate ) {
 
     let longDate = shortDate + "T00:01:00";
     let localDate = new Date( longDate );
+
     let dateStr = localDate.toString().substring(0, 3);
 
     return dateStr;
+}
+
+
+
+/*
+ * @param String ISO short date YYYY-MM-DD
+ *
+ * FORCE LOCAL TIME
+ * Use time format:  THH:MM:SS     (no trailing Z) 
+ * returns LOCAL day of week -- converts to LOCAL timezone
+ * NOT UTC
+ */
+export function getWeekday( dateString ) {
+
+    let shortDay = getShortWeekday( dateString );
+
+    switch (shortDay[0]) {
+
+        case 'M':
+            return "Monday";
+
+        case 'W': 
+            return "Wednesday";
+        
+        case 'F':
+            return "Friday";
+    }
+
+    switch (shortDay.charAt[1]) {
+
+        case 'u':
+            return "Tuesday";
+        
+        case 'h':
+            return "Thursday";
+        
+        case 'a':
+            return "Saturday";
+    }
+
+    console.error("getWeekday() not found for: " + dateString);
+    return "Day Not Found";
 }
 
 

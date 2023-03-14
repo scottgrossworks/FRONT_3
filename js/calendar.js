@@ -3,7 +3,7 @@
  *
  */
 
-import { daysInMonth, getShortDateString, getWeekday, getMonth, getYear, getHours, getMinutes, twoDigitInt  } from "./dates.js";
+import { daysInMonth, getShortDateString, getShortWeekday, getMonth, getYear, getHours, getMinutes, twoDigitInt  } from "./dates.js";
 import { showLeedAction } from "./action.js";
 import { getColorForTrade } from "./trades.js";
 import { isSubscribed } from "./user.js";
@@ -159,8 +159,6 @@ export function loadCalendar() {
         // each day in the DOM knows its date
         // Date() uses 0 indexing for month so -1
         // ISODate format -> 2012-07-14T00:00:00Z
-        //
-        // let theDate = getNewDate(theYear, theMonth, i);
         // 
         let dateString = theYear + "-" + twoDigitInt(theMonth) + "-" + twoDigitInt(i);
         eachDay.setAttribute("LEEDZ_DATE", dateString);
@@ -175,7 +173,7 @@ export function loadCalendar() {
         //
         let daySpan = document.createElement("span");
         // this will be a local timezone day of week
-        daySpan.textContent = getWeekday( dateString );
+        daySpan.textContent = getShortWeekday( dateString );
         dateSquare.appendChild( daySpan ); 
 
         // add the li to the growing vertical ul

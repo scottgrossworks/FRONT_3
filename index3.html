@@ -212,7 +212,7 @@
           <button class="button buy_button">Buy<img id="shopping_cart" src="img/shopping-cart.png"></button>
         </div>
 
-        <a class="modal_close" href="javascript:modalClose();">&#10140;</a>        
+        <a id="modal_close" href="javascript:modalClose();">&#10140;</a>        
       </div>
       
     </div>
@@ -292,7 +292,10 @@
 
       function modalClose() {
         let action = document.getElementById("action_panel");
-        action.style.setProperty("display", "none");  
+        action.style.setProperty("display", "none"); 
+        
+        let closeBut = document.getElementById("modal_close");
+        closeBut.style.setProperty("display", "none");
       }
 
 
@@ -301,12 +304,18 @@
         let action = document.getElementById("action_panel");
         action.classList.replace("column", "modal"); 
         
+        let closeBut = document.getElementById("modal_close");
+        closeBut.style.setProperty("display", "block");
       }
 
 
       function actionColumn() {
         let action = document.getElementById("action_panel");
         action.classList.replace("modal", "column"); 
+        
+        let closeBut = document.getElementById("modal_close");
+        closeBut.style.setProperty("display", "none");
+        
       }
 
 
@@ -367,7 +376,8 @@
             let theDiv = event.target;
 
             if (event.target.matches('a')) {
-              console.log("A=" + event.target);
+              // console.log("A=" + event.target);
+              // triggered also for modal close
               //
               // FIXME FIXME FIXME
               // event.target will be http link

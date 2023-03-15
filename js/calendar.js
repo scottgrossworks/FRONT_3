@@ -286,7 +286,7 @@ export function loadLeedzForTrade( trade_name, trade_color ) {
     // for each (date sorted) leed coming in from the DB
     for (const leed_fromDB of DB_LEEDZ) {
 
-        console.error("LOADING LEED=" + leed_fromDB.trade + "--" + getShortDateString(leed_fromDB.start));
+        // console.error("LOADING LEED=" + leed_fromDB.trade + "--" + getShortDateString(leed_fromDB.start));
 
         // starting at date last visited (skipping template index:0 )
         // iterate through the calendar and find the corresponding date

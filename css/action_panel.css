@@ -85,11 +85,12 @@
     display: block;
     text-align: center;
 
-    border:0;
+    border: 1px solid white;
+    border-radius: 4px;
 
-    padding:0px;
+    padding: 6px 10px;
     margin: auto 0;
-
+    
     width: fit-content;
     max-width: fit-content;
 }

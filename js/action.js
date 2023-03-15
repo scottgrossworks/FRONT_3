@@ -69,6 +69,7 @@ export function showLeedAction( trade_color, leed_fromDB ) {
 
     let theTrade = document.querySelector("#lic_trade");
     theTrade.innerHTML = leed_fromDB.trade;
+    theTrade.style.border = "2px solid " + trade_color;
 
     let theDate = document.querySelector("#lic_date");
     theDate.innerHTML = leed_weekday + " " + leed_monthname + " " + leed_date + ", " + leed_year; 
@@ -92,8 +93,7 @@ export function showLeedAction( trade_color, leed_fromDB ) {
 
 
     // SHOW the action_panel
-
-
     let action = document.getElementById("action_panel");
     action.style.setProperty("display", "block");
+
 }

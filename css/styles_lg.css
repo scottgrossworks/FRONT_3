@@ -33,13 +33,13 @@
     
   #side_panel {
     
-      width:max-content;
+      width:max-content !important;
       left:0;
     }
     
 
     #open_side_btn {
-     visibility: hidden;
+  visibility: hidden;
     }
 
 

@@ -212,7 +212,7 @@
           <button class="button buy_button">Buy<img id="shopping_cart" src="img/shopping-cart.png"></button>
         </div>
 
-        
+        <a class="modal_close" href="javascript:modalClose();">&#10140;</a>        
       </div>
       
     </div>
@@ -285,9 +285,15 @@
             SCREEN_SIZE = 3;
             SIDE_OPEN = false;
             actionModal();
+            break;
         }
       }
       
+
+      function modalClose() {
+        let action = document.getElementById("action_panel");
+        action.style.setProperty("display", "none");  
+      }
 
 
 

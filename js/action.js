@@ -1,6 +1,6 @@
 /* action.js */
 
-import { getWeekday, getHours, getMinutes, getShortMonthname, getNewDate, getISODate } from "./dates.js";
+import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } from "./dates.js";
 
 
 let LEED_DETAILS = {
@@ -34,9 +34,23 @@ export function showLeedAction( trade_color, leed_fromDB ) {
     // GOTO DB to get full leed details
     // leed_fromDB.id
    
-    const leed_weekday = getWeekday( leed_fromDB.start.substring(0, 10) );    
-    const leed_monthname = getShortMonthname( leed_fromDB.start.substring(5, 7) ); 
-    const leed_date = leed_fromDB.start.substring(8, 10);
+    // get full long weekday
+   const leed_weekday = getWeekday( leed_fromDB.start.substring(0, 10) );    
+
+    // use the long monthname for the modal action window
+    // and short monthname for the column view
+    var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
+    let leed_monthname = "";
+    if (screen == "L") {
+        leed_monthname = getShortMonthname( leed_fromDB.start.substring(5, 7) ); 
+    } else {
+        leed_monthname = getMonthname( leed_fromDB.start.substring(5, 7) ); 
+    }
+
+    // remove '0' at front if any
+    let leed_date = leed_fromDB.start.substring(8, 10);
+    if (leed_date.startsWith('0')) { leed_date = leed_date.substr(1) };
+
     const leed_year = leed_fromDB.start.substring(0, 4);
     
     let hours_start = getHours(leed_fromDB.start);

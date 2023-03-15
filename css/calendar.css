@@ -64,7 +64,9 @@
   .each_day {
   
     display:inline-flex;
-    
+    align-items: center;
+
+
     border-radius: 10px;
     border-width: 2px;
     border-style: solid;

@@ -1,0 +1,96 @@
+
+/*
+ *
+ *
+ */
+
+ @import "./globals.css";
+
+
+
+.modal {
+  
+display: block;
+  z-index:800;
+
+  position: fixed;
+  
+  left:0;
+  top:0;
+
+  width:100vw;
+  height:100vh;
+
+}
+
+
+/*
+.modal:not(:target) {
+  visibility: hidden;
+
+}
+*/
+
+
+
+.modal__window {
+  width:100%;
+  position: relative;
+  padding: 0;
+}
+
+
+
+.modal__window h1 {
+
+  margin:0px auto 0px auto;
+
+  width:fit-content;
+  background-color: var(--LEEDZ_GRAY);
+  padding: 10px 0px 15px 0px;
+  border-radius:6px;
+  font-size: large;
+}
+
+.modal__window h2 {
+
+  margin:0px auto 0px auto;
+  
+  width:fit-content;
+  background-color: var(--LEEDZ_GRAY);
+  padding:15px;
+  border-radius:6px;
+  font-size: xx-large;
+}
+
+
+
+
+#close_button {
+
+opacity: 0;
+
+font-family: var(--FONT_3);
+  background-color:var(--LEEDZ_GREEN);
+ 
+  border: solid;
+  border-width:6px;
+  border-color: green;
+
+  color:white;
+  position: absolute;
+
+  top:20px;
+  right:30px;
+
+  padding:10px;
+  width:30px;
+  border-radius: 16px;
+
+
+  font-size: x-large;
+  font-weight: bolder;
+  text-decoration: none;
+  text-align: center;
+}
+

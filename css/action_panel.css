@@ -50,6 +50,15 @@
 }
 
 
+.lic_row a {
+
+    color:green;
+
+    font-weight: bolder;
+}
+
+
+
 .lic_column {
     padding:14px;
     border: 1px solid var(--LEEDZ_DARKGRAY);
@@ -105,6 +114,17 @@
     width: max-content;
     
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 .buy_button {

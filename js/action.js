@@ -5,7 +5,12 @@ import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } fro
 
 let LEED_DETAILS = {
 
+    id:99999,
+    postedBy:"DoctorReyes",
+    postedByEmail:"dr@doctorreyesart.com",
     zip: 90034,
+    reqs: "You must wear a clown costume (fireproof)",
+    details:"This is a 30th Birthday Party at So-and-So Restaurant in Beverly Hills.  You will be performing right next to the fire-breather."
 };
 
     
@@ -31,7 +36,7 @@ leed_fromDB
 */
 export function showLeedAction( trade_color, leed_fromDB ) {
 
-    // GOTO DB to get full leed details
+    // GOTO DB to get full LEED_DETAILS
     // leed_fromDB.id
    
     // get full long weekday
@@ -77,10 +82,10 @@ export function showLeedAction( trade_color, leed_fromDB ) {
 
     // event_info
     //
-    let theDiv = document.querySelector("#event_info_value");
+    let theDiv = document.querySelector("#event_value");
     theDiv.innerHTML = leed_fromDB.note;
 
-    // event_info
+    // START TIME - END TIME
     //
     theDiv = document.querySelector("#start-end_value");
     theDiv.innerHTML = start_time + " - " + end_time;
@@ -92,7 +97,28 @@ export function showLeedAction( trade_color, leed_fromDB ) {
 
 
 
+    // DETAILS
+    // from LEED_DETAILS
+    theDiv = document.querySelector("#details_value");
+    theDiv.innerHTML = LEED_DETAILS.details;
+
+
+    // requirements
+    // from LEED_DETAILS
+    theDiv = document.querySelector("#reqs_value");
+    theDiv.innerHTML = LEED_DETAILS.reqs;
+
+
+    // POSTED BY
+    // from LEED_DETAILS
+    theDiv = document.querySelector("#posted_by_value");    
+    var theHTML = "<a href='mailto:" + LEED_DETAILS.postedByEmail + "'>";
+    theHTML = theHTML + LEED_DETAILS.postedBy + "</a>";
+    theDiv.innerHTML = theHTML;
+
+
     // SHOW the action_panel
+    //
     let action = document.getElementById("action_panel");
     action.style.setProperty("display", "block");
 

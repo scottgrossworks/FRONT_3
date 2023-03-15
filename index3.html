@@ -185,9 +185,9 @@
 
 
 
-          <div class="row lic_row" id="event_info">
-            <div class="column lic_column _3" id="event_info_label">Event Info</div>
-            <div class="column lic_column _7" id="event_info_value"></div>
+          <div class="row lic_row" id="event">
+            <div class="column lic_column _3" id="event_label">Event</div>
+            <div class="column lic_column _7" id="event_value"></div>
           </div>
 
 
@@ -200,6 +200,24 @@
           <div class="row lic_row" id="zip_code">
             <div class="column lic_column _3" id="zip_code_label">Zip Code</div>
             <div class="column lic_column _7" id="zip_code_value"></div>
+          </div>
+          
+
+          <div class="row lic_row" id="details">
+            <div class="column lic_column _3" id="details_label">Details</div>
+            <div class="column lic_column _7" id="details_value"></div>
+          </div>
+
+
+          <div class="row lic_row" id="reqs">
+            <div class="column lic_column _3" id="reqs_label">Requires</div>
+            <div class="column lic_column _7" id="reqs_value"></div>
+          </div>
+
+
+          <div class="row lic_row" id="posted_by">
+            <div class="column lic_column _3" id="posted_by_label">Posted By</div>
+            <div class="column lic_column _7" id="posted_by_value"></div>
           </div>
           
 
@@ -224,6 +242,223 @@
 
 
   </body>
+
+
+  <script type="module" charset=”utf-8″>
+
+    import { initUser } from "./js/user.js";      
+    import { initTradesColumn } from "./js/trades.js";   
+    import { loadCalendar } from "./js/calendar.js";
+    import { initMonthChooser } from "./js/months.js";
+   
+  
+    const trades = [
+    
+    
+    
+    {
+      trade_name: "caricatures",
+      total_leedz: 5,
+
+    },
+  
+  
+    
+    {
+      trade_name: "dancer",
+      total_leedz: 3,
+
+    },
+  
+  
+    
+    {
+      trade_name: "deejay",
+      total_leedz: 15,
+
+    },
+  
+  
+  
+    
+    {
+      trade_name: "eeeeeee",
+      total_leedz: 3,
+
+    },
+  
+  
+  
+    {
+      trade_name: "firebreather",
+      total_leedz: 12,
+
+    },
+  
+  
+  
+  
+    
+    {
+      trade_name: "flame thrower",
+      total_leedz: 32,
+
+    },
+  
+  
+  
+  
+  
+    {
+      trade_name: "ggggggg",
+      total_leedz: 32,
+
+    },
+  
+  
+  
+    
+    {
+      trade_name: "hhhhhhhhh",
+      total_leedz: 2,
+
+    },
+  
+  
+    {
+      trade_name: "mmmmmm",
+      total_leedz: 5,
+
+    },
+  
+  
+  
+    
+    {
+      trade_name: "oooooooooooo",
+      total_leedz: 5,
+
+    },
+  
+  
+  
+  
+    {
+      trade_name: "something else",
+      total_leedz: 7,
+     
+    },
+  
+  
+  
+    {
+      trade_name: "xxxxx",
+      total_leedz: 3,
+
+    },
+  
+    {
+      trade_name: "yyyyyyyy",
+      total_leedz: 3,
+ 
+    },
+  
+    
+    {
+      trade_name: "zzzzzzzzz",
+      total_leedz: 3,
+
+    },
+  
+    
+    {
+      trade_name: "taco table",
+      total_leedz: 5,
+
+    },
+  
+  
+    {
+      trade_name: "taco123123 table",
+      total_leedz: 5,
+
+    },
+  
+  
+    {
+      trade_name: "xx123123xxx",
+      total_leedz: 3,
+
+    },
+  
+    {
+      trade_name: "yyy123yyyyy",
+      total_leedz: 3,
+
+    },
+  
+    
+    {
+      trade_name: "zzzz123zzzzz",
+      total_leedz: 3,
+   
+    },
+  
+  
+    
+    {
+      trade_name: "to23 678tab",
+      total_leedz: 5,
+
+    },
+  
+  
+    {
+      trade_name: "xx12312 3678xxx",
+      total_leedz: 3,
+ 
+    },
+  
+    {
+      trade_name: "yyy123y 678yyyy",
+      total_leedz: 3,
+ 
+    },
+  
+    
+    {
+      trade_name: "zz123678zz",
+      total_leedz: 3,
+
+    },
+  
+  
+  ];
+
+   // will pull down list of subscribed trades
+   initUser();
+
+   initMonthChooser();
+
+   loadCalendar();
+
+   initTradesColumn( trades );
+
+
+   // set the trades sidebar      
+   if (SIDE_OPEN) {
+       openNav();
+   } else {
+       closeNav();
+   }
+
+ 
+
+
+  </script>
+  
+
+
    
      <script>
 
@@ -237,7 +472,7 @@
       /**
        * INITIALIZE
        */
-       console.error("INIT!");
+
       cssScreenSize();
 
 
@@ -401,218 +636,7 @@
      </script>
   
   
-     <script type="module" charset=”utf-8″>
-
-     import { initUser } from "./js/user.js";      
-     import { initTradesColumn } from "./js/trades.js";   
-     import { loadCalendar } from "./js/calendar.js";
-     import { initMonthChooser } from "./js/months.js";
-    
-   
-     const trades = [
-     
-     
-     
-     {
-       trade_name: "caricatures",
-       total_leedz: 5,
-
-     },
-   
-   
-     
-     {
-       trade_name: "dancer",
-       total_leedz: 3,
-
-     },
-   
-   
-     
-     {
-       trade_name: "deejay",
-       total_leedz: 15,
-
-     },
-   
-   
-   
-     
-     {
-       trade_name: "eeeeeee",
-       total_leedz: 3,
-
-     },
-   
-   
-   
-     {
-       trade_name: "firebreather",
-       total_leedz: 12,
-
-     },
-   
-   
-   
-   
-     
-     {
-       trade_name: "flame thrower",
-       total_leedz: 32,
-
-     },
-   
-   
-   
-   
-   
-     {
-       trade_name: "ggggggg",
-       total_leedz: 32,
-
-     },
-   
-   
-   
-     
-     {
-       trade_name: "hhhhhhhhh",
-       total_leedz: 2,
-
-     },
-   
-   
-     {
-       trade_name: "mmmmmm",
-       total_leedz: 5,
  
-     },
-   
-   
-   
-     
-     {
-       trade_name: "oooooooooooo",
-       total_leedz: 5,
-
-     },
-   
-   
-   
-   
-     {
-       trade_name: "something else",
-       total_leedz: 7,
-      
-     },
-   
-   
-   
-     {
-       trade_name: "xxxxx",
-       total_leedz: 3,
-
-     },
-   
-     {
-       trade_name: "yyyyyyyy",
-       total_leedz: 3,
-  
-     },
-   
-     
-     {
-       trade_name: "zzzzzzzzz",
-       total_leedz: 3,
-
-     },
-   
-     
-     {
-       trade_name: "taco table",
-       total_leedz: 5,
-
-     },
-   
-   
-     {
-       trade_name: "taco123123 table",
-       total_leedz: 5,
-
-     },
-   
-   
-     {
-       trade_name: "xx123123xxx",
-       total_leedz: 3,
-
-     },
-   
-     {
-       trade_name: "yyy123yyyyy",
-       total_leedz: 3,
-
-     },
-   
-     
-     {
-       trade_name: "zzzz123zzzzz",
-       total_leedz: 3,
-    
-     },
-   
-   
-     
-     {
-       trade_name: "to23 678tab",
-       total_leedz: 5,
- 
-     },
-   
-   
-     {
-       trade_name: "xx12312 3678xxx",
-       total_leedz: 3,
-  
-     },
-   
-     {
-       trade_name: "yyy123y 678yyyy",
-       total_leedz: 3,
-  
-     },
-   
-     
-     {
-       trade_name: "zz123678zz",
-       total_leedz: 3,
-
-     },
-   
-   
-   ];
-
-    // will pull down list of subscribed trades
-    initUser();
-
-    initMonthChooser();
-
-    loadCalendar();
-
-    initTradesColumn( trades );
-
-    // set the trades sidebar      
-    if (SIDE_OPEN) {
-        openNav();
-    } else {
-        closeNav();
-    }
-
-  
-
-
-   </script>
-   
    
    
    

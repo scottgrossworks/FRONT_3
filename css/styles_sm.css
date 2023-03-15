@@ -14,9 +14,10 @@
     html {
       font-size: 14px;
       line-height: 1.2;
-      color: black;
+   
       font-family: var(--FONT_3);
 
+      --screen_size: S;
     }   
 
 
@@ -26,7 +27,6 @@
     
     #side_panel {
       
-      --is_small: 1;
       width:0;
 
     }
@@ -54,7 +54,7 @@ position: relative;
 
 
 #calendar_panel {
-    
+   
   width:96%;
 
 }
@@ -63,7 +63,7 @@ position: relative;
 
 #action_panel {
   display: none;
-
+  padding-top:100px;  
 }
 
 

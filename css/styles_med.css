@@ -16,8 +16,8 @@
     font-size: 14px;
     line-height: 1.2;
     font-family: var(--FONT_3);
-    color: black;
 
+      --screen_size: M;
     } 
 
 
@@ -37,10 +37,14 @@
  
 
 
+  
+    
+
   #calendar_main {
     left:0 !important;
 
   }
+
 
 
 

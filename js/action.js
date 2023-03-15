@@ -75,4 +75,11 @@ export function showLeedAction( trade_color, leed_fromDB ) {
     theDiv = document.querySelector("#zip_code_value");
     theDiv.innerHTML = LEED_DETAILS.zip;
 
+
+
+    // SHOW the action_panel
+
+
+    let action = document.getElementById("action_panel");
+    action.style.setProperty("display", "block");
 }

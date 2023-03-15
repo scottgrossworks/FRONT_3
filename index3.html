@@ -33,6 +33,8 @@
         <link rel="stylesheet" href="css/styles_med.css" type="text/css" />
         <link rel="stylesheet" href="css/styles_lg.css" type="text/css" />
 
+
+
         <script src="./js/user.js" type="module" defer></script>
         <script src="./js/dates.js" type="module" defer></script>
         <script src="./js/trades.js" type="module" defer></script>
@@ -184,20 +186,20 @@
 
 
           <div class="row lic_row" id="event_info">
-            <div class="column lic_column _4" id="event_info_label">Event Info</div>
-            <div class="column lic_column _6" id="event_info_value"></div>
+            <div class="column lic_column _3" id="event_info_label">Event Info</div>
+            <div class="column lic_column _7" id="event_info_value"></div>
           </div>
 
 
 
           <div class="row lic_row" id="start-end">
-            <div class="column lic_column _4" id="start-end_label">Start-End</div>
-            <div class="column lic_column _6" id="start-end_value"></div>
+            <div class="column lic_column _3" id="start-end_label">Time</div>
+            <div class="column lic_column _7" id="start-end_value"></div>
           </div>
 
           <div class="row lic_row" id="zip_code">
-            <div class="column lic_column _4" id="zip_code_label">Zip Code</div>
-            <div class="column lic_column _6" id="zip_code_value"></div>
+            <div class="column lic_column _3" id="zip_code_label">Zip Code</div>
+            <div class="column lic_column _7" id="zip_code_value"></div>
           </div>
           
 
@@ -211,7 +213,6 @@
         </div>
 
         
-        <a class="modal_close" href="#">X</a>
       </div>
       
     </div>
@@ -231,18 +232,78 @@
       let open = document.getElementById("open_side_btn");
       
       let SIDE_OPEN = true;
-      let small_screen = getComputedStyle( side ).getPropertyValue('--is_small').trim();
-      if (small_screen == "1") {
-        SIDE_OPEN = false;
+      let SCREEN_SIZE = 0; // 0, 1, 2 small
+      
+      /**
+       * INITIALIZE
+       */
+       console.error("INIT!");
+      cssScreenSize();
 
-        /**
+
+
+      
+      /**
+       * RESIZE
+       * called on window resize -- but AFTER css applied -- can read values from 
+       * different media_query css files depending on size
+       */
+       window.onresize = (event) => { 
+        cssScreenSize();
+       
+      };
+
+
+
+
+
+      function cssScreenSize() {
+
+        var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
+        switch (screen) {
+  
+          case "S":
+            SCREEN_SIZE = 0;
+            SIDE_OPEN = false;  
+            actionModal();
+            break;
+          
+          case "M":
+            SCREEN_SIZE = 1;
+            SIDE_OPEN = false;
+            actionModal();
+            break;
+  
+          case "L":
+            SCREEN_SIZE = 2;
+            SIDE_OPEN = true;
+            actionColumn();
+            break;
+  
+          default:
+            console.error("--screen_size not found");
+            SCREEN_SIZE = 3;
+            SIDE_OPEN = false;
+            actionModal();
+        }
+      }
+      
+
+
+
+      function actionModal() {
         let action = document.getElementById("action_panel");
-        action.classList.add(".modal");
+        action.classList.replace("column", "modal"); 
         
-        let closeButton = document.getElementById("a.modal_close");
-        closeButton.setAttribute("visibility", "visibile");
-        */
-      }  
+      }
+
+
+      function actionColumn() {
+        let action = document.getElementById("action_panel");
+        action.classList.replace("modal", "column"); 
+      }
+
+
 
         function openNav() {
           side.style.width = "max-content";
@@ -296,9 +357,8 @@
           // Close the dropdown menu if the user clicks outside of it
           window.addEventListener( "click", (event) => {
 
-            console.log("GOT CLICK target=" + event.target);
+            // console.log("GOT CLICK target=" + event.target);
             let theDiv = event.target;
-            console.log(theDiv);  
 
             if (event.target.matches('a')) {
               console.log("A=" + event.target);

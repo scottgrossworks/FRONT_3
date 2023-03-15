@@ -18,7 +18,7 @@
     align-content: space-between;
     border-bottom: 2px solid lightgray;
 
-    padding:0px;
+    padding:4px 0px 4px 0px;
 
 }
 
@@ -56,18 +56,21 @@
 
 #up_addLeed {
     display: block;
-    height: 34px;
-    width: 34px;
+    
+    height:32px;
+    width: 32px;
+    
     border-radius: 50%;
     background-color: var(--LEEDZ_DARKGREEN);
     color:white;
-    font-size:30px;
+    font-size:29px;
     font-weight: bolder;
 
     margin: 0;
-    padding:2px;
+    padding: 2px 2px 2px 2px;
     border:none;
 
+    align-self: center;
     text-align: center;;
     vertical-align: middle;
 

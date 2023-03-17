@@ -10,7 +10,8 @@ let LEED_DETAILS = {
     postedByEmail:"dr@doctorreyesart.com",
     zip: 90034,
     reqs: "You must wear a clown costume (fireproof)",
-    details:"This is a 30th Birthday Party at So-and-So Restaurant in Beverly Hills.  You will be performing right next to the fire-breather."
+    details:"This is a 30th Birthday Party at So-and-So Restaurant in Beverly Hills.  You will be performing right next to the fire-breather.",
+    price: 40,
 };
 
     
@@ -115,6 +116,17 @@ export function showLeedAction( trade_color, leed_fromDB ) {
     var theHTML = "<a href='mailto:" + LEED_DETAILS.postedByEmail + "'>";
     theHTML = theHTML + LEED_DETAILS.postedBy + "</a>";
     theDiv.innerHTML = theHTML;
+
+
+    
+    // *** PRICE ***
+    // from LEED_DETAILS
+    theDiv = document.querySelector("#price_value");
+    theDiv.innerHTML = "$" + LEED_DETAILS.price;
+
+
+
+
 
 
     // SHOW the action_panel

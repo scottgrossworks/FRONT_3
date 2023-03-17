@@ -116,7 +116,16 @@
 }
 
 
+#price_value {
 
+    color:black;
+    background-color: var(--LEEDZ_GREEN);
+
+    font-family: var(--FONT_1);
+    font-size: larger;
+    font-weight:600;
+    letter-spacing: 0.05em;
+}
 
 
 

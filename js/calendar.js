@@ -290,6 +290,7 @@ export function loadLeedzForTrade( trade_name, trade_color ) {
 
         // starting at date last visited (skipping template index:0 )
         // iterate through the calendar and find the corresponding date
+        let shortDate_fromLeed = getShortDateString(leed_fromDB.start);
         for (var counter = dateIndex; counter < theList.children.length; counter++) {
          
             let each_day = theList.children[ counter ];
@@ -307,10 +308,8 @@ export function loadLeedzForTrade( trade_name, trade_color ) {
 
             // if date row in calendar corresponds to date in leed_fromDB
             // both should be Date.toISOString() 
-            if ( getShortDateString(leed_fromDB.start) == theDate ) {
+            if ( shortDate_fromLeed == theDate ) {
 
-
-                // FIXME FIXME FIXME
                 // these are fresh leedz from DB with possibly altered leed details
                 // overwrite any matching leed
                 removeMatchingLeed( each_day, leed_fromDB.id );

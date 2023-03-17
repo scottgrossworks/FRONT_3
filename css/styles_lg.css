@@ -45,8 +45,9 @@
 
 
   #calendar_main {
-    padding-left:1vw;
+
     align-self: flex-end;
+    padding-left:1vw;
     max-width: 700px;
   }
 

@@ -515,15 +515,19 @@
             break;
           
           case "M":
+            console.log("MED SCREEN");
             SCREEN_SIZE = 1;
             SIDE_OPEN = false;
             actionModal();
             break;
   
           case "L":
+            console.log("LARGE SCREEN");
             SCREEN_SIZE = 2;
             SIDE_OPEN = true;
             actionColumn();
+
+            
             break;
   
           default:
@@ -557,11 +561,13 @@
 
       function actionColumn() {
         let action = document.getElementById("action_panel");
-        action.classList.replace("modal", "column"); 
+        action.classList.replace("modal", "column");
+        action.style.display = "flex";
+        
         
         let closeBut = document.getElementById("modal_close");
         closeBut.style.setProperty("display", "none");
-        
+     
       }
 
 

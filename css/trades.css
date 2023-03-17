@@ -15,7 +15,9 @@
     flex-direction: column;
 
     min-width:60px;
-    width:fit-content;
+    max-width:200px;
+
+    width:min-content;
     padding-top:0;
 
     align-items: flex-start;

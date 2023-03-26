@@ -5,7 +5,7 @@
   
 
 #action_panel {
-    
+
     /* screen size-dependent -->  display:flex; */
     flex-direction: column;
     background-color: white;

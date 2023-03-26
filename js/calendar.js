@@ -123,6 +123,14 @@ const DB_ERROR = [
 
 
 
+/**
+ * 
+ */
+export function isLeedActive() {
+    return (CURRENT_LEED != null);
+}
+
+
 
 /*
  * Build the calendar UI for τƒOWING
@@ -230,7 +238,7 @@ function loadLeedzFromCache( theDay ) {
         }
     }
 
-    // RESET ACHE
+    // RESET CACHE
 
     JSON_leedz = ""; // start wtih fresh JSON
     // only save back to cache leedz that have not been nulled out (unsubscribed)

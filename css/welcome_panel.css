@@ -1,0 +1,71 @@
+/* action_panel.css */
+
+@import "./globals.css";
+
+  
+
+#welcome_panel {
+    
+    /* screen size-dependent -->  display:flex; */
+    flex-direction: column;
+    background-color: white;
+
+    border-left:2px solid lightgray;
+
+    vertical-align: middle;
+    align-items:center;
+    text-align: center;
+
+
+    padding: 20px 6px;
+
+    margin-left:0;
+    margin-right:auto;
+}
+
+
+
+#welcome_tag {
+
+    padding:2px 0;
+    margin:0;
+
+    font-family: var(--FONT_3);
+    font-size: 25px;
+    font-weight:400;
+    color:darkgreen;
+
+}
+
+
+
+.welcomeButton {
+
+    position:relative;
+
+    background-color: var(--LEEDZ_GREEN);
+    border: none;
+    color: black;
+   
+    
+    text-decoration: none;
+    display: flex;
+
+    font-size:2.0em;
+    font-weight: bolder;
+
+    width:max-content;
+    height:max-content;
+
+    margin-top:50px;
+
+    padding-top:20px;
+    padding-bottom:20px;
+    padding-left:25px;
+    padding-right:25px;
+ 
+    border-radius: 20px;
+
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
+}
+

@@ -126,12 +126,14 @@ export function showLeedAction( trade_color, leed_fromDB ) {
 
 
 
-
+    // HIDE the welcome panel if it exists
+    let welcome = document.getElementById("welcome_panel");
+    welcome.style.display = "none";
 
 
     // SHOW the action_panel
     //
     let action = document.getElementById("action_panel");
-    action.style.setProperty("display", "block");
+    action.style.display = "block";
 
 }

@@ -1,12 +1,233 @@
 import { loadLeedzForTrade, removeLeedzForTrade } from "./calendar.js";
 import { isSubscribed, saveSubscription, removeSubscription } from "./user.js";
-
+import { toAPIGateway } from "./dbTools.js";
 
 
 const COLORS = Array();
 
+// FIXME FIXME FIXME -- sort these?
+const DEFAULT_TRADES = [
+    
+    
+    
+  {
+    trade_name: "caricatures",
+    total_leedz: 5,
+
+  },
 
 
+  
+  {
+    trade_name: "dancer",
+    total_leedz: 3,
+
+  },
+
+
+  
+  {
+    trade_name: "dj",
+    total_leedz: 15,
+
+  },
+
+
+
+  
+  {
+    trade_name: "acrobat",
+    total_leedz: 3,
+
+  },
+
+
+
+  {
+    trade_name: "firebreather",
+    total_leedz: 12,
+
+  },
+
+
+
+
+  
+  {
+    trade_name: "flamethrower",
+    total_leedz: 32,
+
+  },
+
+
+
+
+
+  {
+    trade_name: "godzilla",
+    total_leedz: 32,
+
+  },
+
+
+
+  
+  {
+    trade_name: "herbalist",
+    total_leedz: 2,
+
+  },
+
+
+  {
+    trade_name: "muckracker",
+    total_leedz: 5,
+
+  },
+
+
+
+  
+  {
+    trade_name: "nails",
+    total_leedz: 5,
+
+  },
+
+
+
+
+  {
+    trade_name: "hairstylist",
+    total_leedz: 7,
+   
+  },
+
+
+
+  {
+    trade_name: "xylophone",
+    total_leedz: 3,
+
+  },
+
+  {
+    trade_name: "ballerina",
+    total_leedz: 3,
+
+  },
+
+  
+  {
+    trade_name: "balloons",
+    total_leedz: 3,
+
+  },
+
+  
+  {
+    trade_name: "tacos",
+    total_leedz: 5,
+
+  },
+
+
+  {
+    trade_name: "gutters",
+    total_leedz: 5,
+
+  },
+
+
+  {
+    trade_name: "aerialist",
+    total_leedz: 3,
+
+  },
+
+  {
+    trade_name: "pizza",
+    total_leedz: 3,
+
+  },
+
+  
+  {
+    trade_name: "carpenter",
+    total_leedz: 3,
+ 
+  },
+
+
+  
+  {
+    trade_name: "acrobat",
+    total_leedz: 5,
+
+  },
+
+
+  {
+    trade_name: "facepainter",
+    total_leedz: 3,
+
+  },
+
+  {
+    trade_name: "braiding",
+    total_leedz: 3,
+
+  },
+
+  
+  {
+    trade_name: "golf",
+    total_leedz: 3,
+
+  },
+
+
+];
+
+
+
+
+/**
+ * 
+ */
+
+
+export function getAllTrades() {
+
+  let retJSON = DEFAULT_TRADES;
+
+  setTimeout(() => {
+    console.log("WAITING FOR DB..........")
+  }, 1000)
+
+  if(true) return retJSON;
+
+  console.error(">>>>>getAllTrades(1) <<<<<<<<<");
+
+    try {
+      let fromAPI = toAPIGateway("getTrades");
+
+      if (fromAPI != null) {
+          let numResults = Object.keys(fromAPI).length;
+          if (numResults > 0) retJSON = fromAPI;
+      }
+
+    } catch (error) {
+
+      console.error(">>>>>getAllTrades(error)" + error);
+
+    } finally {
+
+      console.error(">>>>>getAllTrades(finally)" + JSON.stringify(retJSON));
+      return retJSON;
+    }
+
+}
 
 
 /**

@@ -191,43 +191,13 @@ const DEFAULT_TRADES = [
 
 
 
-/**
- * 
- */
-export function getAllTrades() {
-
-    let retJSON = DEFAULT_TRADES;
-
-    if(true) return retJSON;
-  
-    console.error(">>>>>getAllTrades(1) <<<<<<<<<");
-
-      try {
-        let fromAPI = toAPIGateway("getTrades");
-
-        if (fromAPI != null) {
-            let numResults = Object.keys(fromAPI).length;
-            if (numResults > 0) retJSON = fromAPI;
-        }
-
-      } catch (error) {
-
-        console.error(">>>>>getAllTrades(error)" + error);
-
-      } finally {
-
-        console.error(">>>>>getAllTrades(finally)" + JSON.stringify(retJSON));
-        return retJSON;
-      }
-
-}
 
 
 
 /**
  * 
  */
-function toAPIGateway( action ) {
+export function toAPIGateway( action ) {
 
 
     var theUrl = API_GATEWAY + action;

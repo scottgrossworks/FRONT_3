@@ -290,52 +290,10 @@
   <script type="module" charset=”utf-8″>
 
     import { initUser } from "./js/user.js";      
-    import { initTradesColumn } from "./js/trades.js";   
+    import { initTradesColumn, getAllTrades } from "./js/trades.js";   
     import { loadCalendar } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
-   
-    import { getAllTrades } from "./js/dbTools.js";
 
-
-
-   // will pull down list of subscribed trades
-   initUser();
-
-   initMonthChooser();
-
-   loadCalendar();
-
-   let trades = getAllTrades();
-   console.log("GOT TRADES=" + trades);
-   console.log("TRADES LEN=" + trades.length)
-   initTradesColumn( trades );
-
-
-   // set the trades sidebar      
-   if (SIDE_OPEN) {
-       openNav();
-   } else {
-       closeNav();
-   }
-
- 
-
-
-  </script>
-  
-
-
-   
-     <script>
-
-      
-      let col = document.getElementById("trades_column");      
-      let side = document.getElementById("side_panel");
-      let open = document.getElementById("open_side_btn");
-      
-      let SIDE_OPEN = true;
-      let SCREEN_SIZE = 0; // 0, 1, 2 small
-      
 
 
       /**
@@ -380,24 +338,6 @@
             break;
         }
       }
-
-
-
-      /**
-       * INITIALIZE
-       */
-
-      cssScreenSize();
-      
-      /**
-       * RESIZE
-       * called on window resize -- but AFTER css applied -- can read values from 
-       * different media_query css files depending on size
-       */
-       window.onresize = (event) => { 
-        cssScreenSize();
-       
-      };
 
 
 
@@ -529,8 +469,62 @@
           }, true);
 
       
+ 
           
+
+
+
         
+          let col = document.getElementById("trades_column");      
+          let side = document.getElementById("side_panel");
+          let open = document.getElementById("open_side_btn");
+          
+          let SIDE_OPEN = true;
+          let SCREEN_SIZE = 0; // 0, 1, 2 small
+          
+    
+ 
+          /**
+          * INITIALIZE
+          */
+
+          cssScreenSize();
+
+          /**
+          * RESIZE
+          * called on window resize -- but AFTER css applied -- can read values from 
+          * different media_query css files depending on size
+          */
+          window.onresize = (event) => { 
+            cssScreenSize();
+          };
+
+
+          // set the trades sidebar      
+          if (SIDE_OPEN) {
+            openNav();
+          } else {
+            closeNav();
+          }
+
+
+
+          // will pull down list of subscribed trades
+          initUser();
+
+          initMonthChooser();
+
+          loadCalendar();
+
+          // FIXME FIXME FIXME
+          // use async and Promise code
+          // wait for getAllTrades then initTradesColumn 
+          let trades = getAllTrades();
+          console.log("GOT TRADES=" + trades);
+          console.log("TRADES LEN=" + trades.length)
+          initTradesColumn( trades );
+
+
 
 
 

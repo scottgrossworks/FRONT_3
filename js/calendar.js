@@ -436,6 +436,11 @@ function removeMatchingLeed( each_day, leed_id ) {
 /** 
  *
  */
+
+//
+// FIXME FIXME FIXME
+// check to see if this is OUR leed
+//
 function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
 

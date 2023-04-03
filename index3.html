@@ -86,7 +86,7 @@
           
         
         <!-- OPEN SIDEBAR BUTTON -->
-        <button id="open_side_btn" class="openbtn" onclick="openClose()"></button>
+        <button id="open_side_btn" class="openbtn" onclick="javascript:openClose()"></button>
 
 
         <!-- all of the trades code -->
@@ -177,7 +177,7 @@
       <div id="welcome_panel" class="column _35">
         <div class="row">
           <span>
-            <img src="./img/logo_2.png">
+            <img id="welcome_logo" src="./img/logo_2.png">
           </span>
         </div>
           
@@ -296,6 +296,50 @@
 
 
 
+
+        /* Set the width of the sidebar to 250px (show it) */
+        export function openClose() {
+          
+          if (SIDE_OPEN) {
+            closeNav();
+            SIDE_OPEN = false;
+          
+          } else {
+            openNav();
+            SIDE_OPEN = true;
+          }
+        }
+        window.openClose = openClose;
+
+
+      
+
+
+      export function modalClose() {
+        let action = document.getElementById("action_panel");
+        action.style.setProperty("display", "none"); 
+        
+        let closeBut = document.getElementById("modal_close");
+        closeBut.style.setProperty("display", "none");
+      }
+      window.modalClose = modalClose;
+
+       /**
+         * DROP DOWN MENU
+         */
+         let DROP_DOWN = false;
+
+         /* When the user clicks on the button,
+         toggle between hiding and showing the dropdown content */
+         export function dropdownMenu() {
+           document.getElementById("dropdown_menu").classList.toggle("show");
+           DROP_DOWN ^= 1; // flip flag
+         }
+         window.dropdownMenu = dropdownMenu;
+         
+
+      
+
       /**
        * FIXME FIXME FIXMEFIXME check for current Leed 
        * isLeedActive this entire block needs to be inside a module
@@ -341,15 +385,6 @@
 
 
 
-
-
-      function modalClose() {
-        let action = document.getElementById("action_panel");
-        action.style.setProperty("display", "none"); 
-        
-        let closeBut = document.getElementById("modal_close");
-        closeBut.style.setProperty("display", "none");
-      }
 
 
 
@@ -405,7 +440,9 @@
 
           col.style.marginLeft = "0";
         }
-      
+   
+        
+
         function closeNav() {
           side.style.width = "0";
 
@@ -416,35 +453,10 @@
         }
 
 
-        /* Set the width of the sidebar to 250px (show it) */
-        function openClose() {
-          
-            if (SIDE_OPEN) {
-              closeNav();
-              SIDE_OPEN = false;
-            
-            } else {
-              openNav();
-              SIDE_OPEN = true;
-            }
-
-        }
 
 
 
-
-        /**
-         * DROP DOWN MENU
-         */
-        let DROP_DOWN = false;
-
-        /* When the user clicks on the button,
-        toggle between hiding and showing the dropdown content */
-        function dropdownMenu() {
-          document.getElementById("dropdown_menu").classList.toggle("show");
-          DROP_DOWN ^= 1; // flip flag
-        }
-
+   
 
           // Close the dropdown menu if the user clicks outside of it
           window.addEventListener( "click", (event) => {
@@ -514,16 +526,23 @@
 
           initMonthChooser();
 
-          loadCalendar();
-
           // FIXME FIXME FIXME
           // use async and Promise code
-          // wait for getAllTrades then initTradesColumn 
-          let trades = getAllTrades();
-          console.log("GOT TRADES=" + trades);
+          // wait for getAllTrades then initTradesColumn
+          let trades = [];
+          await getAllTrades().then((response) => trades = response ); 
+          // console.log("GOT TRADES=" + trades);
           console.log("TRADES LEN=" + trades.length)
+
+          // FIXME FIXME FIXME
+          // catch error here -- look for undefined -- no trades returned
+
           initTradesColumn( trades );
 
+
+          loadCalendar();
+
+ 
 
 
 

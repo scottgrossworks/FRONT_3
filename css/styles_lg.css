@@ -33,7 +33,6 @@
     
   #side_panel {
     
-      width:max-content !important;
       left:0;
     }
     
@@ -47,8 +46,10 @@
   #calendar_main {
 
     align-self: flex-end;
-    padding-left:1vw;
-    max-width: 700px;
+    max-width: 650px;
+
+    margin-left: 35px;
+    margin-right:0;
   }
 
 

@@ -12,7 +12,7 @@ const DEFAULT_TRADES = [
     
   {
     trade_name: "caricatures",
-    total_leedz: 5,
+    num_leedz: 5,
 
   },
 
@@ -20,7 +20,7 @@ const DEFAULT_TRADES = [
   
   {
     trade_name: "dancer",
-    total_leedz: 3,
+    num_leedz: 3,
 
   },
 
@@ -28,7 +28,7 @@ const DEFAULT_TRADES = [
   
   {
     trade_name: "dj",
-    total_leedz: 15,
+    num_leedz: 15,
 
   },
 
@@ -37,7 +37,7 @@ const DEFAULT_TRADES = [
   
   {
     trade_name: "acrobat",
-    total_leedz: 3,
+    num_leedz: 3,
 
   },
 
@@ -45,7 +45,7 @@ const DEFAULT_TRADES = [
 
   {
     trade_name: "firebreather",
-    total_leedz: 12,
+    num_leedz: 12,
 
   },
 
@@ -55,7 +55,7 @@ const DEFAULT_TRADES = [
   
   {
     trade_name: "flamethrower",
-    total_leedz: 32,
+    num_leedz: 32,
 
   },
 
@@ -65,7 +65,7 @@ const DEFAULT_TRADES = [
 
   {
     trade_name: "godzilla",
-    total_leedz: 32,
+    num_leedz: 32,
 
   },
 
@@ -74,14 +74,14 @@ const DEFAULT_TRADES = [
   
   {
     trade_name: "herbalist",
-    total_leedz: 2,
+    num_leedz: 2,
 
   },
 
 
   {
     trade_name: "muckracker",
-    total_leedz: 5,
+    num_leedz: 5,
 
   },
 
@@ -90,7 +90,7 @@ const DEFAULT_TRADES = [
   
   {
     trade_name: "nails",
-    total_leedz: 5,
+    num_leedz: 5,
 
   },
 
@@ -99,7 +99,7 @@ const DEFAULT_TRADES = [
 
   {
     trade_name: "hairstylist",
-    total_leedz: 7,
+    num_leedz: 7,
    
   },
 
@@ -107,54 +107,54 @@ const DEFAULT_TRADES = [
 
   {
     trade_name: "xylophone",
-    total_leedz: 3,
+    num_leedz: 3,
 
   },
 
   {
     trade_name: "ballerina",
-    total_leedz: 3,
+    num_leedz: 3,
 
   },
 
   
   {
     trade_name: "balloons",
-    total_leedz: 3,
+    num_leedz: 3,
 
   },
 
   
   {
     trade_name: "tacos",
-    total_leedz: 5,
+    num_leedz: 5,
 
   },
 
 
   {
     trade_name: "gutters",
-    total_leedz: 5,
+    num_leedz: 5,
 
   },
 
 
   {
     trade_name: "aerialist",
-    total_leedz: 3,
+    num_leedz: 3,
 
   },
 
   {
     trade_name: "pizza",
-    total_leedz: 3,
+    num_leedz: 3,
 
   },
 
   
   {
     trade_name: "carpenter",
-    total_leedz: 3,
+    num_leedz: 3,
  
   },
 
@@ -162,27 +162,27 @@ const DEFAULT_TRADES = [
   
   {
     trade_name: "acrobat",
-    total_leedz: 5,
+    num_leedz: 5,
 
   },
 
 
   {
     trade_name: "facepainter",
-    total_leedz: 3,
+    num_leedz: 3,
 
   },
 
   {
     trade_name: "braiding",
-    total_leedz: 3,
+    num_leedz: 3,
 
   },
 
   
   {
     trade_name: "golf",
-    total_leedz: 3,
+    num_leedz: 3,
 
   },
 
@@ -195,35 +195,31 @@ const DEFAULT_TRADES = [
 /**
  * 
  */
+// FIXME FIXME FIXME error checking and messages
 
-
-export function getAllTrades() {
+export async function getAllTrades() {
 
   let retJSON = DEFAULT_TRADES;
-
-  setTimeout(() => {
-    console.log("WAITING FOR DB..........")
-  }, 1000)
-
-  if(true) return retJSON;
 
   console.error(">>>>>getAllTrades(1) <<<<<<<<<");
 
     try {
-      let fromAPI = toAPIGateway("getTrades");
 
-      if (fromAPI != null) {
-          let numResults = Object.keys(fromAPI).length;
-          if (numResults > 0) retJSON = fromAPI;
-      }
+
+      const response = await toAPIGateway("getTrades");
+      console.log("!!!!GOT FROM API!!!!");
+
+      retJSON = response;  
 
     } catch (error) {
 
       console.error(">>>>>getAllTrades(error)" + error);
+      retJSON = DEFAULT_TRADES;
 
     } finally {
 
       console.error(">>>>>getAllTrades(finally)" + JSON.stringify(retJSON));
+      if (retJSON == undefined || retJSON == null) retJSON = DEFAULT_TRADES;
       return retJSON;
     }
 
@@ -256,7 +252,7 @@ export function getColorForTrade(trade_name) {
  * [
  * {
    trade_name: "caricatures",
-   total_leedz: 5
+   num_leedz: 5
  * }, .... 
  * ]
 */
@@ -276,7 +272,8 @@ export function initTradesColumn( all_trades ) {
   // place the subscribed trades at the top of the list
 
 
-
+  // FIXME FIXME FIXME
+  // *** must catch error on forEach when there is a server error
 
   // for JSON each trade object that comes from the DB
   all_trades.forEach(( trade ) => {     
@@ -289,7 +286,7 @@ export function initTradesColumn( all_trades ) {
     theLabel.textContent = trade.trade_name;
 
     // set the leed count as a superscript
-    newNode.querySelector("sup").textContent = trade.total_leedz;
+    newNode.querySelector("sup").textContent = trade.num_leedz;
 
     let checkBox = newNode.querySelector(".trade_checkbox");
     let radioButton = newNode.querySelector(".trade_radio");
@@ -424,7 +421,7 @@ function createColor(numOfSteps, step) {
  * [
  * {
     trade_name: "caricatures",
-    total_leedz: 5,
+    num_leedz: 5,
  * }, .... 
  * ]
  * 

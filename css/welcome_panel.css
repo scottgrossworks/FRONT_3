@@ -24,6 +24,13 @@
 }
 
 
+#welcome_logo {
+
+    width:92%;
+
+}
+
+
 
 #welcome_tag {
 
@@ -31,10 +38,11 @@
     margin:0;
 
     font-family: var(--FONT_3);
-    font-size: 25px;
+    font-size: 23px;
     font-weight:400;
     color:darkgreen;
 
+    width:86%;
 }
 
 

@@ -133,8 +133,8 @@ export function isLeedActive() {
 
 
 /*
- * Build the calendar UI for τƒOWING
- * does not load leedz
+ * Build the calendar UI 
+ * loads leedz from cache
  * session storage is the leed cache
  *      key    : date
  *      value  : delimited string of JSON-stringified leed objects
@@ -227,6 +227,9 @@ function loadLeedzFromCache( theDay ) {
         // is the user stil subscribed to leedz of this trade?
         if ( isSubscribed( theLeed.trade ) ) {
             
+            // FUTURE FUTURE FUTURE
+            // did the user post this leed?
+           
             // get the color and create a leed
             var trade_color = getColorForTrade( theLeed.trade );
             createCalendarLeed( theDay, trade_color, theLeed);

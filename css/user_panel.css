@@ -72,7 +72,7 @@
 
     align-self: center;
     text-align: center;;
-    vertical-align: middle;
+
 
     margin-right:20px;
 }
@@ -87,7 +87,7 @@
 
 
 #up_logo img {
-    padding:4px;
+    padding: 4px;
     vertical-align: middle;
     width:72px;
     margin-right:0px;

@@ -10,49 +10,51 @@
 
 .modal {
   
-display: block;
-  z-index:800;
+  display: block;
+  z-index:900;
 
   position: fixed;
   
+  /*
   left:0;
   top:0;
 
+
   width:100vw;
   height:100vh;
-
+*/
 }
-
 
 /*
 .modal:not(:target) {
-  visibility: hidden;
+  display:none;
 
 }
 */
 
 
 
-.modal__window {
-  width:100%;
-  position: relative;
-  padding: 0;
-}
+.modal h1 {
 
+  margin: 0;
 
-
-.modal__window h1 {
-
-  margin:0px auto 0px auto;
-
-  width:fit-content;
+  width:max-content;
   background-color: var(--LEEDZ_GRAY);
-  padding: 10px 0px 15px 0px;
-  border-radius:6px;
-  font-size: large;
+  padding: 20px;
+  border-radius:10px;
+  font-size:24px;
+  line-height:1.35em;
 }
 
-.modal__window h2 {
+
+.modal h1 a {
+  color:green;
+}
+
+
+
+
+.modal h2 {
 
   margin:0px auto 0px auto;
   
@@ -60,33 +62,99 @@ display: block;
   background-color: var(--LEEDZ_GRAY);
   padding:15px;
   border-radius:6px;
-  font-size: xx-large;
+  font-size: large;
+}
+
+
+
+/*
+ *
+ *
+ */
+ #error_modal {
+
+  display: none;
+  
+  margin-left:10vw;
+  margin-top: 15vh;
+
+
+  background-color: white;
+  color:black;
+
+  padding:20px;
+
+  width:60vw;
+  height:70vh;
+  
+  border: 3px solid orange;
+  border-radius: 20px;
 }
 
 
 
 
-#modal_close {
+#error_logo {
+
+  padding: 10px 10px 30px 10px;
+
+  height:150px;
+}
+
+
+
+
+#error_modal_close {
 
     display:block;
     position:relative;
 
-font-family: var(--FONT_3);
+  font-family: var(--FONT_3);
   background-color:var(--LEEDZ_DARKGREEN);
 
   color:white;
 
-top: 50px;
-left:5px;
+  top: 20px;
+  left:5px;
 
   padding:10px;
   width:30px;
   border-radius: 10px;
 
-    transform: rotate(180deg);
+  transform: rotate(180deg);
   font-size: x-large;
   font-weight: bolder;
   text-decoration: none;
   text-align: center;
 }
+
+
+
+#buy_modal_close {
+
+  display:block;
+  position:relative;
+
+font-family: var(--FONT_3);
+background-color:var(--LEEDZ_DARKGREEN);
+
+color:white;
+
+top: 50px;
+left:5px;
+
+padding:10px;
+width:30px;
+border-radius: 10px;
+
+  transform: rotate(180deg);
+font-size: x-large;
+font-weight: bolder;
+text-decoration: none;
+text-align: center;
+}
+
+
+
+
 

@@ -10,7 +10,7 @@ export function initUser() {
 
     // FIXME FIXME FIXME
     // load user profile info
-    // load user subscriptions from DB
+    // load user subscriptions from DB (and list of posted leedz?)
     // SUBSCRIBED.push("caricatures");
     let user_href = document.getElementById("user_href");
     user_href.setAttribute("href", "http://scottgross.works");

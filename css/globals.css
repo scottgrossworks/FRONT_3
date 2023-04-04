@@ -96,6 +96,26 @@
 
 
 
+
+
+
+/*
+ *
+ *
+ */
+#error_modal {
+
+  display: none;
+  background-color: white;
+  color:black;
+
+  font-family: var(--FONT_1);
+  font-size: 20px;
+
+}
+
+
+
 /* The sidepanel menu */
 .trades_side {
 

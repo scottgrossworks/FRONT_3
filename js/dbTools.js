@@ -18,6 +18,7 @@ export async function toAPIGateway( action ) {
 
 
     var theUrl = API_GATEWAY + action;
+
     return fetch(theUrl, {
         method: "GET",
         headers: {

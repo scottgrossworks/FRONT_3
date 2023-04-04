@@ -75,10 +75,18 @@
 
 
 
+
+<!--
+  --
+  --
+  --
+  -->    
     <div class="row" id="main_panel">       
       
+
       
-      <!-- LEFT COLUMN
+      <!-- 
+        -- LEFT COLUMN
         -- TRADES PANEL 
         -->
       <div id="trades_column" class="column _15">
@@ -273,12 +281,24 @@
           <button class="button buy_button">Buy<img id="shopping_cart" src="img/shopping-cart.png"></button>
         </div>
 
-        <a id="modal_close" href="javascript:modalClose();">&#10140;</a>        
+        <a id="buy_modal_close" href="javascript:modalClose();">&#10140;</a>        
       </div>
       
     </div>
 
 
+
+
+
+    <!-- 
+      -- ERROR MODAL 
+      -- 
+      -->
+    <div class="row modal" id="error_modal">
+      <center><img id="error_logo" src="img/logo_2.png"></center> 
+      <h1></h1>
+      <a id="error_modal_close" href="javascript:modalClose();" href="">X</a>
+    </div>
 
 
 
@@ -295,6 +315,8 @@
     import { initMonthChooser } from "./js/months.js";
 
 
+
+    const BUG_EMAIL = "<a href='mailto:scottgrossworks@gmail.com'>Report Error</a>"
 
 
         /* Set the width of the sidebar to 250px (show it) */
@@ -316,11 +338,16 @@
 
 
       export function modalClose() {
+
+        let error = document.getElementById("error_modal");
+        if (error != null) error.style.display = "none";
+
         let action = document.getElementById("action_panel");
-        action.style.setProperty("display", "none"); 
-        
-        let closeBut = document.getElementById("modal_close");
-        closeBut.style.setProperty("display", "none");
+        if (action != null) action.style.display = "none";
+
+        let closeBut = document.getElementById("buy_modal_close");
+        if (closeBut != null) closeBut.style.display = "none";
+
       }
       window.modalClose = modalClose;
 
@@ -384,7 +411,19 @@
       }
 
 
+      
 
+
+
+      function errorModal( msg ) {
+
+        let modal = document.getElementById("error_modal");
+        modal.style.display = "block";
+
+        let theMsg = modal.children[1]; /* the error text */
+        theMsg.innerHTML = msg + "<BR><BR>" + BUG_EMAIL;
+
+      }
 
 
 
@@ -395,8 +434,8 @@
         let action = document.getElementById("action_panel");
         action.classList.replace("column", "modal"); 
         
-        let closeBut = document.getElementById("modal_close");
-        closeBut.style.setProperty("display", "block");
+        let closeBut = document.getElementById("buy_modal_close");
+        closeBut.style.display = "block";
       }
 
 
@@ -410,12 +449,13 @@
         action.style.display = "flex";
         
         
-        let closeBut = document.getElementById("modal_close");
-        closeBut.style.setProperty("display", "none");
+        let closeBut = document.getElementById("buy_modal_close");
+        if (closeBut != null) closeBut.style.display = "none";
      
       }
 
 
+      
 
       function welcomeColumn() {
 
@@ -426,8 +466,8 @@
         welcome.classList.replace("modal", "column");
         welcome.style.display = "flex";
         
-        let closeBut = document.getElementById("modal_close");
-        if (closeBut != null) closeBut.style.setProperty("display", "none");
+        let closeBut = document.getElementById("buy_modal_close");
+        if (closeBut != null) closeBut.style.display = "none";
       }
 
 
@@ -507,7 +547,7 @@
           * called on window resize -- but AFTER css applied -- can read values from 
           * different media_query css files depending on size
           */
-          window.onresize = (event) => { 
+          window.onresize = (event) => {
             cssScreenSize();
           };
 
@@ -526,18 +566,27 @@
 
           initMonthChooser();
 
-          // FIXME FIXME FIXME
-          // use async and Promise code
-          // wait for getAllTrades then initTradesColumn
           let trades = [];
-          await getAllTrades().then((response) => trades = response ); 
-          // console.log("GOT TRADES=" + trades);
-          console.log("TRADES LEN=" + trades.length)
 
-          // FIXME FIXME FIXME
-          // catch error here -- look for undefined -- no trades returned
+          try {
+            await getAllTrades().then((response) => trades = response ); 
+            
+            if (trades == undefined || trades == null) {
+              throw new Error("server returned null trades.");
+            }
 
-          initTradesColumn( trades );
+            if (trades.length == undefined || trades.length == 0) {
+              throw new Error("server returned empty (0) trades.");
+            }
+
+            initTradesColumn( trades );
+
+
+          } catch (error) {
+            var msg = "Leedz cannot load.<BR>Please refresh page."
+            msg = error + "<BR>" + msg;
+            errorModal( msg );
+          }
 
 
           loadCalendar();

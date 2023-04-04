@@ -5,187 +5,180 @@ import { toAPIGateway } from "./dbTools.js";
 
 const COLORS = Array();
 
-// FIXME FIXME FIXME -- sort these?
 const DEFAULT_TRADES = [
     
     
-    
   {
-    trade_name: "caricatures",
-    num_leedz: 5,
-
+    trade_name: "acrobat"
   },
-
-
   
   {
-    trade_name: "dancer",
-    num_leedz: 3,
+    trade_name: "aerialist",
+ 
+  },
 
+  {
+    trade_name: "balloon decor",
+
+  },
+  
+  {
+    trade_name: "balloon twisting",
   },
 
 
+  {
+    trade_name: "braiding",
+
+  },
+
+  {
+    trade_name: "caricatures",
+  },
+
+
+  {
+    trade_name: "casino",
+  },
+
+  {
+    trade_name: "comedian",
+  },
+
+
+  {
+    trade_name: "dancer",
+  },
   
   {
     trade_name: "dj",
-    num_leedz: 15,
+  },
 
+  {
+    trade_name: "facepainter",
   },
 
 
+  {
+    trade_name: "food truck",
+  },
+
+  {
+    trade_name: "golf",
+  },
+
+
+  {
+    trade_name: "gymnastics",
+  },
+
+
+  {
+    trade_name: "hairstylist",
+  },
 
   
   {
-    trade_name: "acrobat",
-    num_leedz: 3,
-
+    trade_name: "henna",
   },
 
-
-
+ 
   {
-    trade_name: "firebreather",
-    num_leedz: 12,
-
+    trade_name: "inflatables",
   },
-
-
 
 
   
+  
   {
-    trade_name: "flamethrower",
-    num_leedz: 32,
+    trade_name: "magician",
 
   },
 
 
-
-
-
   {
-    trade_name: "godzilla",
-    num_leedz: 32,
+    trade_name: "makeup",
 
   },
 
+  {
+    trade_name: "martial arts",
+
+  },
 
 
   
-  {
-    trade_name: "herbalist",
-    num_leedz: 2,
-
-  },
-
 
   {
-    trade_name: "muckracker",
-    num_leedz: 5,
+    trade_name: "musician",
 
   },
-
 
 
   
   {
     trade_name: "nails",
-    num_leedz: 5,
-
-  },
-
-
-
-
-  {
-    trade_name: "hairstylist",
-    num_leedz: 7,
-   
-  },
-
-
-
-  {
-    trade_name: "xylophone",
-    num_leedz: 3,
-
-  },
-
-  {
-    trade_name: "ballerina",
-    num_leedz: 3,
-
-  },
-
-  
-  {
-    trade_name: "balloons",
-    num_leedz: 3,
-
-  },
-
-  
-  {
-    trade_name: "tacos",
-    num_leedz: 5,
 
   },
 
 
   {
-    trade_name: "gutters",
-    num_leedz: 5,
+    trade_name: "piano tuner",
 
-  },
-
-
-  {
-    trade_name: "aerialist",
-    num_leedz: 3,
 
   },
 
   {
     trade_name: "pizza",
-    num_leedz: 3,
+
 
   },
 
   
-  {
-    trade_name: "carpenter",
-    num_leedz: 3,
- 
-  },
 
-
-  
   {
-    trade_name: "acrobat",
-    num_leedz: 5,
+    trade_name: "photo booth",
 
   },
 
 
   {
-    trade_name: "facepainter",
-    num_leedz: 3,
+    trade_name: "pony rides",
+
 
   },
 
   {
-    trade_name: "braiding",
-    num_leedz: 3,
+    trade_name: "surfing",
 
   },
 
-  
+
+
   {
-    trade_name: "golf",
-    num_leedz: 3,
+    trade_name: "tattoos",
+
 
   },
 
+
+  {
+    trade_name: "tacos",
+
+
+  },
+
+
+  {
+    trade_name: "tutoring",
+
+  },
+
+
+  {
+    trade_name: "video games",
+
+  },
 
 ];
 
@@ -201,25 +194,26 @@ export async function getAllTrades() {
 
   let retJSON = DEFAULT_TRADES;
 
-  console.error(">>>>>getAllTrades(1) <<<<<<<<<");
+  console.error(">>>>>getAllTrades(" + retJSON.length + ") <<<<<<<<<");
 
     try {
 
-
       const response = await toAPIGateway("getTrades");
-      console.log("!!!!GOT FROM API!!!!");
-
       retJSON = response;  
 
     } catch (error) {
 
-      console.error(">>>>>getAllTrades(error)" + error);
+      printError( "getAllTrades", error );
       retJSON = DEFAULT_TRADES;
 
     } finally {
 
-      console.error(">>>>>getAllTrades(finally)" + JSON.stringify(retJSON));
-      if (retJSON == undefined || retJSON == null) retJSON = DEFAULT_TRADES;
+      // console.error(">>>>>getAllTrades(finally)" + JSON.stringify(retJSON));
+      if (retJSON == undefined || retJSON.length == undefined) {
+          printError("getAllTrades", "using defailt trades");
+          retJSON = DEFAULT_TRADES;
+      }
+
       return retJSON;
     }
 
@@ -258,6 +252,8 @@ export function getColorForTrade(trade_name) {
 */
 export function initTradesColumn( all_trades ) {
 
+  if ((all_trades == null) || (all_trades.length == 0)) return;
+
   // initialize the spectrum of colors
   seedColors( all_trades );
 
@@ -265,15 +261,6 @@ export function initTradesColumn( all_trades ) {
   const theList = document.querySelector("#trades_list");
   const theTemplate = document.querySelector("#template_each_trade");
 
-
-  
-  // FIXME FIXME FIXME
-  // SORT TRADES
-  // place the subscribed trades at the top of the list
-
-
-  // FIXME FIXME FIXME
-  // *** must catch error on forEach when there is a server error
 
   // for JSON each trade object that comes from the DB
   all_trades.forEach(( trade ) => {     
@@ -286,7 +273,9 @@ export function initTradesColumn( all_trades ) {
     theLabel.textContent = trade.trade_name;
 
     // set the leed count as a superscript
-    newNode.querySelector("sup").textContent = trade.num_leedz;
+    // if there is an error we are using default leedz without numbers
+    if (trade.num_leedz != undefined)
+      newNode.querySelector("sup").textContent = trade.num_leedz;
 
     let checkBox = newNode.querySelector(".trade_checkbox");
     let radioButton = newNode.querySelector(".trade_radio");
@@ -554,3 +543,8 @@ function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
 }
 
 
+
+
+function printError( src, msg ) {
+  console.error("TRADES [" + src + "] => " + msg);
+}

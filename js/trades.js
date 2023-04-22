@@ -1,6 +1,7 @@
 import { loadLeedzForTrade, removeLeedzForTrade } from "./calendar.js";
 import { isSubscribed, saveSubscription, removeSubscription } from "./user.js";
-import { toAPIGateway } from "./dbTools.js";
+import { getTrades } from "./dbTools.js";
+import { printError } from "./js/error.js";
 
 
 const COLORS = Array();
@@ -188,8 +189,6 @@ const DEFAULT_TRADES = [
 /**
  * 
  */
-// FIXME FIXME FIXME error checking and messages
-
 export async function getAllTrades() {
 
   let retJSON = DEFAULT_TRADES;
@@ -198,26 +197,18 @@ export async function getAllTrades() {
 
     try {
 
-      const response = await toAPIGateway("getTrades");
-      retJSON = response;  
+      retJSON = await getTrades();
 
     } catch (error) {
 
-      printError( "getAllTrades", error );
+      printError("getAllTrades()", error );
+      printError("getAllTrades()", "Using DEFAULT trades");
       retJSON = DEFAULT_TRADES;
-
-    } finally {
-
-      // console.error(">>>>>getAllTrades(finally)" + JSON.stringify(retJSON));
-      if (retJSON == undefined || retJSON.length == undefined) {
-          printError("getAllTrades", "using defailt trades");
-          retJSON = DEFAULT_TRADES;
-      }
-
-      return retJSON;
     }
 
-}
+
+      return retJSON;
+  }
 
 
 /**
@@ -363,11 +354,6 @@ export function initTradesColumn( all_trades ) {
   // printColors();
 }
 
-
-
-/**
- * 
- */
 
 
 
@@ -544,7 +530,3 @@ function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
 
 
 
-
-function printError( src, msg ) {
-  console.error("TRADES [" + src + "] => " + msg);
-}

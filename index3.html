@@ -43,6 +43,7 @@
         <script src="./js/calendar.js" type="module" defer></script>
         <script src="./js/months.js" type="module" defer></script>
         <script src="./js/action.js" type="module" defer></script>
+        <script src="./js/error.js" type="module" defer></script>
 
   </head>  
    
@@ -309,10 +310,11 @@
 
   <script type="module" charset=”utf-8″>
 
-    import { initUser } from "./js/user.js";      
+    import { initUser, guestUser, getCurrentUser } from "./js/user.js";      
     import { initTradesColumn, getAllTrades } from "./js/trades.js";   
     import { loadCalendar } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
+    import { printError, throwError } from "./js/error.js";
 
 
 
@@ -561,13 +563,46 @@
 
 
 
-          // will pull down list of subscribed trades
-          initUser();
+          // LOAD user profile data
+          // LOAD list of subscribed trades
+          // do not fail on error -- load Guest User as default
+          //
+          // FIXME FIXME FIXME
+          // FOOBAR FOOBAR FOOBAR
+         const USER_NAME = "dave.reyes";
+         try {
+            initUser( USER_NAME ); // will throw error
 
+          } catch (error) {
+
+            // for the console
+            printError("initUser()", error);
+
+            // for the UI
+            var msg = "Cannot load user data.<BR>Using guest account."
+            msg = error + "<BR>" + msg;
+            errorModal( msg );
+
+            // DO NOT FAIL -- use guest user
+            guestUser();
+          }
+
+          // whatever the current user identity -- continue ....
+
+          // UPDATE the UI with the current user info
+          const currentUser = getCurrentUser();
+          let user_href = document.getElementById("user_href");
+          user_href.setAttribute("href", currentUser.email);
+          user_href.innerHTML = currentUser.username;
+
+
+          // INITIALIZE month chooser in middle column
           initMonthChooser();
 
+          
+          // LOAD trades
+          // using data from user profile
           let trades = [];
-
           try {
             await getAllTrades().then((response) => trades = response ); 
             
@@ -583,7 +618,7 @@
 
 
           } catch (error) {
-            var msg = "Leedz cannot load.<BR>Please refresh page."
+            var msg = "Cannot load trades.<BR>Please refresh page."
             msg = error + "<BR>" + msg;
             errorModal( msg );
           }

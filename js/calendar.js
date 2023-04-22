@@ -3,17 +3,19 @@
  *
  */
 
-import { daysInMonth, getShortDateString, getShortWeekday, getMonth, getYear, getHours, getMinutes, twoDigitInt  } from "./dates.js";
+import { daysInMonth, getShortDateString, getShortWeekday, getMonth,
+    firstDayShowing, lastDayShowing, getYear, getHours, getMinutes, twoDigitInt  } from "./dates.js";
 import { showLeedAction } from "./action.js";
 import { getColorForTrade } from "./trades.js";
 import { isSubscribed } from "./user.js";
+import { printError, throwError } from "/error.js";
 
 
 const CACHE_DELIM = "|";
 let CURRENT_LEED = null;
  
 
-
+// DEBUG DEBUG DEBUG
 const DB_CARICATURES = [
                 
     {
@@ -108,6 +110,9 @@ const DB_DEEJAY = [
     },
     
     ];
+
+// DEBUG DEBUG DEBUG
+
 
 
 const DB_ERROR = [
@@ -263,10 +268,13 @@ function loadLeedzFromCache( theDay ) {
  */
 export function loadLeedzForTrade( trade_name, trade_color ) {
 
-    // FIXME FIXME FIXME
-    // GET DB_LEEDZ 
-    // need thisDate for query
+    // load leedz for this trade and date range showing
     //
+    // FOOBAR
+
+
+
+
 
     let DB_LEEDZ = [];
 
@@ -288,6 +296,15 @@ export function loadLeedzForTrade( trade_name, trade_color ) {
             DB_LEEDZ = DB_ERROR;
     }
 ///////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
 
 
     // the UI contains all the each_date days

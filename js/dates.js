@@ -147,7 +147,35 @@ export function getYear() {
 
 
 
+/**
+ * @returns 1st minute of 1st day of month showing -- as seconds since epoch long
+ */
+export function firstDayShowing() {
 
+    let month = getMonth();
+    let year = getYear();
+    let day = 1;
+    
+    let firstDay = getNewDate(year, month, day);
+
+    return firstDay.getTime(); // long
+}
+
+
+/**
+ * @returns last minute of last day of month showing -- as seconds since epoch long
+ */
+export function lastDayShowing() {
+
+    
+    let month = getMonth();
+    let year = getYear();
+    let day = daysInMonth(month, year);
+    
+    let lastDay = getNewDate(year, month, day);
+
+    return lastDay.getTime(); // long
+}
 
 
 

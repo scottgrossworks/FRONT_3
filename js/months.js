@@ -1,6 +1,6 @@
-import { loadCalendar } from "./calendar.js";
+import { loadCalendar, loadUserLeedz } from "./calendar.js";
 import { setDateShowing, getMonth, getYear, getMonthname, getNewDate } from "./dates.js";
-
+import { printError, throwError } from "./error.js";
 
 
 
@@ -34,6 +34,8 @@ export function initMonthChooser() {
         setDateShowing( prevMonth );
 
         loadCalendar();
+
+        loadUserLeedz();
     });
 
 
@@ -58,6 +60,8 @@ export function initMonthChooser() {
        setDateShowing( nextMonth );
 
        loadCalendar();
+
+       loadUserLeedz();
     });
 
 

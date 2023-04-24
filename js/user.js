@@ -58,10 +58,9 @@ export async function initUser( username ) {
 
       printError( "getUser()", error.message );
       printError( "response JSON", responseJSON);
-      
+
       throwError( "initUser()", error); // !!!
     }
-
 
     
     // LOAD CACHE USER
@@ -94,6 +93,8 @@ function blankUserObject() {
   BLANK_USER.zip_radius = null;
   BLANK_USER.subs = [];
   BLANK_USER.leedz_bought = [];
+
+  return BLANK_USER;
 }
 
 
@@ -213,3 +214,14 @@ export function saveSubscription( trade_name ) {
   
 
 
+/**
+ * return the list of subscriptions for the current user
+ */
+export function getSubscriptions() {
+  
+  if (CURRENT_USER == null)
+    throwError("getSubscriptions()", new Error("CURRENT_USER is null"));
+
+    // probably would be better to make a copy and return that
+    return CURRENT_USER.subs;
+  } 

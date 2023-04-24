@@ -14,123 +14,123 @@ const DEFAULT_TRADES = [
   },
   
   {
-    trade_name: "aerialist",
+    trade_name: "aerialist"
  
   },
 
   {
-    trade_name: "balloon decor",
+    trade_name: "balloon decor"
 
   },
   
   {
-    trade_name: "balloon twisting",
+    trade_name: "balloon twisting"
   },
 
 
   {
-    trade_name: "braiding",
+    trade_name: "braiding"
 
   },
 
   {
-    trade_name: "caricatures",
+    trade_name: "caricatures"
   },
 
 
   {
-    trade_name: "casino",
+    trade_name: "casino"
   },
 
   {
-    trade_name: "comedian",
+    trade_name: "comedian"
   },
 
 
   {
-    trade_name: "dancer",
+    trade_name: "dancer"
   },
   
   {
-    trade_name: "dj",
+    trade_name: "dj"
   },
 
   {
-    trade_name: "facepainter",
-  },
-
-
-  {
-    trade_name: "food truck",
-  },
-
-  {
-    trade_name: "golf",
+    trade_name: "facepainter"
   },
 
 
   {
-    trade_name: "gymnastics",
+    trade_name: "food truck"
+  },
+
+  {
+    trade_name: "golf"
   },
 
 
   {
-    trade_name: "hairstylist",
+    trade_name: "gymnastics"
+  },
+
+
+  {
+    trade_name: "hairstylist"
   },
 
   
   {
-    trade_name: "henna",
+    trade_name: "henna"
   },
 
  
   {
-    trade_name: "inflatables",
+    trade_name: "inflatables"
   },
 
 
   
   
   {
-    trade_name: "magician",
+    trade_name: "magician"
 
   },
 
 
   {
-    trade_name: "makeup",
+    trade_name: "makeup"
 
   },
 
   {
-    trade_name: "martial arts",
-
-  },
-
-
-  
-
-  {
-    trade_name: "musician",
+    trade_name: "martial arts"
 
   },
 
 
   
+
   {
-    trade_name: "nails",
+    trade_name: "musician"
+
+  },
+
+
+  
+  {
+    trade_name: "nails"
 
   },
 
 
   {
-    trade_name: "piano tuner",
+    trade_name: "piano tuner"
 
 
   },
 
   {
-    trade_name: "pizza",
+    trade_name: "pizza"
 
 
   },
@@ -138,46 +138,46 @@ const DEFAULT_TRADES = [
   
 
   {
-    trade_name: "photo booth",
+    trade_name: "photo booth"
 
   },
 
 
   {
-    trade_name: "pony rides",
+    trade_name: "pony rides"
 
 
   },
 
   {
-    trade_name: "surfing",
+    trade_name: "surfing"
 
   },
 
 
 
   {
-    trade_name: "tattoos",
-
-
-  },
-
-
-  {
-    trade_name: "tacos",
+    trade_name: "tattoos"
 
 
   },
 
 
   {
-    trade_name: "tutoring",
+    trade_name: "tacos"
+
 
   },
 
 
   {
-    trade_name: "video games",
+    trade_name: "tutoring"
+
+  },
+
+
+  {
+    trade_name: "video games"
 
   },
 
@@ -495,9 +495,10 @@ function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
   theLabel.style.color = "black";
 
 
-  // ask the cache/DB for all the leedz for this trade and add them to UI
+  // ask the cache/DB for all the leedz for this trade (and month showing)
+  // and add them to UI
   //
-  loadLeedzForTrade(trade_name, theColor);
+  loadLeedzForTrade(trade_name);
 }
 
 

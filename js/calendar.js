@@ -4,127 +4,17 @@
  */
 
 import { daysInMonth, getShortDateString, getShortWeekday, getMonth,
-    firstDayShowing, lastDayShowing, getYear, getHours, getMinutes, twoDigitInt  } from "./dates.js";
+    firstDayShowing, lastDayShowing, getYear, getHours, getMinutes, twoDigitInt, getDateShowing  } from "./dates.js";
 import { showLeedAction } from "./action.js";
 import { getColorForTrade } from "./trades.js";
-import { isSubscribed } from "./user.js";
+import { getSubscriptions, isSubscribed } from "./user.js";
 import { printError, throwError } from "/error.js";
+import { getLeedz } from "./dbTools.js";
 
 
 const CACHE_DELIM = "|";
 let CURRENT_LEED = null;
  
-
-// DEBUG DEBUG DEBUG
-const DB_CARICATURES = [
-                
-    {
-      id: 11111,
-      trade: "caricatures",
-      start: new Date("2023-03-03T15:00:00Z").toISOString(),
-      end: new Date("2023-03-03T17:30:00Z").toISOString(),
-      note: "Caricatures 1"
-    },
-    
-    
-    {
-      id: 22222,
-      trade: "caricatures",
-      start: new Date("2023-03-04T18:00:00Z").toISOString(),
-      end: new Date("2023-03-04T21:30:00Z").toISOString(),
-      note: "Caricatures 2",
-    },
-    
-    
-    
-    {
-      id: 33333,
-      trade: "caricatures",
-      start: new Date("2023-05-05T15:30:00Z").toISOString(),
-      end: new Date("2023-05-05T18:30:00Z").toISOString(),
-      note: "Caricatures 3",
-    },
-    
-    ];
-    
-
-const DB_DANCER = [
-            
-    {
-      id: 44444,
-      trade: "dancer",
-      start: new Date("2023-03-04T11:00:00Z").toISOString(),
-      end: new Date("2023-03-04T13:30:00Z").toISOString(),
-      note: "dancer 1",
-    },
-    
-    
-    {
-      id: 55555,
-      trade: "dancer",
-      start: new Date("2023-03-14T18:00:00Z").toISOString(),
-      end: new Date("2023-03-14T21:30:00Z").toISOString(),
-      note: "dancer 2",
-    },
-    
-    
-    
-    {
-      id: 66666,
-      trade: "dancer",
-      start: new Date("2023-05-02T15:30:00Z").toISOString(),
-      end: new Date("2023-05-02T18:30:00Z").toISOString(),
-      note: "dancer 3",
-    },
-    
-    ];
-
-
-const DB_DEEJAY = [
-            
-    {
-      id: 77777,
-      trade: "deejay",
-      start: new Date("2023-03-03T20:00:00Z").toISOString(),
-      end: new Date("2023-03-03T22:30:00Z").toISOString(),
-      note: "deejay 1",
-    },
-    
-    
-    {
-      id: 88888,
-      trade: "deejay",
-      start: new Date("2023-03-06T18:30:00Z").toISOString(),
-      end: new Date("2023-03-06T20:30:00Z").toISOString(),
-      note: "deejay 2",
-    },
-    
-    
-    
-    {
-      id: 99999,
-      trade: "deejay",
-      start: new Date("2023-05-04T15:30:00Z").toISOString(),
-      end: new Date("2023-05-04T18:30:00Z").toISOString(),
-      note: "deejay 3",
-    },
-    
-    ];
-
-// DEBUG DEBUG DEBUG
-
-
-
-const DB_ERROR = [
-            
-    {
-      id: 121212,
-      trade: "ERROR",
-      start: new Date("2023-03-03T06:00:00Z").toISOString(),
-      end: new Date("2023-03-03T09:30:00Z").toISOString(),
-      note: "ERROR",
-    },
-];
 
 
 
@@ -261,60 +151,70 @@ function loadLeedzFromCache( theDay ) {
 
 
 
-/*
- * 
- *
+
+/**
+ * for each trade the user is subscribed to
+ * call LoadLeedzForTrade( each_trade )
  * 
  */
-export function loadLeedzForTrade( trade_name, trade_color ) {
+export async function loadUserLeedz() {
 
+    let subs = getSubscriptions();
+
+    subs.forEach( (trade_name) => {
+
+        loadLeedzForTrade( trade_name );
+    });
+
+}
+
+
+
+/*
+ * load the leedz for this trade and the date ranges showing
+ * 
+ */
+export async function loadLeedzForTrade( trade_name ) {
+
+
+
+    // API request --> DB 
     // load leedz for this trade and date range showing
     //
-    // FOOBAR
+    let results = null;
+    try {
+        // get the leedz for this trade_name and the dates showing
+        results = await getLeedz( trade_name, firstDayShowing(), lastDayShowing() );
 
-
-
-
-
-    let DB_LEEDZ = [];
-
-    switch (trade_name) {
-
-        case "caricatures" :
-            DB_LEEDZ = DB_CARICATURES;
-            break;
-
-        case "dancer" :
-            DB_LEEDZ = DB_DANCER;
-            break;
-
-        case "deejay" :
-            DB_LEEDZ = DB_DEEJAY;
-            break;
-   
-        default:
-            DB_LEEDZ = DB_ERROR;
+    } catch (error) {
+        printError( "getLeedz()", error.message );
+        printError( "response JSON", responseJSON);
+        
+        // EXIT FUNCTION HERE
+        throwError( "loadLeedzForTrade()", error); 
     }
-///////////////////////////////////////////////////
 
 
 
-
-
-
-
-
-
+    // query returns empty result set
+    if (results.length == 0) {
+        printError("loadLeedzForTrade()", "No leedz for trade: " + trade_name);
+        return;
+    }
 
 
     // the UI contains all the each_date days
     const theList = document.querySelector("#calendar_list");
 
+    // the color for all leedz of this trade
+    let trade_color = getColorForTrade( trade_name );
+
     let dateIndex = 1;
     // for each (date sorted) leed coming in from the DB
-    for (const leed_fromDB of DB_LEEDZ) {
+    for (const leed_fromDB of results) {
 
-        // console.error("LOADING LEED=" + leed_fromDB.trade + "--" + getShortDateString(leed_fromDB.start));
+        // FIXME FIXME FIXME
+        console.error("LOADING LEED=" + leed_fromDB.trade + "--" + getShortDateString(leed_fromDB.start));
 
         // starting at date last visited (skipping template index:0 )
         // iterate through the calendar and find the corresponding date
@@ -329,8 +229,9 @@ export function loadLeedzForTrade( trade_name, trade_color ) {
 
             // this should NEVER be null
             if (theDate == null) {
-                console.error("LEEDZ_DATE attribute not being set for each day");
-                console.error("Unable to load leedz for " + leed_fromDB.trade);
+
+                printError("loadLeedzForTrade()", "LEEDZ_DATE attribute not being set for each day");
+                printError("loadLeedzForTrade()", "Unable to load leedz for " + leed_fromDB.trade);
                 return;  
             }
 
@@ -455,6 +356,15 @@ function removeMatchingLeed( each_day, leed_id ) {
 
 /** 
  *
+ *    {
+ *      "id": 1001, 
+        "creator": "scott.gross", 
+        "loc": "1001 Airbrush Lane, Los Angeles, CA 90056", 
+        "start": 1679486584000, 
+        "end": 1679486584000, 
+        "trade": "airbrush",
+        "note": "birthday party for children"
+      }
  */
 
 //
@@ -483,8 +393,10 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     const startTime = hours_start[0] + ":" + getMinutes(leed_fromDB.start) + hours_start[1];
     const endTime = hours_end[0] + ":" + getMinutes(leed_fromDB.end) + hours_end[1];
 
-  
 
+
+  
+    /////////////////////////////////////////////////////////////////////////////////
     // THUMBNAILS
     // hover over leed --> get preview thumbnail
     
@@ -511,6 +423,9 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
         thumbnail.style.opacity = 0;
     });
   
+    /////////////////////////////////////////////////////////////////////////////////
+
+
 
     // click leed --> action window
     // display full leed info table
@@ -528,12 +443,20 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
         CURRENT_LEED = newLeed;
         CURRENT_LEED.style.border = "2px solid black";
 
+
+
         // FIXME FIXME FIXME
         // what if action panel not showing
         // small screens - display:none
         // let actionPanel = document.querySelector("#action_panel");
-        showLeedAction( trade_color, leed_fromDB );
-        
+        try {
+            showLeedAction( leed_fromDB );
+        } catch (error) {
+            // FIXME FIXME FIXME
+            // modal error dialog?
+        }
+            
+
     });
 
     eachDay.appendChild( newLeed );

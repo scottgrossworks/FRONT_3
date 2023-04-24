@@ -8,7 +8,9 @@
 import { printError, throwError } from "./error.js";
 
 const API_GATEWAY = "http://localhost:3000/"
+
 const USERNAME_URL_PARAM = "u";
+
 const TRADE_NAME_URL_PARAM = "t";
 const START_DATE_URL_PARAM = "s";
 const END_DATE_URL_PARAM = "e";
@@ -87,6 +89,17 @@ export async function getUser( username ) {
 
 
 
+
+/**
+ * 
+ * 
+ */
+export async function getDeetz( leed_id ) {
+    return null;
+}
+
+
+
 /**
  * 
  * 
@@ -106,6 +119,8 @@ export async function getLeedz( trade_name, start_date, end_date ) {
 
     let response = null;
     let json_obj = null;
+
+
 
     // GET JSON from http server
     try {

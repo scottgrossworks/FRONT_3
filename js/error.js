@@ -33,8 +33,14 @@ export function printError( src, error ) {
  */
 export function throwError(src, error) {
 
-    errorMsg = "[" + src + "]=>" + error;
-    console.error("Throwing Error: " + errorMsg);        
+    let errMsg = null;
+    if (error instanceof Error) {
+      errMsg = error.message;
+     }  else {
+        errMsg = error;
+    }
+    errMsg = "[" + src + "]=>" + errMsg;
+    // console.error("Throwing Error: " + errMsg);        
 
-    throw new LeedzError(errorMsg);
+    throw new LeedzError(errMsg);
 }

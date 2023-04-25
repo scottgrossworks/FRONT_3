@@ -4,7 +4,10 @@ import { printError, throwError } from "./error.js";
 
 
 
-
+/**
+ * 
+ * 
+ */
 export function initMonthChooser() {
 
     let theMonth = getMonth();

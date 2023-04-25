@@ -8,8 +8,8 @@ import { daysInMonth, getShortDateString, getShortWeekday, getMonth,
 import { showLeedAction } from "./action.js";
 import { getColorForTrade } from "./trades.js";
 import { getSubscriptions, isSubscribed } from "./user.js";
-import { printError, throwError } from "/error.js";
-import { getLeedz } from "./dbTools.js";
+import { printError, throwError } from "./error.js";
+import { db_getLeedz } from "./dbTools.js";
 
 
 const CACHE_DELIM = "|";
@@ -184,7 +184,7 @@ export async function loadLeedzForTrade( trade_name ) {
     let results = null;
     try {
         // get the leedz for this trade_name and the dates showing
-        results = await getLeedz( trade_name, firstDayShowing(), lastDayShowing() );
+        results = await db_getLeedz( trade_name, firstDayShowing(), lastDayShowing() );
 
     } catch (error) {
         printError( "getLeedz()", error.message );
@@ -423,11 +423,11 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
         thumbnail.style.opacity = 0;
     });
   
-    /////////////////////////////////////////////////////////////////////////////////
-
-
-
-    // click leed --> action window
+    
+    
+    ////////////////////////////////////////////////////////////////////////////////////
+    // CLICK LEED --> ACTION WINDOW
+    //
     // display full leed info table
     //
     newLeed.addEventListener("click", function( event ) {

@@ -1,7 +1,7 @@
 /**
  * 
  */
-import { getUser } from "./dbTools.js";
+import { db_getUser } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 
 
@@ -35,15 +35,19 @@ export function getCurrentUser() {
  */
 export async function initUser( username ) {
 
-  console.log("START GET USER PROFILE");
+
+    console.log("initUser()-->" + username);
 
 
     // GET the user JSON data from the server
     //
     try {
 
+      
       // get the user object
-      let resObj = await getUser( username );
+      let resObj = await db_getUser( username );
+
+      console.log("GOT USER DATA!");
 
       // parse user data into an in-memory object
       CURRENT_USER.username = resObj.creator;
@@ -57,8 +61,6 @@ export async function initUser( username ) {
     } catch (error) {
 
       printError( "getUser()", error.message );
-      printError( "response JSON", responseJSON);
-
       throwError( "initUser()", error); // !!!
     }
 

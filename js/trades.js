@@ -1,7 +1,7 @@
 import { loadLeedzForTrade, removeLeedzForTrade } from "./calendar.js";
 import { isSubscribed, saveSubscription, removeSubscription } from "./user.js";
-import { getTrades } from "./dbTools.js";
-import { printError } from "./js/error.js";
+import { db_getTrades } from "./dbTools.js";
+import { printError } from "./error.js";
 
 
 const COLORS = Array();
@@ -193,15 +193,13 @@ export async function getAllTrades() {
 
   let retJSON = DEFAULT_TRADES;
 
-  console.error(">>>>>getAllTrades(" + retJSON.length + ") <<<<<<<<<");
-
     try {
 
-      retJSON = await getTrades();
+      retJSON = await db_getTrades();
 
     } catch (error) {
 
-      printError("getAllTrades()", error );
+      printError("db_getTrades()", error );
       printError("getAllTrades()", "Using DEFAULT trades");
       retJSON = DEFAULT_TRADES;
     }

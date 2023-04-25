@@ -2,6 +2,7 @@
 
 import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } from "./dates.js";
 import { getColorForTrade } from "./trades.js";
+import { db_getDeetz } from "./dbTools.js";
 
 
     
@@ -41,8 +42,8 @@ leed_details contains
         "price": "40"
     }
 ]
-
-
+*
+*
 */
 export async function showLeedAction( leed_preview ) {
 
@@ -53,7 +54,7 @@ export async function showLeedAction( leed_preview ) {
     let leed_details = null;
     try {
         // get the leedz for this trade_name and the dates showing
-        leed_details = await getDeetz( leed_preview.id );
+        leed_details = await db_getDeetz( leed_preview.id );
 
     } catch (error) {
         printError( "getLeedz()", error.message );

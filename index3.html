@@ -539,7 +539,7 @@
     
  
           /**
-          * INITIALIZE
+          * 
           */
 
           cssScreenSize();
@@ -562,6 +562,8 @@
           }
 
 
+          // WE COME HERE AFTER HOSTED LOGIN UI
+          // (hopefully) we can pass username from the login to this page
 
           // LOAD user profile data
           // LOAD list of subscribed trades
@@ -569,6 +571,8 @@
           //
           // FIXME FIXME FIXME
           // FOOBAR FOOBAR FOOBAR
+          // username will come from login sequence (hopefully)
+
          const USER_NAME = "dave.reyes";
          try {
             initUser( USER_NAME ); // will throw error
@@ -596,17 +600,36 @@
           user_href.innerHTML = currentUser.username;
 
 
-          // INITIALIZE month chooser in middle column
+
+
+
+
+          /**
+           * INITIALIZE month chooser in middle column
+           *
+           */ 
           initMonthChooser();
 
+
+
+
+          /**
+           * LOAD central calendar column and any cached leedz
+           */
+           loadCalendar();
+
+
           
-          // LOAD trades
-          // using data from user profile
+          /**
+           * LOAD ALL trades and turn ON the ones subscribed to
+           * when we turn ON a trade this will ALSO load the leedz
+           * for each trade in currentUser.subs[]
+           */
           let trades = [];
           try {
             await getAllTrades().then((response) => trades = response ); 
             
-            if (trades == undefined || trades == null) {
+            if (trades == null) {
               throw new Error("server returned null trades.");
             }
 
@@ -614,21 +637,19 @@
               throw new Error("server returned empty (0) trades.");
             }
 
+            // got ALL trades from DB
             initTradesColumn( trades );
 
 
           } catch (error) {
+            
+            // DO NOT FAIL -- show error modal dialog and print error to console
             var msg = "Cannot load trades.<BR>Please refresh page."
-            msg = error + "<BR>" + msg;
+            msg = error.message + "<BR>" + msg;
+            
+            printError("Init Trades", error);
             errorModal( msg );
           }
-
-
-          loadCalendar();
-
- 
-
-
 
 
 

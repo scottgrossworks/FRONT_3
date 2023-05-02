@@ -230,13 +230,6 @@ export function getSubscriptions() {
   if (CURRENT_USER == null)
     throwError("getSubscriptions()", new Error("CURRENT_USER is null"));
 
-  
-  console.log("GETTING USER SUBS");
-  for (const sub of CURRENT_USER.subs) {
-    console.log("sub=" + sub);
-  }
-
-
     // probably would be better to make a copy and return that
     return CURRENT_USER.subs;
   } 

@@ -2,6 +2,7 @@ import { reloadCalendar } from "./calendar.js";
 import { isSubscribed, saveSubscription, removeSubscription, getSubscriptions } from "./user.js";
 import { db_getTrades } from "./dbTools.js";
 import { printError } from "./error.js";
+import { hideActionWindow } from "./action.js";
 
 
 const COLORS = new Map();
@@ -311,6 +312,9 @@ export function initTradesColumn( all_trades ) {
 
       }
 
+      // clear the action window
+      hideActionWindow();
+      
       // reload the leedz for the current month showing
      reloadCalendar();
     });
@@ -339,6 +343,9 @@ export function initTradesColumn( all_trades ) {
 
       }
 
+      // clear the action window
+      hideActionWindow();
+
       // reload the leedz for the current month showing
       reloadCalendar();
     });
@@ -361,6 +368,9 @@ export function initTradesColumn( all_trades ) {
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
 
       }
+
+      // clear the action window
+      hideActionWindow();
 
       // reload the leedz for the current month showing
       reloadCalendar();

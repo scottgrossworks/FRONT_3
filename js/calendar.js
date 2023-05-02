@@ -230,9 +230,19 @@ export async function loadUserLeedz() {
 
         // when does leed appear on calendar?
         const startDate = new Date( leed_fromDB.start );
-                
-        console.log("%c---FROM DB=" + leed_fromDB.trade + "---" + getShortDateString( startDate.toISOString()), "color:" + trade_color + ";" );
+        
+        
 
+
+
+        // FOOBAR FOOBAR FOOBAR
+        //
+        //
+        console.log("%c---FROM DB=" + leed_fromDB.trade + "--" + startDate.toString() +  "---" + startDate.toISOString(), "color:" + trade_color + ";" );
+
+
+
+        
         // starting at 1 (skipping template index:0 )
         // iterate through the calendar and find the corresponding date
         let shortDate_fromLeed = getShortDateString( startDate.toISOString() );

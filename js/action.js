@@ -186,6 +186,22 @@ export async function showLeedAction( leed_preview ) {
     // leed_preview.creator
     // leed_details.em
 
+}
 
+
+
+/**
+ * 
+ */
+export function hideActionWindow() {
+    
+    // HIDE the action_panel
+    //
+    let action = document.getElementById("action_panel");
+    action.style.display = "none";
+
+    // SHOW the welcome panel if it exists
+    let welcome = document.getElementById("welcome_panel");
+    welcome.style.display = "block";
 
 }

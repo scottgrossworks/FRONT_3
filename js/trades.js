@@ -260,6 +260,7 @@ export function initTradesColumn( all_trades ) {
 
   // import DOM elements from html
   const theList = document.querySelector("#trades_list");
+  const subs = [];
   const theTemplate = document.querySelector("#template_each_trade");
 
 
@@ -377,23 +378,24 @@ export function initTradesColumn( all_trades ) {
     });
   
 
-    // FIXME FIXME FIXME
-    // this would be the place to sort the subs
-    
+ 
     if (is_sub) {
-      theList.prepend( newNode );
+      subs.push( newNode ); 
     } else {
       theList.appendChild( newNode );
     }
     
   });
 
-
+    // this allows for a sorted list of subscriptions
+    for (var i = subs.length - 1; i >= 0; i--) {
+      theList.prepend(subs[i]);
+    }
+    
 
   // DEBUG DEBUG DEBUG
   // printColors();
 }
-
 
 
 

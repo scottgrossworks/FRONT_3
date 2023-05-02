@@ -1,8 +1,9 @@
 /* action.js */
 
-import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } from "./dates.js";
+import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname, getShortDateString } from "./dates.js";
 import { getColorForTrade } from "./trades.js";
 import { db_getDeetz } from "./dbTools.js";
+import { printError, throwError } from "./error.js";
 
 
     
@@ -48,54 +49,60 @@ leed_details contains
 export async function showLeedAction( leed_preview ) {
 
    
-    // API request --> DB 
+    // API request --> DB   
     // load full leed details for leed_preview.id
     //
     let leed_details = null;
-    try {
-        // get the leedz for this trade_name and the dates showing
-        leed_details = await db_getDeetz( leed_preview.id );
+    await db_getDeetz( leed_preview.id )
+        .then(data => {
 
-    } catch (error) {
-        printError( "getLeedz()", error.message );
-        printError( "response JSON", responseJSON);
-  
+          if (data == null) throw new Error("null response from GET");
+          leed_details = data[0];
+        
+          // query returns empty result set
+          if (leed_details == null) throw new Error("No leed details for id: " + leed_preview.id);
+            
+        })
+    .catch(error => {
+
+        printError( "getDeetz()", error.message );
         // EXIT FUNCTION HERE
-        throwError( "loadLeedzForTrade()", error); 
-    }
+        throwError( "showLeedAction()", error); 
+    });
 
 
-    // query returns empty result set
-    if (leed_details == null) {
-        printError("showLeedAction()", "No leed details for id: " + leed_preview.id);
-        return;
-    }
 
 
-    // get full long weekday
-    const leed_weekday = getWeekday( leed_preview.start.substring(0, 10) );    
+    // START DATE
+    let startDate = new Date(leed_preview.start);
+    let isoStart = startDate.toISOString();
+    const leed_weekday = getWeekday( getShortDateString( isoStart ) );
 
     // use the long monthname for the modal action window
     // and short monthname for the column view
     var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
     let leed_monthname = "";
     if (screen == "L") {
-        leed_monthname = getShortMonthname( leed_preview.start.substring(5, 7) ); 
+        leed_monthname = getShortMonthname( isoStart.substring(5, 7) ); 
     } else {
-        leed_monthname = getMonthname( leed_preview.start.substring(5, 7) ); 
+        leed_monthname = getMonthname( isoStart.substring(5, 7) ); 
     }
 
     // remove '0' at front if any
-    let leed_date = leed_preview.start.substring(8, 10);
-    if (leed_date.startsWith('0')) { leed_date = leed_date.substr(1) };
+    let leed_date = isoStart.substring(8, 10);
+    if (leed_date.startsWith('0')) { leed_date = leed_date.substring(1) };
 
-    const leed_year = leed_preview.start.substring(0, 4);
+    const leed_year = isoStart.substring(0, 4);
     
-    let hours_start = getHours(leed_preview.start);
-    let hours_end = getHours(leed_preview.end);
+    let hours_start = getHours(isoStart);
+    
+    // END DATE
+    let endDate = new Date(leed_preview.end);
+    let isoEnd = endDate.toISOString();
+    let hours_end = getHours(isoEnd);
 
-    const start_time = hours_start[0] + ":" + getMinutes(leed_preview.start) + hours_start[1];
-    const end_time = hours_end[0] + ":" + getMinutes(leed_preview.end) + hours_end[1];
+    const start_time = hours_start[0] + ":" + getMinutes(isoStart) + hours_start[1];
+    const end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
 
 
     

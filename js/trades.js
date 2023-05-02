@@ -1,10 +1,10 @@
-import { loadLeedzForTrade, removeLeedzForTrade } from "./calendar.js";
-import { isSubscribed, saveSubscription, removeSubscription } from "./user.js";
+import { reloadCalendar } from "./calendar.js";
+import { isSubscribed, saveSubscription, removeSubscription, getSubscriptions } from "./user.js";
 import { db_getTrades } from "./dbTools.js";
 import { printError } from "./error.js";
 
 
-const COLORS = Array();
+const COLORS = new Map();
 
 const DEFAULT_TRADES = [
     
@@ -191,11 +191,14 @@ const DEFAULT_TRADES = [
  */
 export async function getAllTrades() {
 
-  let retJSON = DEFAULT_TRADES;
+  let retJSON = null;
 
     try {
 
       retJSON = await db_getTrades();
+
+      // if it stays null or there's any problem, report it but do not fail
+      if (retJSON == null) throw new Error("NO trades received from server");
 
     } catch (error) {
 
@@ -210,20 +213,26 @@ export async function getAllTrades() {
 
 
 /**
- * mapping colors->trade persists even when trade unselected -- so that
- * if it is turned back on you get the same color again
  * 
  * @param String name of trade
  * @returns String color corresponding to it in the trades column
  */
 export function getColorForTrade(trade_name) {
 
-  let cacheColor = window.sessionStorage.getItem( trade_name );
-  if (cacheColor != null) {
-    return cacheColor;
-  }
+  let theColor = COLORS.get(trade_name);
+  console.log("%cin getColorForTrade() GOT " + trade_name + ": " + theColor, "color:" + theColor + ";");
 
-  return "var(--LEEDZ_GRAY)";
+
+
+  if (theColor != null) {
+
+    return theColor;
+  
+  } else {
+
+    return "var(--LEEDZ_GRAY)";
+  }
+  
 }
 
 
@@ -240,6 +249,8 @@ export function getColorForTrade(trade_name) {
  * ]
 */
 export function initTradesColumn( all_trades ) {
+
+  console.error("**** INIT TRADES COLUMN *****");
 
   if ((all_trades == null) || (all_trades.length == 0)) return;
 
@@ -284,16 +295,24 @@ export function initTradesColumn( all_trades ) {
     checkBox.addEventListener("click", function( event ) {
      
       if ( isSubscribed( trade.trade_name)  ) { // checkbox is ON
-        console.error("TURNING OFF");
+
         removeSubscription( trade.trade_name );
-        turnTrade_Off(checkBox, radioButton, theLabel, trade.trade_name);
+        turnTrade_Off(checkBox, radioButton, theLabel);
+
+
+        console.log("CHECKBOX");
+        getSubscriptions();
+
 
       } else { // checkbox is OFF
-        console.error("!!!TURNING ON");
+
         saveSubscription( trade.trade_name );
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
 
       }
+
+      // reload the leedz for the current month showing
+     reloadCalendar();
     });
 
 
@@ -307,7 +326,11 @@ export function initTradesColumn( all_trades ) {
       if ( isSubscribed( trade.trade_name) ) { // radio button is ON
 
         removeSubscription( trade.trade_name );
-        turnTrade_Off(checkBox, radioButton, theLabel, trade.trade_name);
+        turnTrade_Off(checkBox, radioButton, theLabel);
+
+        console.log("RADIO");
+        getSubscriptions();
+
 
       } else { // radio button is OFF
 
@@ -315,6 +338,9 @@ export function initTradesColumn( all_trades ) {
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
 
       }
+
+      // reload the leedz for the current month showing
+      reloadCalendar();
     });
 
 
@@ -327,7 +353,7 @@ export function initTradesColumn( all_trades ) {
       if ( isSubscribed( trade.trade_name) ) { // radio button is ON
 
         removeSubscription( trade.trade_name );
-        turnTrade_Off(checkBox, radioButton, theLabel, trade.trade_name);
+        turnTrade_Off(checkBox, radioButton, theLabel);
 
       } else { // radio button is OFF
 
@@ -335,9 +361,14 @@ export function initTradesColumn( all_trades ) {
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
 
       }
+
+      // reload the leedz for the current month showing
+      reloadCalendar();
     });
   
 
+    // FIXME FIXME FIXME
+    // this would be the place to sort the subs
     
     if (is_sub) {
       theList.prepend( newNode );
@@ -346,6 +377,7 @@ export function initTradesColumn( all_trades ) {
     }
     
   });
+
 
 
   // DEBUG DEBUG DEBUG
@@ -390,6 +422,9 @@ function createColor(numOfSteps, step) {
  * Seed the COLORS
  * number of colors == number of trades
  * 
+ * using sessionCache so that
+ * mapping colors->trade persists even when browser refreshed
+ * 
  * all_trades:
  * [
  * {
@@ -405,9 +440,24 @@ function seedColors( all_trades ) {
     
     // for each trade....
     for (let i = 0; i < num_trades; i++ ) {
-      // create a color and seed the map
-      var theColor = createColor( num_trades, i );
-      COLORS.push( theColor );
+      
+      // is there ALREADY a color assigned to this trade_name in cache?
+      var theColor = window.sessionStorage.getItem( all_trades[i].trade_name );
+      if (theColor != null) {
+        COLORS.set( all_trades[i].trade_name,  theColor ); 
+      
+        // console.log("%cCACHE COLOR FOR " + all_trades[i].trade_name, "color: " + theColor + ";");
+      
+      } else {
+        // create a new color and assign it to trade_name
+        theColor = createColor( num_trades, i );
+        COLORS.set( all_trades[i].trade_name,  theColor );
+
+        // cache this in case of browser refresh
+        window.sessionStorage.setItem( all_trades[i].trade_name, theColor );
+      }
+
+      // console.log("%c" + i + "=" + all_trades[i].trade_name, "color: " + theColor);
     
     }
   }
@@ -420,37 +470,13 @@ function seedColors( all_trades ) {
  *
  */
 export function printColors() {
-  for (let i = 0; i < COLORS.length; i++) {
-      var theColor = COLORS[i];
-      var theString = i + ":" + theColor;
-      console.log("%c" + theString, "color: " + theColor + ";"); 
+  
+  for (let trade_name of COLORS.keys() ) {
+    var theColor = COLORS.get(trade_name);
+    console.log("%c" + trade_name + ": " + theColor, "color:" + theColor + ";");
   }
 }
 
-
-/*
- * return an UNUSED randomly generated color
- * 
- * COLORS[ index ] == available color, or null if color is in use
- */
-function chooseTradeColor( tradeName ) {
-
-    // choose a random index into COLORS
-    let index = Math.floor(Math.random() * COLORS.length);
-
-    // if color is in use - recurse and try again
-    let isAssigned = ( COLORS[index]== null ); // null means it's in use
-      if (isAssigned) {
-        return chooseTradeColor( tradeName );
-      }
-    
-    // != null, color still available 
-    // replace this color with null and return it
-    let hexColor = COLORS[index];
-    COLORS[index] = null;
-     
-    return hexColor;
-}
 
 
 
@@ -461,27 +487,17 @@ function chooseTradeColor( tradeName ) {
  */
 function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
 
-
   // turn on the check box and the radio button
   checkBox.checked = true;
   radioButton.checked = true;
 
-  // has the color already been set from a previous load
-  //
-  var theColor = window.sessionStorage.getItem(trade_name);
-  if (theColor == null) {
+  // get the color assigned to this trade
+  var theColor = COLORS.get(trade_name);
 
-    // NO -- color has not been assigned
-    // generate a new random color and map it in session storage to the trade name
-    theColor = chooseTradeColor( trade_name );
-    window.sessionStorage.setItem(trade_name, theColor);
-
-  } 
 
   // DEBUG
   var theString = "TURN ON=" + trade_name;
   console.log("%c" + theString, "color: " + theColor + ";"); 
-
 
   // FIXME 2/2023 
   // should all be done in css but the initial setting doesn't persist
@@ -492,11 +508,6 @@ function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
   // recolor the label
   theLabel.style.color = "black";
 
-
-  // ask the cache/DB for all the leedz for this trade (and month showing)
-  // and add them to UI
-  //
-  loadLeedzForTrade(trade_name);
 }
 
 
@@ -504,7 +515,7 @@ function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
 /*
  *
  */
-function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
+function turnTrade_Off( checkBox, radioButton, theLabel ) {
   
   // turn on the check box and the radio button
   checkBox.checked = false;
@@ -515,17 +526,11 @@ function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
   // should all be done in css but the initial setting doesn't persist
   radioButton.style.backgroundColor = "white";
   radioButton.style.border = "1.5px solid var(--LEEDZ_DARKGRAY)";
-    // recolor the label
-    theLabel.style.color = "gray";
+  
+  // recolor the label
+  theLabel.style.color = "gray";
 
-  // do NOT remove the color from session-storage
-  // in case user turns trade back on -- same color will appear
-  // window.sessionStorage.setItem(trade_name, null);
   radioButton.classList.remove("trade_active");
 
-  // remove all leedz from calendar for this trade
-   removeLeedzForTrade(trade_name);
 }
-
-
 

@@ -23,7 +23,7 @@ export function printError( src, error ) {
         errMsg = error;
     }
     
-    console.error("[" + src + "] => " + errMsg);
+    console.error(src + "=>" + errMsg);
   }
 
 
@@ -39,7 +39,7 @@ export function throwError(src, error) {
      }  else {
         errMsg = error;
     }
-    errMsg = "[" + src + "]=>" + errMsg;
+    errMsg = src + "=>" + errMsg;
     // console.error("Throwing Error: " + errMsg);        
 
     throw new LeedzError(errMsg);

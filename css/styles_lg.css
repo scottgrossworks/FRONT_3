@@ -45,7 +45,7 @@
 
   #calendar_main {
 
-    align-self: flex-end;
+    align-self: flex-start;
     max-width: 650px;
 
     margin-left: 35px;

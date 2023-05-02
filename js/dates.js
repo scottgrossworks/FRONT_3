@@ -361,6 +361,7 @@ export function getWeekday( dateString ) {
  */
 export function getShortDate( theDate ) {
 
+
     let theISO = theDate.toISOString();
     var theString = theISO.substring(0, 10);
 
@@ -375,6 +376,8 @@ export function getShortDate( theDate ) {
  * trim time / timezone info off and return substring
  */
 export function getShortDateString( dateString ) {
+
+    // console.log("%cSHORT STRING:" + dateString, "color:darkgreen;");
 
     var theString = dateString.substring(0, 10);
     return theString;

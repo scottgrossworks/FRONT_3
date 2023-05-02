@@ -26,6 +26,7 @@ export function getCurrentUser() {
 
 
 
+
 /**
  * 
  * CREATE and CACHE a fully-formed JSON user object CURRENT_USER
@@ -35,21 +36,35 @@ export function getCurrentUser() {
  */
 export async function initUser( username ) {
 
+    // GET the user JSON from the cache if any
+    loadCacheUser( username );
 
-    console.log("initUser()-->" + username);
 
 
+    let resObj = [];
+
+    //   client <---> API Gateway <===> DB
+    //
     // GET the user JSON data from the server
     //
+ 
     try {
-
-      
       // get the user object
-      let resObj = await db_getUser( username );
+      await db_getUser( username )
+      .then(data => {
 
-      console.log("GOT USER DATA!");
+        if (data == null) throw new Error("null response from GET");
+        resObj = data[0];
 
-      // parse user data into an in-memory object
+      })
+      .catch(error => {
+        printError("db_getUser()", error);
+        throwError('db_getUser())', 'Problem with fetch operation:' + error.message);
+      });
+
+   
+      // the DB might contain new values
+      // update CURRERNT_USER
       CURRENT_USER.username = resObj.creator;
       CURRENT_USER.zip_home = resObj.zip_home;
       CURRENT_USER.zip_radius = resObj.zip_radius;
@@ -57,6 +72,7 @@ export async function initUser( username ) {
       CURRENT_USER.subs = (resObj.subs != null) ? resObj.subs : [];
       CURRENT_USER.leedz_bought = (resObj.leedz_bought != null) ? resObj.leedz_bought : [];
 
+      console.log("CURRENT USER IS SET=" + CURRENT_USER.username);
 
     } catch (error) {
 
@@ -64,18 +80,8 @@ export async function initUser( username ) {
       throwError( "initUser()", error); // !!!
     }
 
-    
-    // LOAD CACHE USER
-    // is this the current cache for this username?
-    let cacheUser = loadCacheUser( CURRENT_USER.username );
 
-    if (cacheUser != null) {
-      // there IS a cache for this user
-      // copy cache subs to CURRENT_USER subs
-      cacheUser.subs.forEach( sub => CURRENT_USER.subs.push( sub ) );
-    }
-
-    // save CURRENT_USER to session storage
+    // save modified CURRENT_USER to session storage
     saveCacheUser( CURRENT_USER );
 }
 
@@ -139,15 +145,13 @@ function saveCacheUser( userObj ) {
     }
 
     try {
-
       let userJSON = JSON.stringify (userObj);
-      window.sessionStorage.putItem("USER", userJSON);
+      window.sessionStorage.setItem("USER", userJSON);
 
 
     } catch (error) {
-      printError("saveCacheUser()", "cannot JSON-ify user object");
       printError("saveCacheUser()", error.message);
-      window.sessionStorage.putItem("USER", null);
+      window.sessionStorage.setItem("USER", null);
     }
 }
 
@@ -194,8 +198,9 @@ export function saveSubscription( trade_name ) {
 
     if (CURRENT_USER.subs.indexOf(trade_name) == -1) { // not in list already
       CURRENT_USER.subs.push( trade_name );
-      window.sessionStorage.setItem("SUBS", CURRENT_USER.subs);
     }
+
+    saveCacheUser( CURRENT_USER );
   }
   
   
@@ -211,7 +216,8 @@ export function saveSubscription( trade_name ) {
     }
 
     CURRENT_USER.subs.splice( CURRENT_USER.subs.indexOf(trade_name), 1);
-    window.sessionStorage.setItem("SUBS", CURRENT_USER.subs);
+
+    saveCacheUser( CURRENT_USER );
   }
   
 
@@ -223,6 +229,13 @@ export function getSubscriptions() {
   
   if (CURRENT_USER == null)
     throwError("getSubscriptions()", new Error("CURRENT_USER is null"));
+
+  
+  console.log("GETTING USER SUBS");
+  for (const sub of CURRENT_USER.subs) {
+    console.log("sub=" + sub);
+  }
+
 
     // probably would be better to make a copy and return that
     return CURRENT_USER.subs;

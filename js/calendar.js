@@ -4,7 +4,7 @@
  */
 
 import { daysInMonth, getShortDateString, getShortWeekday, getMonth,
-    firstDayShowing, lastDayShowing, getYear, getHours, getMinutes, twoDigitInt, getDateShowing  } from "./dates.js";
+    firstDayShowing, lastDayShowing, getYear, getHours, getMinutes, twoDigitInt } from "./dates.js";
 import { showLeedAction } from "./action.js";
 import { getColorForTrade } from "./trades.js";
 import { getSubscriptions, isSubscribed } from "./user.js";
@@ -31,10 +31,15 @@ export function isLeedActive() {
  * Build the calendar UI 
  * loads leedz from cache
  * session storage is the leed cache
- *      key    : date
+ *      key    : date   
  *      value  : delimited string of JSON-stringified leed objects
  */
 export function loadCalendar() {
+
+
+
+    console.error("**** LOAD CALENDAR *****");
+
 
     // load the current date showing
     let theYear = getYear();
@@ -83,12 +88,32 @@ export function loadCalendar() {
         theList.appendChild( eachDay );
 
  
-        // CACHE
+        // FIXME FIXME FIXME
+        // CACHE ??
         // are there leedz in the cache for this date?
-        loadLeedzFromCache( eachDay );
+        // loadLeedzFromCache( eachDay );
     }
 
 }
+
+
+
+
+
+
+/*
+ * clear the current calendar of leedz
+ * call loadUserLeedz() to repopulate it
+ *
+ */
+export function reloadCalendar() {
+
+    removeLeedzShowing();
+    loadUserLeedz();
+}
+
+
+
 
 
 
@@ -151,31 +176,19 @@ function loadLeedzFromCache( theDay ) {
 
 
 
-
 /**
- * for each trade the user is subscribed to
- * call LoadLeedzForTrade( each_trade )
+ *
  * 
  */
 export async function loadUserLeedz() {
 
+    console.log("IN LOAD USER LEEDZ !!!!");
+
     let subs = getSubscriptions();
-
-    subs.forEach( (trade_name) => {
-
-        loadLeedzForTrade( trade_name );
-    });
-
-}
-
-
-
-/*
- * load the leedz for this trade and the date ranges showing
- * 
- */
-export async function loadLeedzForTrade( trade_name ) {
-
+    if (subs.length == 0) {
+        printError("loadUserLeedz()", "No trades subscribed");
+        return;
+    }
 
 
     // API request --> DB 
@@ -183,55 +196,59 @@ export async function loadLeedzForTrade( trade_name ) {
     //
     let results = null;
     try {
-        // get the leedz for this trade_name and the dates showing
-        results = await db_getLeedz( trade_name, firstDayShowing(), lastDayShowing() );
+        // 
+        //  client <---> API Gateway <===> DB
+        //
+        // get the leedz for all trade names in subs and the dates showing
+        results = await db_getLeedz( subs, firstDayShowing(), lastDayShowing() );
 
     } catch (error) {
         printError( "getLeedz()", error.message );
         printError( "response JSON", responseJSON);
         
         // EXIT FUNCTION HERE
-        throwError( "loadLeedzForTrade()", error); 
+        throwError( "loadUserLeedz()", error); 
     }
-
-
 
     // query returns empty result set
     if (results.length == 0) {
-        printError("loadLeedzForTrade()", "No leedz for trade: " + trade_name);
+        printError("loadUserLeedz()", "No leedz returned");
         return;
     }
 
-
+    
+    
+    
     // the UI contains all the each_date days
     const theList = document.querySelector("#calendar_list");
 
-    // the color for all leedz of this trade
-    let trade_color = getColorForTrade( trade_name );
-
-    let dateIndex = 1;
     // for each (date sorted) leed coming in from the DB
     for (const leed_fromDB of results) {
+        
+        // what color are all leedz of this trade?
+        let trade_color = getColorForTrade( leed_fromDB.trade );
 
-        // FIXME FIXME FIXME
-        console.error("LOADING LEED=" + leed_fromDB.trade + "--" + getShortDateString(leed_fromDB.start));
+        // when does leed appear on calendar?
+        const startDate = new Date( leed_fromDB.start );
+                
+        console.log("%c---FROM DB=" + leed_fromDB.trade + "---" + getShortDateString( startDate.toISOString()), "color:" + trade_color + ";" );
 
-        // starting at date last visited (skipping template index:0 )
+        // starting at 1 (skipping template index:0 )
         // iterate through the calendar and find the corresponding date
-        let shortDate_fromLeed = getShortDateString(leed_fromDB.start);
-        for (var counter = dateIndex; counter < theList.children.length; counter++) {
+        let shortDate_fromLeed = getShortDateString( startDate.toISOString() );
+        
+        for (var counter = 1; counter < theList.children.length; counter++) {
          
             let each_day = theList.children[ counter ];
 
             // compare the date for this row in the calendar to the date of the leed
             // theDate is a String
             let theDate = each_day.getAttribute("LEEDZ_DATE");
-
             // this should NEVER be null
             if (theDate == null) {
 
-                printError("loadLeedzForTrade()", "LEEDZ_DATE attribute not being set for each day");
-                printError("loadLeedzForTrade()", "Unable to load leedz for " + leed_fromDB.trade);
+                printError("loadUserLeedz()", "LEEDZ_DATE attribute not being set for each day");
+                printError("loadUserLeedz()", "Unable to load leedz for " + leed_fromDB.trade);
                 return;  
             }
 
@@ -247,17 +264,15 @@ export async function loadLeedzForTrade( trade_name ) {
                 //
                 createCalendarLeed( each_day, trade_color, leed_fromDB);
                 
-                dateIndex = counter; 
-                // reset so on next iteration
-                // skip ahead to date of this leed
-                break; // leed will only have one corresponding calendar day
-            
+                break; // leed will only have one corresponding calendar day    
             } 
         }
+
+
         // before we move on to next leed
         // CACHE this one in sessionStorage -- might be future date not displayed
         // console.log("CACHING LEED FOR=" + getShortDateString(leed_fromDB.start));
-        cacheLeed( leed_fromDB, getShortDateString(leed_fromDB.start) );
+        cacheLeed( leed_fromDB, shortDate_fromLeed );
     }
 }
 
@@ -301,13 +316,36 @@ function cacheLeed( leed_fromDB, theDate ) {
 
 
 
+/**
+ * 
+ *
+ */
+function removeLeedzShowing() {
+
+    const theDays = document.getElementsByClassName("each_day");
+    
+    for (var d = 0; d < theDays.length; d++) {
+        var each_day = theDays.item(d);
+
+        // remove all children after the first one (date box)
+        for (var i = each_day.children.length - 1; i > 0; i--) {
+            each_day.children[i].remove();
+        }
+
+        // on to the next day
+    }   
+}
+
+
+
+
 /*
  * 
  */
 export function removeLeedzForTrade( trade_name ) {
 
 
-    const theDays = document.querySelectorAll(".each_day");
+    const theDays = document.getElementsByClassName(".each_day");
     // get all the days of the current month showing
     for (var i = 0; i < theDays.length; i++) {
 
@@ -315,10 +353,11 @@ export function removeLeedzForTrade( trade_name ) {
         var each_day = theDays[i];
         
         // iterate over all children looking leedz with matching trade_name
-        for ( var c = 1; c < each_day.children.length; c++) {
-            // start with 1 to skip the date square
+        // skip the first and last child
+        const lastChild = each_day.children.length - 1;
+        for ( var c = 1; c < lastChild; c++) {
+           
             var theChild = each_day.children[c];
-
             var test_trade = theChild.getAttribute("TRADE_NAME");
                 
             if (test_trade == trade_name) {
@@ -356,15 +395,16 @@ function removeMatchingLeed( each_day, leed_id ) {
 
 /** 
  *
- *    {
- *      "id": 1001, 
+    {
+        "id": 1004, 
         "creator": "scott.gross", 
-        "loc": "1001 Airbrush Lane, Los Angeles, CA 90056", 
-        "start": 1679486584000, 
-        "end": 1679486584000, 
+        "zip": "90056", 
+        "start": 1680469860000, 
+        "end": 1680477060000, 
         "trade": "airbrush",
-        "note": "birthday party for children"
-      }
+        "note": "staff appreciation party"
+    }
+]
  */
 
 //
@@ -373,6 +413,8 @@ function removeMatchingLeed( each_day, leed_id ) {
 //
 function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
+
+    console.log("%cCREATING CALENDAR LEED " + leed_fromDB.trade, "color: " + trade_color + ";");
 
     // create the DOM node
     const newLeed = document.createElement("button");
@@ -387,11 +429,16 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
     // LEED DATE
     // returns array [ hours(12) , AM/PM ]  
-    let hours_start = getHours(leed_fromDB.start);
-    let hours_end = getHours(leed_fromDB.end);
+    const startDate = new Date( leed_fromDB.start );
+    const endDate = new Date( leed_fromDB.end );
+    let isoStart = startDate.toISOString();
+    let isoEnd = endDate.toISOString();
 
-    const startTime = hours_start[0] + ":" + getMinutes(leed_fromDB.start) + hours_start[1];
-    const endTime = hours_end[0] + ":" + getMinutes(leed_fromDB.end) + hours_end[1];
+    let hours_start = getHours( isoStart ); 
+    let hours_end = getHours( isoEnd );
+
+    const startTime = hours_start[0] + ":" + getMinutes( isoStart ) + hours_start[1];
+    const endTime = hours_end[0] + ":" + getMinutes( isoEnd ) + hours_end[1];
 
 
 

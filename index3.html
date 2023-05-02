@@ -18,7 +18,7 @@
     <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
 
 
-        <link rel="stylesheet" href="css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="css/globals.css?v=1234" type="text/css" />
 
         <link rel="stylesheet" href="css/user_panel.css" type="text/css" />        
         <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
@@ -312,7 +312,7 @@
 
     import { initUser, guestUser, getCurrentUser } from "./js/user.js";      
     import { initTradesColumn, getAllTrades } from "./js/trades.js";   
-    import { loadCalendar } from "./js/calendar.js";
+    import { loadCalendar, loadUserLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
     import { printError, throwError } from "./js/error.js";
 
@@ -422,7 +422,9 @@
         let modal = document.getElementById("error_modal");
         modal.style.display = "block";
 
+
         let theMsg = modal.children[1]; /* the error text */
+        theMsg.style.width = "90%";
         theMsg.innerHTML = msg + "<BR><BR>" + BUG_EMAIL;
 
       }
@@ -575,7 +577,7 @@
 
          const USER_NAME = "dave.reyes";
          try {
-            initUser( USER_NAME ); // will throw error
+            await initUser( USER_NAME ); // will throw error
 
           } catch (error) {
 
@@ -599,24 +601,6 @@
           user_href.setAttribute("href", currentUser.email);
           user_href.innerHTML = currentUser.username;
 
-
-
-
-
-
-          /**
-           * INITIALIZE month chooser in middle column
-           *
-           */ 
-          initMonthChooser();
-
-
-
-
-          /**
-           * LOAD central calendar column and any cached leedz
-           */
-           loadCalendar();
 
 
           
@@ -650,6 +634,29 @@
             printError("Init Trades", error);
             errorModal( msg );
           }
+
+
+          
+
+          /**
+           * INITIALIZE month chooser in middle column
+           *
+           */ 
+           initMonthChooser();
+
+
+
+          
+          /**
+           * LOAD central calendar column and any cached leedz
+           */
+           loadCalendar();
+
+
+          /**
+           * 
+           */
+          loadUserLeedz();
 
 
 

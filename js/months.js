@@ -10,6 +10,12 @@ import { printError, throwError } from "./error.js";
  */
 export function initMonthChooser() {
 
+
+
+    console.error("**** INIT MONTHS CHOOSER *****");
+
+
+
     let theMonth = getMonth();
     let theYear = getYear();
 
@@ -17,6 +23,8 @@ export function initMonthChooser() {
     let theLabel = months.querySelector("#month_label");
 
     theLabel.textContent = getMonthname(theMonth) + ", " + theYear;
+
+
 
 
     /*

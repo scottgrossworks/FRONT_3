@@ -4,8 +4,8 @@
     --CENTER-WIDTH: 46vw;
 
     --LEEDZ_BKG: white;
-    --LEEDZ_GRAY:rgba(239, 242, 247, 0.876); 
-    --LEEDZ_DARKGRAY: rgba(181, 181, 185, 0.844);
+    --LEEDZ_GRAY:rgba(239, 242, 247, 1); 
+    --LEEDZ_DARKGRAY: rgba(181, 181, 185, 1);
     --LEEDZ_LIGHTGREEN:rgb(215, 240, 230);
     --LEEDZ_GREEN: rgb(97, 234, 178);
     --LEEDZ_DARKGREEN: #04AA6D;

@@ -1,0 +1,257 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+:root {
+	font-size: 16px;
+	font-family: var(--FONT_1);
+
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+body {
+	display: block;
+	max-width:1024px;
+	margin:0 auto;	
+}
+
+
+
+
+
+input,
+textarea,
+select {
+
+	width:100%;
+	
+	border: none;
+	background-color: var(--LEEDZ_GRAY);
+	
+	padding:12px 8px;
+
+	font-size: 1rem;
+	outline: none;
+	border-radius: 8px;
+
+	font-family: var(--FONT_2);
+	border-bottom: 1px solid var(--LEEDZ_DARKGREEN);
+}
+
+input,
+textarea {
+	appearance: none;
+	-webkit-appearance: none;
+}
+
+
+
+
+input[type="button"],
+input[type="submit"] {
+	padding: 0.5rem 1.6rem;
+	background-color: var(--LEEDZ_DARKGREEN);
+	border-radius: 5px;
+
+	font-weight: bolder;
+	font-family: var(--FONT_3);
+
+	color: white;
+
+	
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
+
+	
+	transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="button"]:hover,
+input[type="submit"]:hover {
+	background-color: var(--LEEDZ_DARKGREEN);
+	box-shadow: 0 3px 3px #ccc;
+}
+
+input[type="button"]:active,
+input[type="submit"]:active {
+	background-color: var(--LEEDZ_DARKGREEN);
+}
+
+
+
+.user_title {
+	text-align: center;
+	color:black;
+	font-family: var(--FONT_3);
+	font-size:1.8em;
+}
+
+section {
+	
+	margin:0 auto;
+	width:100vw;
+
+}
+
+section > h1 {
+
+	padding: 4px 20px;
+	margin-bottom: 10px 20px;
+}
+
+
+section > img {
+
+	margin: 10px 20px;
+}
+
+
+
+section > table {
+
+	margin: 0 auto;
+	border-spacing: 0;
+
+	padding-left: 10vw;
+	padding-right:10vw;
+		
+	width:100%;
+	max-width:700px;
+
+}
+
+section > table tr {
+
+	text-align:right;
+	align-content:space-between;
+}
+
+
+section > table td {
+	width:100%;
+	border: none;
+	text-align: left;
+}
+
+
+section > table tbody td {
+	padding:20px;
+
+}
+
+.labelTD {
+	
+	width:fit-content;
+	min-width:100px;
+	max-width: 200px;
+	
+	padding-left:0px;
+	padding-right:0px;
+	margin-right:0px;
+
+	font-family: var(--FONT_3);
+	font-weight: 600;
+}
+
+
+.buttonTD {
+
+	
+	width:min-content;
+	max-width: 150px;
+	padding:10px;
+}
+
+
+
+
+
+.editSpecial {
+
+    position:relative;
+
+    background-color: var(--LEEDZ_DARKGREEN);
+    border: none;
+    color: white;
+   
+    
+    text-decoration: none;
+    display: flex;
+
+    font-size:1.3em;
+    font-weight: bolder;
+
+    width:max-content;
+    height:max-content;
+
+    margin-top:20px;
+
+    padding-top:15px;
+    padding-bottom:12px;
+    padding-left:20px;
+    padding-right:20px;
+ 
+    border-radius: 12px;
+
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
+}
+
+
+
+
+
+.save_button {
+
+    position:relative;
+
+    background-color: var(--LEEDZ_GREEN);
+    border: none;
+    color: black;
+   
+    
+    text-decoration: none;
+    display: flex;
+
+    font-size:1.2em;
+    font-weight: bolder;
+
+    width:max-content;
+    height:max-content;
+
+    margin-top:50px;
+
+    padding-top:20px;
+    padding-bottom:15px;
+    padding-left:30px;
+    padding-right:30px;
+ 
+    border-radius: 12px;
+
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
+}
+
+
+
+
+.back_button {
+
+	z-index: 900;
+ 
+	transform: rotate(180deg);
+	
+	font-size: 20px;
+	font-weight:600;
+	cursor: pointer;
+	background-color: var(--LEEDZ_DARKGREEN);
+	color: white;
+	padding: 10px 15px;
+	border: none;
+}
+
+.back_button a {
+
+	  
+	text-decoration:none;
+	color:white;
+}

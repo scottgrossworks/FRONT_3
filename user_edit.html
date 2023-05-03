@@ -1,0 +1,227 @@
+
+   
+<!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+		 <meta charset="UTF-8">
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 
+		 <TITLE>LEEDZ User Info</TITLE>
+	 
+	 	<!-- Favicon -->
+		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+ 
+ 
+		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+		 <link rel="stylesheet" href="./css/user_edit.css" tyep="text/css"/>
+
+		 <script src="./js/inline-edit.js" type="module" defer></script> 
+	</head>
+
+
+		 
+
+
+
+	<body>
+	
+		<center>
+
+			
+			<div class="row" style="width:100vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+
+				<div class="column _1">
+
+				<button class="back_button" style="margin:35px 20px; width:50px"><a href="./index.html">&#10140;</a></button>
+				</div>
+
+
+				<div class="column _6" style="margin:auto 0;transform:translateY(6px)">
+					<h1 class="user_title">Edit Account</h1>
+				</div>
+				
+				<div class="column _3" style="padding:6px;text-align:center">
+				<img src="./img/logo_2.png" style="width:120px">
+				</div>
+			
+			
+		
+			</div>
+
+
+			
+<section>
+
+	<BR>	
+
+			<button class="button editSpecial" style="font-size:1.1em">Login / Password</button>
+
+	
+			<BR>
+
+			<button class="button editSpecial">Payment Info</button>
+
+			<BR>
+
+
+				
+
+
+
+				<table>
+					
+					
+					<tr id="row_username">
+					
+						<TD class="labelTD">Username: </TD><td data-inlineType="text" data-inlineName="username" data-inlineRequired="true" data-inlinePlaceholder="(Required)">dave.reyes</td>
+		
+						<td data-inlineType="doneButton" class="buttonTD">
+							<input type="button" value="Edit" onclick="inlineEdit('row_username', defaultOptions)"/>
+						</td>
+					</tr>
+
+
+
+				<tr id="row_email">
+					
+					<TD class="labelTD">Email: </TD><td data-inlineType="email" data-inlineName="email" data-inlineRequired="true" data-inlinePlaceholder="(Required)">wizzardblitz@netzero.net</td>
+	
+					<td data-inlineType="doneButton" class="buttonTD">
+						<input type="button" value="Edit" onclick="inlineEdit('row_email', emailOptions)"/>
+					</td>
+				</tr>
+
+
+
+				<tr id="row_website">
+					
+					<TD class="labelTD">Website: </TD><td data-inlineType="link" data-inlineName="website" data-inlineRequired="0" data-inlinePlaceholder="(Website)"></td>
+	
+					<td data-inlineType="doneButton" class="buttonTD">
+						<input type="button" value="Edit" onclick="inlineEdit('row_website', urlOptions)"/>
+					</td>
+				</tr>
+
+
+
+				<tr id="row_aboutMe">
+
+					<TD class="labelTD">About Me: </TD><td data-inlineType="textarea" data-inlineName="aboutMe">Help sell the leedz you post</td>
+					
+					
+					<td data-inlineType="doneButton" class="buttonTD">
+						<input type="button" value="Edit" onclick="inlineEdit('row_aboutMe', defaultOptions)"/>
+					</td>
+				</tr>
+
+				
+
+
+
+
+
+				<tr id="row_zip">
+					
+					<TD class="labelTD">Zip Code: </TD><td data-inlineType="zip" data-inlineName="zip" data-inlineRequired="0" data-inlinePlaceholder="">90034</td>
+	
+					<td data-inlineType="doneButton" class="buttonTD">
+						<input type="button" value="Edit" onclick="inlineEdit('row_zip', defaultOptions)"/>
+					</td>
+				</tr>
+
+
+
+
+
+
+				<tr id="row_radius">
+					<TD class="labelTD">Search Miles: </TD>
+					<td data-inlineType="select" data-inlineName="radius"
+						data-inlineOptionsTitle='["5","10","20","50","100","500", "1000"]'
+						data-inlineOptionsValue='["5","10","20","50","100","500", "1000"]'>10</td>
+				
+					<td data-inlineType="doneButton" class="buttonTD">
+						<input type="button" value="Edit" onclick="inlineEdit('row_radius', sampleOptions)"/>
+					</td>
+				</tr>
+			</table>	
+
+			<button class="button save_button">Save Changes</button>
+			
+			
+			</center>
+
+			<BR>
+			<BR>
+				
+
+	</body>
+
+
+
+	<script type="module">
+			
+
+		import { inlineEmailFinishCell } from "./js/inline-edit.js";
+		import { inlineURLFinishCell } from "./js/inline-edit.js";
+		import { inlineEdit } from "./js/inline-edit.js";
+
+
+		function simpleRowDataParser(rowData) {
+			var str = "";
+			for (var key in rowData) {
+				 if (rowData.hasOwnProperty(key))
+					str += rowData[key];
+			}
+			return str;
+		}
+
+
+		function defaultCallback(rowData, rowName) {
+			/* alert(rowName + " : " + simpleRowDataParser(rowData)); */
+		}
+
+
+		function urlCallback(rowData, rowName) {
+			/* alert(rowName + " : " + simpleRowDataParser(rowData)); */
+		}
+
+		function emailCallback(rowData, rowName) {
+			/* alert(rowName + " : " + simpleRowDataParser(rowData)); */
+		}
+	
+		function selectCallback(rowData, rowName) {
+			/* alert(rowName + " : " + simpleRowDataParser(rowData)); */
+		}
+
+
+		var defaultOptions = { "finishCallback": defaultCallback };
+
+		var emailOptions = {    "finishCallback": emailCallback,
+								"emailFinish": inlineEmailFinishCell };
+
+		var urlOptions = {		"finishCallback": urlCallback,
+								"urlFinish": inlineURLFinishCell };
+
+		var sampleOptions = { "finishCallback": selectCallback };	
+
+
+		window.inlineEdit = inlineEdit;
+
+		window.defaultOptions = defaultOptions;
+		window.emailOptions = emailOptions;
+		window.urlOptions = urlOptions;
+		window.sampleOptions = sampleOptions;
+
+
+	
+	
+	</script>
+
+	
+		
+
+
+</html>

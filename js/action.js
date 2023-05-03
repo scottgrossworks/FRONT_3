@@ -116,6 +116,7 @@ export async function showLeedAction( leed_preview ) {
     let theTrade = document.querySelector("#lic_trade");
     theTrade.innerHTML = leed_preview.trade;
     theTrade.style.border = "2px solid " + trade_color;
+    theTrade.style.backgroundColor = trade_color;
 
     let theDate = document.querySelector("#lic_date");
     theDate.innerHTML = leed_weekday + " " + leed_monthname + " " + leed_date + ", " + leed_year; 

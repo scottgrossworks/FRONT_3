@@ -22,19 +22,19 @@
 
 
 		 
-
+	<center>
 
 
 	<body>
 	
-		<center>
+
 
 			
 			<div class="row" style="width:100vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
 
 			<div class="column _1">
 
-				<button class="back_button" style="margin:35px 20px; width:50px"><a href="./index.html">&#10140;</a></button>
+				<button class="back_button" style="margin:35px 20px; width:50px"><a href="#" onclick="backButton()">&#10140;</a></button>
 				</div>
 
 				<div class="column _2"></div>
@@ -189,14 +189,13 @@
 			<button id="saveButton" class="button save_button" value="save" style="opacity:0.5" onclick="saveChanges()">Save Changes</button>
 			
 			
-			</center>
+	
 
 			<BR>
 			<BR>
 				
 
 	</body>
-
 
 
 	<script type="module">
@@ -207,54 +206,67 @@
 		import { blankUserObject, saveUserChanges, getCurrentUser } from "./js/user.js";
 		import { printError, throwError } from "./js/error.js";
 		
+		import { USERNAME_URL_PARAM } from "./js/dbTools.js";
+
+
 
 		var EDITING = false;
 
 		const USER_CHANGES = blankUserObject();
-		const CURRENT_USER = getCurrentUser();
 
-		// FIXME FIXME FIXME
-		CURRENT_USER.username = "dave.reyes";
-		CURRENT_USER.website = "http://doctorreyes.com";
-		CURRENT_USER.about = "I am a caricature artist";
-		CURRENT_USER.email = "wizzardblitz@netzero.net";
-		
+	
+		const CURRENT_USER = getCurrentUser( true );
+
+		console.log(CURRENT_USER);
+
+		if (CURRENT_USER != null) {
+
+			var element = null;
+			
+			if (CURRENT_USER.username != null) {
+				element = document.getElementById("td_username");
+				element.innerHTML = CURRENT_USER.username;
+			}
 
 
+			if (CURRENT_USER.email != null) {
+				element = document.getElementById("td_email");
+				element.innerHTML = CURRENT_USER.email;
+			}
 
-		var element = null;
-		
-		if (CURRENT_USER.username != null) {
-			element = document.getElementById("td_username");
-			element.innerHTML = CURRENT_USER.username;
+			if (CURRENT_USER.website != null) {
+				element = document.getElementById("td_website");
+				element.innerHTML = CURRENT_USER.website;
+			}
+
+
+			if (CURRENT_USER.about != null) {
+				element = document.getElementById("td_about");
+				element.innerHTML = CURRENT_USER.about;
+			}
+
+			if (CURRENT_USER.zip_home != null) {
+				element = document.getElementById("td_zip");
+				element.innerHTML = CURRENT_USER.zip_home;
+			}
+
+			if (CURRENT_USER.zip_radius != null) {
+				element = document.getElementById("td_radius");
+				element.innerHTML = CURRENT_USER.zip_radius;
+			}
+
 		}
 
 
-		if (CURRENT_USER.email != null) {
-			element = document.getElementById("td_email");
-			element.innerHTML = CURRENT_USER.email;
-		}
-
-		if (CURRENT_USER.website != null) {
-			element = document.getElementById("td_website");
-			element.innerHTML = CURRENT_USER.website;
-		}
 
 
-		if (CURRENT_USER.about != null) {
-			element = document.getElementById("td_about");
-			element.innerHTML = CURRENT_USER.about;
-		}
+		function backButton() {
+			const CURRENT_USER = getCurrentUser(true);
+			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER;
+			window.open(href, true);
 
-		if (CURRENT_USER.zip != null) {
-			element = document.getElementById("td_zip");
-			element.innerHTML = CURRENT_USER.zip;
 		}
-
-		if (CURRENT_USER.radius != null) {
-			element = document.getElementById("td_radius");
-			element.innerHTML = CURRENT_USER.radius;
-		}
+		window.backButton = backButton;
 
 
 

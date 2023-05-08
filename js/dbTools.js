@@ -9,15 +9,15 @@ import { printError, throwError } from "./error.js";
 
 
 
-const API_GATEWAY = "http://localhost:3000/"
+export const API_GATEWAY = "http://localhost:3000/"
 
-const USERNAME_URL_PARAM = "un";
+export const USERNAME_URL_PARAM = "un";
 
-const SUBS_URL_PARAM = "sb";
-const START_DATE_URL_PARAM = "ds";
-const END_DATE_URL_PARAM = "de";
+export const SUBS_URL_PARAM = "sb";
+export const START_DATE_URL_PARAM = "ds";
+export const END_DATE_URL_PARAM = "de";
 
-const LEED_ID_URL_PARAM = "id";
+export const LEED_ID_URL_PARAM = "id";
 
 
 

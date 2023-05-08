@@ -94,8 +94,6 @@
 
 .leed_thumbnail {
 
-    z-index:900;
-
     position:fixed;
     display:flex;
     text-align: start;

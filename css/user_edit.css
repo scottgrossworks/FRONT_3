@@ -1,6 +1,7 @@
 * {
 	padding: 0;
 	margin: 0;
+	max-width:1024px;
 }
 
 :root {
@@ -13,7 +14,6 @@
 
 body {
 	display: block;
-	max-width:1024px;
 	margin:0 auto;	
 }
 

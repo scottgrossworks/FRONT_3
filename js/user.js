@@ -4,7 +4,7 @@
 import { db_getUser } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 
-
+export const CACHE_USER_KEY = "USER";
 
 const GUEST_USER = blankUserObject();
 GUEST_USER.username = "guest.user";
@@ -15,14 +15,38 @@ let CURRENT_USER = blankUserObject();
 
 
 
+
 /**
  * return the current user object
+ * refresh from cache if requested
  */
-export function getCurrentUser() {
+export function getCurrentUser( useCache ) {
+
+  if (CURRENT_USER == null)
+    throwError("getCurrentUser", "CURRENT_USER should never be null");
+
+  // search the cache
+  if (useCache) {
+    // is there a cache user?
+    const cacheUser = loadCacheUser();
+    if (cacheUser != null) {
+      CURRENT_USER = cacheUser;
+    }
+  }
+
+  // may be blank - won't be null
   return CURRENT_USER;
 }
 
 
+
+/**
+ * 
+ * @returns true if we are using the GUEST account
+ */
+export function isGuestUser() {
+  return CURRENT_USER === GUEST_USER;
+}
 
 
 
@@ -36,16 +60,33 @@ export function getCurrentUser() {
  */
 export async function initUser( username ) {
 
-    // GET the user JSON from the cache if any
-    loadCacheUser( username );
+  
+    CURRENT_USER = getCurrentUser(false);
 
+    // is there a cache user?
+    const cacheUser = loadCacheUser();
+    if (cacheUser != null) {
 
+      // if the usernames match
+      // start init() with the last saved cache user
+      if (cacheUser.username == CURRENT_USER.username) {
+        CURRENT_USER = cacheUser;
+      } 
+      // else -- the cache user does not match
+      // we will overwrite the cache user at the end of initUser()
+
+    }   
+    
+
+    // console.log("initUser()");
+    // console.log(CURRENT_USER);
 
     let resObj = [];
 
     //   client <---> API Gateway <===> DB
     //
     // GET the user JSON data from the server
+    // UPDATE CURRENT_USER with new values from DB
     //
  
     try {
@@ -58,36 +99,48 @@ export async function initUser( username ) {
 
       })
       .catch(error => {
-        printError("db_getUser()", error);
-        throwError('db_getUser())', 'Problem with fetch operation:' + error.message);
+        printError("db_getUser", error);
+        throwError('db_getUser', 'Problem with fetch operation:' + error.message);
       });
 
-   
-      // the DB might contain new values
+
       // update CURRERNT_USER
+      // some fields are mandatory and will always contain values
+      // some are optional and may be null
+      // if statements are in case cache version is more recent
+      // 
       CURRENT_USER.username = resObj.creator;
       CURRENT_USER.email = resObj.email;
-      CURRENT_USER.webite = resObj.website;
-      CURRENT_USER.aboute = resObj.about;
 
-      CURRENT_USER.zip_home = resObj.zip_home;
-      CURRENT_USER.zip_radius = resObj.zip_radius;
+      if (resObj.website != null)
+        CURRENT_USER.webite = resObj.website;
+  
+      if (resObj.about != null)
+       CURRENT_USER.about = resObj.about;
+
+      if (resObj.zip_home != null)
+        CURRENT_USER.zip_home = resObj.zip_home;
+  
+      if (resObj.zip_radius != null)
+        CURRENT_USER.zip_radius = resObj.zip_radius;
  
       CURRENT_USER.subs = (resObj.subs != null) ? resObj.subs : [];
       CURRENT_USER.leedz_bought = (resObj.leedz_bought != null) ? resObj.leedz_bought : [];
 
-      console.log("CURRENT USER IS SET=" + CURRENT_USER.username);
-
     } catch (error) {
 
-      printError( "getUser()", error.message );
-      throwError( "initUser()", error); // !!!
+      printError( "getUser", error.message );
+      throwError( "initUser", error); // !!!
     }
-
 
     // save modified CURRENT_USER to session storage
     saveCacheUser( CURRENT_USER );
-}
+
+
+    console.log("%cLOADED USER", "color:orange");
+    console.log(CURRENT_USER);
+
+  }
 
 
 
@@ -185,12 +238,11 @@ export function saveUserChanges( userObj ) {
 
 /**
  * return user object currently in cache
+ * MAY return null
  */
-function loadCacheUser( username ) {
+function loadCacheUser() {
   
-    // look in CACHE
-    const key = "user#" + username;
-    let userJSON = window.sessionStorage.getItem( key );
+    let userJSON = window.sessionStorage.getItem( CACHE_USER_KEY );
     let userObj = null;
     if (userJSON == undefined || userJSON == null) {
       return userObj; // return NULL and be done
@@ -234,6 +286,8 @@ function saveCacheUser( userObj ) {
 
 
 
+
+
 /**
  * set CURRENT_USER to the default user with blank profile
  */
@@ -243,6 +297,8 @@ export function guestUser() {
 
   // clear the cache of any prev user data
   saveCacheUser( GUEST_USER );
+
+  return GUEST_USER;
 }
 
 

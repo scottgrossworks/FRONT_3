@@ -49,6 +49,13 @@
    
   <body>
    
+
+    <!--
+  --
+  --
+  --
+  -->    
+
     <div class="row" id="user_panel">
 
       <div class="column _20" id="up_left_column"><label><a id="user_href" href=""></a></label></div>
@@ -59,12 +66,13 @@
         
         <span id="up_logo"><a href="javascript:dropdownMenu();"><img src="./img/logo_wide.png"></a></span>
         <div id="dropdown_menu" class="dropdown-content">
-          <a href="#" id="dd_account">Account</a>
+          <a href="./user_edit.html" id="dd_account">Account</a>
 
-          <a href="#" id="dd_howto">How To</a>
-          <a href="#">About</a>
+          <a href="./how_to.html" id="dd_howto">How To</a>
+          
+          <a href="./terms.html">About</a>
 
-          <a href="#">Contact</a>
+          <a href="./contact.html">Contact</a>
 
 
           <a href="#" id="dd_logout">Log Out</a>
@@ -73,7 +81,6 @@
 
       
     </div>
-
 
 
 
@@ -291,16 +298,16 @@
 
 
 
-    <!-- 
-      -- ERROR MODAL 
-      -- 
-      -->
-    <div class="row modal" id="error_modal">
-      <center><img id="error_logo" src="img/logo_2.png"></center> 
-      <h1></h1>
-      <a id="error_modal_close" href="javascript:modalClose();" href="">X</a>
-    </div>
 
+  <!-- 
+    -- ERROR MODAL 
+    -- 
+    -->
+  <div class="row modal" id="error_modal">
+    <center><img id="error_logo" src="img/logo_2.png"></center> 
+    <h1></h1>
+    <a id="error_modal_close" href="javascript:modalClose();" href="">X</a>
+  </div>
 
 
 
@@ -509,11 +516,14 @@
             let theDiv = event.target;
 
             if (event.target.matches('a')) {
-              // console.log("A=" + event.target);
+              console.log("%cDROPDOWN=" + event.target, "color:green;");
               // triggered also for modal close
               //
               // FIXME FIXME FIXME
               // event.target will be http link
+
+
+
 
             } else if (! (event.target.matches('img'))) {
               // click -- not on a link and not on the dropdown image

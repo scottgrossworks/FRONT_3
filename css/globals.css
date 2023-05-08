@@ -10,6 +10,7 @@
     --LEEDZ_GREEN: rgb(97, 234, 178);
     --LEEDZ_DARKGREEN: #04AA6D;
  
+    
 /*     --LEEDZ_GRAY:rgb(239, 242, 247);  */
 
     --FONT_1: "Ebrima";
@@ -37,32 +38,50 @@
   
  
 
-      
-   html {
-      
-    font-size: 14px;
-    line-height: 1.2;
-    font-family: var(--FONT_3);
-    color: black;
-    overflow-y: hidden;
-    } 
-
-
-
 
    * {
     padding: 0;
     margin: 0;
-
     }
 
 
-   body {
+
+      
+   html, body {
+      
+    overflow-y: hidden;
+    color:black;
     background-color: white;
-    display: flex;
-    flex-direction: column;
-  
-  }
+    } 
+
+
+
+    body {
+      display:flex;
+      flex-direction:column;
+
+      font-size: 14px;
+      line-height: 1.2;
+      font-family: var(--FONT_3);
+    }
+
+
+    
+
+#user_panel {
+  flex: 1 0 auto;
+  overflow-y: scroll;
+  top:0;
+}
+
+
+#main_panel {
+
+  flex: 1 0 auto;
+  top:0;
+  padding-bottom:25px;
+}
+
 
 
 
@@ -85,14 +104,6 @@
 
 }
 
-
-
-
-#main_panel {
-  height: 100%;
-  display:flex;
-  top:0;
-}
 
 
 

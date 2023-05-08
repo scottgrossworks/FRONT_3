@@ -113,8 +113,10 @@ section > table {
 	margin: 0 auto;
 	border-spacing: 0;
 
-	padding-left: 10vw;
-	padding-right:10vw;
+	padding-left: 5vw;
+	padding-right:5vw;
+
+	
 		
 	width:100%;
 	max-width:700px;
@@ -125,6 +127,7 @@ section > table tr {
 
 	text-align:right;
 	align-content:space-between;
+	
 }
 
 
@@ -136,18 +139,20 @@ section > table td {
 
 
 section > table tbody td {
-	padding:20px;
+	padding:25px;
+	border-bottom: 2px solid var(--LEEDZ_LIGHTGREEN);
 
 }
 
 .labelTD {
 	
-	width:fit-content;
-	min-width:100px;
-	max-width: 200px;
+	width:max-content;
+	min-width: 200px;
+	max-width: 300px;
 	
 	padding-left:0px;
 	padding-right:0px;
+	
 	margin-right:0px;
 
 	font-family: var(--FONT_3);

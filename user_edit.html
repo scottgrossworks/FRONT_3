@@ -32,13 +32,13 @@
 			
 			<div class="row" style="width:100vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
 
-				<div class="column _1">
+			<div class="column _1">
 
 				<button class="back_button" style="margin:35px 20px; width:50px"><a href="./index.html">&#10140;</a></button>
 				</div>
 
-
-				<div class="column _6" style="margin:auto 0;transform:translateY(6px)">
+				<div class="column _2"></div>
+				<div class="column _4" style="margin:auto 0;transform:translateY(6px)">
 					<h1 class="user_title">Edit Account</h1>
 				</div>
 				
@@ -55,27 +55,50 @@
 <section>
 
 	<BR>	
-
-			<button class="button editSpecial" style="font-size:1.1em">Login / Password</button>
-
-	
-			<BR>
-
-			<button class="button editSpecial">Payment Info</button>
-
-			<BR>
+	<BR>
 
 
-				
-
-
+			
 
 				<table>
 					
 					
+
+
+
+					<tr id="row_login">
+					
+						<TD class="labelTD">Login &amp; Password: </TD>
+						<td data-inlineType="text" data-inlineName="login"></td>
+		
+						<td data-inlineType="doneButton" class="buttonTD">
+							<input type="button" value="Edit" onclick=""/>
+						</td>
+					</tr>
+
+
+
+
+
+					<tr id="row_payment">
+					
+						<TD class="labelTD">Payment Information: </TD>
+						<td data-inlineType="text" data-inlineName="payment"></td>
+						
+						<td data-inlineType="doneButton" class="buttonTD">
+							<input type="button" value="Edit" onclick=""/>
+						</td>
+					</tr>
+
+
+
+
+
 					<tr id="row_username">
 					
-						<TD class="labelTD">Username: </TD><td data-inlineType="text" data-inlineName="username" data-inlineRequired="true" data-inlinePlaceholder="(Required)">dave.reyes</td>
+						<TD class="labelTD">Username: </TD>
+						
+						<td id="td_username" data-inlineType="text" data-inlineName="username" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
 		
 						<td data-inlineType="doneButton" class="buttonTD">
 							<input type="button" value="Edit" onclick="inlineEdit('row_username', defaultOptions)"/>
@@ -86,7 +109,9 @@
 
 				<tr id="row_email">
 					
-					<TD class="labelTD">Email: </TD><td data-inlineType="email" data-inlineName="email" data-inlineRequired="true" data-inlinePlaceholder="(Required)">wizzardblitz@netzero.net</td>
+					<TD class="labelTD">Email: </TD>
+					
+					<td id="td_email" data-inlineType="email" data-inlineName="email" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
 	
 					<td data-inlineType="doneButton" class="buttonTD">
 						<input type="button" value="Edit" onclick="inlineEdit('row_email', emailOptions)"/>
@@ -97,7 +122,9 @@
 
 				<tr id="row_website">
 					
-					<TD class="labelTD">Website: </TD><td data-inlineType="link" data-inlineName="website" data-inlineRequired="0" data-inlinePlaceholder="(Website)"></td>
+					<TD class="labelTD">Website: </TD>
+					
+					<td id="td_website" data-inlineType="link" data-inlineName="website" data-inlineRequired="0" data-inlinePlaceholder="(Website)"></td>
 	
 					<td data-inlineType="doneButton" class="buttonTD">
 						<input type="button" value="Edit" onclick="inlineEdit('row_website', urlOptions)"/>
@@ -106,13 +133,15 @@
 
 
 
-				<tr id="row_aboutMe">
+				<tr id="row_about">
 
-					<TD class="labelTD">About Me: </TD><td data-inlineType="textarea" data-inlineName="aboutMe">Help sell the leedz you post</td>
+					<TD class="labelTD">About Me: </TD>
+					
+					<td id="td_about" data-inlineType="textarea" data-inlineName="about">Help sell the leedz you post</td>
 					
 					
 					<td data-inlineType="doneButton" class="buttonTD">
-						<input type="button" value="Edit" onclick="inlineEdit('row_aboutMe', defaultOptions)"/>
+						<input type="button" value="Edit" onclick="inlineEdit('row_about', defaultOptions)"/>
 					</td>
 				</tr>
 
@@ -124,7 +153,10 @@
 
 				<tr id="row_zip">
 					
-					<TD class="labelTD">Zip Code: </TD><td data-inlineType="zip" data-inlineName="zip" data-inlineRequired="0" data-inlinePlaceholder="">90034</td>
+					<TD class="labelTD">Zip Code: </TD>
+					
+					<td id="td_zip" data-inlineType="zip" data-inlineName="zip" 
+					data-inlineRequired="0" data-inlinePlaceholder=""></td>
 	
 					<td data-inlineType="doneButton" class="buttonTD">
 						<input type="button" value="Edit" onclick="inlineEdit('row_zip', defaultOptions)"/>
@@ -138,9 +170,11 @@
 
 				<tr id="row_radius">
 					<TD class="labelTD">Search Miles: </TD>
-					<td data-inlineType="select" data-inlineName="radius"
+					<td 
+						id="td_radius"
+						data-inlineType="select" data-inlineName="radius"
 						data-inlineOptionsTitle='["5","10","20","50","100","500", "1000"]'
-						data-inlineOptionsValue='["5","10","20","50","100","500", "1000"]'>10</td>
+						data-inlineOptionsValue='["5","10","20","50","100","500", "1000"]'></td>
 				
 					<td data-inlineType="doneButton" class="buttonTD">
 						<input type="button" value="Edit" onclick="inlineEdit('row_radius', sampleOptions)"/>
@@ -148,7 +182,11 @@
 				</tr>
 			</table>	
 
-			<button class="button save_button">Save Changes</button>
+
+
+
+			<!-- SAVE CHANGES BUTTON -->
+			<button id="saveButton" class="button save_button" value="save" style="opacity:0.5" onclick="saveChanges()">Save Changes</button>
 			
 			
 			</center>
@@ -164,56 +202,189 @@
 	<script type="module">
 			
 
-		import { inlineEmailFinishCell } from "./js/inline-edit.js";
-		import { inlineURLFinishCell } from "./js/inline-edit.js";
+		import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
 		import { inlineEdit } from "./js/inline-edit.js";
+		import { blankUserObject, saveUserChanges, getCurrentUser } from "./js/user.js";
+		import { printError, throwError } from "./js/error.js";
+		
+
+		var EDITING = false;
+
+		const USER_CHANGES = blankUserObject();
+		const CURRENT_USER = getCurrentUser();
+
+		// FIXME FIXME FIXME
+		CURRENT_USER.username = "dave.reyes";
+		CURRENT_USER.website = "http://doctorreyes.com";
+		CURRENT_USER.about = "I am a caricature artist";
+		CURRENT_USER.email = "wizzardblitz@netzero.net";
+		
 
 
-		function simpleRowDataParser(rowData) {
-			var str = "";
-			for (var key in rowData) {
-				 if (rowData.hasOwnProperty(key))
-					str += rowData[key];
-			}
-			return str;
+
+		var element = null;
+		
+		if (CURRENT_USER.username != null) {
+			element = document.getElementById("td_username");
+			element.innerHTML = CURRENT_USER.username;
 		}
+
+
+		if (CURRENT_USER.email != null) {
+			element = document.getElementById("td_email");
+			element.innerHTML = CURRENT_USER.email;
+		}
+
+		if (CURRENT_USER.website != null) {
+			element = document.getElementById("td_website");
+			element.innerHTML = CURRENT_USER.website;
+		}
+
+
+		if (CURRENT_USER.about != null) {
+			element = document.getElementById("td_about");
+			element.innerHTML = CURRENT_USER.about;
+		}
+
+		if (CURRENT_USER.zip != null) {
+			element = document.getElementById("td_zip");
+			element.innerHTML = CURRENT_USER.zip;
+		}
+
+		if (CURRENT_USER.radius != null) {
+			element = document.getElementById("td_radius");
+			element.innerHTML = CURRENT_USER.radius;
+		}
+
+
 
 
 		function defaultCallback(rowData, rowName) {
-			/* alert(rowName + " : " + simpleRowDataParser(rowData)); */
+
+			beginEditing();
+
+			switch(rowName) {
+
+				case "row_username":
+					USER_CHANGES.username = rowData["username"];
+					break;
+
+				case "row_zip":
+					USER_CHANGES.zip_home = rowData["zip"];
+					break;
+
+				case "row_about":
+					USER_CHANGES.about = rowData["about"];
+					break;
+
+				case "row_website":
+					USER_CHANGES.website = rowData["website"];
+					break; 
+					
+				case "row_email":
+					USER_CHANGES.email = rowData["email"];
+					break; 
+
+
+				default:
+					printError("defaultCallback()", "received unknown form field: " + rowName);
+					break;
+
+			}
+
+			// console.log(USER_CHANGES);
+
 		}
 
 
-		function urlCallback(rowData, rowName) {
-			/* alert(rowName + " : " + simpleRowDataParser(rowData)); */
-		}
 
-		function emailCallback(rowData, rowName) {
-			/* alert(rowName + " : " + simpleRowDataParser(rowData)); */
-		}
+
 	
 		function selectCallback(rowData, rowName) {
-			/* alert(rowName + " : " + simpleRowDataParser(rowData)); */
+
+			beginEditing();
+
+			switch ( rowName ) {
+
+				case "row_radius":
+					const theData = rowData["_radiusValue"];
+					USER_CHANGES.zip_radius = theData;
+					break;
+
+				default:
+					printError("defaultCallback()", "received unknown form field: " + rowName);
+					break;
+			}
+
+
+			// console.log(USER_CHANGES);
 		}
+
+
+
+
+
+		//
+		//
+		//
+		function beginEditing() {
+			var element = document.getElementById("saveButton");
+			element.innerHTML = "Save Changes";
+			element.style.backgroundColor = "var(--LEEDZ_GREEN)";
+			element.style.opacity = 1;
+
+			EDITING = true;
+		}
+
+
+		//
+		//
+		//
+		function endEditing() {
+			var element = document.getElementById("saveButton");
+			element.innerHTML = "Saved!";
+			element.style.backgroundColor = "darkorange";
+			element.style.opacity = 0.5;
+
+			EDITING = false;
+		}
+
+
+
+		//
+		//
+		//
+		function saveChanges() {
+
+			if (! EDITING) return;
+
+			saveUserChanges( USER_CHANGES );
+
+			endEditing();
+		}
+
+
 
 
 		var defaultOptions = { "finishCallback": defaultCallback };
 
-		var emailOptions = {    "finishCallback": emailCallback,
+		var emailOptions = {    "finishCallback": defaultCallback,
 								"emailFinish": inlineEmailFinishCell };
 
-		var urlOptions = {		"finishCallback": urlCallback,
+		var urlOptions = {		"finishCallback": defaultCallback,
 								"urlFinish": inlineURLFinishCell };
 
 		var sampleOptions = { "finishCallback": selectCallback };	
 
 
 		window.inlineEdit = inlineEdit;
-
 		window.defaultOptions = defaultOptions;
 		window.emailOptions = emailOptions;
 		window.urlOptions = urlOptions;
 		window.sampleOptions = sampleOptions;
+
+		window.saveChanges = saveChanges;
+
 
 
 	

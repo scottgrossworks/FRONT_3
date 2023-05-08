@@ -8,6 +8,10 @@ import { printError, throwError } from "./error.js";
 
 
 
+
+
+
+
 var inlineEditRowContents = {};
 
 class StringEscaper {
@@ -28,16 +32,34 @@ class StringEscaper {
 
 
 
+
+
+
+
+
+
+
+
+
+/**
+ * Called by Edit button or Clickable Row
+ *
+ */
 export function inlineEdit(rowName, options) {
     var tableRow = document.getElementById(rowName);
+    
     inlineEditRowContents[rowName] = {};
     for (var i = 0; i < tableRow.childElementCount; i++) {
         var cell = tableRow.children[i];
-        inlineEditRowContents[rowName][i] = cell.innerHTML;
-        if (options.hasOwnProperty("updateCell"))
+
+        inlineEditRowContents[rowName][i] = cell.innerHTML.trim();
+        if (options.hasOwnProperty("updateCell")) {
             options.updateCell(cell, i, rowName, options);
-        else
+        } else {
             inlineDefaultUpdateCell(cell, i, rowName, options);
+        }
+   
+   
     }
 }
 
@@ -45,30 +67,55 @@ export function inlineEdit(rowName, options) {
 
 
 
+
+/**
+ * Update contents of cell being edited 
+ */
+
 function inlineDefaultUpdateCell(cell, i, rowName, options) {
+    
+
+    
     var attributesFilter = ["inlineoptionsvalue", "inlineoptionstitle"];
     var cellContent = "";
     var key;
+    
     if (i === 0) {
         cellContent += `<form id='${rowName}Form'></form>`;
+    
     }
+    
+    
     switch (cell.dataset.inlinetype) {
+        
+    
+        //
+        // ZIP CODE
+        //
         case "zip":
-            
-        cellContent += `<input type='num' value='${inlineEditRowContents[rowName][i]}' form='${rowName}Form'`;
+        
+        cellContent += `<input type='text' value='${inlineEditRowContents[rowName][i]}' form='${rowName}Form'`;
         for (key in cell.dataset) {
             if (cell.dataset.hasOwnProperty(key) && key.substr(0, 6) == "inline" && attributesFilter.indexOf(key) == -1) {
                 cellContent += ` ${key.substr(6)}='${cell.dataset[key]}'`;
             }
         }
         cellContent += "/>";
+        
+
+
         break;
+
+
+
+
 
             
         case "doneButton":
             cellContent += `<input type='submit' value='Finish' form='${rowName}Form'/>`;
             break;
         case "button":
+
             cellContent += inlineEditRowContents[rowName][i];
             break;
         case "link":
@@ -151,6 +198,9 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             cellContent += inlineEditRowContents[rowName][i];
             break;
     }
+
+
+
     cell.innerHTML = cellContent;
     if (i === 0) {
         // set the onsubmit function of the form of this row
@@ -185,6 +235,9 @@ function isAlphaNum( str ) {
 
 
 function inlineDefaultFinish(rowName, options) {
+   
+   
+   
     var tableRow = document.getElementById(rowName);
     var rowData = {};
     for (var i = 0; i < tableRow.childElementCount; i++) {
@@ -193,7 +246,7 @@ function inlineDefaultFinish(rowName, options) {
         switch (cell.dataset.inlinetype) {
             case "zip":
 
-                let theVal = cell.children[getFromChildren].value;
+                const theVal = cell.children[getFromChildren].value;
                 
                 if (theVal.length != 5) {
                     let errMsg = "Zip code must be 5 digits";
@@ -235,15 +288,21 @@ function inlineDefaultFinish(rowName, options) {
                 inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace(cell.children[getFromChildren].value);
                 break;
             case "select":
-                rowData[cell.dataset.inlinename] = cell.children[getFromChildren].selectedIndex;
+
+                rowData[cell.dataset.inlinename] = cell.children[getFromChildren].selectedIndex;                
                 rowData["_" + cell.dataset.inlinename + "Title"] = JSON.parse(cell.dataset.inlineoptionstitle)[cell.children[getFromChildren].selectedIndex];
                 rowData["_" + cell.dataset.inlinename + "Value"] = JSON.parse(cell.dataset.inlineoptionsvalue)[cell.children[getFromChildren].selectedIndex];
-                inlineEditRowContents[rowName][i] = JSON.parse(cell.dataset.inlineoptionstitle)[cell.children[getFromChildren].selectedIndex];
+
+                const theData = JSON.parse(cell.dataset.inlineoptionstitle)[cell.children[getFromChildren].selectedIndex];
+                inlineEditRowContents[rowName][i] = theData;
                 break;
+
             case "textarea":
                 // TODO textarea value is \n not <br/>
                 rowData[cell.dataset.inlinename] = cell.children[getFromChildren].value;
-                inlineEditRowContents[rowName][i] = cell.children[getFromChildren].value;
+                inlineEditRowContents[rowName][i] = cell.children[getFromChildren].value
+
+
                 break;
             default:
                 break;
@@ -251,13 +310,13 @@ function inlineDefaultFinish(rowName, options) {
     }
 
 
-
-
-
-    // do whatever ajax magic
-    if (options.hasOwnProperty("finishCallback"))
+    // Call appropriate callback for this row
+    if (options.hasOwnProperty("finishCallback")) {
         options.finishCallback(rowData, rowName);
+    }
 
+
+    // update the table cell with the new value
     for (i = 0; i < tableRow.childElementCount; i++) {
         var cell = tableRow.children[i];
         
@@ -269,6 +328,7 @@ function inlineDefaultFinish(rowName, options) {
 
             inlineEmailFinishCell(cell, i, rowName);
 
+
         } else {
             inlineDefaultFinishCell(cell, i, rowName);
         }
@@ -277,11 +337,18 @@ function inlineDefaultFinish(rowName, options) {
 
 
 
+
+
+
 export function inlineDefaultFinishCell(cell, i, rowName) {
+
     var cellContent = "";
     cellContent += inlineEditRowContents[rowName][i];
     cell.innerHTML = cellContent;
 }
+
+
+
 
 
 export function inlineURLFinishCell(cell, i, rowName) {
@@ -304,4 +371,30 @@ export function inlineEmailFinishCell(cell, i, rowName) {
         cell.innerHTML = content;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -66,9 +66,13 @@ export async function initUser( username ) {
       // the DB might contain new values
       // update CURRERNT_USER
       CURRENT_USER.username = resObj.creator;
+      CURRENT_USER.email = resObj.email;
+      CURRENT_USER.webite = resObj.website;
+      CURRENT_USER.aboute = resObj.about;
+
       CURRENT_USER.zip_home = resObj.zip_home;
       CURRENT_USER.zip_radius = resObj.zip_radius;
-      CURRENT_USER.email = resObj.email;
+ 
       CURRENT_USER.subs = (resObj.subs != null) ? resObj.subs : [];
       CURRENT_USER.leedz_bought = (resObj.leedz_bought != null) ? resObj.leedz_bought : [];
 
@@ -92,18 +96,91 @@ export async function initUser( username ) {
 /**
  * create an empty JSON-compatible user object
  */
-function blankUserObject() {
+export function blankUserObject() {
   
   const BLANK_USER = new Object();
+  
   BLANK_USER.username = null;
   BLANK_USER.email = null;
+  BLANK_USER.website = null;
+  BLANK_USER.about = null
+
   BLANK_USER.zip_home = null;
   BLANK_USER.zip_radius = null;
+
   BLANK_USER.subs = [];
   BLANK_USER.leedz_bought = [];
 
   return BLANK_USER;
 }
+
+
+
+
+
+
+
+
+// FIXME FIXME FIXME FIXME
+/**
+ * the user has updated info
+ * JSON-serialize the changes
+ */
+export function saveUserChanges( userObj ) {
+
+
+  if (userObj == null)
+    throwError("saveUserChanges()", "null user object");
+
+  if (CURRENT_USER == null)
+    throwError("saveUserChanges()", "No CURRENT_USER initialized");
+
+
+  if (userObj.username != null)
+    CURRENT_USER.username = userObj.username;
+
+  if (userObj.email != null)
+    CURRENT_USER.email = userObj.email;
+
+    if (userObj.website != null)
+    CURRENT_USER.website = userObj.website;
+
+  if (userObj.zip_home != null)
+    CURRENT_USER.zip_home = userObj.zip_home;
+
+  if (userObj.zip_radius != null)
+    CURRENT_USER.zip_radius = userObj.zip_radius;
+
+  if (userObj.about != null)
+    CURRENT_USER.about = userObj.about;
+  
+  saveCacheUser( CURRENT_USER );
+  
+  // FIXME FIXME FIXME
+  // post User changes to server
+  // FIXME FIXME FIXME
+  // db_updateUser()
+  console.log("******** POSTING USER CHANGES TO SERVER ******* ");
+  console.log(CURRENT_USER);
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /**

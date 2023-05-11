@@ -289,7 +289,7 @@
         </div>
 
         <div class="row" id="row_edit_button">
-          <button id="action_edit" class="button edit_button">Edit&nbsp;<img id="edit_icon" src="img/edit.png"></button>
+          <button id="action_edit" class="button edit_button" onclick="openLeedEdit()">Edit&nbsp;<img id="edit_icon" src="img/edit.png"></button>
         </div>
 
 
@@ -332,8 +332,6 @@
 
 
     const BUG_EMAIL = "<a href='mailto:scottgrossworks@gmail.com'>Report Error</a>"
-
-
     window.printError = printError;
 
 
@@ -382,14 +380,11 @@
           if (isGuestUser()) {
             const ddAccount = document.getElementById("dd_account");
             ddAccount.style.opacity = 0.5;
-
-            console.log("SETTING ATTRIBUTE");
             ddAccount.setAttribute("onclick", "printError('openUserEdit', 'Cannot edit Guest user account')");
           }
 
           const menu = document.getElementById("dropdown_menu");
           menu.classList.toggle("show");
-
 
            DROP_DOWN ^= 1; // flip flag
          }
@@ -412,6 +407,20 @@
       }
 
       window.openUserEdit = openUserEdit;
+
+
+
+
+      
+
+      // open LEED edit page
+      function openLeedEdit() {
+
+         window.open("./leed_edit.html", "location=1,status=0, menubar=0");
+        
+      }
+      window.openLeedEdit = openLeedEdit;
+
 
 
 

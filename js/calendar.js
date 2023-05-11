@@ -6,7 +6,7 @@
 import { daysInMonth, getShortDateString, getShortWeekday, getMonth,
     firstDayShowing, lastDayShowing, getYear, getHours, getMinutes, twoDigitInt } from "./dates.js";
 import { showLeedAction } from "./action.js";
-import { getCurrentLeed, setCurrentLeed } from "./leed.js";
+import { setCurrentLeed } from "./leed.js";
 import { getColorForTrade } from "./trades.js";
 import { getSubscriptions } from "./user.js";
 import { printError, throwError, errorModal } from "./error.js";
@@ -14,6 +14,7 @@ import { db_getLeedz } from "./dbTools.js";
 
 
 
+let CURRENT_SELECTION = null;
 
 
  
@@ -27,6 +28,8 @@ import { db_getLeedz } from "./dbTools.js";
  *
  */
 export function loadCalendar() {
+
+    CURRENT_SELECTION = null;
 
     // load the current date showing
     let theYear = getYear();
@@ -164,9 +167,11 @@ export function removeLeedzForTrade( trade_name ) {
 export async function loadUserLeedz() {
 
 
+    CURRENT_SELECTION = null;
+
     let subs = getSubscriptions();
     if (subs.length == 0) {
-        printError("loadUserLeedz()", "No trades subscribed");
+        printError("loadUserLeedz", "No trades subscribed");
         return;
     }
 
@@ -183,16 +188,16 @@ export async function loadUserLeedz() {
         results = await db_getLeedz( subs, firstDayShowing(), lastDayShowing() );
 
     } catch (error) {   
-        printError( "getLeedz()", error.message );
+        printError( "getLeedz", error.message );
         printError( "response JSON", responseJSON);
         
         // EXIT FUNCTION HERE
-        throwError( "loadUserLeedz()", error); 
+        throwError( "loadUserLeedz", error); 
     }
 
     // query returns empty result set
     if (results.length == 0) {
-        printError("loadUserLeedz()", "No leedz returned");
+        printError("loadUserLeedz", "No leedz returned");
         return;
     }
 
@@ -237,8 +242,8 @@ export async function loadUserLeedz() {
             // this should NEVER be null
             if (theDate == null) {
 
-                printError("loadUserLeedz()", "LEEDZ_DATE attribute not being set for each day");
-                printError("loadUserLeedz()", "Unable to load leedz for " + leed_fromDB.trade);
+                printError("loadUserLeedz", "LEEDZ_DATE attribute not being set for each day");
+                printError("loadUserLeedz", "Unable to load leedz for " + leed_fromDB.trade);
                 return;  
             }
 
@@ -378,16 +383,15 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     
         // turn off the thumbnail
         thumbnail.style.opacity = 0;
-  
-        let currentLeed = getCurrentLeed();
 
         // turn off the old leed
-        if (currentLeed.node != null) {
-            currentLeed.node.style.border = 0;
+        if ( CURRENT_SELECTION != null) {
+            CURRENT_SELECTION.style.border = 0;
         } 
-
-        setCurrentLeed( newLeed, leed_fromDB );
+        // turn on new leed
+        setCurrentLeed( leed_fromDB );
         newLeed.style.border = "2px solid black";
+        CURRENT_SELECTION = newLeed;
         
 
 

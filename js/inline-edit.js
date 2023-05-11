@@ -4,6 +4,7 @@
  */
 
 import { printError, throwError } from "./error.js";
+import { isValidTrade } from "./trades.js";
 
 
 
@@ -105,6 +106,31 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
 
         break;
+
+
+
+
+
+
+        //
+        // TRADE NAME
+        //
+        case "trade_name":
+        
+        cellContent += `<input type='trade_name' value='${inlineEditRowContents[rowName][i]}' form='${rowName}Form'`;
+        for (key in cell.dataset) {
+            if (cell.dataset.hasOwnProperty(key) && key.substr(0, 6) == "inline" && attributesFilter.indexOf(key) == -1) {
+                cellContent += ` ${key.substr(6)}='${cell.dataset[key]}'`;
+            }
+        }
+        cellContent += "/>";
+        
+
+
+        break;
+
+
+
 
 
 
@@ -221,10 +247,10 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
  * returns true if the str represents a number
  *  
  */
-function isAlphaNum( str ) {
+function isNumOnly( str ) {
 
     // Defining the regular expression
-    const strRegex = new RegExp(/^[a-z0-9]+$/i);
+    const strRegex = new RegExp(/^[0-9]+$/i);
          
     // match the regex with the string
     let result = strRegex.test( str );
@@ -246,7 +272,7 @@ function inlineDefaultFinish(rowName, options) {
         switch (cell.dataset.inlinetype) {
             case "zip":
 
-                const theVal = cell.children[getFromChildren].value;
+                var theVal = cell.children[getFromChildren].value;
                 
                 if (theVal.length != 5) {
                     let errMsg = "Zip code must be 5 digits";
@@ -255,7 +281,7 @@ function inlineDefaultFinish(rowName, options) {
                     return;
                 }
 
-                if (! isAlphaNum( theVal )) {
+                if (! isNumOnly( theVal )) {
                     let errMsg = "Zip code must be all digits";
                     printError("inlineDefaultFinish()", errMsg );
                     alert(errMsg);
@@ -267,6 +293,33 @@ function inlineDefaultFinish(rowName, options) {
                 rowData[cell.dataset.inlinename] = theVal;
                 inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace( theVal );
                 break;
+
+
+
+
+
+
+
+            case "trade_name":
+
+                var theVal = cell.children[getFromChildren].value;
+
+                // is this a valid trade name?  If not -- show error and force re-enter
+                if (! (isValidTrade(theVal)))  {
+                    let errMsg = "Invalid trade name: " + theVal;
+                    printError("inlineDefaultFinish()", errMsg );
+                    alert(errMsg);
+                    return;
+                }
+
+                rowData[cell.dataset.inlinename] = theVal;
+                inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace( theVal );
+                break;
+
+
+
+
+
 
 
             case "doneButton":

@@ -15,7 +15,7 @@
  
  
 		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
-		 <link rel="stylesheet" href="./css/user_edit.css" tyep="text/css"/>
+		 <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
 
 		 <script src="./js/inline-edit.js" type="module" defer></script> 
 	</head>
@@ -87,12 +87,18 @@ LEED DETAILS
 
 <table>
 
-        <tr id="row_trade">
+   
+
+    <tr id="row_trade">
 					
-            <TD class="labelTD">Trade Name: </TD>
-            <td data-inlineType="text" colspan=2 data-inlineName="trade"></td>
-            
-        </tr>
+        <TD class="labelTD">Trade Name: </TD>
+        
+        <td id="td_trade" data-inlineType="trade_name" data-inlineName="trade" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
+
+        <td data-inlineType="doneButton" class="buttonTD">
+            <input type="button" value="Edit" onclick="inlineEdit('row_trade', defaultOptions)"/>
+        </td>
+    </tr>
 
 
 
@@ -216,10 +222,11 @@ LEED DETAILS
 			<button id="saveButton" class="button save_button" value="save" style="opacity:0.5" onclick="saveChanges()">Save Changes</button>
 			
 			
+            <BR>
 	
 
 			<!-- DELETE BUTTON -->
-			<button id="delButton" class="button del_button" value="del" style="opacity:0.5" onclick="deleteLeed()">Delete Leed</button>
+			<button id="delButton" class="button del_button" value="del" style="opacity:1.0" onclick="deleteLeed()">Delete Leed</button>
 			
 			
 
@@ -234,11 +241,11 @@ LEED DETAILS
 
 	<script type="module">
 			
-
+        import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname, getShortDateString } from "./js/dates.js";
 		import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
 		import { inlineEdit } from "./js/inline-edit.js";
 
-        import { clearUserLeed } from "./js/leed.js"
+        import { clearCurrentLeed, getCurrentLeed, blankLeedObject } from "./js/leed.js"
 		import { printError, throwError, errorModal } from "./js/error.js";
 		
         import { CACHE_LEED_KEY } from "./js/leed.js";
@@ -250,7 +257,6 @@ LEED DETAILS
         //
         //
         let leedJSON = window.sessionStorage.getItem( CACHE_LEED_KEY );
-        let leedJSON = null;
         if (leedJSON == undefined || leedJSON == null) {
             printError("Edit Leed", "Cannot retrieve cache leed with key:" + CACHE_LEED_KEY );
             errorModal("Cannot load Leed info from cache");
@@ -274,6 +280,10 @@ LEED DETAILS
 		var EDITING = false;
 
 		const CURRENT_LEED = getCurrentLeed();
+
+        console.log("GOT CURRENT LEED");
+        console.log(CURRENT_LEED);
+
         if (CURRENT_LEED == null)
             throwError("Cannot initialize leed editor: CURRENT_LEED is null");
 
@@ -285,11 +295,52 @@ LEED DETAILS
         element = document.getElementById("td_note");
         element.innerHTML = CURRENT_LEED.note;
 
+
+        // THE DATE
+        // start and end times
+        const startDate = new Date( CURRENT_LEED.start );
+        const isoStart = startDate.toISOString();
+
+        const start_weekday = getWeekday( getShortDateString( isoStart ) );
+        const start_monthname = getShortMonthname( isoStart.substring(5, 7) ); 
+
+        // remove '0' at front if any
+        let start_date = isoStart.substring(8, 10);
+        if (start_date.startsWith('0')) { start_date = start_date.substring(1) };
+
+        const endDate = new Date( CURRENT_LEED.end );
+        const isoEnd = endDate.toISOString();
+       
+        const end_weekday = getWeekday( getShortDateString( isoEnd ) );
+        const end_monthname = getShortMonthname( isoEnd.substring(5, 7) ); 
+        
+        // remove '0' at front if any
+        let end_date = isoStart.substring(8, 10);
+        if (end_date.startsWith('0')) { end_date = end_date.substring(1) };
+        
+        const leed_year = isoStart.substring(0, 4);
+        const hours_start = getHours(isoStart);
+        const hours_end = getHours(isoEnd);
+    
+
+        const fullStartDate = start_weekday + " " + start_monthname + " " + start_date + ", " + leed_year; 
+
+        const fullEndDate = end_weekday + " " + end_monthname + " " + end_date + ", " + leed_year; 
+
+
+        const start_time = hours_start[0] + ":" + getMinutes(isoStart) + hours_start[1];
+        const end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
+
+
+
         element = document.getElementById("td_start");
-        element.innerHTML = CURRENT_LEED.start;
+        element.innerHTML = fullStartDate + " at " + start_time;
 
         element = document.getElementById("td_end");
-        element.innerHTML = CURRENT_LEED.end;
+        element.innerHTML = fullEndDate + " at " + end_time;
+
+
+
 
         element = document.getElementById("td_loc");
         element.innerHTML = CURRENT_LEED.loc;
@@ -301,7 +352,7 @@ LEED DETAILS
         element.innerHTML = CURRENT_LEED.reqs;
 
         element = document.getElementById("td_price");
-        element.innerHTML = CURRENT_LEED.price;
+        element.innerHTML = "<B>$&nbsp;" + CURRENT_LEED.price + "</B>";
 
 
 
@@ -336,6 +387,10 @@ LEED DETAILS
 			beginEditing();
 
 			switch(rowName) {
+
+                case "row_trade":
+                    LEED_CHANGES.trade = rowData["trade"];
+                    break;
 
 				case "row_note":
 					LEED_CHANGES.note = rowData["note"];

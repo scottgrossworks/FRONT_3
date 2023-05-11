@@ -5,6 +5,7 @@ import { getColorForTrade } from "./trades.js";
 import { db_getDeetz } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 import { getCurrentUser } from "./user.js";
+import { getCurrentLeed, setCurrentLeed } from "./leed.js";
 
 
     
@@ -74,6 +75,8 @@ export async function showLeedAction( leed_preview ) {
     });
 
 
+    
+    const CURRENT_LEED = getCurrentLeed();
 
 
     // START DATE
@@ -141,19 +144,21 @@ export async function showLeedAction( leed_preview ) {
     // loc == full address
     theDiv = document.querySelector("#loc_value");
     theDiv.innerHTML = leed_details.loc;
-
+    CURRENT_LEED.loc = leed_details.loc;
 
 
     // DETAILS
     // from leed_details
     theDiv = document.querySelector("#details_value");
     theDiv.innerHTML = leed_details.det;
+    CURRENT_LEED.det = leed_details.det;
 
 
     // requirements
     // from leed_details
     theDiv = document.querySelector("#reqs_value");
     theDiv.innerHTML = leed_details.reqs;
+    CURRENT_LEED.reqs = leed_details.reqs;
 
 
     // creator
@@ -169,15 +174,19 @@ export async function showLeedAction( leed_preview ) {
     // from leed_details
     theDiv = document.querySelector("#price_value");
     theDiv.innerHTML = "$" + leed_details.price;
+    CURRENT_LEED.price = leed_details.price;
 
 
+    setCurrentLeed( CURRENT_LEED );
 
 
 
     let row_buy_button = document.getElementById("row_buy_button");
     let row_edit_button = document.getElementById("row_edit_button");
 
-
+    // the action buttons at the bottom depend on whether the
+    // current user posted the leed being examined
+    // 
     if (current_user.username == leed_preview.creator) {
 
         // the current user POSTED this leed

@@ -65,8 +65,6 @@ export function blankLeedObject() {
 
     BLANK_LEED.price = null;
 
-    BLANK_LEED.node = null;
-
     return BLANK_LEED;
   }
   
@@ -83,6 +81,13 @@ export function getCurrentLeed() {
     if (CURRENT_LEED == null)
         throwError("getCurrentLeed", "CURRENT_LEED is null");
 
+    if (CURRENT_LEED.id == null) {
+        // CURRENT_LEED is blank
+        // go back to cache
+        loadCacheLeed();
+    }
+
+
     return CURRENT_LEED;
 }
 
@@ -91,16 +96,11 @@ export function getCurrentLeed() {
 /**
  * 
  */
-export function setCurrentLeed( domNode, jsonObj ) {
+export function setCurrentLeed( jsonObj ) {
 
     if (jsonObj == null)
         throwError("setCurrentLeed", "leed JSON is null");
 
-    if (domNode == null)
-        throwError("setCurrentLeed", "DOM node is null");
-
-        
-    CURRENT_LEED.node = domNode;
   
     CURRENT_LEED.id = jsonObj.id;
     CURRENT_LEED.creator = jsonObj.creator;
@@ -108,16 +108,16 @@ export function setCurrentLeed( domNode, jsonObj ) {
     CURRENT_LEED.trade = jsonObj.trade;
     
     CURRENT_LEED.zip = jsonObj.zip;
-    CURRENT_LEED.loc = null;
+    CURRENT_LEED.loc = jsonObj.loc;
 
     CURRENT_LEED.start = jsonObj.start;
     CURRENT_LEED.end = jsonObj.end;
 
     CURRENT_LEED.note = jsonObj.note;
-    CURRENT_LEED.det = null;
-    CURRENT_LEED.reqs = null;
+    CURRENT_LEED.det = jsonObj.det;
+    CURRENT_LEED.reqs = jsonObj.reqs;
 
-    CURRENT_LEED.price = null;
+    CURRENT_LEED.price = jsonObj.price;
 
     saveCacheLeed( CURRENT_LEED );
 }
@@ -131,8 +131,6 @@ export function setCurrentLeed( domNode, jsonObj ) {
  */
 export function clearCurrentLeed() {
 
-    CURRENT_LEED.node = null;
-  
     CURRENT_LEED.id = null;
     CURRENT_LEED.creator = null;
 
@@ -211,7 +209,8 @@ export function loadCacheLeed() {
 
     const leedJSON = window.sessionStorage.getItem( CACHE_LEED_KEY );
     if (leedJSON == null) {
-        return null;
+        printError("loadCacheLeed", "No value in cache for key: " + CACHE_LEED_KEY);
+        return;
     }
 
     let cacheObj = null;
@@ -219,11 +218,27 @@ export function loadCacheLeed() {
         cacheObj = JSON.parse( leedJSON );
 
     } catch (error) {
-        printError("loadCacheLeed", "Cannot parse JSON: " + leedJSON);
-        return null;
+        printError("loadCacheLeed", "Invalid JSON: " + leedJSON);
+        throwError("loadCahceLeed", "Cannot load leed from cache");
     }
+    
 
-    return cacheObj;
+    CURRENT_LEED.id = cacheObj.id;
+    CURRENT_LEED.creator = cacheObj.creator;
+
+    CURRENT_LEED.trade =cacheObj.trade;
+    
+    CURRENT_LEED.zip = cacheObj.zip;
+    CURRENT_LEED.loc = cacheObj.loc;
+
+    CURRENT_LEED.start = cacheObj.start;
+    CURRENT_LEED.end = cacheObj.end;
+
+    CURRENT_LEED.note = cacheObj.note;
+    CURRENT_LEED.det = cacheObj.det;
+    CURRENT_LEED.reqs = cacheObj.reqs;
+
+    CURRENT_LEED.price = cacheObj.price;
 
 }
 

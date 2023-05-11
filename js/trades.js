@@ -187,6 +187,25 @@ const DEFAULT_TRADES = [
 
 
 
+
+
+/**
+ * is this a valid trade name?
+ *  compare against default trades 
+ */
+export function isValidTrade( tradeName ) {
+  
+  for (var i = 0; i < DEFAULT_TRADES.length; i++) {
+    
+    if ( DEFAULT_TRADES[i].trade_name == tradeName ) {
+     return true;
+    }
+  }
+  return false;
+}
+
+
+
 /**
  * 
  */

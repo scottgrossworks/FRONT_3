@@ -66,6 +66,19 @@
 
 
 
+					<tr id="row_username">
+					
+						<TD class="labelTD">Username: </TD>
+						
+						<td colspan=2 id="td_username" data-inlineType="text" data-inlineName="username" 
+						data-inlineRequired="true" data-inlinePlaceholder="(Required)" style="color:green;font-weight:600"></td>
+		
+						
+					</tr>
+
+
+
+
 					<tr id="row_login">
 					
 						<TD class="labelTD">Login &amp; Password: </TD>
@@ -92,18 +105,6 @@
 
 
 
-
-
-					<tr id="row_username">
-					
-						<TD class="labelTD">Username: </TD>
-						
-						<td id="td_username" data-inlineType="text" data-inlineName="username" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
-		
-						<td data-inlineType="doneButton" class="buttonTD">
-							<input type="button" value="Edit" onclick="inlineEdit('row_username', defaultOptions)"/>
-						</td>
-					</tr>
 
 
 
@@ -212,12 +213,7 @@
 
 		var EDITING = false;
 
-		const USER_CHANGES = blankUserObject();
-
-	
 		const CURRENT_USER = getCurrentUser( true );
-
-		console.log(CURRENT_USER);
 
 		if (CURRENT_USER != null) {
 
@@ -262,14 +258,20 @@
 
 		function backButton() {
 			const CURRENT_USER = getCurrentUser(true);
-			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER;
-			window.open(href, true);
+	
+			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
+			window.open(href);
+
+			clearCurrentLeed();
+			self.close();
 
 		}
 		window.backButton = backButton;
 
 
 
+
+		const USER_CHANGES = blankUserObject();
 
 		function defaultCallback(rowData, rowName) {
 

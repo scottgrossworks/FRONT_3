@@ -1,7 +1,7 @@
 * {
 	padding: 0;
 	margin: 0;
-	max-width:1024px;
+	max-width:1200px;
 }
 
 :root {
@@ -147,8 +147,8 @@ section > table tbody td {
 .labelTD {
 	
 	width:max-content;
-	min-width: 200px;
-	max-width: 300px;
+	min-width: 100px;
+	max-width: 350px;
 	
 	padding-left:0px;
 	padding-right:0px;

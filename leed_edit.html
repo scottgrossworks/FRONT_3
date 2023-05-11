@@ -1,0 +1,449 @@
+
+   
+<!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+		 <meta charset="UTF-8">
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 
+		 <TITLE>Edit Leed</TITLE>
+	 
+	 	<!-- Favicon -->
+		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+ 
+ 
+		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+		 <link rel="stylesheet" href="./css/user_edit.css" tyep="text/css"/>
+
+		 <script src="./js/inline-edit.js" type="module" defer></script> 
+	</head>
+
+
+		 
+	<center>
+
+
+	<body>
+	
+
+
+			
+			<div class="row" style="width:100vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+
+			<div class="column _1">
+
+				<button class="back_button" style="margin:35px 20px; width:50px"><a href="#" onclick="backButton()">&#10140;</a></button>
+				</div>
+
+				<div class="column _2"></div>
+				<div class="column _4" style="margin:auto 0;transform:translateY(6px)">
+					<h1 class="user_title">Edit Leed</h1>
+				</div>
+				
+				<div class="column _3" style="padding:6px;text-align:center">
+				<img src="./img/logo_2.png" style="width:120px">
+				</div>
+			
+			
+		
+			</div>
+
+
+			
+<section>
+
+	<BR>	
+	<BR>
+
+
+			
+        <!--
+        
+LEED PREVIEW
+        {
+            "id": 1001, 
+            "creator": "dave.reyes", 
+            "zip": "90034", 
+            "start": 1680635460000, 
+            "end": 1680639060000, 
+            "trade": "caricatures",
+            "note": "This is Leed ID 1001 fun times"
+        },
+
+LEED DETAILS
+    {
+        "id": 1004,
+        "loc": "1001 Airbrush Lane, Los Angeles, CA 90056",  
+        "det": "1004 staff app1 These are the potentially-longwinded leed details for staff appreciation party, leed id: 1004",
+        "reqs": "1004 staff app2 These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
+        "price": "40"
+    }
+
+
+        -->
+        
+
+<table>
+
+        <tr id="row_trade">
+					
+            <TD class="labelTD">Trade Name: </TD>
+            <td data-inlineType="text" colspan=2 data-inlineName="trade"></td>
+            
+        </tr>
+
+
+
+
+        <tr id="row_note">
+					
+            <TD class="labelTD">Title: </TD>
+            
+            <td id="td_note" data-inlineType="text" data-inlineName="note" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
+
+            <td data-inlineType="doneButton" class="buttonTD">
+                <input type="button" value="Edit" onclick="inlineEdit('row_note', defaultOptions)"/>
+            </td>
+        </tr>
+
+
+
+        
+        <!-- FIXMEFIXMEFIXME date/time chooser -->
+        <tr id="row_start">
+					
+            <TD class="labelTD">Start: </TD>
+            
+            <td id="td_start" data-inlineType="text" data-inlineName="start" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
+
+            <td data-inlineType="doneButton" class="buttonTD">
+                <input type="button" value="Edit" onclick="inlineEdit('row_start', defaultOptions)"/>
+            </td>
+        </tr>
+
+
+        
+
+
+                
+        <!-- FIXMEFIXMEFIXME date/time chooser -->
+        <tr id="row_end">
+					
+            <TD class="labelTD">End: </TD>
+            
+            <td id="td_end" data-inlineType="text" data-inlineName="end" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
+
+            <td data-inlineType="doneButton" class="buttonTD">
+                <input type="button" value="Edit" onclick="inlineEdit('row_end', defaultOptions)"/>
+            </td>
+        </tr>
+
+
+
+        <!-- ADDRESS 
+        
+        FIXME FIXME FIXME
+        need special validation for address
+        read zip from last 5 digits of address.trim()
+        -->
+        <tr id="row_loc">
+					
+            <TD class="labelTD">Address: </TD>
+            
+            <td id="td_loc" data-inlineType="text" data-inlineName="loc" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
+
+            <td data-inlineType="doneButton" class="buttonTD">
+                <input type="button" value="Edit" onclick="inlineEdit('row_loc', defaultOptions)"/>
+            </td>
+        </tr>
+
+
+
+        <!-- LEED DETAILS -->
+        <tr id="row_det">
+					
+            <TD class="labelTD">Details: </TD>
+            
+            <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
+
+            <td data-inlineType="doneButton" class="buttonTD">
+                <input type="button" value="Edit" onclick="inlineEdit('row_det', defaultOptions)"/>
+            </td>
+        </tr>
+
+
+
+        
+        <!-- LEED REQUIREMENTS -->
+        <tr id="row_reqs">
+					
+            <TD class="labelTD">Requirements: </TD>
+            
+            <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0"></td>
+
+            <td data-inlineType="doneButton" class="buttonTD">
+                <input type="button" value="Edit" onclick="inlineEdit('row_reqs', defaultOptions)"/>
+            </td>
+        </tr>
+
+
+        
+        <!-- LEED PRICE -->
+        <tr id="row_det">
+					
+            <TD class="labelTD">Price: </TD>
+            
+            <td id="td_price" data-inlineType="text" data-inlineName="price" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
+
+            <td data-inlineType="doneButton" class="buttonTD">
+                <input type="button" value="Edit" onclick="inlineEdit('row_price', defaultOptions)"/>
+            </td>
+        </tr>
+
+
+
+				
+
+
+			</table>	
+
+
+
+
+			<!-- SAVE CHANGES BUTTON -->
+			<button id="saveButton" class="button save_button" value="save" style="opacity:0.5" onclick="saveChanges()">Save Changes</button>
+			
+			
+	
+
+			<!-- DELETE BUTTON -->
+			<button id="delButton" class="button del_button" value="del" style="opacity:0.5" onclick="deleteLeed()">Delete Leed</button>
+			
+			
+
+
+
+			<BR>
+			<BR>
+				
+
+	</body>
+
+
+	<script type="module">
+			
+
+		import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
+		import { inlineEdit } from "./js/inline-edit.js";
+
+        import { clearUserLeed } from "./js/leed.js"
+		import { printError, throwError, errorModal } from "./js/error.js";
+		
+        import { CACHE_LEED_KEY } from "./js/leed.js";
+
+
+
+
+        
+        //
+        //
+        let leedJSON = window.sessionStorage.getItem( CACHE_LEED_KEY );
+        let leedJSON = null;
+        if (leedJSON == undefined || leedJSON == null) {
+            printError("Edit Leed", "Cannot retrieve cache leed with key:" + CACHE_LEED_KEY );
+            errorModal("Cannot load Leed info from cache");
+            throwError("Error loading cache leed");
+        }
+    
+        let cache_leed = null;
+        // load leed obj from cache
+        try {
+        cache_leed = JSON.parse( leedJSON );
+    
+        } catch (error) {
+            printError("Cannot parse leed JSON", leedJSON);
+            errorModal("Cache leed has invalid JSON format");
+            throwError("Error parsing cahce leed JSON");
+        }
+
+    
+          //
+          //
+		var EDITING = false;
+
+		const CURRENT_LEED = getCurrentLeed();
+        if (CURRENT_LEED == null)
+            throwError("Cannot initialize leed editor: CURRENT_LEED is null");
+
+        var element = null;
+        
+        element = document.getElementById("td_trade");
+        element.innerHTML = CURRENT_LEED.trade;
+
+        element = document.getElementById("td_note");
+        element.innerHTML = CURRENT_LEED.note;
+
+        element = document.getElementById("td_start");
+        element.innerHTML = CURRENT_LEED.start;
+
+        element = document.getElementById("td_end");
+        element.innerHTML = CURRENT_LEED.end;
+
+        element = document.getElementById("td_loc");
+        element.innerHTML = CURRENT_LEED.loc;
+
+        element = document.getElementById("td_det");
+        element.innerHTML = CURRENT_LEED.det;
+
+        element = document.getElementById("td_reqs");
+        element.innerHTML = CURRENT_LEED.reqs;
+
+        element = document.getElementById("td_price");
+        element.innerHTML = CURRENT_LEED.price;
+
+
+
+
+
+
+
+
+
+		function backButton() {
+			const CURRENT_USER = getCurrentUser(true);
+	
+			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
+			window.open(href);
+
+			clearCurrentLeed();
+			self.close();
+
+		}
+		window.backButton = backButton;
+
+
+
+
+
+
+
+        const LEED_CHANGES = blankLeedObject();
+
+		function defaultCallback(rowData, rowName) {
+
+			beginEditing();
+
+			switch(rowName) {
+
+				case "row_note":
+					LEED_CHANGES.note = rowData["note"];
+					break;
+
+				case "row_start":
+					LEED_CHANGES.start = rowData["start"];
+					break;
+
+                case "row_end":
+                    LEED_CHANGES.end = rowData["end"];
+                    break;
+
+				case "row_loc":
+					LEED_CHANGES.loc = rowData["loc"];
+					break;
+
+				case "row_det":
+					LEED_CHANGES.det = rowData["det"];
+					break; 
+					
+				case "row_reqs":
+					LEED_CHANGES.reqs = rowData["reqs"];
+					break; 
+
+
+				case "row_price":
+					LEED_CHANGES.price = rowData["price"];
+					break; 
+
+				default:
+					printError("defaultCallback()", "received unknown form field: " + rowName);
+					break;
+
+			}
+
+			
+            console.log("SHOWING LEED CHANGES");
+            console.log(LEED_CHANGES);
+
+		}
+
+
+
+
+
+
+		//
+		//
+		//
+		function beginEditing() {
+			var element = document.getElementById("saveButton");
+			element.innerHTML = "Save Changes";
+			element.style.backgroundColor = "var(--LEEDZ_GREEN)";
+			element.style.opacity = 1;
+
+			EDITING = true;
+		}
+
+
+		//
+		//
+		//
+		function endEditing() {
+			var element = document.getElementById("saveButton");
+			element.innerHTML = "Saved!";
+			element.style.backgroundColor = "darkorange";
+			element.style.opacity = 0.5;
+
+			EDITING = false;
+		}
+
+
+
+		//
+		//
+		//
+		function saveChanges() {
+
+			if (! EDITING) return;
+
+			saveLeedChanges( LEED_CHANGES );
+
+			endEditing();
+		}
+
+
+
+
+		var defaultOptions = { "finishCallback": defaultCallback };
+
+
+
+
+		window.inlineEdit = inlineEdit;
+		window.defaultOptions = defaultOptions;
+
+
+		window.saveChanges = saveChanges;
+
+
+
+	
+	
+	</script>
+
+	
+		
+
+
+</html>

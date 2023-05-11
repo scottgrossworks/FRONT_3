@@ -44,3 +44,19 @@ export function throwError(src, error) {
 
     throw new LeedzError(errMsg);
 }
+
+
+
+
+
+export function errorModal( msg ) {
+
+  let modal = document.getElementById("error_modal");
+  modal.style.display = "block";
+
+
+  let theMsg = modal.children[1]; /* the error text */
+  theMsg.style.width = "90%";
+  theMsg.innerHTML = msg + "<BR><BR>" + BUG_EMAIL;
+
+}

@@ -21,6 +21,8 @@
 
     margin-left:0;
     margin-right:auto;
+
+    overflow-y: scroll;
 }
 
 
@@ -132,14 +134,10 @@
 
 
 
-
-
-
-
-
-
 .buy_button {
 
+    display:flex;
+    
     position:relative;
 
     background-color: var(--LEEDZ_GREEN);
@@ -148,18 +146,17 @@
    
     
     text-decoration: none;
-    display: flex;
 
-    font-size:2.4em;
+    font-size:2.25em;
     font-weight: bolder;
 
     width:max-content;
     height:max-content;
 
-    margin-top:50px;
+    margin-top:30px;
 
     padding-top:25px;
-    padding-bottom:20px;
+    padding-bottom:15px;
     padding-left:30px;
     padding-right:30px;
  
@@ -174,6 +171,54 @@ img#shopping_cart {
 
     width:40px;
     height:40px;
+    padding: 4px;
+
+    transform: translateY(-4px);
+
+}
+
+
+
+
+
+.edit_button {
+
+    
+    display:flex;
+    
+    position:relative;
+
+    background-color: var(--LEEDZ_GREEN);
+    border: none;
+    color: black;
+   
+    
+    text-decoration: none;
+
+    font-size:2.25em;
+    font-weight: bolder;
+
+    width:max-content;
+    height:max-content;
+
+    margin-top:30px;
+
+    padding-top:25px;
+    padding-bottom:15px;
+    padding-left:30px;
+    padding-right:30px;
+ 
+    border-radius: 20px;
+
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
+}
+
+
+
+img#edit_icon {
+
+    width:35px;
+    height:35px;
     padding: 4px;
 
     transform: translateY(-4px);

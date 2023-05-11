@@ -283,11 +283,16 @@
 
         </div>
 
-        <BR>
 
-        <div class="row">
+        <div class="row" id="row_buy_button">
           <button id="action_buy" class="button buy_button">Buy<img id="shopping_cart" src="img/shopping-cart.png"></button>
         </div>
+
+        <div class="row" id="row_edit_button">
+          <button id="action_edit" class="button edit_button">Edit&nbsp;<img id="edit_icon" src="img/edit.png"></button>
+        </div>
+
+
 
         <a id="buy_modal_close" href="javascript:modalClose();">&#10140;</a>        
       </div>
@@ -321,7 +326,7 @@
     import { initTradesColumn, getAllTrades } from "./js/trades.js";   
     import { loadCalendar, loadUserLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
-    import { printError, throwError } from "./js/error.js";
+    import { printError, throwError, errorModal } from "./js/error.js";
 
     import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 
@@ -402,7 +407,7 @@
           errorModal("Cannot edit Guest user account");
 
         } else {
-          window.open("./user_edit.html", true);
+          window.open("./user_edit.html", "location=1,status=0, menubar=0");
         }
       }
 
@@ -460,19 +465,6 @@
 
 
 
-      function errorModal( msg ) {
-
-        let modal = document.getElementById("error_modal");
-        modal.style.display = "block";
-
-
-        let theMsg = modal.children[1]; /* the error text */
-        theMsg.style.width = "90%";
-        theMsg.innerHTML = msg + "<BR><BR>" + BUG_EMAIL;
-
-      }
-
-
 
       function actionModal() {
         let welcome = document.getElementById("welcome_panel");
@@ -524,35 +516,6 @@
 
 
 
-      // FOOBAR FOOBAR FOOBAR
-        function openNav() {
-
-          console.log("OPEN NAV");
-
-          side.style.width = "max-content";
-     
-          open.style.left = side.clientWidth + "px";
-          open.innerHTML = "&#10140;"
-
-          col.style.marginLeft = "0";
-        }
-   
-        
-
-        function closeNav() {
-
-          console.log("CLOSE NAV");
-          side.style.width = "0";
-
-          open.style.left = 0;
-          open.innerHTML = "&#9776;"
-
-          col.style.marginLeft = "-120px";
-        }
-
-
-
-
 
    
 
@@ -588,15 +551,41 @@
 
 
         
-          let col = document.getElementById("trades_column");      
-          let side = document.getElementById("side_panel");
-          let open = document.getElementById("open_side_btn");
+          const col = document.getElementById("trades_column");      
+          const side = document.getElementById("side_panel");
+          const open = document.getElementById("open_side_btn");
           
           let SIDE_OPEN = true;
           let SCREEN_SIZE = 0; // 0, 1, 2 small
           
     
  
+
+
+          function openNav() {
+
+            side.style.width = "max-content";
+       
+            open.style.left = side.clientWidth + "px";
+            open.innerHTML = "&#10140;"
+  
+            col.style.marginLeft = "0";
+          }
+     
+          
+  
+          function closeNav() {
+  
+            side.style.width = "0";
+  
+            open.style.left = 0;
+            open.innerHTML = "&#9776;"
+  
+            col.style.marginLeft = "-120px";
+          }
+  
+
+
           /**
           * 
           */
@@ -621,34 +610,42 @@
           }
 
 
-          // WE COME HERE AFTER HOSTED LOGIN UI
-          // (hopefully) we can pass username from the login to this page
+          // full URL for index.html should include username parameter
+          // index.html?un=scott.gross
 
+          // IF WE COME HERE AFTER HOSTED LOGIN UI
+          //   username will come from login sequence (hopefully)
+          // IF WE COME HERE FROM BACK BUTTON ON user_edit page
+          //   username will be passed in from account edit page
+          
           // LOAD user profile data
           // LOAD list of subscribed trades
           // do not fail on error -- load Guest User as default
           //
-          // FIXME FIXME FIXME
-          // FOOBAR FOOBAR FOOBAR
-          // username will come from login sequence (hopefully)
-
-          // WE MAY ALSO COME HERE FROM BACK BUTTON ON user_edit page
-
-
-          // full URL for index.html should include username parameter
-          // index.html?un=scott.gross
-          // otherwise use guest account
+        
           let currentUser = null;
 
           const urlParams = new URLSearchParams(window.location.search);
           const url_username = urlParams.get( USERNAME_URL_PARAM );
-          if (url_username == null) {
+          const alphaNum = /^[a-zA-Z0-9._-]+$/;
+
+          //
+          // validate the username param
+          // must not be null
+           if (url_username == null) {
             // use guest account
             printError("No username parameter", "Using Guest Account");
             currentUser = guestUser();
 
+
+          //
+          // must contain only alphanum chars
+          } else if (! (alphaNum.test( url_username ))) {
+            printError("Invalid username: " + url_username, "username can only contain alphanumeric chars");
+            currentUser = guestUser();
       
 
+      
           } else {
 
             const cacheUser = getCurrentUser( true );

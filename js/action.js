@@ -4,6 +4,7 @@ import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname, getS
 import { getColorForTrade } from "./trades.js";
 import { db_getDeetz } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
+import { getCurrentUser } from "./user.js";
 
 
     
@@ -35,7 +36,6 @@ leed_details contains
 [
     {
         "id": 1004,
-        "trade": "airbrush", 
         "loc": "1001 Airbrush Lane, Los Angeles, CA 90056",  
         "det": "These are the potentially-longwinded leed details for staff appreciation party, leed id: 1004",
         "reqs": "These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
@@ -44,6 +44,9 @@ leed_details contains
     }
 ]
 *
+*
+* if user has posted this leed -- show EDIT button
+* if someone else has posted this leed -- show BUY button
 *
 */
 export async function showLeedAction( leed_preview ) {
@@ -121,6 +124,7 @@ export async function showLeedAction( leed_preview ) {
     let theDate = document.querySelector("#lic_date");
     theDate.innerHTML = leed_weekday + " " + leed_monthname + " " + leed_date + ", " + leed_year; 
 
+    const current_user = getCurrentUser();
 
     // event_info
     //
@@ -155,7 +159,7 @@ export async function showLeedAction( leed_preview ) {
     // creator
     // from leed_preview
     theDiv = document.querySelector("#posted_by_value");    
-    var theHTML = "<a href='mailto:" + leed_details.em + "'>";
+    var theHTML = "<a href='mailto:" + current_user.email + "'>";
     theHTML = theHTML + leed_preview.creator + "</a>";
     theDiv.innerHTML = theHTML;
 
@@ -165,6 +169,48 @@ export async function showLeedAction( leed_preview ) {
     // from leed_details
     theDiv = document.querySelector("#price_value");
     theDiv.innerHTML = "$" + leed_details.price;
+
+
+
+
+
+    let row_buy_button = document.getElementById("row_buy_button");
+    let row_edit_button = document.getElementById("row_edit_button");
+
+
+    if (current_user.username == leed_preview.creator) {
+
+        // the current user POSTED this leed
+        // show the EDIT button
+        row_buy_button.style.display = "none";
+        row_edit_button.style.display = "flex";
+
+
+        // pass the current leed from this page
+        // to the leed_edit page using the session cache
+        document.getElementById("action_edit").addEventListener( "click", (event) => { 
+            console.log("%cEDIT BUTTON CALLBACK", "color:darkorange");
+
+            // FIXMEFIXMEFIXME
+            
+
+        });
+
+
+        // FOOBAR
+
+    } else {
+        // current user is trying to BUY someone else's leed
+        // show the BUY button
+        row_buy_button.style.display = "flex";
+        row_edit_button.style.display = "none";
+
+        // program the BUY button
+        document.getElementById("action_buy").addEventListener( "click", (event) => { 
+            console.log("%BUY BUTTON CALLBACK", "color:darkorange");
+        });
+    }
+
 
 
 
@@ -178,14 +224,6 @@ export async function showLeedAction( leed_preview ) {
     let action = document.getElementById("action_panel");
     action.style.display = "block";
 
-    //
-    // FIXME FIXME FIXME
-    //
-    // function
-    // PROGRAM THE BUY BUTTON?
-    // let buy_button = document.querySelector("action_buy");
-    // leed_preview.creator
-    // leed_details.em
 
 }
 
@@ -206,3 +244,19 @@ export function hideActionWindow() {
     welcome.style.display = "block";
 
 }
+
+
+
+
+/** 
+ * 
+ *
+ *
+ */
+
+
+/** 
+ * 
+ *
+ *
+ */

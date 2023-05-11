@@ -4,7 +4,7 @@
 import { db_getUser } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 
-export const CACHE_USER_KEY = "USER";
+export const CACHE_USER_KEY = "U";
 
 const GUEST_USER = blankUserObject();
 GUEST_USER.username = "guest.user";
@@ -113,7 +113,7 @@ export async function initUser( username ) {
       CURRENT_USER.email = resObj.email;
 
       if (resObj.website != null)
-        CURRENT_USER.webite = resObj.website;
+        CURRENT_USER.website = resObj.website;
   
       if (resObj.about != null)
        CURRENT_USER.about = resObj.about;
@@ -137,8 +137,8 @@ export async function initUser( username ) {
     saveCacheUser( CURRENT_USER );
 
 
-    console.log("%cLOADED USER", "color:orange");
-    console.log(CURRENT_USER);
+    // console.log("%cLOADED USER: " + CURRENT_USER.username, "color:darkorange");
+    // console.log(CURRENT_USER);
 
   }
 
@@ -183,10 +183,10 @@ export function saveUserChanges( userObj ) {
 
 
   if (userObj == null)
-    throwError("saveUserChanges()", "null user object");
+    throwError("saveUserChanges", "null user object");
 
   if (CURRENT_USER == null)
-    throwError("saveUserChanges()", "No CURRENT_USER initialized");
+    throwError("saveUserChanges", "No CURRENT_USER initialized");
 
 
   if (userObj.username != null)
@@ -245,18 +245,20 @@ function loadCacheUser() {
     let userJSON = window.sessionStorage.getItem( CACHE_USER_KEY );
     let userObj = null;
     if (userJSON == undefined || userJSON == null) {
-      return userObj; // return NULL and be done
+
+      printError("loadCacheUser", "No value for cache key=" + CACHE_USER_KEY);
+      return null; // return NULL and be done
     }
 
     // CACHE contains JSON
     // verfiy it and create object
-      try {
-        userObj = JSON.parse( userJSON );
-    
-      } catch (error) {
-        printError("loadCacheUser(" + username + ")" , "Cannot parse JSON: " + userJSON);
-        return null;
-      }
+    try {
+      userObj = JSON.parse( userJSON );
+  
+    } catch (error) {
+      printError("loadCacheUser", "Cannot parse JSON: " + userJSON);
+      return null;
+    }
 
     return userObj;
 }
@@ -275,12 +277,12 @@ function saveCacheUser( userObj ) {
 
     try {
       let userJSON = JSON.stringify (userObj);
-      window.sessionStorage.setItem("USER", userJSON);
+      window.sessionStorage.setItem( CACHE_USER_KEY , userJSON);
 
 
     } catch (error) {
       printError("saveCacheUser()", error.message);
-      window.sessionStorage.setItem("USER", null);
+      window.sessionStorage.setItem( CACHE_USER_KEY , null);
     }
 }
 

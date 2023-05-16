@@ -1,82 +1,38 @@
 * {
 	padding: 0;
 	margin: 0;
-	max-width:1200px;
+
 }
 
-:root {
-	font-size: 16px;
-	font-family: var(--FONT_1);
-
-	overflow-x: hidden;
-	overflow-y: scroll;
-}
 
 body {
 	display: block;
-	margin:0 auto;	
-}
-
-
-
-
-
-input,
-textarea,
-select {
+	margin:0 auto;
+	
+	font-size: 16px;
+	font-family: var(--FONT_1);
 
 	width:100%;
-	
-	border: none;
-	background-color: var(--LEEDZ_GRAY);
-	
-	padding:12px 8px;
+	max-width:1200px;
+	height:max-content;
 
-	font-size: 1rem;
-	outline: none;
-	border-radius: 8px;
 
-	font-family: var(--FONT_2);
-	border-bottom: 1px solid var(--LEEDZ_DARKGREEN);
-}
 
-input,
-textarea {
-	appearance: none;
-	-webkit-appearance: none;
+
 }
 
 
 
+.titleRow {
 
-input[type="button"],
-input[type="submit"] {
-	padding: 0.5rem 1.6rem;
-	background-color: var(--LEEDZ_DARKGREEN);
-	border-radius: 5px;
+	width:100%;
+	vertical-align:bottom;
 
-	font-weight: bolder;
-	font-family: var(--FONT_3);
+	border-bottom: 2px solid var(--LEEDZ_DARKGREEN);
 
-	color: white;
-
-	
-    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
-
-	
-	transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-input[type="button"]:hover,
-input[type="submit"]:hover {
-	background-color: var(--LEEDZ_DARKGREEN);
-	box-shadow: 0 3px 3px #ccc;
-}
 
-input[type="button"]:active,
-input[type="submit"]:active {
-	background-color: var(--LEEDZ_DARKGREEN);
-}
 
 
 
@@ -87,39 +43,32 @@ input[type="submit"]:active {
 	font-size:1.8em;
 }
 
-section {
-	
+
+#form_container {
+
+	height:58vh;
+	max-height:1000px;
+	overflow-y:scroll;
 	margin:0 auto;
-	width:100vw;
-
-}
-
-section > h1 {
-
-	padding: 4px 20px;
-	margin-bottom: 10px 20px;
-}
 
 
-section > img {
-
-	margin: 10px 20px;
+	background-color: var(--LEEDZ_LIGHTGREEN);
 }
 
 
 
-section > table {
+table {
 
 	margin: 0 auto;
 	border-spacing: 0;
 
-	padding-left: 5vw;
-	padding-right:5vw;
-
-
+	height:fit-content;
 	width:100%;
 	max-width:900px;
 
+	margin: 0 auto;
+	padding-left: 2vw;
+	padding-right: 2vw;
 }
 
 
@@ -128,18 +77,17 @@ section > table {
 @media screen and (min-width: 900px) {
 
 
-    section > table {
+    table {
         max-width:1024px;
-        padding-left: 2vw;
-        padding-right:2vw;
-    
+		margin: 0 auto;
 
     }
 }
 
 
 
-section > table tr {
+table tbody tr {
+
 
 	text-align:right;
 	align-content:space-between;
@@ -147,14 +95,14 @@ section > table tr {
 }
 
 
-section > table tbody td {
+table tbody td {
 	
     width:max-content;
 	border: none;
 	text-align: left;
 
 	padding:25px;
-	border-bottom: 2px solid var(--LEEDZ_LIGHTGREEN);
+	border-top: 2px solid lightgray;
 
 }
 
@@ -174,12 +122,39 @@ section > table tbody td {
 }
 
 
+
+.eyeballTD {
+	cursor: pointer;
+	padding-right:10px;
+	padding-left:2px;
+}
+
+
+.eyeballTD img {
+
+	width: 30px;
+	height:30px;
+	padding-left:0px;
+	padding-right:0px;
+	margin:0 auto;
+
+}
+
+.lock {
+	filter:brightness(65%);
+}
+
+
+
+
+
+
 .buttonTD {
 
 	
 	width:min-content;
 	max-width: 150px;
-	padding:10px;
+
 }
 
 
@@ -238,10 +213,10 @@ section > table tbody td {
     width:max-content;
     height:max-content;
 
-    margin-top:50px;
+    margin-top:20px;
 
     padding-top:20px;
-    padding-bottom:15px;
+    padding-bottom:18px;
     padding-left:30px;
     padding-right:30px;
  
@@ -307,4 +282,64 @@ section > table tbody td {
 	  
 	text-decoration:none;
 	color:white;
+}
+
+
+
+
+input,
+textarea,
+select {
+
+	width:100%;
+	
+	border: none;
+	background-color: var(--LEEDZ_GRAY);
+	
+	padding:12px 8px;
+
+	font-size: 1rem;
+	outline: none;
+	border-radius: 8px;
+
+	font-family: var(--FONT_2);
+	border-bottom: 1px solid var(--LEEDZ_DARKGREEN);
+}
+
+input,
+textarea {
+	appearance: none;
+	-webkit-appearance: none;
+}
+
+
+
+
+input[type="button"],
+input[type="submit"] {
+	padding: 0.5rem 1.6rem;
+	background-color: var(--LEEDZ_DARKGREEN);
+	border-radius: 5px;
+
+	font-weight: bolder;
+	font-family: var(--FONT_3);
+
+	color: white;
+
+	
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
+
+	
+	transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="button"]:hover,
+input[type="submit"]:hover {
+	background-color: var(--LEEDZ_DARKGREEN);
+	box-shadow: 0 3px 3px #ccc;
+}
+
+input[type="button"]:active,
+input[type="submit"]:active {
+	background-color: var(--LEEDZ_DARKGREEN);
 }

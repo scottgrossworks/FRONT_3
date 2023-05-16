@@ -41,7 +41,8 @@ leed_details contains
         "det": "These are the potentially-longwinded leed details for staff appreciation party, leed id: 1004",
         "reqs": "These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
         "em": "scottgrossworks@gmail.com",
-        "price": "40"
+        "ph": "123456789",
+        "pr": "40"
     }
 ]
 *
@@ -113,7 +114,7 @@ export async function showLeedAction( leed_preview ) {
 
     
 
-    // leed_title
+    // LEED TITLE
     //
     let trade_color = getColorForTrade( leed_preview.trade );
     const radioButton = document.querySelector("#lic_trade_radio");
@@ -129,41 +130,112 @@ export async function showLeedAction( leed_preview ) {
 
     const current_user = getCurrentUser();
 
-    // event_info
+
+
+    // TITLE NOTE
     //
-    let theDiv = document.querySelector("#event_value");
+    let theDiv = document.querySelector("#note_value");
     theDiv.innerHTML = leed_preview.note;
 
     // START TIME - END TIME
     //
     theDiv = document.querySelector("#start-end_value");
     theDiv.innerHTML = start_time + " - " + end_time;
-     
 
-    // loc in details - zip in preview
+
+
+
+    // LOCATION
     // loc == full address
     theDiv = document.querySelector("#loc_value");
-    theDiv.innerHTML = leed_details.loc;
+    if (CURRENT_LEED.opts["loc"] == "hide") {
+        theDiv.classList.add("buy2show");
+        theDiv.innerHTML = "Buy to show";
+    } else {
+        theDiv.classList.remove("buy2show");
+        theDiv.innerHTML = leed_details.loc;
+    }
     CURRENT_LEED.loc = leed_details.loc;
+
+
+
+
+    // ZIP
+    theDiv = document.querySelector("#zip_value");
+    theDiv.innerHTML = leed_preview.zip;
+    CURRENT_LEED.zip = leed_preview.zip;
+    
+    
+        
+
+
+    // EMAIL
+    // 
+    theDiv = document.querySelector("#em_value");
+    if (CURRENT_LEED.opts["em"] == "hide") {
+        theDiv.classList.add("buy2show");
+        theDiv.innerHTML = "Buy to show";
+    } else {
+        theDiv.classList.remove("buy2show");
+        theDiv.innerHTML = leed_details.em;
+    }
+    CURRENT_LEED.em = leed_details.em;
+
+
+
+    // PHONE
+    // 
+    theDiv = document.querySelector("#ph_value");
+    if (CURRENT_LEED.opts["ph"] == "hide") {
+        theDiv.classList.add("buy2show");
+        theDiv.innerHTML = "Buy to show";
+    } else {
+        theDiv.classList.remove("buy2show");
+        theDiv.innerHTML = leed_details.ph;
+    }
+    CURRENT_LEED.ph = leed_details.ph;
+
+
+
+
 
 
     // DETAILS
     // from leed_details
-    theDiv = document.querySelector("#details_value");
-    theDiv.innerHTML = leed_details.det;
+    // 
+    theDiv = document.querySelector("#det_value");
+    if (CURRENT_LEED.opts["det"] == "hide") {
+        theDiv.classList.add("buy2show");
+        theDiv.innerHTML = "Buy to show";
+    } else {
+        theDiv.classList.remove("buy2show");
+        theDiv.innerHTML = leed_details.det;
+    }
     CURRENT_LEED.det = leed_details.det;
 
 
-    // requirements
+
+
+    // REQUIREMENTS
     // from leed_details
+    // 
     theDiv = document.querySelector("#reqs_value");
-    theDiv.innerHTML = leed_details.reqs;
+    if (CURRENT_LEED.opts["reqs"] == "hide") {
+        theDiv.classList.add("buy2show");
+        theDiv.innerHTML = "Buy to show";
+    } else {
+        theDiv.classList.remove("buy2show");
+        theDiv.innerHTML = leed_details.reqs;
+    }
     CURRENT_LEED.reqs = leed_details.reqs;
+
+
+
 
 
     // creator
     // from leed_preview
-    theDiv = document.querySelector("#posted_by_value");    
+    theDiv = document.querySelector("#creator_value");    
     var theHTML = "<a href='mailto:" + current_user.email + "'>";
     theHTML = theHTML + leed_preview.creator + "</a>";
     theDiv.innerHTML = theHTML;
@@ -172,13 +244,23 @@ export async function showLeedAction( leed_preview ) {
     
     // *** PRICE ***
     // from leed_details
-    theDiv = document.querySelector("#price_value");
-    theDiv.innerHTML = "$" + leed_details.price;
-    CURRENT_LEED.price = leed_details.price;
+    theDiv = document.querySelector("#pr_value");
+    theDiv.innerHTML = "$" + leed_details.pr;
+    CURRENT_LEED.pr = leed_details.pr;
 
 
     setCurrentLeed( CURRENT_LEED );
 
+
+
+
+
+    //
+    //
+    //  BUTTONS
+    //
+    //
+    //
 
 
     let row_buy_button = document.getElementById("row_buy_button");
@@ -218,6 +300,13 @@ export async function showLeedAction( leed_preview ) {
         document.getElementById("action_buy").addEventListener( "click", (event) => { 
             console.log("%BUY BUTTON CALLBACK", "color:darkorange");
         });
+    
+    
+        // FIXME FIXME FIXME FIXME
+        // REPORT BUTTON 
+        // REPORT BAD LEED
+    
+    
     }
 
 

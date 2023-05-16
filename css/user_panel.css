@@ -20,7 +20,9 @@
 
     padding:4px 0px 4px 0px;
 
+    overflow: hidden !important;
 }
+
 
 
 #user_panel label a {

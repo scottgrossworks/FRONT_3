@@ -240,9 +240,16 @@ export async function getAllTrades() {
 export function getColorForTrade(trade_name) {
 
   let theColor = COLORS.get(trade_name);
+
+  if (theColor == null) {
+      // check the cache 
+      // is there a color assigned to this trade_name in cache?
+      theColor = window.sessionStorage.getItem( trade_name );
+      COLORS.set(trade_name, theColor);
+  }
+
+  console.log(COLORS);
   console.log("%cin getColorForTrade() GOT " + trade_name + ": " + theColor, "color:" + theColor + ";");
-
-
 
   if (theColor != null) {
 

@@ -222,6 +222,10 @@
 
 
         <div class="leed_info_container">
+
+
+
+
           <div class="row lic_row" id="leed_title">
             
             <div class="column lic_column"  id="lic_color">
@@ -237,9 +241,9 @@
 
 
 
-          <div class="row lic_row" id="event">
-            <div class="column lic_column _3" id="event_label">Event</div>
-            <div class="column lic_column _7" id="event_value"></div>
+          <div class="row lic_row" id="note">
+            <div class="column lic_column _3" id="note_label">Event</div>
+            <div class="column lic_column _7" id="note_value"></div>
           </div>
 
 
@@ -249,15 +253,42 @@
             <div class="column lic_column _7" id="start-end_value"></div>
           </div>
 
-          <div class="row lic_row" id="loc">
-            <div class="column lic_column _3" id="loc_label">Location</div>
-            <div class="column lic_column _7" id="loc_value"></div>
-          </div>
+
           
 
-          <div class="row lic_row" id="details">
-            <div class="column lic_column _3" id="details_label">Details</div>
-            <div class="column lic_column _7" id="details_value"></div>
+          <div class="row lic_row" id="loc">
+            <div class="column lic_column _3" id="loc_label">Address</div>
+            <div class="column lic_column _7" id="loc_value"></div>
+          </div>
+      
+
+          
+          <div class="row lic_row" id="zip">
+            <div class="column lic_column _3" id="zip_label">Zip</div>
+            <div class="column lic_column _7" id="zip_value"></div>
+          </div>
+
+
+
+
+          <div class="row lic_row" id="em">
+            <div class="column lic_column _3" id="em_label">Email</div>
+            <div class="column lic_column _7" id="em_value"></div>
+          </div>
+                    
+
+
+          <div class="row lic_row" id="ph">
+            <div class="column lic_column _3" id="ph_label">Phone</div>
+            <div class="column lic_column _7" id="ph_value"></div>
+          </div>
+                    
+
+
+
+          <div class="row lic_row" id="det">
+            <div class="column lic_column _3" id="det_label">Details</div>
+            <div class="column lic_column _7" id="det_value"></div>
           </div>
 
 
@@ -267,17 +298,17 @@
           </div>
 
 
-          <div class="row lic_row" id="posted_by">
-            <div class="column lic_column _3" id="posted_by_label">Posted By</div>
-            <div class="column lic_column _7" id="posted_by_value"></div>
+          <div class="row lic_row" id="creator">
+            <div class="column lic_column _3" id="creator_label">Posted By</div>
+            <div class="column lic_column _7" id="creator_value"></div>
           </div>
           
 
           
 
-          <div class="row lic_row" id="price">
-            <div class="column lic_column _3" id="price_label">Price</div>
-            <div class="column lic_column _7" id="price_value"></div>
+          <div class="row lic_row" id="pr">
+            <div class="column lic_column _3" id="pr_label">Price</div>
+            <div class="column lic_column _7" id="pr_value"></div>
           </div>
 
 
@@ -326,6 +357,8 @@
     import { initTradesColumn, getAllTrades } from "./js/trades.js";   
     import { loadCalendar, loadUserLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
+    import { getCurrentLeed, }  from "./js/leed.js";
+    import { showLeedAction } from "./js/action.js";
     import { printError, throwError, errorModal } from "./js/error.js";
 
     import { USERNAME_URL_PARAM } from "./js/dbTools.js";
@@ -453,12 +486,28 @@
             SCREEN_SIZE = 2;
             SIDE_OPEN = true;
              
-            if ( false ) // FIXME FIXME is there a leed current?
-              actionColumn();
-            else
+
+
+            // Is there a current leed in cache
+            // possibly just being edited in another window?
+            let current_leed = getCurrentLeed();
+            console.log("%cGOT CURRENT LEED: ","color:indigo;");
+            console.log(current_leed);
+            
+            if ( current_leed.id != null ) {
+              showLeedAction(current_leed);
+            
+              let closeBut = document.getElementById("buy_modal_close");
+              if (closeBut != null) closeBut.style.display = "none";
+            
+            } else {
               welcomeColumn();
+            }
             
             break;
+
+
+            
   
           default:
             console.error("--screen_size not found");
@@ -484,22 +533,6 @@
         
         let closeBut = document.getElementById("buy_modal_close");
         closeBut.style.display = "block";
-      }
-
-
-      function actionColumn() {
-
-        let welcome = document.getElementById("welcome_panel");
-        welcome.style.display = "none";
-
-        let action = document.getElementById("action_panel");
-        action.classList.replace("modal", "column");
-        action.style.display = "flex";
-        
-        
-        let closeBut = document.getElementById("buy_modal_close");
-        if (closeBut != null) closeBut.style.display = "none";
-     
       }
 
 
@@ -619,6 +652,12 @@
           }
 
 
+
+          /**
+           * USER
+           *
+           */
+
           // full URL for index.html should include username parameter
           // index.html?un=scott.gross
 
@@ -644,6 +683,8 @@
            if (url_username == null) {
             // use guest account
             printError("No username parameter", "Using Guest Account");
+            
+            // USE GUEST USER
             currentUser = guestUser();
 
 
@@ -651,64 +692,64 @@
           // must contain only alphanum chars
           } else if (! (alphaNum.test( url_username ))) {
             printError("Invalid username: " + url_username, "username can only contain alphanumeric chars");
+            
+            // USE GUEST USER
             currentUser = guestUser();
       
 
       
           } else {
 
-            const cacheUser = getCurrentUser( true );
-            // this will load a cache user if one exists but will not return null
+            try {
+              await initUser( url_username ); // will throw error
+  
+              // return newly-loaded user
+              currentUser = getCurrentUser( false );
 
-            if (url_username == cacheUser) {
-              // use the cache user -- do not go back to the server
-              currentUser = cacheUser;
+            } catch (error) {
+  
+              // for the console
+              printError("initUser", error);
+  
+              // for the UI
+              var msg = "Cannot load user data.<BR>Using guest account.";
+              msg = error + "<BR>" + msg;
+              errorModal( msg );
+  
+              // DO NOT FAIL -- use guest user
+              currentUser = guestUser();   
 
-
-            } else {
-              // this is a new login with a different username
-              // do NOT use the cache user
-              // go BACK to DB and get new user object
-
-                try {
-                  await initUser( url_username ); // will throw error
-      
-                  // return newly-loaded user
-                  currentUser = getCurrentUser( false );
-
-                } catch (error) {
-      
-                  // for the console
-                  printError("initUser", error);
-      
-                  // for the UI
-                  var msg = "Cannot load user data.<BR>Using guest account.";
-                  msg = error + "<BR>" + msg;
-                  errorModal( msg );
-      
-                  // DO NOT FAIL -- use guest user
-                  currentUser = guestUser();   
-                }
             }
+
           }
 
 
           // whatever the current user identity -- continue ....
           // UPDATE the UI with the current user info
+          // user clicks on username --> user edit account page
           let user_href = document.getElementById("user_href");
-          user_href.setAttribute("href", currentUser.email);
           user_href.innerHTML = currentUser.username;
+          user_href.setAttribute("href", "#");
+          user_href.addEventListener( "click", (event) => {    
+            openUserEdit();
+          });
+
 
           if (isGuestUser()) {
             user_href.style.color = "darkorange";
 
             let dot = document.getElementById("up_dot");
             dot.style.backgroundColor = "darkorange";
+            // do nothing on click
+            user_href.setAttribute("href", "#");
+            // user_href.addEventListener( "click", (event) => { });
           }
 
 
           
           /**
+           * TRADES
+           *
            * LOAD ALL trades and turn ON the ones subscribed to
            * when we turn ON a trade this will ALSO load the leedz
            * for each trade in currentUser.subs[]

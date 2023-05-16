@@ -52,91 +52,73 @@ export function isGuestUser() {
 
 
 /**
+ * @param username then user login
+ * 
+ * If this is the same as the cache user - load the cache user
+ * If this is a new username, go back to the DB for a new user object
  * 
  * CREATE and CACHE a fully-formed JSON user object CURRENT_USER
  * [ { username: "value", email, "value", ... } ] 
  * 
  * or throw Error
  */
-export async function initUser( username ) {
+export async function initUser( login ) {
 
+    const cacheUser = getCurrentUser(true);
+    if (cacheUser.username == login) {
+      // this is the same user from another browser window -- do NOT go back to server
+      // CURRENT_USER == cacheUser;
+
+    } else {
+
+      //   client <---> API Gateway <===> DB
+      //
+      // GET the user JSON data from the server
+      // UPDATE CURRENT_USER with new values from DB
+      //
+      let resObj = [];   
+      try {
+        // get the user object
+        await db_getUser( login )
+        .then(data => {
   
-    CURRENT_USER = getCurrentUser(false);
-
-    // is there a cache user?
-    const cacheUser = loadCacheUser();
-    if (cacheUser != null) {
-
-      // if the usernames match
-      // start init() with the last saved cache user
-      if (cacheUser.username == CURRENT_USER.username) {
-        CURRENT_USER = cacheUser;
-      } 
-      // else -- the cache user does not match
-      // we will overwrite the cache user at the end of initUser()
-
-    }   
-    
-
-    // console.log("initUser()");
-    // console.log(CURRENT_USER);
-
-    let resObj = [];
-
-    //   client <---> API Gateway <===> DB
-    //
-    // GET the user JSON data from the server
-    // UPDATE CURRENT_USER with new values from DB
-    //
- 
-    try {
-      // get the user object
-      await db_getUser( username )
-      .then(data => {
-
-        if (data == null) throw new Error("null response from GET");
-        resObj = data[0];
-
-      })
-      .catch(error => {
-        printError("db_getUser", error);
-        throwError('db_getUser', 'Problem with fetch operation:' + error.message);
-      });
-
-
-      // update CURRERNT_USER
-      // some fields are mandatory and will always contain values
-      // some are optional and may be null
-      // if statements are in case cache version is more recent
-      // 
-      CURRENT_USER.username = resObj.creator;
-      CURRENT_USER.email = resObj.email;
-
-      if (resObj.website != null)
-        CURRENT_USER.website = resObj.website;
+          if (data == null) throw new Error("null response from GET");
+          resObj = data[0];
   
-      if (resObj.about != null)
-       CURRENT_USER.about = resObj.about;
+        })
+        .catch(error => {
+          printError("initUser", "Error initializing user: " + login);
+          printError("db_getUser", error);
+          throwError('db_getUser', 'Problem with fetch operation:' + error.message);
+        });
 
-      if (resObj.zip_home != null)
-        CURRENT_USER.zip_home = resObj.zip_home;
-  
-      if (resObj.zip_radius != null)
-        CURRENT_USER.zip_radius = resObj.zip_radius;
- 
-      CURRENT_USER.subs = (resObj.subs != null) ? resObj.subs : [];
-      CURRENT_USER.leedz_bought = (resObj.leedz_bought != null) ? resObj.leedz_bought : [];
+        // copy the new values into CURRENT_USER
 
-    } catch (error) {
+        // some fields are mandatory and will always contain values
+        // some are optional and may be null
+        // if statements are in case cache version is more recent
+        // 
+        CURRENT_USER.username = resObj.creator;
+        CURRENT_USER.email = resObj.email;
 
-      printError( "getUser", error.message );
-      throwError( "initUser", error); // !!!
+        CURRENT_USER.website = (resObj.website != null) ? resObj.website : null;
+        CURRENT_USER.about = (resObj.about != null) ? resObj.about : null;
+        CURRENT_USER.zip_home = (resObj.zip_home != null) ? resObj.zip_home : null;
+        CURRENT_USER.zip_radius = (resObj.zip_radius != null) ? resObj.zip_radius : null;
+
+        CURRENT_USER.subs = (resObj.subs != null) ? resObj.subs : [];
+        CURRENT_USER.leedz_bought = (resObj.leedz_bought != null) ? resObj.leedz_bought : [];
+
+      } catch (error) {
+
+        printError( "getUser", error.message );
+        throwError( "initUser", error); // !!!
+      }
+
+      // save modified CURRENT_USER to session storage
+      saveCacheUser( CURRENT_USER );
     }
-
-    // save modified CURRENT_USER to session storage
-    saveCacheUser( CURRENT_USER );
-
-
+    
     // console.log("%cLOADED USER: " + CURRENT_USER.username, "color:darkorange");
     // console.log(CURRENT_USER);
 

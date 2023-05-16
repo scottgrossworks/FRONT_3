@@ -6,14 +6,17 @@
 
 #action_panel {
 
+    
+    height:100%;
+
+
     /* screen size-dependent -->  display:flex; */
-    flex-direction: column;
     background-color: white;
 
     border-left:2px solid lightgray;
 
     vertical-align: middle;
-    align-items:start;
+
     text-align: start;
 
 
@@ -22,7 +25,6 @@
     margin-left:0;
     margin-right:auto;
 
-    overflow-y: scroll;
 }
 
 
@@ -34,7 +36,7 @@
 
 
     width:94%;
-    height:fit-content;
+    height:70vh;
 
     padding: 0;
     margin: 0 0 0 6px;
@@ -44,7 +46,11 @@
     border: 2px solid var(--LEEDZ_DARKGREEN);
 
     font-size:1.1em;
+    
+    overflow-y:scroll;
 }
+
+
 
 .lic_row {
     
@@ -69,6 +75,9 @@
 }
 
 
+
+
+
 #leed_title {
 
     align-items: start;
@@ -79,6 +88,15 @@
 }  
 
 
+
+
+
+.buy2show {
+
+    background-color: var(--LEEDZ_GREEN);
+    color:black;
+    font-weight: 600;
+}
 
 
 #lic_color {
@@ -120,7 +138,7 @@
 }
 
 
-#price_value {
+#pr_value {
 
     color:black;
     background-color: var(--LEEDZ_GREEN);
@@ -128,7 +146,9 @@
     font-family: var(--FONT_1);
     font-size: larger;
     font-weight:600;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
+
+    padding:10px;
 }
 
 
@@ -195,22 +215,22 @@ img#shopping_cart {
     
     text-decoration: none;
 
-    font-size:2.25em;
+    font-size:2em;
     font-weight: bolder;
 
     width:max-content;
     height:max-content;
 
-    margin-top:30px;
+    margin-top:5vh;
 
-    padding-top:25px;
-    padding-bottom:15px;
-    padding-left:30px;
-    padding-right:30px;
+    padding-top:20px;
+    padding-bottom:10px;
+    padding-left:20px;
+    padding-right:20px;
  
-    border-radius: 20px;
+    border-radius: 16px;
 
-    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
+    box-shadow: 0px 2px 12px 0px rgba(0,0,0,0.2);    
 }
 
 

@@ -30,213 +30,242 @@
 
 
 			
-			<div class="row" style="width:100vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+			<div class="row titleRow">
 
-			<div class="column _1">
+			    <div class="column _1">
 
-				<button class="back_button" style="margin:35px 20px; width:50px"><a href="#" onclick="backButton()">&#10140;</a></button>
-				</div>
+                    <button class="back_button" style="margin:35px 20px; width:50px"><a href="#" onclick="backButton()">&#10140;</a></button>
+                    </div>
 
-				<div class="column _2"></div>
-				<div class="column _4" style="margin:auto 0;transform:translateY(6px)">
-					<h1 class="user_title">Edit Leed</h1>
-				</div>
-				
-				<div class="column _3" style="padding:6px;text-align:center">
-				<img src="./img/logo_2.png" style="width:120px">
-				</div>
-			
+                    <div class="column _2"></div>
+                    <div class="column _4" style="margin:auto 0;transform:translateY(6px)">
+                        <h1 class="user_title">Edit Leed</h1>
+                    </div>
+                    
+                    <div class="column _3" style="padding:6px;text-align:center">
+                    <img src="./img/logo_2.png" style="width:120px">
+                    </div>
+                
 			
 		
-			</div>
-
+			    </div>
+            <div>
 
 			
-<section>
 
 	<BR>	
-	<BR>
 
 
-			
-        <!--
-        
-LEED PREVIEW
-        {
-            "id": 1001, 
-            "creator": "dave.reyes", 
-            "zip": "90034", 
-            "start": 1680635460000, 
-            "end": 1680639060000, 
-            "trade": "caricatures",
-            "note": "This is Leed ID 1001 fun times"
-        },
-
-LEED DETAILS
-    {
-        "id": 1004,
-        "loc": "1001 Airbrush Lane, Los Angeles, CA 90056",  
-        "det": "1004 staff app1 These are the potentially-longwinded leed details for staff appreciation party, leed id: 1004",
-        "reqs": "1004 staff app2 These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
-        "price": "40"
-    }
+<div class="row" id="form_container">
+    <ul style="list-style:none;">
 
 
-        -->
-        
+        <li>
+        <table>
 
-<table>
 
-   
+            <tr id="row_trade">
+                            
+                <TD class="labelTD">Trade Name: </TD>
+                
+                <td id="td_trade" data-inlineType="trade_name" data-inlineName="trade" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
-    <tr id="row_trade">
-					
-        <TD class="labelTD">Trade Name: </TD>
-        
-        <td id="td_trade" data-inlineType="trade_name" data-inlineName="trade" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="inlineEdit('row_trade', defaultOptions)"/>
+                </td>
 
-        <td data-inlineType="doneButton" class="buttonTD">
-            <input type="button" value="Edit" onclick="inlineEdit('row_trade', defaultOptions)"/>
-        </td>
-    </tr>
+                <TD class="eyeballTD"><img src="./img/eye_show.png"  id="trade_eye" class="lock"></TD>
+            </tr>
 
 
 
 
-        <tr id="row_note">
-					
-            <TD class="labelTD">Title: </TD>
+            <tr id="row_note">
+                        
+                <TD class="labelTD">Title: </TD>
+                
+                <td id="td_note" data-inlineType="text" data-inlineName="note" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="inlineEdit('row_note', defaultOptions)"/>
+                </td>
+
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="note_eye" class="lock"></TD>
+            </tr>
+
+
+
+            <!-- FIXMEFIXMEFIXME date/time chooser -->
+            <tr id="row_start">
+                        
+                <TD class="labelTD">Start Time: </TD>
+                
+                <td id="td_start" data-inlineType="text" data-inlineName="start" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="inlineEdit('row_start', defaultOptions)"/>
+                </td>
+
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="start_eye" class="lock"></TD>
+            </tr>
+
+
+                    
+            <!-- FIXMEFIXMEFIXME date/time chooser -->
+            <tr id="row_end">
+                        
+                <TD class="labelTD">End Time: </TD>
+                
+                <td id="td_end" data-inlineType="text" data-inlineName="end" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="inlineEdit('row_end', defaultOptions)"/>
+                </td>
+
+               <TD class="eyeballTD"><img src="./img/eye_show.png"  id="end_eye" class="lock"></TD>
+            </tr>
+
+
+
+            <!-- ADDRESS 
             
-            <td id="td_note" data-inlineType="text" data-inlineName="note" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
+            FIXME FIXME FIXME
+            need special validation for address
+            read zip from last 5 digits of address.trim()
+            -->
+            <tr id="row_loc">
+                        
+                <TD class="labelTD">Address: </TD>
+                
+                <td id="td_loc" data-inlineType="text" data-inlineName="loc" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
-            <td data-inlineType="doneButton" class="buttonTD">
-                <input type="button" value="Edit" onclick="inlineEdit('row_note', defaultOptions)"/>
-            </td>
-        </tr>
-
-
-
-        
-        <!-- FIXMEFIXMEFIXME date/time chooser -->
-        <tr id="row_start">
-					
-            <TD class="labelTD">Start: </TD>
-            
-            <td id="td_start" data-inlineType="text" data-inlineName="start" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
-
-            <td data-inlineType="doneButton" class="buttonTD">
-                <input type="button" value="Edit" onclick="inlineEdit('row_start', defaultOptions)"/>
-            </td>
-        </tr>
-
-
-        
-
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="inlineEdit('row_loc', defaultOptions)"/>
+                </td>
 
                 
-        <!-- FIXMEFIXMEFIXME date/time chooser -->
-        <tr id="row_end">
-					
-            <TD class="labelTD">End: </TD>
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="loc_eye" eyeball="show" onclick="toggleEyeball('loc')"></TD>
+            </tr>
+
+
+
+            <!-- LEED PHONE 
+            FIXME FIXME FIXME special validation
+            -->
+            <tr id="row_ph">
+                            
+                <TD class="labelTD">Client Phone: </TD>
+                
+                <td id="td_ph" data-inlineType="tel" data-inlineName="ph" data-inlineRequired="0"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="inlineEdit('row_ph', defaultOptions)"/>
+                </td>
+
+                
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="ph_eye" eyeball="show" onclick="toggleEyeball('ph')"></TD>
+            </tr>
+
+
+
+
+            <!-- LEED EMAIL 
+            FIXME FIXME FIXME special validation
+            -->
+            <tr id="row_em">
+                            
+                <TD class="labelTD">Client Email: </TD>
+                
+                <td id="td_em" data-inlineType="email" data-inlineName="em" data-inlineRequired="0"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="inlineEdit('row_em', defaultOptions)"/>
+                </td>
+
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="em_eye" eyeball="show" onclick="toggleEyeball('em')"></TD>
+            </tr>
+
+
+
+
+            <!-- LEED DETAILS -->
+            <tr id="row_det">
+                        
+                <TD class="labelTD">Details: </TD>
+                
+                <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="inlineEdit('row_det', defaultOptions)"/>
+                </td>
+
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="det_eye" eyeball="show" onclick="toggleEyeball('det')"></TD>
+            </tr>
+
+
+
             
-            <td id="td_end" data-inlineType="text" data-inlineName="end" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
+            <!-- LEED REQUIREMENTS -->
+            <tr id="row_reqs">
+                        
+                <TD class="labelTD">Requirements: </TD>
+                
+                <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0"></td>
 
-            <td data-inlineType="doneButton" class="buttonTD">
-                <input type="button" value="Edit" onclick="inlineEdit('row_end', defaultOptions)"/>
-            </td>
-        </tr>
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="inlineEdit('row_reqs', defaultOptions)"/>
+                </td>
+
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="reqs_eye" eyeball="show" onclick="toggleEyeball('reqs')"></TD>
+            </tr>
+
+
+            
+            <!-- LEED PRICE -->
+            <tr id="row_det">
+                        
+                <TD class="labelTD">Price: </TD>
+                
+                <td id="td_pr" data-inlineType="text" data-inlineName="pr" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="inlineEdit('row_price', defaultOptions)"/>
+                </td>
+
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="price_eye" class="lock"></TD>
+            </tr>
 
 
 
-        <!-- ADDRESS 
+                    
+
+
+        </table>	
+        </li>
+
+    </ul>
+</div>
+
+
+<div class="row">
+        <!-- SAVE CHANGES BUTTON -->
+        <button id="saveButton" class="button save_button" value="save" style="opacity:0.5" onclick="saveChanges()">Save Changes</button>
+</div>
         
-        FIXME FIXME FIXME
-        need special validation for address
-        read zip from last 5 digits of address.trim()
-        -->
-        <tr id="row_loc">
-					
-            <TD class="labelTD">Address: </TD>
-            
-            <td id="td_loc" data-inlineType="text" data-inlineName="loc" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
 
-            <td data-inlineType="doneButton" class="buttonTD">
-                <input type="button" value="Edit" onclick="inlineEdit('row_loc', defaultOptions)"/>
-            </td>
-        </tr>
+
+<div class="row">
+        <!-- DELETE BUTTON -->
+        <button id="delButton" class="button del_button" value="del" style="opacity:1.0" onclick="deleteLeed()">Delete Leed</button>
+</div>
 
 
 
-        <!-- LEED DETAILS -->
-        <tr id="row_det">
-					
-            <TD class="labelTD">Details: </TD>
-            
-            <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
-
-            <td data-inlineType="doneButton" class="buttonTD">
-                <input type="button" value="Edit" onclick="inlineEdit('row_det', defaultOptions)"/>
-            </td>
-        </tr>
+    <BR>
+    <BR>
 
 
-
-        
-        <!-- LEED REQUIREMENTS -->
-        <tr id="row_reqs">
-					
-            <TD class="labelTD">Requirements: </TD>
-            
-            <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0"></td>
-
-            <td data-inlineType="doneButton" class="buttonTD">
-                <input type="button" value="Edit" onclick="inlineEdit('row_reqs', defaultOptions)"/>
-            </td>
-        </tr>
-
-
-        
-        <!-- LEED PRICE -->
-        <tr id="row_det">
-					
-            <TD class="labelTD">Price: </TD>
-            
-            <td id="td_price" data-inlineType="text" data-inlineName="price" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
-
-            <td data-inlineType="doneButton" class="buttonTD">
-                <input type="button" value="Edit" onclick="inlineEdit('row_price', defaultOptions)"/>
-            </td>
-        </tr>
-
-
-
-				
-
-
-			</table>	
-
-
-
-
-			<!-- SAVE CHANGES BUTTON -->
-			<button id="saveButton" class="button save_button" value="save" style="opacity:0.5" onclick="saveChanges()">Save Changes</button>
-			
-			
-            <BR>
-	
-
-			<!-- DELETE BUTTON -->
-			<button id="delButton" class="button del_button" value="del" style="opacity:1.0" onclick="deleteLeed()">Delete Leed</button>
-			
-			
-
-
-
-			<BR>
-			<BR>
-				
-
-	</body>
+</body>
 
 
 	<script type="module">
@@ -244,11 +273,12 @@ LEED DETAILS
         import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname, getShortDateString } from "./js/dates.js";
 		import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
 		import { inlineEdit } from "./js/inline-edit.js";
-
-        import { clearCurrentLeed, getCurrentLeed, blankLeedObject } from "./js/leed.js"
+        import { getCurrentUser } from "./js/user.js";
+        import { clearCurrentLeed, getCurrentLeed, blankLeedObject, saveLeedChanges } from "./js/leed.js";
 		import { printError, throwError, errorModal } from "./js/error.js";
 		
         import { CACHE_LEED_KEY } from "./js/leed.js";
+        import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 
 
 
@@ -345,14 +375,26 @@ LEED DETAILS
         element = document.getElementById("td_loc");
         element.innerHTML = CURRENT_LEED.loc;
 
+
+
+        element = document.getElementById("td_em");
+        element.innerHTML = CURRENT_LEED.em;
+
+        element = document.getElementById("td_ph");
+        element.innerHTML = CURRENT_LEED.ph
+
+
+
+
         element = document.getElementById("td_det");
         element.innerHTML = CURRENT_LEED.det;
 
         element = document.getElementById("td_reqs");
         element.innerHTML = CURRENT_LEED.reqs;
 
-        element = document.getElementById("td_price");
-        element.innerHTML = "<B>$&nbsp;" + CURRENT_LEED.price + "</B>";
+
+        element = document.getElementById("td_pr");
+        element.innerHTML = "<B>$&nbsp;" + CURRENT_LEED.pr + "</B>";
 
 
 
@@ -382,6 +424,7 @@ LEED DETAILS
 
         const LEED_CHANGES = blankLeedObject();
 
+
 		function defaultCallback(rowData, rowName) {
 
 			beginEditing();
@@ -403,6 +446,21 @@ LEED DETAILS
                 case "row_end":
                     LEED_CHANGES.end = rowData["end"];
                     break;
+
+
+                case "row_em":
+                    LEED_CHANGES.em = rowData["em"];
+                    break;
+
+                case "row_ph":
+                    LEED_CHANGES.ph = rowData["ph"];
+                    break;
+
+
+                case "row_zip":
+                    LEED_CHANGES.loc = rowData["zip"];
+                    break;
+
 
 				case "row_loc":
 					LEED_CHANGES.loc = rowData["loc"];
@@ -476,21 +534,59 @@ LEED DETAILS
 
 			endEditing();
 		}
+		window.saveChanges = saveChanges;
 
+
+
+        //
+        //
+        //
+        function toggleEyeball( fieldName ) {
+            
+            beginEditing();
+
+
+            let theImg = document.getElementById(fieldName + "_eye");
+      
+
+            if (theImg.eyeball == "hide") {
+
+                theImg.src = "./img/eye_show.png";
+                theImg.eyeball = "show";
+                theImg.style.opacity = 1;
+                LEED_CHANGES.opts[fieldName] = "show";
+
+            } else {
+                
+                theImg.src = "./img/eye_hide.png";
+                theImg.eyeball = "hide";
+                theImg.style.opacity = 0.35;
+                LEED_CHANGES.opts[fieldName] = "hide";
+            }
+
+                        
+            console.log("TOGGLING CL=");
+            console.log(LEED_CHANGES);
+
+        }
+        window.toggleEyeball = toggleEyeball;
+
+        
+
+
+		function deleteLeed() {
+            console.log("DELETE LEED");
+
+            // FIXME FIXME FIXME some kind of feedback that leed successfully deleted
+		}
+		window.deleteLeed = deleteLeed;
 
 
 
 		var defaultOptions = { "finishCallback": defaultCallback };
 
-
-
-
 		window.inlineEdit = inlineEdit;
 		window.defaultOptions = defaultOptions;
-
-
-		window.saveChanges = saveChanges;
-
 
 
 	

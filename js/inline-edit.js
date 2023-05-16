@@ -54,13 +54,7 @@ export function inlineEdit(rowName, options) {
         var cell = tableRow.children[i];
 
         inlineEditRowContents[rowName][i] = cell.innerHTML.trim();
-        if (options.hasOwnProperty("updateCell")) {
-            options.updateCell(cell, i, rowName, options);
-        } else {
-            inlineDefaultUpdateCell(cell, i, rowName, options);
-        }
-   
-   
+        inlineDefaultUpdateCell(cell, i, rowName, options);   
     }
 }
 
@@ -260,6 +254,17 @@ function isNumOnly( str ) {
 
 
 
+function trimAndRemoveSpaces(inputString) {
+    // Trim leading/trailing white spaces and remove spaces in between
+    let trimmedString = inputString.trim().replace(/\s+/g, " ");
+    // Replace all single spaces with ""
+    let resultString = trimmedString.replace(/ /g, "");
+
+    return resultString;
+}
+
+
+
 function inlineDefaultFinish(rowName, options) {
    
    
@@ -276,14 +281,14 @@ function inlineDefaultFinish(rowName, options) {
                 
                 if (theVal.length != 5) {
                     let errMsg = "Zip code must be 5 digits";
-                    printError("inlineDefaultFinish()", errMsg );
+                    printError("inlineDefaultFinish", errMsg );
                     alert(errMsg);
                     return;
                 }
 
                 if (! isNumOnly( theVal )) {
                     let errMsg = "Zip code must be all digits";
-                    printError("inlineDefaultFinish()", errMsg );
+                    printError("inlineDefaultFinish", errMsg );
                     alert(errMsg);
                     return;
                 }
@@ -297,6 +302,31 @@ function inlineDefaultFinish(rowName, options) {
 
 
 
+            case "tel":
+                
+                var theVal = cell.children[getFromChildren].value;
+                if (theVal.length < 10) {
+                    let errMsg = "Invalid phone #: " + theVal;
+                    printError("inlineDefaultFinish", errMsg );
+                    alert(errMsg);
+                    return;
+                }
+
+
+                let trimString = trimAndRemoveSpaces( theVal );
+
+
+                if (trimString.length != 10) {
+                    let errMsg = "Phone # must be 10 digits";
+                    printError("inlineDefaultFinish", errMsg );
+                    alert(errMsg);
+                    return;
+                }
+
+                rowData[cell.dataset.inlinename] = trimString;
+                inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace( trimString );
+                break;
+
 
 
 
@@ -304,7 +334,9 @@ function inlineDefaultFinish(rowName, options) {
 
                 var theVal = cell.children[getFromChildren].value;
 
+                //
                 // is this a valid trade name?  If not -- show error and force re-enter
+                //
                 if (! (isValidTrade(theVal)))  {
                     let errMsg = "Invalid trade name: " + theVal;
                     printError("inlineDefaultFinish()", errMsg );
@@ -335,11 +367,27 @@ function inlineDefaultFinish(rowName, options) {
                 break;
             case "text":
             case "date":
-            case "tel":
             case "email":
-                rowData[cell.dataset.inlinename] = cell.children[getFromChildren].value;
-                inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace(cell.children[getFromChildren].value);
+
+                var theVal = cell.children[getFromChildren].value;
+
+                //
+                // is this a valid email?  If not -- show error and force re-enter
+                //
+                if (! theVal.contains('@')) {
+                    let errMsg = "Invalid email: " + theVal;
+                    printError("inlineDefaultFinish()", errMsg );
+                    alert(errMsg);
+                    return;
+                }
+
+                rowData[cell.dataset.inlinename] = theVal;
+                inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace( theVal );
                 break;
+
+
+
+
             case "select":
 
                 rowData[cell.dataset.inlinename] = cell.children[getFromChildren].selectedIndex;                
@@ -403,6 +451,7 @@ export function inlineDefaultFinishCell(cell, i, rowName) {
 
 
 
+//
 
 export function inlineURLFinishCell(cell, i, rowName) {
 

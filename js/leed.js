@@ -1,7 +1,6 @@
 /**
  * 
  */
-import { db_getUser } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 
 
@@ -37,7 +36,8 @@ LEED DETAILS
         "det": "1004 staff app1 These are the potentially-longwinded leed details for staff appreciation party, leed id: 1004",
         "reqs": "1004 staff app2 These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
         "em": "scottgrossworks@gmail.com",
-        "price": "40"
+        "ph": "123456789",
+        "pr": "40"
     }
 
 */
@@ -59,11 +59,17 @@ export function blankLeedObject() {
     BLANK_LEED.start = null;
     BLANK_LEED.end = null;
 
+    BLANK_LEED.em = null;
+    BLANK_LEED.ph = null;
+
     BLANK_LEED.note = null;
     BLANK_LEED.details = null;
     BLANK_LEED.reqs = null;
 
-    BLANK_LEED.price = null;
+    BLANK_LEED.pr = null;
+
+
+    BLANK_LEED.opts = {};
 
     return BLANK_LEED;
   }
@@ -100,24 +106,34 @@ export function setCurrentLeed( jsonObj ) {
 
     if (jsonObj == null)
         throwError("setCurrentLeed", "leed JSON is null");
-
   
     CURRENT_LEED.id = jsonObj.id;
-    CURRENT_LEED.creator = jsonObj.creator;
 
-    CURRENT_LEED.trade = jsonObj.trade;
+    if (jsonObj.creator != null) CURRENT_LEED.creator = jsonObj.creator;
+
+    if (jsonObj.trade != null) CURRENT_LEED.trade = jsonObj.trade;
+    if (jsonObj.zip != null) CURRENT_LEED.zip = jsonObj.zip;
+    if (jsonObj.loc != null) CURRENT_LEED.loc = jsonObj.loc;
     
-    CURRENT_LEED.zip = jsonObj.zip;
-    CURRENT_LEED.loc = jsonObj.loc;
+    if (jsonObj.start != null) CURRENT_LEED.start = jsonObj.start;
+    if (jsonObj.end != null) CURRENT_LEED.end = jsonObj.end;
 
-    CURRENT_LEED.start = jsonObj.start;
-    CURRENT_LEED.end = jsonObj.end;
+    if (jsonObj.em != null) CURRENT_LEED.em = jsonObj.em;
+    if (jsonObj.ph != null) CURRENT_LEED.ph = jsonObj.ph;
 
-    CURRENT_LEED.note = jsonObj.note;
-    CURRENT_LEED.det = jsonObj.det;
-    CURRENT_LEED.reqs = jsonObj.reqs;
+    if (jsonObj.note != null) CURRENT_LEED.note = jsonObj.note;
+    if (jsonObj.det != null) CURRENT_LEED.det = jsonObj.det;
+    if (jsonObj.reqs != null) CURRENT_LEED.reqs = jsonObj.reqs;
 
-    CURRENT_LEED.price = jsonObj.price;
+    if (jsonObj.pr != null) CURRENT_LEED.pr = jsonObj.pr;
+
+    if ((jsonObj.opts != null) && (jsonObj.opts.length != 0)) CURRENT_LEED.opts = jsonObj.opts;
+
+
+    console.log("CACHING LEED");
+
+    console.log(CURRENT_LEED);
+
 
     saveCacheLeed( CURRENT_LEED );
 }
@@ -139,6 +155,9 @@ export function clearCurrentLeed() {
     CURRENT_LEED.zip = null;
     CURRENT_LEED.loc = null;
 
+    CURRENT_LEED.em = null;
+    CURRENT_LEED.ph = null;
+
     CURRENT_LEED.start = null;
     CURRENT_LEED.end = null;
 
@@ -146,7 +165,9 @@ export function clearCurrentLeed() {
     CURRENT_LEED.det = null;
     CURRENT_LEED.reqs = null;
 
-    CURRENT_LEED.price = null;
+    CURRENT_LEED.pr = null;
+
+    CURRENT_LEED.opts = {};
 
 }
 
@@ -234,11 +255,16 @@ export function loadCacheLeed() {
     CURRENT_LEED.start = cacheObj.start;
     CURRENT_LEED.end = cacheObj.end;
 
+    CURRENT_LEED.em = cacheObj.em;
+    CURRENT_LEED.ph = cacheObj.ph;
+
     CURRENT_LEED.note = cacheObj.note;
     CURRENT_LEED.det = cacheObj.det;
     CURRENT_LEED.reqs = cacheObj.reqs;
 
-    CURRENT_LEED.price = cacheObj.price;
+    CURRENT_LEED.pr = cacheObj.pr;
+
+    CURRENT_LEED.opts = cacheObj.opts;
 
 }
 
@@ -313,26 +339,15 @@ function loadLeedzFromCache( theDay ) {
 
 
 /** 
-    BLANK_LEED.id = null;
-    BLANK_LEED.creator = null;
-
-    BLANK_LEED.trade = null;
-    
-    BLANK_LEED.loc = null;
-    BLANK_LEED.zip = null;
-    BLANK_LEED.start = null;
-    BLANK_LEED.end = null;
-
-    BLANK_LEED.note = null;
-    BLANK_LEED.details = null;
-    BLANK_LEED.reqs = null;
-
-    BLANK_LEED.price = null;
-
+ *
  * the leed has updated info
  * JSON-serialize the changes
  */
 export function saveLeedChanges( leedObj ) {
+
+  console.log("saveLeedChanges()");
+  console.log(leedObj);
+  
 
   if (leedObj == null)
     throwError("saveLeedChanges", "null leed object");
@@ -340,61 +355,74 @@ export function saveLeedChanges( leedObj ) {
   if (CURRENT_LEED == null)
     throwError("saveLeedChanges", "CURRENT_LEED is null");
 
-  if (leedObj.id == null)
-      throwError("saveLeedChanges", "leed id must be set");
 
+  /*
+   * cannot be changed
+   *
   CURRENT_LEED.id = leedObj.id;
+  CURRENT_LEED.creator = leedObj.creator;
+  */
 
-  if (leedObj.creator != null)
-    CURRENT_LEED.creator = leedObj.creator;
 
   if (leedObj.trade != null)
     CURRENT_LEED.trade = leedObj.trade;
 
 
-  if (leedObj.loc != null)
-    CURRENT_LEED.website = leedObj.website;
-
-
-
-    // FIXME FIXME FIXME
-    // get the ZIP from last 5 digits of address after trim
   if (leedObj.zip != null)
     CURRENT_LEED.zip = leedObj.zip;
-    // FIXME FIXME FIXME
+
+    
+  if (leedObj.loc != null)
+    CURRENT_LEED.loc = leedObj.loc;
+
 
   if (leedObj.start != null)
     CURRENT_LEED.start = leedObj.start;
+
 
   if (leedObj.end != null)
     CURRENT_LEED.end = leedObj.end;
 
 
+  if (leedObj.em != null)
+    CURRENT_LEED.em = leedObj.em;
+
+    
+  if (leedObj.ph != null)
+    CURRENT_LEED.ph = leedObj.ph;
+
 
   if (leedObj.note != null)
     CURRENT_LEED.note = leedObj.note;
     
-  if (leedObj.details != null)
-    CURRENT_LEED.details = leedObj.details;
+  if (leedObj.det != null)
+    CURRENT_LEED.det = leedObj.det;
 
   if (leedObj.reqs != null)
     CURRENT_LEED.reqs = leedObj.reqs;
 
 
-  if (leedObj.price != null)
-    CURRENT_LEED.price = leedObj.price;
+  if (leedObj.pr != null)
+    CURRENT_LEED.pr = leedObj.pr;
 
+  if ((leedObj.opts != null) && (leedObj.opts.length != 0))
+    CURRENT_LEED.opts = leedObj.opts;
 
   
-  cacheLeed( CURRENT_LEED );
+  // cache this Leed   
+  saveCacheLeed( CURRENT_LEED );
+  
+
+
   
   // FIXME FIXME FIXME
   // post User changes to server
   // FIXME FIXME FIXME
   // db_updateUser()
   console.log("******** POSTING LEED CHANGES TO SERVER ******* ");
+  console.log("OPTS=" + leedObj.opts);
   console.log(CURRENT_LEED);
-
+  // FIXME FIXME FIXME
 
 }
 

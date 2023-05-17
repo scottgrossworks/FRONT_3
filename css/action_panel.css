@@ -70,7 +70,10 @@
 
 
 .lic_column {
-    padding:14px;
+
+
+    padding: 16px;
+
     border: 1px solid var(--LEEDZ_DARKGRAY);
 }
 
@@ -138,6 +141,13 @@
 }
 
 
+#pr_label {
+
+    font-weight:600;
+    color:darkgreen;
+}
+
+
 #pr_value {
 
     color:black;
@@ -148,7 +158,6 @@
     font-weight:600;
     letter-spacing: 0.06em;
 
-    padding:10px;
 }
 
 

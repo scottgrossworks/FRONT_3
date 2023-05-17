@@ -149,24 +149,8 @@
 
 
 
-            <!-- LEED PHONE 
-            FIXME FIXME FIXME special validation
-            -->
-            <tr id="row_ph">
-                            
-                <TD class="labelTD">Client Phone: </TD>
-                
-                <td id="td_ph" data-inlineType="tel" data-inlineName="ph" data-inlineRequired="0"></td>
 
-                <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="inlineEdit('row_ph', defaultOptions)"/>
-                </td>
-
-                
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="ph_eye" eyeball="show" onclick="toggleEyeball('ph')"></TD>
-            </tr>
-
-
+            
 
 
             <!-- LEED EMAIL 
@@ -184,6 +168,27 @@
 
                 <TD class="eyeballTD"><img src="./img/eye_show.png" id="em_eye" eyeball="show" onclick="toggleEyeball('em')"></TD>
             </tr>
+
+
+
+
+            <!-- LEED PHONE 
+            FIXME FIXME FIXME special validation
+            -->
+            <tr id="row_ph">
+                            
+                <TD class="labelTD">Client Phone: </TD>
+                
+                <td id="td_ph" data-inlineType="tel" data-inlineName="ph" data-inlineRequired="0"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="inlineEdit('row_ph', defaultOptions)"/>
+                </td>
+
+                
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="ph_eye" eyeball="show" onclick="toggleEyeball('ph')"></TD>
+            </tr>
+
 
 
 
@@ -310,12 +315,15 @@
 		var EDITING = false;
 
 		const CURRENT_LEED = getCurrentLeed();
+        const LEED_CHANGES = blankLeedObject();
 
         console.log("GOT CURRENT LEED");
         console.log(CURRENT_LEED);
 
         if (CURRENT_LEED == null)
             throwError("Cannot initialize leed editor: CURRENT_LEED is null");
+
+
 
         var element = null;
         
@@ -366,6 +374,7 @@
         element = document.getElementById("td_start");
         element.innerHTML = fullStartDate + " at " + start_time;
 
+
         element = document.getElementById("td_end");
         element.innerHTML = fullEndDate + " at " + end_time;
 
@@ -374,23 +383,37 @@
 
         element = document.getElementById("td_loc");
         element.innerHTML = CURRENT_LEED.loc;
-
+        if (CURRENT_LEED.opts["loc"] == "hide")
+            toggleEyeball("loc");
+            
 
 
         element = document.getElementById("td_em");
         element.innerHTML = CURRENT_LEED.em;
+        if (CURRENT_LEED.opts["em"] == "hide")
+            toggleEyeball("em");
+
+
 
         element = document.getElementById("td_ph");
         element.innerHTML = CURRENT_LEED.ph
-
+        if (CURRENT_LEED.opts["ph"] == "hide")
+            toggleEyeball("ph");
 
 
 
         element = document.getElementById("td_det");
         element.innerHTML = CURRENT_LEED.det;
+        if (CURRENT_LEED.opts["det"] == "hide")
+        toggleEyeball("det");
+
+
 
         element = document.getElementById("td_reqs");
         element.innerHTML = CURRENT_LEED.reqs;
+        if (CURRENT_LEED.opts["reqs"] == "hide")
+            toggleEyeball("reqs");
+
 
 
         element = document.getElementById("td_pr");
@@ -421,8 +444,6 @@
 
 
 
-
-        const LEED_CHANGES = blankLeedObject();
 
 
 		function defaultCallback(rowData, rowName) {
@@ -563,10 +584,6 @@
                 theImg.style.opacity = 0.35;
                 LEED_CHANGES.opts[fieldName] = "hide";
             }
-
-                        
-            console.log("TOGGLING CL=");
-            console.log(LEED_CHANGES);
 
         }
         window.toggleEyeball = toggleEyeball;

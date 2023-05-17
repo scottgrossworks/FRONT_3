@@ -367,22 +367,33 @@ function inlineDefaultFinish(rowName, options) {
                 break;
             case "text":
             case "date":
+
+                var theVal = cell.children[getFromChildren].value;
+                rowData[cell.dataset.inlinename] = theVal;
+                inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace( theVal );
+        
+
+            break;
+
+
+
             case "email":
 
                 var theVal = cell.children[getFromChildren].value;
-
+                var trimVal = theVal.trim();
                 //
                 // is this a valid email?  If not -- show error and force re-enter
                 //
-                if (! theVal.contains('@')) {
-                    let errMsg = "Invalid email: " + theVal;
+                if (trimVal.indexOf('@') == -1) {
+                    let errMsg = "Invalid email: " + trimVal;
                     printError("inlineDefaultFinish()", errMsg );
                     alert(errMsg);
                     return;
                 }
 
-                rowData[cell.dataset.inlinename] = theVal;
-                inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace( theVal );
+                
+                rowData[cell.dataset.inlinename] = trimVal;
+                inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace( trimVal );
                 break;
 
 

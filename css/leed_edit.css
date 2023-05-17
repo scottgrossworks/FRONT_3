@@ -141,7 +141,9 @@ table tbody td {
 }
 
 .lock {
-	filter:brightness(65%);
+	cursor:default;
+	opacity:25%;
+	filter:brightness(55%);
 }
 
 
@@ -213,7 +215,7 @@ table tbody td {
     width:max-content;
     height:max-content;
 
-    margin-top:20px;
+    margin-top:25px;
 
     padding-top:20px;
     padding-bottom:18px;

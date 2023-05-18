@@ -5,7 +5,7 @@ import { getColorForTrade } from "./trades.js";
 import { db_getDeetz } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 import { getCurrentUser } from "./user.js";
-import { getCurrentLeed, setCurrentLeed } from "./leed.js";
+import { getCurrentLeed, saveCacheLeed, setCurrentLeed } from "./leed.js";
 
 
     
@@ -249,9 +249,11 @@ export async function showLeedAction( leed_preview ) {
     CURRENT_LEED.pr = leed_details.pr;
 
 
-    setCurrentLeed( CURRENT_LEED );
 
 
+    // Now that the new data is copied into CURRENT_LEED
+    // cache the leed
+    saveCacheLeed( CURRENT_LEED );
 
 
 
@@ -321,6 +323,9 @@ export async function showLeedAction( leed_preview ) {
     //
     let action = document.getElementById("action_panel");
     action.style.display = "block";
+
+
+
 
 
 }

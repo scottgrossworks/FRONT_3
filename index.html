@@ -59,7 +59,7 @@
     <div class="row" id="user_panel">
 
       <div class="column _05" style="max-width:45px;"><button id="up_dot"></button></div>
-      <div class="column _2" id="up_left_column"><label><a id="user_href" href=""></a></label></div>
+      <div class="column _25" id="up_left_column"><label><a id="user_href" href=""></a></label></div>
       <div class="column _6"></div>
       <div class="column _15 dropdown" id="up_right_column">
         
@@ -236,78 +236,83 @@
 
             
             <div class="column lic_column" id="lic_date"></div>
+            
+            <div class="column lic_column" id="lic_close">
+              <a id="buy_modal_close" href="javascript:modalClose();">X</a>
+            </div>
+
           </div>
 
 
 
 
           <div class="row lic_row" id="note">
-            <div class="column lic_column _3" id="note_label">Event</div>
-            <div class="column lic_column _7" id="note_value"></div>
+            <div class="column lic_column _25 label" id="note_label">Event</div>
+            <div class="column lic_column _75" id="note_value"></div>
           </div>
 
 
 
           <div class="row lic_row" id="start-end">
-            <div class="column lic_column _3" id="start-end_label">Time</div>
-            <div class="column lic_column _7" id="start-end_value"></div>
+            <div class="column lic_column _25 label" id="start-end_label">Time</div>
+            <div class="column lic_column _75" id="start-end_value"></div>
           </div>
 
 
           
 
           <div class="row lic_row" id="loc">
-            <div class="column lic_column _3" id="loc_label">Address</div>
-            <div class="column lic_column _7" id="loc_value"></div>
+            <div class="column lic_column _25 label" id="loc_label">Address</div>
+            <div class="column lic_column _75" id="loc_value"></div>
           </div>
       
 
           
           <div class="row lic_row" id="zip">
-            <div class="column lic_column _3" id="zip_label">Zip</div>
-            <div class="column lic_column _7" id="zip_value"></div>
+            <div class="column lic_column _25 label" id="zip_label">Zip</div>
+            <div class="column lic_column _75" id="zip_value"></div>
           </div>
 
 
 
 
           <div class="row lic_row" id="em">
-            <div class="column lic_column _3" id="em_label">Email</div>
-            <div class="column lic_column _7" id="em_value"></div>
+            <div class="column lic_column _25 label" id="em_label">Email</div>
+            <div class="column lic_column _75" id="em_value"></div>
           </div>
                     
 
 
           <div class="row lic_row" id="ph">
-            <div class="column lic_column _3" id="ph_label">Phone</div>
-            <div class="column lic_column _7" id="ph_value"></div>
+            <div class="column lic_column _25 label" id="ph_label">Phone</div>
+            <div class="column lic_column _75" id="ph_value"></div>
           </div>
                     
 
 
 
           <div class="row lic_row" id="det">
-            <div class="column lic_column _3" id="det_label">Details</div>
-            <div class="column lic_column _7" id="det_value"></div>
+            <div class="column lic_column _25 label" id="det_label">Details</div>
+            <div class="column lic_column _75" id="det_value"></div>
           </div>
 
 
           <div class="row lic_row" id="reqs">
-            <div class="column lic_column _3" id="reqs_label">Requires</div>
-            <div class="column lic_column _7" id="reqs_value"></div>
+            <div class="column lic_column _25 label" id="reqs_label">Requires</div>
+            <div class="column lic_column _75" id="reqs_value"></div>
           </div>
 
 
           <div class="row lic_row" id="creator">
-            <div class="column lic_column _3" id="creator_label">Posted By</div>
-            <div class="column lic_column _7" id="creator_value"></div>
+            <div class="column lic_column _25 label" id="creator_label">Posted By</div>
+            <div class="column lic_column _75" id="creator_value"></div>
           </div>
           
 
           
           <div class="row lic_row" id="pr">
-            <div class="column lic_column _3" id="pr_label">Price</div>
-            <div class="column lic_column _7" id="pr_value"></div>
+            <div class="column lic_column _25 label" id="pr_label">Price</div>
+            <div class="column lic_column _75" id="pr_value"></div>
           </div>
 
 
@@ -323,8 +328,7 @@
         </div>
 
 
-
-        <a id="buy_modal_close" href="javascript:modalClose();">&#10140;</a>        
+    
       </div>
       
     </div>
@@ -395,7 +399,7 @@
         if (action != null) action.style.display = "none";
 
         let closeBut = document.getElementById("buy_modal_close");
-        if (closeBut != null) closeBut.style.display = "none";
+        closeBut.style.display = "none";
 
       }
       window.modalClose = modalClose;
@@ -490,14 +494,14 @@
             // Is there a current leed in cache
             // possibly just being edited in another window?
             let current_leed = getCurrentLeed();
-            console.log("%cGOT CURRENT LEED: ","color:indigo;");
+            console.log("%cSCREEN SIZE GOT CURRENT LEED: ","color:darkorange;");
             console.log(current_leed);
             
             if ( current_leed.id != null ) {
               showLeedAction(current_leed);
             
               let closeBut = document.getElementById("buy_modal_close");
-              if (closeBut != null) closeBut.style.display = "none";
+              closeBut.style.display = "none";
             
             } else {
               welcomeColumn();
@@ -531,7 +535,7 @@
         action.classList.replace("column", "modal"); 
         
         let closeBut = document.getElementById("buy_modal_close");
-        closeBut.style.display = "block";
+        closeBut.style.display = "flex";
       }
 
 
@@ -547,7 +551,7 @@
         welcome.style.display = "flex";
         
         let closeBut = document.getElementById("buy_modal_close");
-        if (closeBut != null) closeBut.style.display = "none";
+        closeBut.style.display = "none";
       }
 
 
@@ -625,32 +629,6 @@
             col.style.marginLeft = "-120px";
           }
   
-
-
-          /**
-          * 
-          */
-
-          cssScreenSize();
-
-          /**
-          * RESIZE
-          * called on window resize -- but AFTER css applied -- can read values from 
-          * different media_query css files depending on size
-          */
-          window.onresize = (event) => {
-            cssScreenSize();
-          };
-
-
-          // set the trades sidebar      
-          if (SIDE_OPEN) {
-            openNav();
-          } else {
-            closeNav();
-          }
-
-
 
           /**
            * USER
@@ -801,6 +779,38 @@
            * 
            */
           loadUserLeedz();
+
+
+
+
+
+          
+
+
+          /**
+          * 
+          */
+
+          cssScreenSize();
+
+          /**
+          * RESIZE
+          * called on window resize -- but AFTER css applied -- can read values from 
+          * different media_query css files depending on size
+          */
+          window.onresize = (event) => {
+            cssScreenSize();
+          };
+
+
+          // set the trades sidebar      
+          if (SIDE_OPEN) {
+            openNav();
+          } else {
+            closeNav();
+          }
+
+
 
 
 

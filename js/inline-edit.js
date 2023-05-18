@@ -420,10 +420,7 @@ function inlineDefaultFinish(rowName, options) {
             case "date":
 
                 var theVal = cell.children[getFromChildren].value;
-
-                console.log("THEVAL START=" + theVal);
-
-                var trimVal = prettyFormatDT( theVal );
+                var trimVal = prettyFormatDT( theVal.trim() );
 
                 rowData[cell.dataset.inlinename] = trimVal;
                 inlineEditRowContents[rowName][i] = trimVal;

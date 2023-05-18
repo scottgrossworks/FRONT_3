@@ -6,6 +6,8 @@
 
 #welcome_panel {
     
+    display: none;
+
     /* screen size-dependent -->  display:flex; */
     flex-direction: column;
     background-color: white;

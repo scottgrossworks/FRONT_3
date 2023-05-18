@@ -15,14 +15,14 @@
 
   position: fixed;
   
-  /*
   left:0;
   top:0;
 
+ 
 
   width:100vw;
   height:100vh;
-*/
+
 }
 
 /*
@@ -130,7 +130,35 @@
 
 
 
+
+
 #buy_modal_close {
+
+  font-family: var(--FONT_3);
+  background-color:var(--LEEDZ_DARKGREEN);
+
+  color:white;
+
+  padding:10px 14px;
+  margin-right:6px;
+
+  
+  width:fit-content;
+  border-radius: 10px;
+
+  font-size: x-large;
+  font-weight: bolder;
+  text-decoration: none;
+
+  text-align: center;
+}
+
+
+
+
+
+
+#back_button_close {
 
   display:block;
   position:relative;
@@ -153,7 +181,6 @@ font-weight: bolder;
 text-decoration: none;
 text-align: center;
 }
-
 
 
 

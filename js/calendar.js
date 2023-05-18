@@ -389,9 +389,9 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
             CURRENT_SELECTION.style.border = 0;
         } 
         // turn on new leed
-        setCurrentLeed( leed_fromDB );
         newLeed.style.border = "2px solid black";
         CURRENT_SELECTION = newLeed;
+        setCurrentLeed( leed_fromDB );
         
 
 
@@ -401,6 +401,7 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
         // let actionPanel = document.querySelector("#action_panel");
         try {
             showLeedAction( leed_fromDB );
+ 
 
         } catch (error) {
             printError("showLeedAction", error);

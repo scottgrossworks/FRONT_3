@@ -26,7 +26,8 @@ export function getNewDate( theYear, theMonth, theDay) {
 
 
 /**
- * format Date().getTime() for input type="datetime-local"
+ *  input Date().getTime()
+ *  for use in input type="datetime-local"
  */
 export function formatDTforInput(dateTimeString) {
     
@@ -49,7 +50,7 @@ export function formatDTforInput(dateTimeString) {
 
   /**
    * 
-   * 
+   * 1680444660000 --> Tuesday Apr 2, 2023 at 6:11PM
    */
   export function prettyFormatDT( isoString ) {
 
@@ -77,6 +78,55 @@ export function formatDTforInput(dateTimeString) {
 
 
 
+/**
+ * reverse of prettyFormatDT
+ * input prettyFormatDT and output DT
+ * 
+ * Tuesday Apr 2, 2023 at 6:11PM --> 1680444660000
+ */
+export function DTfromPretty( prettyStr ) {
+
+   
+    // MONTH
+    var space = prettyStr.indexOf(' ');
+    const the_month = prettyStr.substring( space + 1, space + 4);
+    
+
+    // DAY
+    var space2 = prettyStr.indexOf(' ', space + 1);
+    var comma = prettyStr.indexOf(',');
+    const the_day = prettyStr.substring(space2 + 1, comma);
+
+
+    // YEAR
+    var at = prettyStr.indexOf('at');
+    const the_year = prettyStr.substring(comma + 1, at).trim();
+
+
+    // HOURS
+    var colon = prettyStr.indexOf(':');
+    const the_hour = prettyStr.substring(at + 2, colon).trim();
+
+
+    // MINUTES
+    const the_min = prettyStr.substring(colon + 1, colon + 3);
+
+
+    const the_date = new Date( Date.UTC( the_year,
+                                      the_month,
+                                      the_day,
+                                      the_hour,
+                                      the_min,
+                                      0 ) );
+
+
+    const the_DT = the_date.getTime();
+
+    console.log("%cTHE DATE=" + the_date, "color:darkgreen");
+
+    return the_DT;
+
+}
 
 
 

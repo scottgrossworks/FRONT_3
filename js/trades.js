@@ -248,8 +248,8 @@ export function getColorForTrade(trade_name) {
       COLORS.set(trade_name, theColor);
   }
 
-  console.log(COLORS);
-  console.log("%cin getColorForTrade() GOT " + trade_name + ": " + theColor, "color:" + theColor + ";");
+  // console.log(COLORS);
+  // console.log("%cin getColorForTrade() GOT " + trade_name + ": " + theColor, "color:" + theColor + ";");
 
   if (theColor != null) {
 

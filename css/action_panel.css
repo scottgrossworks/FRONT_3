@@ -29,6 +29,15 @@
 
 
 
+#lic_close {
+
+    justify-content: flex-end;
+}
+
+
+
+
+
 .leed_info_container {
 
     display:flex;
@@ -36,18 +45,19 @@
 
 
     width:94%;
-    height:70vh;
+    height:fit-content;
 
     padding: 0;
     margin: 0 0 0 6px;
 
     background-color:var(--LEEDZ_GRAY);
  
-    border: 2px solid var(--LEEDZ_DARKGREEN);
+    border: 1px solid var(--LEEDZ_DARKGREEN);
 
     font-size:1.1em;
-    
-    overflow-y:scroll;
+
+    overflow-x: hidden;
+    overflow-y:auto;
 }
 
 
@@ -55,29 +65,26 @@
 .lic_row {
     
     width:auto;
-    padding:0 !important;
-
-}
-
-
-.lic_row a {
-
-    color:green;
-
-    font-weight: bolder;
+    align-items: center;
+    
+    border: 1px solid var(--LEEDZ_DARKGRAY) !important;
 }
 
 
 
 .lic_column {
 
+    display:flex;
+    padding-top: 16px;
+    padding-bottom:16px;
+    padding-left:10px;
+    padding-right:4px;
 
-    padding: 16px;
-
-    border: 1px solid var(--LEEDZ_DARKGRAY);
 }
 
-
+.label {
+    font-weight: 600;
+}
 
 
 
@@ -85,12 +92,16 @@
 
     align-items: start;
     background-color: white;
+    outline:none;
     border-bottom: 1px solid var(--LEEDZ_DARKGRAY);
     padding:0px;
     font-weight: bolder;
 }  
 
 
+#em_value {
+    font-size: smaller;
+}
 
 
 
@@ -110,7 +121,10 @@
 
     max-width: 15px !important;
     padding-left:4px;
+    padding-right:14px;
+
     margin: auto 0;
+    outline:none;
     border:0;
 }
 
@@ -119,6 +133,7 @@
     display: block;
     text-align: center;
 
+    outline:none;
     border: 1px solid white;
     border-radius: 4px;
 
@@ -132,6 +147,7 @@
 #lic_date {
 
     display:block;
+    outline:none;
     border:0;
     padding:0px;
     margin: auto 10px;
@@ -143,7 +159,6 @@
 
 #pr_label {
 
-    font-weight:600;
     color:darkgreen;
 }
 
@@ -156,6 +171,9 @@
     font-family: var(--FONT_1);
     font-size: larger;
     font-weight:600;
+
+    border-left: 2px solid var(--LEEDZ_DARKGRAY);
+
     letter-spacing: 0.06em;
 
 }

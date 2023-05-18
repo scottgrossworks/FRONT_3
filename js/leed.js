@@ -63,7 +63,7 @@ export function blankLeedObject() {
     BLANK_LEED.ph = null;
 
     BLANK_LEED.note = null;
-    BLANK_LEED.details = null;
+    BLANK_LEED.det = null;
     BLANK_LEED.reqs = null;
 
     BLANK_LEED.pr = null;
@@ -90,7 +90,7 @@ export function getCurrentLeed() {
     if (CURRENT_LEED.id == null) {
         // CURRENT_LEED is blank
         // go back to cache
-        loadCacheLeed();
+        loadCacheLeed();  
     }
 
 
@@ -107,6 +107,7 @@ export function setCurrentLeed( jsonObj ) {
     if (jsonObj == null)
         throwError("setCurrentLeed", "leed JSON is null");
   
+
     CURRENT_LEED.id = jsonObj.id;
 
     if (jsonObj.creator != null) CURRENT_LEED.creator = jsonObj.creator;
@@ -198,17 +199,17 @@ export function isLeedActive() {
  * 
  *
  */
-export function saveCacheLeed( leed_fromDB ) {
+export function saveCacheLeed( theLeed ) {
 
-    if (leed_fromDB == null)
+    if (theLeed == null)
         throwError("cacheLeed", "Cannot cache null leed");
 
     let leedJSON = null;
     try {
-        leedJSON = JSON.stringify( leed_fromDB );
+        leedJSON = JSON.stringify( theLeed );
     } catch (error) {
         printError("cacheLeed", "Cannot convert leed to JSON");
-        console.error(leed_fromDB);
+        console.error(theLeed);
         throwError("cacheLeed", "Invalid leed for cache");
     }
    
@@ -226,7 +227,7 @@ export function saveCacheLeed( leed_fromDB ) {
  * MAY return null 
  *
  */
-export function loadCacheLeed() {
+ function loadCacheLeed() {
 
     const leedJSON = window.sessionStorage.getItem( CACHE_LEED_KEY );
     if (leedJSON == null) {

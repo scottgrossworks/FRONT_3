@@ -275,8 +275,10 @@
 
 	<script type="module">
 			
-        import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname, getShortDateString } from "./js/dates.js";
-		import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
+        import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } from "./js/dates.js";
+        import { getShortDateString, DTfromPretty } from "./js/dates.js";
+		
+        import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
 		import { inlineEdit } from "./js/inline-edit.js";
         import { getCurrentUser } from "./js/user.js";
         import { clearCurrentLeed, getCurrentLeed, blankLeedObject, saveLeedChanges } from "./js/leed.js";
@@ -450,6 +452,10 @@
 
 			beginEditing();
 
+
+            console.log("%cIN CB", "color:orange;");
+
+
 			switch(rowName) {
 
                 case "row_trade":
@@ -461,11 +467,13 @@
 					break;
 
 				case "row_start":
-					LEED_CHANGES.start = rowData["start"];
+                    var dateTime = DTfromPretty( rowData["start"] );
+					LEED_CHANGES.start = dateTime;
 					break;
 
                 case "row_end":
-                    LEED_CHANGES.end = rowData["end"];
+                    var dateTime = DTfromPretty( rowData["end"] );
+                    LEED_CHANGES.end = dateTime;
                     break;
 
 

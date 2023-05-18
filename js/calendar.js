@@ -394,14 +394,8 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
         setCurrentLeed( leed_fromDB );
         
 
-
-        // FIXME FIXME FIXME
-        // what if action panel not showing
-        // small screens - display:none
-        // let actionPanel = document.querySelector("#action_panel");
         try {
             showLeedAction( leed_fromDB );
- 
 
         } catch (error) {
             printError("showLeedAction", error);

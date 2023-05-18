@@ -370,39 +370,32 @@
     const BUG_EMAIL = "<a href='mailto:scottgrossworks@gmail.com'>Report Error</a>"
     window.printError = printError;
 
-
-
-        /* Set the width of the sidebar to 250px (show it) */
-        export function openClose() {
-          
-          if (SIDE_OPEN) {
-            closeNav();
-            SIDE_OPEN = false;
-          
-          } else {
-            openNav();
-            SIDE_OPEN = true;
-          }
-        }
-        window.openClose = openClose;
-
-
       
 
 
-      export function modalClose() {
 
-        let error = document.getElementById("error_modal");
-        if (error != null) error.style.display = "none";
+      /** 
+      * Set the width of the sidebar to 250px (show it)
+      *
+      *
+      */
 
-        let action = document.getElementById("action_panel");
-        if (action != null) action.style.display = "none";
-
-        let closeBut = document.getElementById("buy_modal_close");
-        closeBut.style.display = "none";
-
+      export function openClose() {
+          
+          if (SIDE_OPEN) {
+              closeNav();
+              SIDE_OPEN = false;
+          
+          } else {
+              openNav();
+              SIDE_OPEN = true;
+          }
       }
-      window.modalClose = modalClose;
+      window.openClose = openClose;
+
+
+
+
 
        /**
          * DROP DOWN MENU
@@ -413,7 +406,7 @@
          toggle between hiding and showing the dropdown content */
          export function dropdownMenu() {
 
-          if (isGuestUser()) {
+          if (isGuestUser()) {  
             const ddAccount = document.getElementById("dd_account");
             ddAccount.style.opacity = 0.5;
             ddAccount.setAttribute("onclick", "printError('openUserEdit', 'Cannot edit Guest user account')");
@@ -427,6 +420,37 @@
          window.dropdownMenu = dropdownMenu;
          
 
+
+         
+
+          // Close the dropdown menu if the user clicks outside of it
+          window.addEventListener( "click", (event) => {
+
+            // console.log("GOT CLICK target=" + event.target);
+            let theDiv = event.target;
+
+            if (event.target.matches('a')) {
+              console.log("%cDROPDOWN=" + event.target, "color:green;");
+              // triggered also for modal close
+              //
+              // FIXME FIXME FIXME
+              // event.target will be http link
+
+
+
+
+            } else if (! (event.target.matches('img'))) {
+              // click -- not on a link and not on the dropdown image
+              // HIDE THE DROPDOWN
+              var dropdown = document.getElementById("dropdown_menu");
+              dropdown.classList.remove("show");
+
+            }
+          }, true);
+
+
+
+          
       
 
 
@@ -461,6 +485,38 @@
 
 
 
+        
+      const col = document.getElementById("trades_column");      
+      const side = document.getElementById("side_panel");
+      const open = document.getElementById("open_side_btn");
+      
+      let SIDE_OPEN = true;
+      let SCREEN_SIZE = 0; // 0, 1, 2 small
+      
+
+
+      function openNav() {
+
+        side.style.width = "max-content";
+   
+        open.style.left = side.clientWidth + "px";
+        open.innerHTML = "&#10140;"
+
+        col.style.marginLeft = "0";
+      }
+ 
+      
+
+      function closeNav() {
+
+        side.style.width = "0";
+
+        open.style.left = 0;
+        open.innerHTML = "&#9776;"
+
+        col.style.marginLeft = "-120px";
+      }
+
 
       /**
        * FIXME FIXME FIXMEFIXME check for current Leed 
@@ -468,40 +524,37 @@
        */
       function cssScreenSize() {
 
+
         var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
+        var action = document.getElementById("action_panel");
         switch (screen) {
   
           case "S":
-            SCREEN_SIZE = 0;
+            action.setAttribute("screen", 0);
             SIDE_OPEN = false;  
             actionModal();
             break;
           
           case "M":
-            // console.log("MED SCREEN");
-            SCREEN_SIZE = 1;
+            action.setAttribute("screen", 1);
             SIDE_OPEN = false;
             actionModal();
             break;
   
           case "L":
-            // console.log("LARGE SCREEN");
-            SCREEN_SIZE = 2;
+            action.setAttribute("screen", 2);
             SIDE_OPEN = true;
-             
 
+            
+            var closeColumn = document.getElementById("lic_close");
+            closeColumn.style.display = "none";
 
             // Is there a current leed in cache
             // possibly just being edited in another window?
             let current_leed = getCurrentLeed();
-            console.log("%cSCREEN SIZE GOT CURRENT LEED: ","color:darkorange;");
-            console.log(current_leed);
-            
+
             if ( current_leed.id != null ) {
               showLeedAction(current_leed);
-            
-              let closeBut = document.getElementById("buy_modal_close");
-              closeBut.style.display = "none";
             
             } else {
               welcomeColumn();
@@ -514,7 +567,6 @@
   
           default:
             console.error("--screen_size not found");
-            SCREEN_SIZE = 3;
             SIDE_OPEN = false;
             actionModal();
             break;
@@ -524,22 +576,6 @@
 
       
 
-
-
-
-      function actionModal() {
-        let welcome = document.getElementById("welcome_panel");
-        welcome.style.display = "none";
-
-        let action = document.getElementById("action_panel");
-        action.classList.replace("column", "modal"); 
-        
-        let closeBut = document.getElementById("buy_modal_close");
-        closeBut.style.display = "flex";
-      }
-
-
-      
 
       function welcomeColumn() {
 
@@ -553,82 +589,46 @@
         let closeBut = document.getElementById("buy_modal_close");
         closeBut.style.display = "none";
       }
+      window.welcomeColumn = welcomeColumn;
 
 
 
 
 
 
-
-
-
-   
-
-          // Close the dropdown menu if the user clicks outside of it
-          window.addEventListener( "click", (event) => {
-
-            // console.log("GOT CLICK target=" + event.target);
-            let theDiv = event.target;
-
-            if (event.target.matches('a')) {
-              console.log("%cDROPDOWN=" + event.target, "color:green;");
-              // triggered also for modal close
-              //
-              // FIXME FIXME FIXME
-              // event.target will be http link
-
-
-
-
-            } else if (! (event.target.matches('img'))) {
-              // click -- not on a link and not on the dropdown image
-              // HIDE THE DROPDOWN
-              var dropdown = document.getElementById("dropdown_menu");
-              dropdown.classList.remove("show");
-
-            }
-          }, true);
-
-      
- 
-          
-
-
-
-        
-          const col = document.getElementById("trades_column");      
-          const side = document.getElementById("side_panel");
-          const open = document.getElementById("open_side_btn");
-          
-          let SIDE_OPEN = true;
-          let SCREEN_SIZE = 0; // 0, 1, 2 small
-          
+      function actionModal() {
+        let welcome = document.getElementById("welcome_panel");
+        welcome.style.display = "none";
     
- 
+        let action = document.getElementById("action_panel");
+        action.classList.replace("column", "modal"); 
+        
+        var closeColumn = document.getElementById("lic_close");
+        closeColumn.style.display = "flex";
+
+        let closeBut = document.getElementById("buy_modal_close");
+        closeBut.style.display = "flex";
+      }
+      window.actionModal = actionModal;
 
 
-          function openNav() {
 
-            side.style.width = "max-content";
-       
-            open.style.left = side.clientWidth + "px";
-            open.innerHTML = "&#10140;"
-  
-            col.style.marginLeft = "0";
-          }
-     
-          
-  
-          function closeNav() {
-  
-            side.style.width = "0";
-  
-            open.style.left = 0;
-            open.innerHTML = "&#9776;"
-  
-            col.style.marginLeft = "-120px";
-          }
-  
+
+      function modalClose() {
+
+        let error = document.getElementById("error_modal");
+        if (error != null) error.style.display = "none";
+    
+        let action = document.getElementById("action_panel");
+        if (action != null) action.style.display = "none";
+    
+        let closeBut = document.getElementById("buy_modal_close");
+        closeBut.style.display = "none";
+    
+      }
+      window.modalClose = modalClose;
+    
+
 
           /**
            * USER

@@ -312,8 +312,6 @@ export async function showLeedAction( leed_preview ) {
     }
 
 
-
-
     // HIDE the welcome panel if it exists
     let welcome = document.getElementById("welcome_panel");
     welcome.style.display = "none";
@@ -325,7 +323,13 @@ export async function showLeedAction( leed_preview ) {
     action.style.display = "block";
 
 
-
+    var screen = action.getAttribute("screen");
+    let closeBut = document.getElementById("buy_modal_close");
+    if (screen != 2) {
+        closeBut.style.display = "flex";
+    } else {
+        closeBut.style.display = "none";
+    }
 
 
 }
@@ -346,6 +350,7 @@ export function hideActionWindow() {
     let welcome = document.getElementById("welcome_panel");
     welcome.style.display = "block";
 
+
 }
 
 
@@ -358,8 +363,9 @@ export function hideActionWindow() {
  */
 
 
-/** 
- * 
- *
- *
- */
+
+
+
+
+
+  

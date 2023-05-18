@@ -101,18 +101,16 @@
     opacity: 0;
 
     width: max-content;
-    height: 25px;
-    padding-left: 16px;
-    padding-right:16px;
-    padding-top:10px;
-    padding-bottom: 16px;
+    height: max-content;
+
+    padding: 10px 16px;
 
     color:green;
     background-color:white;
     border-radius: 20px;
 
     font-family: var(--FONT_1);
-    font-size: small;
+    font-size: 1em;
 }
 
 

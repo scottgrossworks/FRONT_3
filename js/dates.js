@@ -3,7 +3,7 @@
  * The system imagines everyone lives in the same timezone
  * dates.js brokers all date requests from the UI for consistent display no matter the client timezone
  * 
- */
+ */ 
 
 
 const DATE_KEY = "DS";
@@ -21,6 +21,69 @@ export function getNewDate( theYear, theMonth, theDay) {
     const theDate = new Date( Date.UTC(theYear, theMonth - 1, theDay) );
     return theDate;
 }
+
+
+
+
+/**
+ * format Date().getTime() for input type="datetime-local"
+ */
+export function formatDTforInput(dateTimeString) {
+    
+    const dateObj = new Date(dateTimeString);
+
+
+    var year = dateObj.getUTCFullYear();
+    var month = twoDigitInt( dateObj.getUTCMonth() + 1 );
+    var day = twoDigitInt( dateObj.getUTCDate() );
+        
+    
+    const hours = twoDigitInt(dateObj.getUTCHours());
+    const minutes = twoDigitInt(String(dateObj.getUTCMinutes()).padStart(2, "0"));
+    
+    
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
+
+
+  /**
+   * 
+   * 
+   */
+  export function prettyFormatDT( isoString ) {
+
+        const the_weekday = getWeekday( getShortDateString( isoString ) );
+        const the_monthname = getShortMonthname( isoString.substring(5, 7) ); 
+
+        // remove '0' at front if any
+        let the_date = isoString.substring(8, 10);
+        if (the_date.startsWith('0')) { the_date = the_date.substring(1) };
+
+        const the_year = isoString.substring(0, 4);
+        const the_hours = getHours(isoString);
+
+        const fullStartDate = the_weekday + " " + the_monthname + " " + the_date + ", " + the_year; 
+        const the_time = the_hours[0] + ":" + getMinutes(isoString) + the_hours[1];
+
+        const retString = fullStartDate + " at " + the_time;
+
+        // console.log("RETURNING: " + retString);
+
+        return retString;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -80,6 +143,10 @@ export function setDateShowing( theDate ) {
     window.sessionStorage.setItem(DATE_KEY, getShortDateString(DATE_SHOWING.toISOString()));
 
 }
+
+
+
+
 
 
 

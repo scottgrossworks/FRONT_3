@@ -4,7 +4,11 @@
  */
 
 import { printError, throwError } from "./error.js";
+import { getCurrentLeed } from "./leed.js";
 import { isValidTrade } from "./trades.js";
+import { prettyFormatDT, formatDTforInput } from "./dates.js";
+
+
 
 
 
@@ -14,25 +18,6 @@ import { isValidTrade } from "./trades.js";
 
 
 var inlineEditRowContents = {};
-
-class StringEscaper {
-    static replaceTag(tag) {
-		var tagsToReplace = {
-	        '&': '&amp;',
-	        '<': '&lt;',
-	        '>': '&gt;'
-	    };
-        return tagsToReplace[tag] || tag;
-    }
-
-    static safe_tags_replace(str) {
-        if (str == null) return "";
-        return str.replace(/[&<>]/g, StringEscaper.replaceTag);
-    }
-}
-
-
-
 
 
 
@@ -156,8 +141,18 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             }
             cellContent += "/>";
             break;
-        case "date":
-            cellContent += `<input type='date' value='${inlineEditRowContents[rowName][i]}' form='${rowName}Form'`;
+
+
+            case "date":
+
+            // var theVal = inlineEditRowContents[rowName][i];
+
+            var current_leed = getCurrentLeed();
+            var dateTime = (rowName == "row_start") ? current_leed.start : current_leed.end;
+            var theVal = formatDTforInput( dateTime );
+
+
+            cellContent += `<input type='datetime-local' value='${theVal}' form='${rowName}Form'`;
             for (key in cell.dataset    ) {
                 if (cell.dataset.hasOwnProperty(key) && key.substr(0, 6) == "inline" && attributesFilter.indexOf(key) == -1) {
                     cellContent += ` ${key.substr(6)}='${cell.dataset[key]}'`;
@@ -237,6 +232,38 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 }
 
 
+
+
+
+
+/**
+ * replace HTML tags
+ */
+function replaceHTMLTags( str ) {
+    if (str == null) return "";
+
+    var trimVal = str.trim();
+
+    if (trimVal == "") return "";
+
+    trimVal = str.replace(/[&<>]/g, replaceTag);
+
+    return trimVal;
+
+}
+
+
+
+function replaceTag(tag) {
+    var tagsToReplace = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;'
+    };
+    return tagsToReplace[tag] || tag;
+}
+
+
 /**
  * returns true if the str represents a number
  *  
@@ -278,15 +305,17 @@ function inlineDefaultFinish(rowName, options) {
             case "zip":
 
                 var theVal = cell.children[getFromChildren].value;
-                
-                if (theVal.length != 5) {
+
+                var trimVal = trimAndRemoveSpaces( theVal );
+
+                if (trimVal.length != 5) {
                     let errMsg = "Zip code must be 5 digits";
                     printError("inlineDefaultFinish", errMsg );
                     alert(errMsg);
                     return;
                 }
 
-                if (! isNumOnly( theVal )) {
+                if (! isNumOnly( trimVal )) {
                     let errMsg = "Zip code must be all digits";
                     printError("inlineDefaultFinish", errMsg );
                     alert(errMsg);
@@ -294,9 +323,8 @@ function inlineDefaultFinish(rowName, options) {
                 }
 
 
-                
-                rowData[cell.dataset.inlinename] = theVal;
-                inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace( theVal );
+                rowData[cell.dataset.inlinename] = trimVal;
+                inlineEditRowContents[rowName][i] = trimVal;
                 break;
 
 
@@ -305,7 +333,9 @@ function inlineDefaultFinish(rowName, options) {
             case "tel":
                 
                 var theVal = cell.children[getFromChildren].value;
-                if (theVal.length < 10) {
+                var trimVal = trimAndRemoveSpaces( theVal );
+
+                if (trimVal.length < 10) {
                     let errMsg = "Invalid phone #: " + theVal;
                     printError("inlineDefaultFinish", errMsg );
                     alert(errMsg);
@@ -313,18 +343,15 @@ function inlineDefaultFinish(rowName, options) {
                 }
 
 
-                let trimString = trimAndRemoveSpaces( theVal );
-
-
-                if (trimString.length != 10) {
+                if (trimVal.length != 10) {
                     let errMsg = "Phone # must be 10 digits";
                     printError("inlineDefaultFinish", errMsg );
                     alert(errMsg);
                     return;
                 }
 
-                rowData[cell.dataset.inlinename] = trimString;
-                inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace( trimString );
+                rowData[cell.dataset.inlinename] = trimVal;
+                inlineEditRowContents[rowName][i] = trimVal;
                 break;
 
 
@@ -333,19 +360,21 @@ function inlineDefaultFinish(rowName, options) {
             case "trade_name":
 
                 var theVal = cell.children[getFromChildren].value;
+                var trimVal = theVal.trim();
 
                 //
                 // is this a valid trade name?  If not -- show error and force re-enter
                 //
-                if (! (isValidTrade(theVal)))  {
+                if (! (isValidTrade( trimVal )))  {
                     let errMsg = "Invalid trade name: " + theVal;
                     printError("inlineDefaultFinish()", errMsg );
                     alert(errMsg);
                     return;
                 }
 
-                rowData[cell.dataset.inlinename] = theVal;
-                inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace( theVal );
+
+                rowData[cell.dataset.inlinename] = trimVal;
+                inlineEditRowContents[rowName][i] = trimVal;
                 break;
 
 
@@ -360,17 +389,44 @@ function inlineDefaultFinish(rowName, options) {
                 break;
             case "link":
 
+                var theVal = cell.children[getFromChildren].value;
+                var trimVal = trimAndRemoveSpaces( theVal );
 
-                rowData[cell.dataset.inlinename] = cell.children[getFromChildren].value;
-                inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace(cell.children[getFromChildren].value);
-            
+                rowData[cell.dataset.inlinename] = trimVal;
+                inlineEditRowContents[rowName][i] = trimVal;
+
                 break;
+
+
+
             case "text":
+
+            
+                var theVal = cell.children[getFromChildren].value;
+                var trimVal = theVal.trim();
+                var safeVal = replaceHTMLTags( trimVal );
+
+                rowData[cell.dataset.inlinename] = safeVal;
+                inlineEditRowContents[rowName][i] = safemVal;
+
+
+
+            break;
+
+
+
+
+
             case "date":
 
                 var theVal = cell.children[getFromChildren].value;
-                rowData[cell.dataset.inlinename] = theVal;
-                inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace( theVal );
+
+                console.log("THEVAL START=" + theVal);
+
+                var trimVal = prettyFormatDT( theVal );
+
+                rowData[cell.dataset.inlinename] = trimVal;
+                inlineEditRowContents[rowName][i] = trimVal;
         
 
             break;
@@ -380,7 +436,8 @@ function inlineDefaultFinish(rowName, options) {
             case "email":
 
                 var theVal = cell.children[getFromChildren].value;
-                var trimVal = theVal.trim();
+                var trimVal = trimAndRemoveSpaces( theVal );
+
                 //
                 // is this a valid email?  If not -- show error and force re-enter
                 //
@@ -393,7 +450,8 @@ function inlineDefaultFinish(rowName, options) {
 
                 
                 rowData[cell.dataset.inlinename] = trimVal;
-                inlineEditRowContents[rowName][i] = StringEscaper.safe_tags_replace( trimVal );
+                inlineEditRowContents[rowName][i] = trimVal;
+
                 break;
 
 
@@ -410,10 +468,14 @@ function inlineDefaultFinish(rowName, options) {
                 break;
 
             case "textarea":
-                // TODO textarea value is \n not <br/>
-                rowData[cell.dataset.inlinename] = cell.children[getFromChildren].value;
-                inlineEditRowContents[rowName][i] = cell.children[getFromChildren].value
 
+                // TODO textarea value is \n not <br/>
+                var theVal = cell.children[getFromChildren].value;
+                var safeVal = replaceHTMLTags( theVal.trim() );
+
+                
+                rowData[cell.dataset.inlinename] = safeVal;
+                inlineEditRowContents[rowName][i] = safeVal;;
 
                 break;
             default:

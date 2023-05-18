@@ -360,7 +360,7 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
         // PLACE the thumbnail
         thumbnail.style.left = (event.clientX + 10) + "px"
         thumbnail.style.top = (event.clientY - 70) + "px";
-        thumbnail.style.border = "2px solid " + trade_color;
+        thumbnail.style.border = "4px solid " + trade_color;
         thumbnail.style.opacity = 1;
 
     });

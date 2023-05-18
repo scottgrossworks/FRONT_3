@@ -546,9 +546,12 @@
             SIDE_OPEN = true;
 
             
+
             var closeColumn = document.getElementById("lic_close");
             closeColumn.style.display = "none";
 
+
+            
             // Is there a current leed in cache
             // possibly just being edited in another window?
             let current_leed = getCurrentLeed();
@@ -599,15 +602,18 @@
       function actionModal() {
         let welcome = document.getElementById("welcome_panel");
         welcome.style.display = "none";
-    
-        let action = document.getElementById("action_panel");
-        action.classList.replace("column", "modal"); 
-        
+
         var closeColumn = document.getElementById("lic_close");
         closeColumn.style.display = "flex";
 
         let closeBut = document.getElementById("buy_modal_close");
         closeBut.style.display = "flex";
+
+
+        let action = document.getElementById("action_panel");
+        action.classList.replace("column", "modal"); 
+
+
       }
       window.actionModal = actionModal;
 

@@ -237,7 +237,7 @@
             
             <div class="column lic_column" id="lic_date"></div>
             
-            <div class="column lic_column" id="lic_close">
+            <div class="column _1 lic_column" id="lic_close">
               <a id="buy_modal_close" href="javascript:modalClose();">X</a>
             </div>
 
@@ -327,7 +327,9 @@
           <button id="action_edit" class="button edit_button" onclick="openLeedEdit()">Edit&nbsp;<img id="edit_icon" src="img/edit.png"></button>
         </div>
 
-
+        <div class="row" id="row_report_button">
+          <button id="action_report" class="button report_button">Report</button>
+        </div>
     
       </div>
       
@@ -361,7 +363,7 @@
     import { loadCalendar, loadUserLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
     import { getCurrentLeed, }  from "./js/leed.js";
-    import { showLeedAction } from "./js/action.js";
+    import { setActionHeight, showLeedAction } from "./js/action.js";
     import { printError, throwError, errorModal } from "./js/error.js";
 
     import { USERNAME_URL_PARAM } from "./js/dbTools.js";
@@ -527,31 +529,34 @@
 
         var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
         var action = document.getElementById("action_panel");
+
+        console.log("%cCSS SCREEN SIZE=" + screen, "color:violet");
+
         switch (screen) {
   
           case "S":
             action.setAttribute("screen", 0);
+            setActionHeight( window.innerHeight );
             SIDE_OPEN = false;  
             actionModal();
             break;
           
           case "M":
             action.setAttribute("screen", 1);
+            setActionHeight( window.innerHeight );
             SIDE_OPEN = false;
             actionModal();
             break;
   
           case "L":
             action.setAttribute("screen", 2);
+            setActionHeight( window.innerHeight );
             SIDE_OPEN = true;
-
+            modalClose();
             
-
             var closeColumn = document.getElementById("lic_close");
             closeColumn.style.display = "none";
 
-
-            
             // Is there a current leed in cache
             // possibly just being edited in another window?
             let current_leed = getCurrentLeed();

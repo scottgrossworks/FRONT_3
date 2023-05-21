@@ -8,6 +8,47 @@ import { getCurrentUser } from "./user.js";
 import { getCurrentLeed, saveCacheLeed, setCurrentLeed } from "./leed.js";
 
 
+
+
+
+export function setActionHeight( window_height ) {
+
+    var action = document.getElementById("action_panel");
+    // var screen = action.getAttribute("screen");
+    
+    var action_height = Math.floor(window_height * 0.7 );
+    action.style.height = action_height;
+
+/*    
+    switch (screen) {
+        
+        case "0":
+            // small
+            // mobile phones
+            action.style.height = action_height;
+            break;
+        
+        case "1":
+            // medium
+            // tablets
+            action.style.height = action_height;
+            break;
+        
+        case "2":
+            // large
+            // browser window
+            action.style.height = action_height;
+            break;
+        
+        default:
+            printError("setActionHeight", "invalid screen attribute: " + screen);
+    }
+
+*/
+
+}
+
+
     
 //
 // FIXME FIXME FIXME
@@ -54,6 +95,10 @@ leed_details contains
 export async function showLeedAction( leed_preview ) {
 
    
+    let action = document.getElementById("action_panel");
+    // will show at the bottom
+
+
     // API request --> DB   
     // load full leed details for leed_preview.id
     //
@@ -87,9 +132,10 @@ export async function showLeedAction( leed_preview ) {
 
     // use the long monthname for the modal action window
     // and short monthname for the column view
-    var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
+    // var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
+    var screen = action.getAttribute("screen");
     let leed_monthname = "";
-    if (screen == "L") {
+    if (screen == "2") {
         leed_monthname = getShortMonthname( isoStart.substring(5, 7) ); 
     } else {
         leed_monthname = getMonthname( isoStart.substring(5, 7) ); 
@@ -262,11 +308,16 @@ export async function showLeedAction( leed_preview ) {
     //  BUTTONS
     //
     //
-    //
 
+    /*
+    console.log("%cNOW SHOWING LEED ACTION","color:darkred");
+    console.log(current_user.username);
+    console.log(leed_preview.creator);
+    */
 
     let row_buy_button = document.getElementById("row_buy_button");
     let row_edit_button = document.getElementById("row_edit_button");
+    let row_report_button = document.getElementById("row_report_button");
 
     // the action buttons at the bottom depend on whether the
     // current user posted the leed being examined
@@ -276,6 +327,7 @@ export async function showLeedAction( leed_preview ) {
         // the current user POSTED this leed
         // show the EDIT button
         row_buy_button.style.display = "none";
+        row_report_button.style.display = "none";
         row_edit_button.style.display = "flex";
 
 
@@ -290,24 +342,26 @@ export async function showLeedAction( leed_preview ) {
         });
 
 
-        // FOOBAR
-
     } else {
+
+
         // current user is trying to BUY someone else's leed
-        // show the BUY button
         row_buy_button.style.display = "flex";
+        row_report_button.style.display = "flex";
         row_edit_button.style.display = "none";
 
+        // BUY LEED
         // program the BUY button
         document.getElementById("action_buy").addEventListener( "click", (event) => { 
-            console.log("%BUY BUTTON CALLBACK", "color:darkorange");
+            console.log("%cBUY BUTTON CALLBACK", "color:green");
         });
     
-    
-        // FIXME FIXME FIXME FIXME
-        // REPORT BUTTON 
+
         // REPORT BAD LEED
-    
+        // program the REPORT button
+           document.getElementById("action_report").addEventListener( "click", (event) => { 
+            console.log("%cREPORT BUTTON CALLBACK", "color:darkorange");
+        });
     
     }
 
@@ -319,11 +373,12 @@ export async function showLeedAction( leed_preview ) {
 
     // SHOW the action_panel
     //
-    let action = document.getElementById("action_panel");
+    // got action above
+    // let action = document.getElementById("action_panel");
     action.style.display = "block";
 
-
-    var screen = action.getAttribute("screen");
+    // got screen above
+    // var screen = action.getAttribute("screen");
     let closeBut = document.getElementById("buy_modal_close");
     if (screen != 2) {
         closeBut.style.display = "flex";

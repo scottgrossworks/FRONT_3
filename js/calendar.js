@@ -167,7 +167,7 @@ export async function loadCalLeedz( goto_DB ) {
             results = loadLeedzFromCache(getMonth(), getYear());
         }
     } catch (error) {
-        printError("Loading leedz", error);
+        printError("Loading leedz from DB", error);
         errorModal(error.message, false);
         return;
     }
@@ -350,7 +350,7 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
             CURRENT_SELECTION.style.border = 0;
         } 
         // turn on new leed
-        newLeed.style.border = "2px solid black";
+        newLeed.style.border = "3px solid black";
         CURRENT_SELECTION = newLeed;
         setCurrentLeed( leed_fromDB );
         

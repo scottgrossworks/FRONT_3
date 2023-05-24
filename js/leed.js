@@ -37,6 +37,7 @@ export async function loadLeedzFromDB( subs, firstDay, lastDay ) {
       // get the leedz for all trade names in subs and the dates showing
       results = await db_getLeedz( subs, firstDay, lastDay );
 
+
   } catch (error) {   
       printError( "DB getLeedz", error.message );
       printError( "Received JSON", results);
@@ -176,9 +177,8 @@ export function setCurrentLeed( jsonObj ) {
     if ((jsonObj.opts != null) && (jsonObj.opts.length != 0)) CURRENT_LEED.opts = jsonObj.opts;
 
 
-    console.log("CACHING LEED");
-
-    console.log(CURRENT_LEED);
+    // console.log("CACHING LEED");
+    // console.log(CURRENT_LEED);
 
 
     saveCacheLeed( CURRENT_LEED );
@@ -317,17 +317,32 @@ export function saveCacheLeed( theLeed ) {
 
 
 function JSON_to_Array(jsonString) {
-
+  
   if (jsonString == null || jsonString == "" || jsonString == CACHE_DELIM)
-    return [];
+      return [];
+  
+  try {
+    // split the string into an array of JSON strings
+    var jsonStrings = jsonString.split('|');
+    var jsonArray = [];
 
-  // split the string into an array of JSON strings
-  const jsonStrings = jsonString.split('|');
+    for (var i = 0; i < jsonStrings.length; i++) {
+      
+      if (jsonStrings[i] == "") continue;
+      
+      try {
+        jsonArray.push(JSON.parse(jsonStrings[i]));
+      } catch (error) {
+        printError("JSON.parse", jsonStrings[i]);
+      }
+
+    }
+    return jsonArray;
   
-  // parse each JSON string and store it in an array
-  const jsonArray = jsonStrings.map(json => JSON.parse(json));
-  
-  return jsonArray;
+  } catch (error) {
+    printError("JSON_to_Array", "JSON Error: " + jsonString);
+    return [];
+  }
 }
 
 
@@ -336,6 +351,7 @@ function JSON_to_Array(jsonString) {
  *
  */
 export function saveLeedzToCache( new_leedz, the_month, the_year ) {
+
 
   var cache_key = CACHE_LEEDZ_CAL_KEY + the_month + the_year;
   let cache_string = window.sessionStorage.getItem( cache_key );  
@@ -360,6 +376,9 @@ export function saveLeedzToCache( new_leedz, the_month, the_year ) {
       cache_leedz.push( new_leed );
     }
   }
+
+  // console.log("IN SAVE LEEDZ");
+  // console.log(cache_leedz);
 
   // RESTORE CACHE
   // serialize array using CACHE_DELIM

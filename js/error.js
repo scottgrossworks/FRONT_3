@@ -4,6 +4,8 @@
 
 
 const BUG_EMAIL = "scottgrossworks@gmail.com";
+const ERR_KEY = "er";
+
 
 
 class LeedzError extends Error {
@@ -44,12 +46,21 @@ export function throwError(src, error) {
         errMsg = error;
     }
     errMsg = src + "=>" + errMsg;
-    console.error("Throwing Error: " + errMsg);        
+    // console.error("Throwing Error: " + errMsg);        
 
     throw new LeedzError(errMsg);
 }
 
 
+
+export function errorModalClose() {
+
+    let error = document.getElementById("error_modal");
+    error.style.setProperty("no_close", false);
+    error.style.display = "none";
+
+    error.setAttribute(ERR_KEY, "");
+}
 
 
 
@@ -58,7 +69,7 @@ export function errorModal( error, no_close ) {
   let modal = document.getElementById("error_modal");
   modal.setAttribute("no_close", no_close);
 
-  let errorString = modal.getAttribute("err_str");
+  let errorString = modal.getAttribute( ERR_KEY );
 
   if ((errorString == null) || errorString == "") {
     errorString = error + "<BR>";
@@ -66,7 +77,7 @@ export function errorModal( error, no_close ) {
     errorString = errorString + "<BR>" + error;
   }
 
-  modal.setAttribute("err_str", errorString);
+  modal.setAttribute(ERR_KEY, errorString);
 
   let theMsg = modal.children[1]; /* the error text */
   theMsg.style.width = "90%";

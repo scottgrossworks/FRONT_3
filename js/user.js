@@ -5,6 +5,7 @@ import { db_getUser } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 
 export const CACHE_USER_KEY = "U";
+export const MAX_USER_SUBS = 5;
 
 const GUEST_USER = blankUserObject();
 GUEST_USER.username = "guest.user";
@@ -194,7 +195,18 @@ export function saveUserChanges( userObj ) {
 
   if (userObj.about != null)
     CURRENT_USER.about = userObj.about;
+
+  if (userObj.subs != null)
+    CURRENT_USER.subs = userObj.subs;
+
+  if (userObj.leedz_bought != null)
+    CURRENT_USER.leedz_bought = userObj.leedz_bought;
+
+  if (userObj.badges != null)
+    CURRENT_USER.badges = userObj.badges;
+
   
+
   saveCacheUser( CURRENT_USER );
   
   // FIXME FIXME FIXME
@@ -318,6 +330,12 @@ export function isSubscribed( trade_name ) {
  * @param String trade_name 
  */
 export function saveSubscription( trade_name ) {
+
+  if (CURRENT_USER.subs.length == MAX_USER_SUBS) {
+    var error = "MAX subscriptions reached: " + MAX_USER_SUBS;
+    printError("Save Subscription", error);
+    throwError("Save Subscription", error);
+  }
 
     if (CURRENT_USER.subs.indexOf(trade_name) == -1) { // not in list already
       CURRENT_USER.subs.push( trade_name );

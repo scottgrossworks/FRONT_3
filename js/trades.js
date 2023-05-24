@@ -332,7 +332,14 @@ export function initTradesColumn( all_trades ) {
 
       } else { // checkbox is OFF
 
-        saveSubscription( trade.trade_name );
+
+        try {
+          saveSubscription( trade.trade_name );
+        } catch (error) {
+          errorModal(error, false);
+          return;
+        }
+
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
 
       }
@@ -342,7 +349,7 @@ export function initTradesColumn( all_trades ) {
       
       // reload the leedz for the current month showing
       removeLeedzShowing();
-      loadCalLeedz(false);
+      loadCalLeedz(true);
     });
 
 
@@ -361,7 +368,13 @@ export function initTradesColumn( all_trades ) {
 
       } else { // radio button is OFF
 
-        saveSubscription( trade.trade_name );
+        try {
+          saveSubscription( trade.trade_name );
+        } catch (error) {
+          errorModal(error, false);
+          return;
+        }
+
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
 
       }
@@ -371,7 +384,7 @@ export function initTradesColumn( all_trades ) {
 
       // reload the leedz for the current month showing
       removeLeedzShowing();
-      loadCalLeedz(false);
+      loadCalLeedz(true);
     });
 
 
@@ -388,7 +401,14 @@ export function initTradesColumn( all_trades ) {
 
       } else { // radio button is OFF
 
-        saveSubscription( trade.trade_name );
+
+        try {
+          saveSubscription( trade.trade_name );
+        } catch (error) {
+          errorModal(error, false);
+          return;
+        }
+
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
 
       }
@@ -398,7 +418,7 @@ export function initTradesColumn( all_trades ) {
 
       // reload the leedz for the current month showing
       removeLeedzShowing();
-      loadCalLeedz(false);
+      loadCalLeedz(true);
     });
   
 
@@ -534,8 +554,8 @@ function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
 
 
   // DEBUG
-  var theString = "TURN ON=" + trade_name;
-  console.log("%c" + theString, "color: " + theColor + ";"); 
+  // var theString = "TURN ON=" + trade_name;
+  // console.log("%c" + theString, "color: " + theColor + ";"); 
 
   // FIXME 2/2023 
   // should all be done in css but the initial setting doesn't persist

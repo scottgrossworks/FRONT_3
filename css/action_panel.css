@@ -6,7 +6,7 @@
 
 #action_panel {
 
-    height:100%;    
+    top:0;
 
     /* screen size-dependent -->  display:flex; */
     background-color:white;
@@ -26,7 +26,8 @@
     margin-left:0;
     margin-right:auto;
 
-    overflow-y: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 
@@ -253,6 +254,7 @@ img#shopping_cart {
     height:max-content;
 
     margin-top:5vh;
+    margin-bottom:100px;
 
     padding-top:25px;
     padding-bottom:15px;

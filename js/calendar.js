@@ -6,11 +6,11 @@
 import { daysInMonth, getShortDateString, getShortWeekday, getMonth,
     firstDayShowing, lastDayShowing, getYear, getHours, getMinutes, twoDigitInt } from "./dates.js";
 import { showLeedAction } from "./action.js";
-import { setCurrentLeed } from "./leed.js";
+import { setCurrentLeed, loadLeedzFromDB, loadLeedzFromCache, saveLeedzToCache } from "./leed.js";
 import { getColorForTrade } from "./trades.js";
 import { getSubscriptions } from "./user.js";
 import { printError, throwError, errorModal } from "./error.js";
-import { db_getLeedz } from "./dbTools.js";
+
 
 
 
@@ -86,28 +86,13 @@ export function loadCalendar() {
 
 
 
-/*
- * clear the current calendar of leedz
- * call loadUserLeedz() to repopulate it
- *
- */
-export function reloadCalendar() {
-
-    removeLeedzShowing();
-    loadUserLeedz();
-}
-
-
-
-
-
 
 
 /**
  * 
  *
  */
-function removeLeedzShowing() {
+export function removeLeedzShowing() {
 
     const theDays = document.getElementsByClassName("each_day");
     
@@ -164,43 +149,28 @@ export function removeLeedzForTrade( trade_name ) {
  *
  * 
  */
-export async function loadUserLeedz() {
+export async function loadCalLeedz( goto_DB ) {
 
 
     CURRENT_SELECTION = null;
-
-    let subs = getSubscriptions();
-    if (subs.length == 0) {
-        printError("loadUserLeedz", "No trades subscribed");
-        return;
-    }
-
 
     // API request --> DB 
     // load leedz for this trade and date range showing
     //
     let results = null;
     try {
-        // 
-        //  client <---> API Gateway <===> DB
-        //
-        // get the leedz for all trade names in subs and the dates showing
-        results = await db_getLeedz( subs, firstDayShowing(), lastDayShowing() );
 
-    } catch (error) {   
-        printError( "getLeedz", error.message );
-        printError( "response JSON", responseJSON);
-        
-        // EXIT FUNCTION HERE
-        throwError( "loadUserLeedz", error); 
-    }
-
-    // query returns empty result set
-    if (results.length == 0) {
-        printError("loadUserLeedz", "No leedz returned");
+        if (goto_DB) {
+            results = await loadLeedzFromDB(getSubscriptions(), firstDayShowing(), lastDayShowing());
+            saveLeedzToCache( results, getMonth(), getYear() );
+        } else { 
+            results = loadLeedzFromCache(getMonth(), getYear());
+        }
+    } catch (error) {
+        printError("Loading leedz", error);
+        errorModal(error.message, false);
         return;
     }
-
     
     
     
@@ -233,8 +203,8 @@ export async function loadUserLeedz() {
             // this should NEVER be null
             if (theDate == null) {
 
-                printError("loadUserLeedz", "LEEDZ_DATE attribute not being set for each day");
-                printError("loadUserLeedz", "Unable to load leedz for " + leed_fromDB.trade);
+                printError("loadCalLeedz", "LEEDZ_DATE attribute not being set for each day");
+                printError("loadCalLeedz", "Unable to load leedz for " + leed_fromDB.trade);
                 return;  
             }
 
@@ -390,7 +360,7 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
         } catch (error) {
             printError("showLeedAction", error);
-            errorModal("Error showing Action Window: " + error.message);
+            errorModal("Error showing Action Window: " + error.message, true);
         }
             
 

@@ -1,16 +1,59 @@
 /**
  * 
  */
+import { isSubscribed } from "./user.js";
 import { printError, throwError } from "./error.js";
+import { db_getLeedz } from "./dbTools.js";
 
 
-export const CACHE_LEED_KEY ="L";
+
+
+export const CACHE_LEED_KEY ="LD";
+export const CACHE_LEEDZ_CAL_KEY = "LC";
 
 const CACHE_DELIM = "|";
 
-
-
 const CURRENT_LEED = blankLeedObject();
+
+
+
+
+
+/**
+ *
+ * 
+ */
+export async function loadLeedzFromDB( subs, firstDay, lastDay ) {
+    
+
+  // API request --> DB 
+  // load leedz for this trade and date range showing
+  //
+  let results = null;
+  try {
+      // 
+      //  client <---> API Gateway <===> DB
+      //
+      // get the leedz for all trade names in subs and the dates showing
+      results = await db_getLeedz( subs, firstDay, lastDay );
+
+  } catch (error) {   
+      printError( "DB getLeedz", error.message );
+      printError( "Received JSON", results);
+      
+      // EXIT FUNCTION HERE
+      throwError( "loadLeedzFromDB", error); 
+  }
+
+  // query returns empty result set
+  // if (results.length == 0) { ; }
+
+  return results;
+}
+
+
+
+
 
 
 
@@ -68,7 +111,8 @@ export function blankLeedObject() {
 
     BLANK_LEED.pr = null;
 
-
+    // opts should be 0000101100  long digit
+    // FIXME FIXME FIXME convert between opts as digit and array of key=value pairs
     BLANK_LEED.opts = {};
 
     return BLANK_LEED;
@@ -128,6 +172,7 @@ export function setCurrentLeed( jsonObj ) {
 
     if (jsonObj.pr != null) CURRENT_LEED.pr = jsonObj.pr;
 
+    // FIXME FIXME FIXME convert between opts as digit and array of key=value pairs
     if ((jsonObj.opts != null) && (jsonObj.opts.length != 0)) CURRENT_LEED.opts = jsonObj.opts;
 
 
@@ -168,6 +213,7 @@ export function clearCurrentLeed() {
 
     CURRENT_LEED.pr = null;
 
+    // opts should be long digit
     CURRENT_LEED.opts = {};
 
 }
@@ -231,7 +277,7 @@ export function saveCacheLeed( theLeed ) {
 
     const leedJSON = window.sessionStorage.getItem( CACHE_LEED_KEY );
     if (leedJSON == null) {
-        printError("loadCacheLeed", "No value in cache for key: " + CACHE_LEED_KEY);
+        // printError("loadCacheLeed", "No value in cache for key: " + CACHE_LEED_KEY);
         return;
     }
 
@@ -270,37 +316,94 @@ export function saveCacheLeed( theLeed ) {
 }
 
 
+function JSON_to_Array(jsonString) {
+
+  if (jsonString == null || jsonString == "" || jsonString == CACHE_DELIM)
+    return [];
+
+  // split the string into an array of JSON strings
+  const jsonStrings = jsonString.split('|');
+  
+  // parse each JSON string and store it in an array
+  const jsonArray = jsonStrings.map(json => JSON.parse(json));
+  
+  return jsonArray;
+}
 
 
 
-
-
-
-// FIXME FIXME FIXME
-// should we cache leedz / reload them when showing new calendar
-// do we go back to DB every time?
 /**
- * 
  *
- 
-function loadLeedzFromCache( theDay ) {
+ */
+export function saveLeedzToCache( new_leedz, the_month, the_year ) {
+
+  var cache_key = CACHE_LEEDZ_CAL_KEY + the_month + the_year;
+  let cache_string = window.sessionStorage.getItem( cache_key );  
+  let cache_leedz = JSON_to_Array(cache_string);
+
+
+  for (let i = 0; i < new_leedz.length; i++) {
+    var new_leed = new_leedz[i];
+
+    // look for a matching leed id already in the cache 
+    for (let y = 0; y < cache_leedz.length; y++) {
+      if (new_leed.id == cache_leedz[y].id) {
+        cache_leedz[y] = new_leed;
+        new_leed = null;
+        break;
+      }
+    }
+
+    if (new_leed != null) {
+      // new_leed was not spliced into from_cache 
+      // append it to the end
+      cache_leedz.push( new_leed );
+    }
+  }
+
+  // RESTORE CACHE
+  // serialize array using CACHE_DELIM
+  let JSON_leedz = "";
+  cache_leedz.forEach( (leed) => {
+      JSON_leedz = JSON_leedz + JSON.stringify(leed) + CACHE_DELIM;  
+  });
+
+  
+    // rewrite to session storage
+    // key = monthyear
+    window.sessionStorage.setItem( cache_key, JSON_leedz);
+
+}
+
+
+
+
+
+
+/**
+ * will check to see if user is still subscribed to cached trade
+ * updates cache accordingly
+ */
+export function loadLeedzFromCache( the_month, the_year ) {
 
     // GET CACHE 
-    let dateString = theDay.getAttribute("LEEDZ_DATE");
-    
-    // lists of JSON leedz are cached to dateStrings
-    let JSON_leedz = window.sessionStorage.getItem(dateString);
-    if (JSON_leedz == null || JSON_leedz == "" || JSON_leedz == CACHE_DELIM) return;
-
+    // lists of JSON leedz are cached by month 
+    var cache_key = CACHE_LEEDZ_CAL_KEY + the_month + the_year;
+    let JSON_leedz = window.sessionStorage.getItem( cache_key );
+    if (JSON_leedz == null || JSON_leedz == "" || JSON_leedz == CACHE_DELIM) {
+      // there may be nothing in the cache -- this is not an eror 
+      return [];
+    }
 
     // LOAD LEEDZ
     // load the cache leedz for this dateString
-    const theLeedz = JSON_leedz.split( CACHE_DELIM );
-    
+    const cacheLeedz = JSON_leedz.split( CACHE_DELIM );
+    let retLeedz = [];
+
     // for each JSON leed loaded from CACHE
-    for (var i = 0; i < theLeedz.length; i++) {
+    for (var i = 0; i < cacheLeedz.length; i++) {
   
-        var theJSON = theLeedz[i];
+        var theJSON = cacheLeedz[i];
         if ((theJSON == null) || (theJSON == "") || (theJSON == CACHE_DELIM)) continue; // just be safe
 
         // (re)create leed node using cache data
@@ -308,35 +411,33 @@ function loadLeedzFromCache( theDay ) {
    
         // is the user stil subscribed to leedz of this trade?
         if ( isSubscribed( theLeed.trade ) ) {
-            
-            // FUTURE FUTURE FUTURE
-            // did the user post this leed?
-           
-            // get the color and create a leed
-            var trade_color = getColorForTrade( theLeed.trade );
-            createCalendarLeed( theDay, trade_color, theLeed);
-        
-        } else {
-            // user has unsubscribed since last cache save
-            // remove leed from cache and DO NOT add to calendar
-            theLeedz[i] = null;
+            // if user has unsubscribed since last cache save
+            // do NOT return it or re-add it to the cache
+            retLeedz.push( theLeed );       
         }
+      }
+                
+
+    // REWRITE CACHE
+    // reserialize retLeedz into a String with delimeters
+    JSON_leedz = ""; // start wtih fresh JSON
+
+    if (retLeedz.length > 0) {
+      retLeedz.forEach( (leed) => {
+          JSON_leedz = JSON_leedz + JSON.stringify(leed) + CACHE_DELIM;
+      });
     }
 
-    // RESET CACHE
-
-    JSON_leedz = ""; // start wtih fresh JSON
-    // only save back to cache leedz that have not been nulled out (unsubscribed)
-    theLeedz.forEach( (leed) => {
-        if (leed != null) JSON_leedz = JSON_leedz + JSON.stringify(leed) + CACHE_DELIM;
-    });
-
     // put JSON back where it came from
-    window.sessionStorage.setItem(dateString, JSON_leedz);
+    window.sessionStorage.setItem( cache_key, JSON_leedz);
+
+    // return the list of (still subscribed) leedz from cache
+    return retLeedz;
     
 }
 
-*/
+
+
 
 
 /** 

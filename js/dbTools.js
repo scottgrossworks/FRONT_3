@@ -152,6 +152,7 @@ export async function db_getLeedz( subs, start_date, end_date ) {
         throwError("db_getLeedz()", "null / undefined args");
     }
     
+
     let subs_string = "";
     for (const trade_name of subs) {
         subs_string += trade_name + ",";

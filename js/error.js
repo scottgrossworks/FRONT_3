@@ -3,8 +3,12 @@
  */
 
 
+const BUG_EMAIL = "scottgrossworks@gmail.com";
+
+
 class LeedzError extends Error {
-    constructor(message) {
+
+  constructor(message) {
       super(message);
       this.name = "LeedzError"; 
     }
@@ -40,7 +44,7 @@ export function throwError(src, error) {
         errMsg = error;
     }
     errMsg = src + "=>" + errMsg;
-    // console.error("Throwing Error: " + errMsg);        
+    console.error("Throwing Error: " + errMsg);        
 
     throw new LeedzError(errMsg);
 }
@@ -49,14 +53,31 @@ export function throwError(src, error) {
 
 
 
-export function errorModal( msg ) {
+export function errorModal( error, no_close ) {
 
   let modal = document.getElementById("error_modal");
-  modal.style.display = "block";
+  modal.setAttribute("no_close", no_close);
 
+  let errorString = modal.getAttribute("err_str");
+
+  if ((errorString == null) || errorString == "") {
+    errorString = error + "<BR>";
+  } else {
+    errorString = errorString + "<BR>" + error;
+  }
+
+  modal.setAttribute("err_str", errorString);
 
   let theMsg = modal.children[1]; /* the error text */
   theMsg.style.width = "90%";
-  theMsg.innerHTML = msg + "<BR><BR>" + BUG_EMAIL;
 
+  let email_link = "<a href='mailto:" + BUG_EMAIL + "'> Report Bug</a>";
+  theMsg.innerHTML = errorString + "<BR><BR>" + email_link;
+
+  modal.style.display = "block";
 }
+
+
+
+
+

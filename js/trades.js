@@ -1,8 +1,9 @@
-import { reloadCalendar } from "./calendar.js";
-import { isSubscribed, saveSubscription, removeSubscription, getSubscriptions } from "./user.js";
+import { loadCalLeedz, removeLeedzShowing } from "./calendar.js";
+import { isSubscribed, saveSubscription, removeSubscription } from "./user.js";
 import { db_getTrades } from "./dbTools.js";
-import { printError } from "./error.js";
+import { printError, errorModal } from "./error.js";
 import { hideActionWindow } from "./action.js";
+
 
 
 const COLORS = new Map();
@@ -225,6 +226,9 @@ export async function getAllTrades() {
       printError("db_getTrades()", error );
       printError("getAllTrades()", "Using DEFAULT trades");
       retJSON = DEFAULT_TRADES;
+      // throwError("getAllTrades", error);
+      errorModal("Error getting trades: " + error.message, true);
+
     }
 
 
@@ -277,8 +281,6 @@ export function getColorForTrade(trade_name) {
 */
 export function initTradesColumn( all_trades ) {
 
-  console.error("**** INIT TRADES COLUMN *****");
-
   if ((all_trades == null) || (all_trades.length == 0)) return;
 
   // initialize the spectrum of colors
@@ -328,10 +330,6 @@ export function initTradesColumn( all_trades ) {
         turnTrade_Off(checkBox, radioButton, theLabel);
 
 
-        console.log("CHECKBOX");
-        getSubscriptions();
-
-
       } else { // checkbox is OFF
 
         saveSubscription( trade.trade_name );
@@ -343,7 +341,8 @@ export function initTradesColumn( all_trades ) {
       hideActionWindow();
       
       // reload the leedz for the current month showing
-     reloadCalendar();
+      removeLeedzShowing();
+      loadCalLeedz(false);
     });
 
 
@@ -359,9 +358,6 @@ export function initTradesColumn( all_trades ) {
         removeSubscription( trade.trade_name );
         turnTrade_Off(checkBox, radioButton, theLabel);
 
-        console.log("RADIO");
-        getSubscriptions();
-
 
       } else { // radio button is OFF
 
@@ -374,7 +370,8 @@ export function initTradesColumn( all_trades ) {
       hideActionWindow();
 
       // reload the leedz for the current month showing
-      reloadCalendar();
+      removeLeedzShowing();
+      loadCalLeedz(false);
     });
 
 
@@ -400,7 +397,8 @@ export function initTradesColumn( all_trades ) {
       hideActionWindow();
 
       // reload the leedz for the current month showing
-      reloadCalendar();
+      removeLeedzShowing();
+      loadCalLeedz(false);
     });
   
 
@@ -450,9 +448,11 @@ function createColor(numOfSteps, step) {
       case 4: r = f; g = 0; b = 1; break;
       case 5: r = 1; g = 0; b = q; break;
   }
-  var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
+  var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 215)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
   return (c);
 }
+
+//  var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
 
 
 

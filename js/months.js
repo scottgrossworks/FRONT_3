@@ -1,4 +1,4 @@
-import { loadCalendar, loadUserLeedz } from "./calendar.js";
+import { loadCalendar, loadCalLeedz } from "./calendar.js";
 import { setDateShowing, getMonth, getYear, getMonthname, getNewDate } from "./dates.js";
 import { printError, throwError } from "./error.js";
 
@@ -9,11 +9,6 @@ import { printError, throwError } from "./error.js";
  * 
  */
 export function initMonthChooser() {
-
-
-
-    console.error("**** INIT MONTHS CHOOSER *****");
-
 
 
     let theMonth = getMonth();
@@ -36,17 +31,17 @@ export function initMonthChooser() {
         let prevMonth = getPrevMonth();
 
         let theMonth = prevMonth.getUTCMonth() + 1;
-        console.log("CHECKING MONTH=" + theMonth);
+        // console.log("CHECKING MONTH=" + theMonth);
 
         let theYear = prevMonth.getFullYear();
 
-        theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
+        // theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
         
         setDateShowing( prevMonth );
 
         loadCalendar();
 
-        loadUserLeedz();
+        loadCalLeedz(true);
     });
 
 
@@ -59,12 +54,12 @@ export function initMonthChooser() {
   
         let nextMonth = getNextMonth();
 
-        console.error("GOT NEXT MONT=" + nextMonth.toISOString());
+        // console.error("GOT NEXT MONT=" + nextMonth.toISOString());
 
         let theMonth = nextMonth.getUTCMonth() + 1;
         let theYear = nextMonth.getFullYear();
 
-        console.log("*****theMonth=" + theMonth + "*****theYear=" + theYear);
+        // console.log("*****theMonth=" + theMonth + "*****theYear=" + theYear);
 
         theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
 
@@ -72,7 +67,7 @@ export function initMonthChooser() {
 
        loadCalendar();
 
-       loadUserLeedz();
+       loadCalLeedz(true);
     });
 
 
@@ -96,7 +91,7 @@ function getPrevMonth() {
         theMonth--;
     }
 
-    console.log("getPrevMonth=" + theMonth + "=" + theYear);
+    // console.log("getPrevMonth=" + theMonth + "=" + theYear);
 
     const theDay = 1;
 
@@ -113,7 +108,7 @@ function getNextMonth() {
     let theYear = getYear();
 
     
-    console.log("getNextMonth START=" + theMonth + "=" + theYear)
+    // console.log("getNextMonth START=" + theMonth + "=" + theYear)
 
     if (theMonth == 12) {
         theYear++;
@@ -125,7 +120,7 @@ function getNextMonth() {
 
     
 
-    console.log("getNextMonth END=" + theMonth + "=" + theYear);
+    // console.log("getNextMonth END=" + theMonth + "=" + theYear);
 
     const theDay = 1;
 

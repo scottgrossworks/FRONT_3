@@ -10,8 +10,7 @@ import { getCurrentLeed, saveCacheLeed, setCurrentLeed } from "./leed.js";
 
 
 
-
-export function setActionHeight( window_height ) {
+function setActionHeight( window_height ) {
 
     var action = document.getElementById("action_panel");
     // var screen = action.getAttribute("screen");
@@ -94,9 +93,12 @@ leed_details contains
 */
 export async function showLeedAction( leed_preview ) {
 
-   
+    // SET THE WINDOW SIZE
+    // will show everyhing at the very end
     let action = document.getElementById("action_panel");
-    // will show at the bottom
+    // var action_height = Math.floor( window.innerHeight * 0.7 );
+    action.style.height = "100%";
+    
 
 
     // API request --> DB   
@@ -216,28 +218,44 @@ export async function showLeedAction( leed_preview ) {
 
 
     // EMAIL
-    // 
-    theDiv = document.querySelector("#em_value");
-    if (CURRENT_LEED.opts["em"] == "hide") {
-        theDiv.classList.add("buy2show");
-        theDiv.innerHTML = "Buy to show";
+    // (OPTIONAL)
+    if (leed_details.em == null || leed_details.em == "") {
+        theDiv = document.querySelector("#em");
+        theDiv.style.display = "none";
+
     } else {
-        theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = leed_details.em;
+        theDiv = document.querySelector("#em_value");
+        if (CURRENT_LEED.opts["em"] == "hide") {
+            theDiv.classList.add("buy2show");
+            theDiv.innerHTML = "Buy to show";
+        } else {
+            theDiv.classList.remove("buy2show");
+            theDiv.innerHTML = leed_details.em;
+        }
+   
+        theDiv.style.display = "flex";
     }
     CURRENT_LEED.em = leed_details.em;
 
 
 
     // PHONE
-    // 
-    theDiv = document.querySelector("#ph_value");
-    if (CURRENT_LEED.opts["ph"] == "hide") {
-        theDiv.classList.add("buy2show");
-        theDiv.innerHTML = "Buy to show";
+    // (OPTIONAL)
+    if (leed_details.ph == null || leed_details.ph == "") {
+        theDiv = document.querySelector("#ph");
+        theDiv.style.display = "none";
+
     } else {
-        theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = leed_details.ph;
+        theDiv = document.querySelector("#ph_value");
+        if (CURRENT_LEED.opts["ph"] == "hide") {
+            theDiv.classList.add("buy2show");
+            theDiv.innerHTML = "Buy to show";
+        } else {
+            theDiv.classList.remove("buy2show");
+            theDiv.innerHTML = leed_details.ph;
+        }
+       
+        theDiv.style.display = "flex";
     }
     CURRENT_LEED.ph = leed_details.ph;
 
@@ -248,14 +266,22 @@ export async function showLeedAction( leed_preview ) {
 
     // DETAILS
     // from leed_details
-    // 
-    theDiv = document.querySelector("#det_value");
-    if (CURRENT_LEED.opts["det"] == "hide") {
-        theDiv.classList.add("buy2show");
-        theDiv.innerHTML = "Buy to show";
+    // (OPTIONAL)
+    //
+    if (leed_details.det == null || leed_details.det == "") {
+        theDiv = document.querySelector("#det");
+        theDiv.style.display = "none";
+
     } else {
-        theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = leed_details.det;
+        theDiv = document.querySelector("#det_value");
+        if (CURRENT_LEED.opts["det"] == "hide") {
+            theDiv.classList.add("buy2show");
+            theDiv.innerHTML = "Buy to show";
+        } else {
+            theDiv.classList.remove("buy2show");
+            theDiv.innerHTML = leed_details.det;
+        }
+        theDiv.style.display = "flex";
     }
     CURRENT_LEED.det = leed_details.det;
 
@@ -264,14 +290,22 @@ export async function showLeedAction( leed_preview ) {
 
     // REQUIREMENTS
     // from leed_details
+    // (OPTIONAL)
     // 
-    theDiv = document.querySelector("#reqs_value");
-    if (CURRENT_LEED.opts["reqs"] == "hide") {
-        theDiv.classList.add("buy2show");
-        theDiv.innerHTML = "Buy to show";
+    if (leed_details.reqs == null || leed_details.reqs == "") {
+        theDiv = document.querySelector("#reqs");
+        theDiv.style.display = "none";
+
     } else {
-        theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = leed_details.reqs;
+        theDiv = document.querySelector("#reqs_value");
+        if (CURRENT_LEED.opts["reqs"] == "hide") {
+            theDiv.classList.add("buy2show");
+            theDiv.innerHTML = "Buy to show";
+        } else {
+            theDiv.classList.remove("buy2show");
+            theDiv.innerHTML = leed_details.reqs;
+        }
+        theDiv.style.display = "flex";
     }
     CURRENT_LEED.reqs = leed_details.reqs;
 
@@ -380,12 +414,7 @@ export async function showLeedAction( leed_preview ) {
     // got screen above
     // var screen = action.getAttribute("screen");
     let closeBut = document.getElementById("buy_modal_close");
-    if (screen != 2) {
-        closeBut.style.display = "flex";
-    } else {
-        closeBut.style.display = "none";
-    }
-
+    closeBut.style.display = "flex";
 
 }
 

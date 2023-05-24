@@ -109,6 +109,11 @@ export async function initUser( login ) {
         CURRENT_USER.subs = (resObj.subs != null) ? resObj.subs : [];
         CURRENT_USER.leedz_bought = (resObj.leedz_bought != null) ? resObj.leedz_bought : [];
 
+
+        // USER BADGES
+        CURRENT_USER.badges = (resObj.badges != null) ? resObj.badges : [];
+        
+
       } catch (error) {
 
         printError( "getUser", error.message );
@@ -145,6 +150,7 @@ export function blankUserObject() {
 
   BLANK_USER.subs = [];
   BLANK_USER.leedz_bought = [];
+  BLANK_USER.badges = [];
 
   return BLANK_USER;
 }
@@ -318,6 +324,14 @@ export function saveSubscription( trade_name ) {
     }
 
     saveCacheUser( CURRENT_USER );
+
+    //
+    // FIXME FIXME FIXME
+    // if not guest user
+    // save subscription to the database
+    //
+
+
   }
   
   
@@ -335,6 +349,14 @@ export function saveSubscription( trade_name ) {
     CURRENT_USER.subs.splice( CURRENT_USER.subs.indexOf(trade_name), 1);
 
     saveCacheUser( CURRENT_USER );
+
+
+    //
+    // FIXME FIXME FIXME
+    // if not guest user
+    // remove subscription to the database
+    //
+
   }
   
 

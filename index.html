@@ -50,8 +50,12 @@
   <body>
    
 
-    <!--
-  --
+
+
+
+
+  <!--
+  -- USER PANEL
   --
   --
   -->    
@@ -59,8 +63,20 @@
     <div class="row" id="user_panel">
 
       <div class="column _05" style="max-width:45px;"><button id="up_dot"></button></div>
-      <div class="column _25" id="up_left_column"><label><a id="user_href" href=""></a></label></div>
-      <div class="column _6"></div>
+      <div class="column _15" id="up_left_column"><label><a id="user_href" href=""></a></label></div>
+      
+      
+      <div class="column _65" id="up_center_column">
+
+        <template id="template_badge">
+          <div class="each_badge">
+            <a href="#" class="badge_href"><img class="badge_img"></a>
+          </div>
+        </template>     
+
+      </div>
+      
+      
       <div class="column _15 dropdown" id="up_right_column">
         
         <span id="up_addLeed"><a href="#add_leed" title="+ Sell Leed">+</a></span>
@@ -347,7 +363,7 @@
   <div class="row modal" id="error_modal">
     <center><img id="error_logo" src="img/logo_2.png"></center> 
     <h1></h1>
-    <a id="error_modal_close" href="javascript:modalClose();" href="">X</a>
+    <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
   </div>
 
 
@@ -358,12 +374,12 @@
 
   <script type="module" charset=”utf-8″>
 
-    import { initUser, guestUser, getCurrentUser, isGuestUser } from "./js/user.js";      
+    import { initUser, guestUser, getCurrentUser, isGuestUser, isSubscribed } from "./js/user.js";      
     import { initTradesColumn, getAllTrades } from "./js/trades.js";   
-    import { loadCalendar, loadUserLeedz } from "./js/calendar.js";
+    import { loadCalendar, loadCalLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
-    import { getCurrentLeed, }  from "./js/leed.js";
-    import { setActionHeight, showLeedAction } from "./js/action.js";
+    import { getCurrentLeed, clearCurrentLeed,  }  from "./js/leed.js";
+    import { showLeedAction } from "./js/action.js";
     import { printError, throwError, errorModal } from "./js/error.js";
 
     import { USERNAME_URL_PARAM } from "./js/dbTools.js";
@@ -432,7 +448,7 @@
             let theDiv = event.target;
 
             if (event.target.matches('a')) {
-              console.log("%cDROPDOWN=" + event.target, "color:green;");
+              // console.log("%cDROPDOWN=" + event.target, "color:green;");
               // triggered also for modal close
               //
               // FIXME FIXME FIXME
@@ -461,7 +477,7 @@
 
         if (isGuestUser()) {
           printError("openUserEdit", "Cannot edit Guest user account");
-          errorModal("Cannot edit Guest user account");
+          errorModal("Cannot edit Guest user account", false);
 
         } else {
           window.open("./user_edit.html", "location=1,status=0, menubar=0");
@@ -536,38 +552,51 @@
   
           case "S":
             action.setAttribute("screen", 0);
-            setActionHeight( window.innerHeight );
             SIDE_OPEN = false;  
             actionModal();
             break;
           
           case "M":
             action.setAttribute("screen", 1);
-            setActionHeight( window.innerHeight );
             SIDE_OPEN = false;
             actionModal();
             break;
   
           case "L":
+
             action.setAttribute("screen", 2);
-            setActionHeight( window.innerHeight );
-            SIDE_OPEN = true;
             modalClose();
             
             var closeColumn = document.getElementById("lic_close");
             closeColumn.style.display = "none";
 
+
+            SIDE_OPEN = true;
+            openNav();
+            
+  
             // Is there a current leed in cache
             // possibly just being edited in another window?
             let current_leed = getCurrentLeed();
 
-            if ( current_leed.id != null ) {
-              showLeedAction(current_leed);
-            
+        
+            if (( current_leed.id != null ) && (isSubscribed( current_leed.trade ))) {
+                    
+                try {
+                  showLeedAction(current_leed);
+
+                } catch (error) {
+                  printError("cssScreenSize", error);
+                  errorModal("Cannot load leed details", error);
+                  clearCurrentLeed();
+                  welcomeColumn();
+                }
+
             } else {
+              clearCurrentLeed();
               welcomeColumn();
-            }
-            
+            }      
+
             break;
 
 
@@ -617,7 +646,7 @@
 
         let action = document.getElementById("action_panel");
         action.classList.replace("column", "modal"); 
-
+        console.log("ACTION MODAL");
 
       }
       window.actionModal = actionModal;
@@ -625,26 +654,138 @@
 
 
 
+      function errorModalClose() {
+        let error = document.getElementById("error_modal");
+        error.style.setProperty("no_close", false);
+        error.style.display = "none";
+      }
+      window.errorModalClose = errorModalClose;
+
+
+
       function modalClose() {
 
-        let error = document.getElementById("error_modal");
-        if (error != null) error.style.display = "none";
-    
         let action = document.getElementById("action_panel");
-        if (action != null) action.style.display = "none";
-    
+        action.classList.remove("modal");
+        action.style.display = "none";
+
         let closeBut = document.getElementById("buy_modal_close");
         closeBut.style.display = "none";
-    
+
+        let error = document.getElementById("error_modal");
+        let no_close = error.getAttribute("no_close");
+
+        if (no_close) {
+          error.style.display = "block";
+
+        } else {
+          error.style.display = "none";
+        }
+
       }
       window.modalClose = modalClose;
     
 
 
-          /**
-           * USER
-           *
-           */
+      
+
+
+  /**
+    * USER
+    *
+    */
+
+    function initUserPanel(current_user) {
+
+      // whatever the current user identity -- continue ....
+      // UPDATE the UI with the current user info
+      // user clicks on username --> user edit account page
+      let user_href = document.getElementById("user_href");
+      user_href.innerHTML = current_user.username;
+      user_href.setAttribute("href", "#");
+      user_href.addEventListener( "click", (event) => {    
+      openUserEdit();
+      });
+
+
+      if (isGuestUser()) {
+      user_href.style.color = "darkorange";
+
+      let dot = document.getElementById("up_dot");
+      dot.style.backgroundColor = "darkorange";
+      // do nothing on click
+      user_href.setAttribute("href", "#");
+      // user_href.addEventListener( "click", (event) => { });
+      
+
+
+
+      // BADGES
+      } else if (current_user.badges.length != 0) {
+          
+          // clone a new node
+          //
+          //
+          //  <div class="each_badge">
+          //    <a href="#" class="badge_href"><img class="badge_img"></a>
+          //  </div>
+          //  
+          const theList = document.querySelector("#up_center_column");
+          const theTemplate = document.querySelector("#template_badge");
+          for (var i = 0; i < current_user.badges.length; i++) {
+            var newNode = theTemplate.content.cloneNode(true).querySelector(".each_badge");
+            var theImg = newNode.querySelector(".badge_img");
+            var theHref = newNode.querySelector(".badge_href");
+              switch( current_user.badges[i]) {
+                  case "1":
+                  theImg.src = "./img/badge_1.png";
+                  theHref.setAttribute("href", "#");   // FIXME explain badge in About section #
+                  break;
+                  case "2":
+                  theImg.src = "./img/badge_2.png";
+                  theHref.setAttribute("href", "#");   // FIXME explain badge in About section #
+                  break;
+                  case "3":
+                  theImg.src = "./img/badge_3.png";
+                  theHref.setAttribute("href", "#");   // FIXME explain badge in About section #
+                  break;
+                  case "4":
+                  theImg.src = "./img/badge_4.png";
+                  theHref.setAttribute("href", "#");   // FIXME explain badge in About section #
+                  break;
+                  case "5":
+                  theImg.src = "./img/badge_5.png";
+                  theHref.setAttribute("href", "#");   // FIXME explain badge in About section #
+                  break;
+                  default:
+                  printError("initUserPanel", "unknown user badge: " + current_user.badges[i]);
+                  // do not fail, just ignore
+                  theImg = null;
+                  break;
+              }
+            if (theImg != null) theList.appendChild(newNode);
+          } // for  
+
+      }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// START FROM HERE ON PAGE LOAD.....
+//
+//////////////////////////////////////////////////////////////////////
+
 
           // full URL for index.html should include username parameter
           // index.html?un=scott.gross
@@ -659,7 +800,7 @@
           // do not fail on error -- load Guest User as default
           //
         
-          let currentUser = null;
+          let current_user = null;
 
           const urlParams = new URLSearchParams(window.location.search);
           const url_username = urlParams.get( USERNAME_URL_PARAM );
@@ -673,7 +814,7 @@
             printError("No username parameter", "Using Guest Account");
             
             // USE GUEST USER
-            currentUser = guestUser();
+            current_user = guestUser();
 
 
           //
@@ -682,7 +823,7 @@
             printError("Invalid username: " + url_username, "username can only contain alphanumeric chars");
             
             // USE GUEST USER
-            currentUser = guestUser();
+            current_user = guestUser();
       
 
       
@@ -692,7 +833,7 @@
               await initUser( url_username ); // will throw error
   
               // return newly-loaded user
-              currentUser = getCurrentUser( false );
+              current_user = getCurrentUser( false );
 
             } catch (error) {
   
@@ -702,45 +843,41 @@
               // for the UI
               var msg = "Cannot load user data.<BR>Using guest account.";
               msg = error + "<BR>" + msg;
-              errorModal( msg );
+              printError("User Init", msg);
+              errorModal( msg , true );
   
               // DO NOT FAIL -- use guest user
-              currentUser = guestUser();   
+              current_user = guestUser();   
 
             }
 
           }
-
-
-          // whatever the current user identity -- continue ....
-          // UPDATE the UI with the current user info
-          // user clicks on username --> user edit account page
-          let user_href = document.getElementById("user_href");
-          user_href.innerHTML = currentUser.username;
-          user_href.setAttribute("href", "#");
-          user_href.addEventListener( "click", (event) => {    
-            openUserEdit();
-          });
-
-
-          if (isGuestUser()) {
-            user_href.style.color = "darkorange";
-
-            let dot = document.getElementById("up_dot");
-            dot.style.backgroundColor = "darkorange";
-            // do nothing on click
-            user_href.setAttribute("href", "#");
-            // user_href.addEventListener( "click", (event) => { });
-          }
-
-
           
+
+
+          // INIT USER PANEL
+          //
+          try {
+            initUserPanel( current_user );
+
+          } catch (error) {
+            var msg = "Cannot create user panel.<BR>Please refresh page."
+            msg = error.message + "<BR>" + msg;
+            
+            printError("User Panel", error);
+            errorModal( msg , true );
+          }
+          
+
+
+
+
           /**
            * TRADES
            *
            * LOAD ALL trades and turn ON the ones subscribed to
            * when we turn ON a trade this will ALSO load the leedz
-           * for each trade in currentUser.subs[]
+           * for each trade in current_user.subs[]
            */
           let trades = [];
           try {
@@ -764,8 +901,8 @@
             var msg = "Cannot load trades.<BR>Please refresh page."
             msg = error.message + "<BR>" + msg;
             
-            printError("Init Trades", error);
-            errorModal( msg );
+            printError("Trades Column", error);
+            errorModal( msg , true );
           }
 
 
@@ -775,7 +912,16 @@
            * INITIALIZE month chooser in middle column
            *
            */ 
-           initMonthChooser();
+           try {
+             initMonthChooser();
+            
+            } catch (error) {
+              var msg = "Cannot create month chooser.<BR>Please refresh page."
+              msg = error.message + "<BR>" + msg;
+              
+              printError("Month Chooser", error);
+              errorModal( msg , true );
+            }
 
 
 
@@ -783,15 +929,37 @@
           /**
            * LOAD central calendar column and any cached leedz
            */
-           loadCalendar();
+           try {
+             
+            loadCalendar();
+
+            } catch (error) {
+
+              var msg = "Cannot load calendar.<BR>Please refresh page."
+              msg = error.message + "<BR>" + msg;
+              
+              printError("Loading Calendar", error);
+              errorModal( msg , true );
+            }
+
+
 
 
           /**
            * 
            */
-          loadUserLeedz();
+          try {
 
+            await loadCalLeedz( true );
 
+          } catch (error) {
+
+            var msg = "Cannot load leedz.<BR>Please refresh page."
+            msg = error.message + "<BR>" + msg;
+            
+            printError("Loading Leedz", error);
+            errorModal( msg , true );
+          }
 
 
 

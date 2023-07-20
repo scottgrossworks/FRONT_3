@@ -1,6 +1,6 @@
-import { loadCalendar, loadCalLeedz } from "./calendar.js";
 import { setDateShowing, getMonth, getYear, getMonthname, getNewDate } from "./dates.js";
-import { printError, throwError } from "./error.js";
+import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./calendar.js";
+
 
 
 
@@ -10,6 +10,7 @@ import { printError, throwError } from "./error.js";
  */
 export function initMonthChooser() {
 
+    console.log("INIT MONTH CHOOSER");
 
     let theMonth = getMonth();
     let theYear = getYear();
@@ -30,17 +31,22 @@ export function initMonthChooser() {
         let prevMonth = getPrevMonth();
 
         let theMonth = prevMonth.getUTCMonth() + 1;
-        // console.log("CHECKING MONTH=" + theMonth);
-
+    
         let theYear = prevMonth.getFullYear();
 
-        // theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
+        theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
         
         setDateShowing( prevMonth );
 
-        loadCalendar();
+        buildCalendar();
 
-        loadCalLeedz(true);
+        loadCacheLeedz();
+
+        // this is an async call
+        // will return immediately - data shows up later
+        loadDBLeedz();
+
+        console.log("((((1)))))  BACK FROM LOAD");
     });
 
 
@@ -53,25 +59,31 @@ export function initMonthChooser() {
   
         let nextMonth = getNextMonth();
 
-        // console.error("GOT NEXT MONT=" + nextMonth.toISOString());
-
         let theMonth = nextMonth.getUTCMonth() + 1;
         let theYear = nextMonth.getFullYear();
 
-        // console.log("*****theMonth=" + theMonth + "*****theYear=" + theYear);
-
-        theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
+       theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
 
        setDateShowing( nextMonth );
 
-       loadCalendar();
+       buildCalendar();
 
-       loadCalLeedz(true);
+       loadCacheLeedz();
+
+        // this is an async call
+        // will return immediately - data shows up later
+       loadDBLeedz();
+
+       console.log("((((2)))))  BACK FROM LOAD");
     });
 
-
-
 }
+
+
+
+
+
+
 
 
 /*

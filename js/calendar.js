@@ -23,11 +23,11 @@ let CURRENT_SELECTION = null;
 
 
 /*
- * Build the calendar UI 
- * loads leedz from DB
+ * JUST build the calendar UI 
  *
+ * do not go back to DB for leedz
  */
-export function loadCalendar() {
+export function buildCalendar() {
 
     CURRENT_SELECTION = null;
 
@@ -146,10 +146,38 @@ export function removeLeedzForTrade( trade_name ) {
 
 
 /**
- *
+ * Load leedz from cache (month showing) and return immediately
  * 
  */
-export async function loadCalLeedz( goto_DB ) {
+export function loadCacheLeedz() {
+
+    CURRENT_SELECTION = null;
+
+    let results = null;
+    try {
+            results = loadLeedzFromCache(getMonth(), getYear());
+        
+    } catch (error) {
+        printError("Loading leedz from DB", error);
+        errorModal(error.message, false);
+        return;
+    }
+    
+    // update calendar
+    addLeedzToCalendar( results );
+}
+
+
+
+
+
+
+/**
+ *  GOTO DB for new leedz
+ *  will populate the calendar and save new leedz to cache
+ * 
+ 
+export function loadDBLeedz() {
 
 
     CURRENT_SELECTION = null;
@@ -160,71 +188,44 @@ export async function loadCalLeedz( goto_DB ) {
     let results = null;
     try {
 
-        if (goto_DB) {
             results = await loadLeedzFromDB(getSubscriptions(), firstDayShowing(), lastDayShowing());
+            
+            // immediately save to cache
             saveLeedzToCache( results, getMonth(), getYear() );
-        } else { 
-            results = loadLeedzFromCache(getMonth(), getYear());
-        }
+      
     } catch (error) {
         printError("Loading leedz from DB", error);
         errorModal(error.message, false);
         return;
     }
     
-    
-    
-    // the UI contains all the each_date days
-    const theList = document.querySelector("#calendar_list");
-
-    // for each (date sorted) leed coming in from the DB
-    for (const leed_fromDB of results) {
-        
-        // what color are all leedz of this trade?
-        let trade_color = getColorForTrade( leed_fromDB.trade );
-
-        // when does leed appear on calendar?
-        const startDate = new Date( leed_fromDB.start );
-        
-        
-        // console.log("%c---FROM DB=" + leed_fromDB.trade + "--" + startDate.toString() +  "---" + startDate.toISOString(), "color:" + trade_color + ";" );
-
-        // starting at 1 (skipping template index:0 )
-        // iterate through the calendar and find the corresponding date
-        let shortDate_fromLeed = getShortDateString( startDate.toISOString() );
-        
-        for (var counter = 1; counter < theList.children.length; counter++) {
-         
-            let each_day = theList.children[ counter ];
-
-            // compare the date for this row in the calendar to the date of the leed
-            // theDate is a String
-            let theDate = each_day.getAttribute("LEEDZ_DATE");
-            // this should NEVER be null
-            if (theDate == null) {
-
-                printError("loadCalLeedz", "LEEDZ_DATE attribute not being set for each day");
-                printError("loadCalLeedz", "Unable to load leedz for " + leed_fromDB.trade);
-                return;  
-            }
-
-            // if date row in calendar corresponds to date in leed_fromDB
-            // both should be Date.toISOString() 
-            if ( shortDate_fromLeed == theDate ) {
-
-                // these are fresh leedz from DB with possibly altered leed details
-                // overwrite any matching leed
-                removeMatchingLeed( each_day, leed_fromDB.id );
-
-                // CREATE CALENDAR LEED
-                //
-                createCalendarLeed( each_day, trade_color, leed_fromDB);
-                
-                break; // leed will only have one corresponding calendar day    
-            } 
-        }
+    // update calendar
+    addLeedzToCalendar( results );
+}
+*/
 
 
+/**
+ *  GOTO DB for new leedz
+ *  will populate the calendar and save new leedz to cache
+ * 
+ */
+export function loadDBLeedz() {
+
+
+    CURRENT_SELECTION = null;
+
+    // API request --> DB 
+    // load leedz for this trade and date range showing
+    // returns immediately -- provide callback for DB results when they come in
+    try {
+
+            loadLeedzFromDB(getSubscriptions(), firstDayShowing(), lastDayShowing(), asyncDBCallback );
+            
+    } catch (error) {
+        printError("Loading leedz from DB", error);
+        errorModal(error.message, false);
+        return;
     }
 }
 
@@ -232,7 +233,89 @@ export async function loadCalLeedz( goto_DB ) {
 
 
 
+//
+// FIXME FIXME FIXME
+// when new leedz come back from DB
+// must go back and remove identical leed from cache / calendar
+// in case where same id, new date -- leed will currently appear twice,
+// once from cache load, once from db load with new date info
+//
+/**
+ * 
+ */
+function asyncDBCallback( results ) {
 
+    console.log("*** IN asyncDBCallback!!! **** ");
+    // update calendar
+    addLeedzToCalendar( results );
+
+    // immediately save to cache
+    saveLeedzToCache( results, getMonth(), getYear() );
+
+}
+
+
+
+/**
+ *  
+ * 
+ */
+function addLeedzToCalendar( results ) {
+
+        // the UI contains all the each_date days
+        const theList = document.querySelector("#calendar_list");
+
+        // for each (date sorted) leed coming in from the DB
+        for (const the_Leed of results) {
+            
+            // what color are all leedz of this trade?
+            let trade_color = getColorForTrade( the_Leed.trade );
+    
+            // when does leed appear on calendar?
+            const startDate = new Date( the_Leed.start );
+            
+            
+            // console.log("%c---FROM DB=" + leed_fromDB.trade + "--" + startDate.toString() +  "---" + startDate.toISOString(), "color:" + trade_color + ";" );
+    
+            // starting at 1 (skipping template index:0 )
+            // iterate through the calendar and find the corresponding date
+            let shortDate_fromLeed = getShortDateString( startDate.toISOString() );
+            
+            for (var counter = 1; counter < theList.children.length; counter++) {
+             
+                let each_day = theList.children[ counter ];
+    
+                // compare the date for this row in the calendar to the date of the leed
+                // theDate is a String
+                let theDate = each_day.getAttribute("LEEDZ_DATE");
+                // this should NEVER be null
+                if (theDate == null) {
+    
+                    printError("loadCalLeedz", "LEEDZ_DATE attribute not being set for each day");
+                    printError("loadCalLeedz", "Unable to load leedz for " + the_Leed.trade);
+                    return;  
+                }
+    
+                // if date row in calendar corresponds to date in leed_fromDB
+                // both should be Date.toISOString() 
+                if ( shortDate_fromLeed == theDate ) {
+    
+                    // these are fresh leedz from DB with possibly altered leed details
+                    // overwrite any matching leed
+                    removeMatchingLeed( each_day, the_Leed.id );
+    
+                    // CREATE CALENDAR LEED
+                    //
+                    createCalendarLeed( each_day, trade_color, the_Leed);
+                    
+                    break; // leed will only have one corresponding calendar day    
+                } 
+            }
+    
+    
+        }
+
+}
 
  
 /**

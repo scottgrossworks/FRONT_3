@@ -235,14 +235,13 @@ img#shopping_cart {
 
 .edit_button {
 
-    
     display:flex;
     
     position:relative;
 
-    background-color: var(--LEEDZ_GREEN);
+    background-color: var(--LEEDZ_DARKGREEN);
     border: none;
-    color: black;
+    color: white;
    
     
     text-decoration: none;
@@ -281,6 +280,22 @@ img#edit_icon {
 
 
 
+
+div#row_buy_button {
+    display: none;
+}
+
+
+
+div#row_edit_button {
+    display: none;
+}
+
+
+
+div#row_report_button {
+    display: none;
+}
 
 
 

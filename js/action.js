@@ -9,6 +9,7 @@ import { getCurrentLeed, saveCacheLeed, setCurrentLeed } from "./leed.js";
 
 
 
+/**   
 
 function setActionHeight( window_height ) {
 
@@ -17,8 +18,7 @@ function setActionHeight( window_height ) {
     
     var action_height = Math.floor(window_height * 0.7 );
     action.style.height = action_height;
-
-/*    
+ 
     switch (screen) {
         
         case "0":
@@ -42,21 +42,13 @@ function setActionHeight( window_height ) {
         default:
             printError("setActionHeight", "invalid screen attribute: " + screen);
     }
-
+}
 */
 
-}
+
 
 
     
-//
-// FIXME FIXME FIXME
-// local caching and changes on DB / race conditions
-// cache by id?
-//
-// FIXME FIXME FIXME
-// buy button?
-
 /*
  * Show full leed details in the action window
  
@@ -88,7 +80,8 @@ leed_details contains
 *
 *
 * if user has posted this leed -- show EDIT button
-* if someone else has posted this leed -- show BUY button
+* 
+* if someone else has posted this leed -- show BUY and REPORT buttons
 *
 */
 export async function showLeedAction( leed_preview ) {
@@ -125,6 +118,9 @@ export async function showLeedAction( leed_preview ) {
 
     
     const CURRENT_LEED = getCurrentLeed();
+    
+    console.log("---------CURRENT LEED---------");
+    console.log(CURRENT_LEED);
 
 
     // START DATE

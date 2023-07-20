@@ -1,4 +1,4 @@
-import { loadCalLeedz, removeLeedzShowing } from "./calendar.js";
+import { loadCacheLeedz, removeLeedzShowing } from "./calendar.js";
 import { isSubscribed, saveSubscription, removeSubscription } from "./user.js";
 import { db_getTrades } from "./dbTools.js";
 import { printError, errorModal } from "./error.js";
@@ -347,9 +347,11 @@ export function initTradesColumn( all_trades ) {
       // clear the action window
       hideActionWindow();
       
-      // reload the leedz for the current month showing
       removeLeedzShowing();
-      loadCalLeedz(true);
+
+      // reload current month leedz from cache
+      // DO NOT go back to DB for new leedz
+      loadCacheLeedz();
     });
 
 
@@ -382,9 +384,12 @@ export function initTradesColumn( all_trades ) {
       // clear the action window
       hideActionWindow();
 
-      // reload the leedz for the current month showing
       removeLeedzShowing();
-      loadCalLeedz(true);
+
+      // reload current month leedz from cache
+      // DO NOT go back to DB for new leedz
+      loadCacheLeedz();
+
     });
 
 

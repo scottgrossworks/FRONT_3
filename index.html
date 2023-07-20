@@ -376,7 +376,7 @@
 
     import { initUser, guestUser, getCurrentUser, isGuestUser, isSubscribed } from "./js/user.js";      
     import { initTradesColumn, getAllTrades } from "./js/trades.js";   
-    import { loadCalendar, loadCalLeedz } from "./js/calendar.js";
+    import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
     import { getCurrentLeed, clearCurrentLeed,  }  from "./js/leed.js";
     import { showLeedAction } from "./js/action.js";
@@ -923,18 +923,18 @@
 
           
           /**
-           * LOAD central calendar column and any cached leedz
+           * BUILD central calendar column 
            */
            try {
-             
-            loadCalendar();
+
+              buildCalendar();
 
             } catch (error) {
 
-              var msg = "Cannot load calendar.<BR>Please refresh page."
+              var msg = "Cannot build calendar.<BR>Please refresh page."
               msg = error.message + "<BR>" + msg;
               
-              printError("Loading Calendar", error);
+              printError("Building Calendar", error);
               errorModal( msg , true );
             }
 
@@ -942,21 +942,40 @@
 
 
           /**
-           * 
+           * Load CACHE leedz
            */
           try {
 
-            await loadCalLeedz( true );
+            loadCacheLeedz();
 
           } catch (error) {
 
-            var msg = "Cannot load leedz.<BR>Please refresh page."
+            var msg = "Cannot load leedz from cache.<BR>Please refresh page."
             msg = error.message + "<BR>" + msg;
             
-            printError("Loading Calendar Leedz", error);
+            printError("Loading Cache Leedz", error);
             errorModal( msg , true );
           }
 
+
+          
+
+          /**
+           * Load Leedz from DB -- will return immediately
+            * delegate to callback internally when data arrives
+           */
+           try {
+
+            loadDBLeedz();
+
+          } catch (error) {
+
+            var msg = "Cannot load leedz from DB.  <BR>Please refresh page."
+            msg = error.message + "<BR>" + msg;
+            
+            printError("Loading DB Leedz", error);
+            errorModal( msg , true );
+          }
 
 
           

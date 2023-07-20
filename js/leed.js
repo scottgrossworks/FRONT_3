@@ -8,57 +8,6 @@ import { db_getLeedz } from "./dbTools.js";
 
 
 
-export const CACHE_LEED_KEY ="LD";
-export const CACHE_LEEDZ_CAL_KEY = "LC";
-
-const CACHE_DELIM = "|";
-
-const CURRENT_LEED = blankLeedObject();
-
-
-
-
-
-/**
- *
- * 
- */
-export async function loadLeedzFromDB( subs, firstDay, lastDay ) {
-    
-
-  // API request --> DB 
-  // load leedz for this trade and date range showing
-  //
-  let results = null;
-  try {
-      // 
-      //  client <---> API Gateway <===> DB
-      //
-      // get the leedz for all trade names in subs and the dates showing
-      results = await db_getLeedz( subs, firstDay, lastDay );
-
-
-  } catch (error) {   
-      printError( "DB getLeedz", error.message );
-      printError( "Received JSON", results);
-      
-      // EXIT FUNCTION HERE
-      throwError( "loadLeedzFromDB", error); 
-  }
-
-  // query returns empty result set
-  // if (results.length == 0) { ; }
-
-  return results;
-}
-
-
-
-
-
-
-
-
 /**
 
 LEED PREVIEW
@@ -86,6 +35,83 @@ LEED DETAILS
 
 */
 
+
+
+
+export const LEED_KEYS = {
+  ID: 0,
+  CREATOR: 1,
+  TRADE: 2,
+  LOC: 3,
+  ZIP: 4,
+  START: 5,
+  END: 6,
+  EM: 7,
+  PH: 8,
+  NOTE: 9,
+  DET: 10,
+  REQS: 11,
+  PR: 12,
+};
+
+
+
+
+
+export const CACHE_LEED_KEY ="LD";
+
+
+const START_OPTS = "000000000000000"; // 15 chars long
+
+const CACHE_LEEDZ_CAL_KEY = "LC";
+const CACHE_DELIM = "|";
+
+
+const CURRENT_LEED = blankLeedObject();
+
+
+
+/**
+ *
+ * 
+ */
+export async function loadLeedzFromDB( subs, firstDay, lastDay, theCallback ) {
+    
+
+  // API request --> DB 
+  // load leedz for this trade and date range showing
+  //
+  let results = null;
+  try {
+      // 
+      //  client <---> API Gateway <===> DB
+      //
+      // get the leedz for all trade names in subs and the dates showing
+      results = await db_getLeedz( subs, firstDay, lastDay );
+
+
+  } catch (error) {   
+      printError( "DB getLeedz", error.message );
+      printError( "Received JSON", results);
+      
+      // EXIT FUNCTION HERE
+      throwError( "loadLeedzFromDB", error); 
+  }
+
+  // query returns empty result set
+  // if (results.length == 0) { ; }
+
+  // the callback function will populate the calendar and update the cache
+  theCallback( results );
+}
+
+
+
+
+
+
+
+
 /**
  * create an empty JSON-compatible leed object
  */
@@ -112,9 +138,7 @@ export function blankLeedObject() {
 
     BLANK_LEED.pr = null;
 
-    // opts should be 0000101100  long digit
-    // FIXME FIXME FIXME convert between opts as digit and array of key=value pairs
-    BLANK_LEED.opts = {};
+    BLANK_LEED.opts = START_OPTS;
 
     return BLANK_LEED;
   }
@@ -173,9 +197,11 @@ export function setCurrentLeed( jsonObj ) {
 
     if (jsonObj.pr != null) CURRENT_LEED.pr = jsonObj.pr;
 
-    // FIXME FIXME FIXME convert between opts as digit and array of key=value pairs
-    if ((jsonObj.opts != null) && (jsonObj.opts.length != 0)) CURRENT_LEED.opts = jsonObj.opts;
-
+    if ((jsonObj.opts == null) || (jsonObj.opts.length == 0)) {
+        CURRENT_LEED.opts = START_OPTS;
+    } else {
+        CURRENT_LEED.opts = jsonObj.opts;
+    }
 
     // console.log("CACHING LEED");
     // console.log(CURRENT_LEED);
@@ -213,8 +239,7 @@ export function clearCurrentLeed() {
 
     CURRENT_LEED.pr = null;
 
-    // opts should be long digit
-    CURRENT_LEED.opts = {};
+    CURRENT_LEED.opts = START_OPTS;
 
 }
 

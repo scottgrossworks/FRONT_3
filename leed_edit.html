@@ -74,7 +74,7 @@
                     <input type="button" value="Edit" onclick="inlineEdit('row_trade', defaultOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_show.png"  id="trade_eye" class="lock"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png"  id="2_eye" class="lock"></TD>
             </tr>
 
 
@@ -90,7 +90,7 @@
                     <input type="button" value="Edit" onclick="inlineEdit('row_note', defaultOptions)"/>
                 </td>
 
-               <TD class="eyeballTD"><img src="./img/eye_show.png" id="note_eye" class="lock"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="9_eye" class="lock"></TD>
             </tr>
 
 
@@ -106,7 +106,7 @@
                     <input type="button" value="Edit" onclick="inlineEdit('row_start', defaultOptions)"/>
                 </td>
 
-               <TD class="eyeballTD"><img src="./img/eye_show.png" id="start_eye" class="lock"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="5_eye" class="lock"></TD>
             </tr>
 
 
@@ -122,7 +122,7 @@
                     <input type="button" value="Edit" onclick="inlineEdit('row_end', defaultOptions)"/>
                 </td>
 
-               <TD class="eyeballTD"><img src="./img/eye_show.png"  id="end_eye" class="lock"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_show.png"  id="6_eye" class="lock"></TD>
             </tr>
 
 
@@ -144,7 +144,7 @@
                 </td>
 
                 
-               <TD class="eyeballTD"><img src="./img/eye_show.png" id="loc_eye" eyeball="show" onclick="toggleEyeball('loc')"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="3_eye" eyeball="show" onclick="toggleEyeball( 3 )"></TD>
             </tr>
 
 
@@ -165,7 +165,7 @@
                     <input type="button" value="Edit" onclick="inlineEdit('row_em', defaultOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="em_eye" eyeball="show" onclick="toggleEyeball('em')"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="7_eye" eyeball="show" onclick="toggleEyeball( 7 )"></TD>
             </tr>
 
 
@@ -184,7 +184,7 @@
                 </td>
 
                 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="ph_eye" eyeball="show" onclick="toggleEyeball('ph')"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="8_eye" eyeball="show" onclick="toggleEyeball( 8 )"></TD>
             </tr>
 
 
@@ -202,7 +202,7 @@
                     <input type="button" value="Edit" onclick="inlineEdit('row_det', defaultOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="det_eye" eyeball="show" onclick="toggleEyeball('det')"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="10_eye" eyeball="show" onclick="toggleEyeball( 10 )"></TD>
             </tr>
 
 
@@ -219,7 +219,7 @@
                     <input type="button" value="Edit" onclick="inlineEdit('row_reqs', defaultOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="reqs_eye" eyeball="show" onclick="toggleEyeball('reqs')"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="11_eye" eyeball="show" onclick="toggleEyeball( 11 )"></TD>
             </tr>
 
 
@@ -235,7 +235,7 @@
                     <input type="button" value="Edit" onclick="inlineEdit('row_price', defaultOptions)"/>
                 </td>
 
-               <TD class="eyeballTD"><img src="./img/eye_show.png" id="price_eye" class="lock"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="12_eye" class="lock"></TD>
             </tr>
 
 
@@ -285,6 +285,8 @@
         import { CACHE_LEED_KEY } from "./js/leed.js";
         import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 
+        import { LEED_KEYS }  from "./js/leed.js";
+
 
 
 
@@ -294,7 +296,7 @@
         let leedJSON = window.sessionStorage.getItem( CACHE_LEED_KEY );
         if (leedJSON == undefined || leedJSON == null) {
             printError("Edit Leed", "Cannot retrieve cache leed with key:" + CACHE_LEED_KEY );
-            errorModal("Cannot load Leed info from cache");
+            errorModal("Cannot load Leed info from cache", true);
             throwError("Error loading cache leed");
         }
     
@@ -305,7 +307,7 @@
     
         } catch (error) {
             printError("Cannot parse leed JSON", leedJSON);
-            errorModal("Cache leed has invalid JSON format");
+            errorModal("Cache leed has invalid JSON format", true);
             throwError("Error parsing cahce leed JSON");
         }
 
@@ -383,36 +385,36 @@
 
         element = document.getElementById("td_loc");
         element.innerHTML = CURRENT_LEED.loc;
-        if (CURRENT_LEED.opts["loc"] == "hide")
-            toggleEyeball("loc");
+        if (CURRENT_LEED.opts[ LEED_KEYS.LOC ] == "hide")
+            toggleEyeball( LEED_KEYS.LOC );
             
 
 
         element = document.getElementById("td_em");
         element.innerHTML = CURRENT_LEED.em;
-        if (CURRENT_LEED.opts["em"] == "hide")
-            toggleEyeball("em");
+        if (CURRENT_LEED.opts[ LEED_KEYS.EM ] == "hide")
+            toggleEyeball( LEED_KEYS.EM );
 
 
 
         element = document.getElementById("td_ph");
         element.innerHTML = CURRENT_LEED.ph
-        if (CURRENT_LEED.opts["ph"] == "hide")
-            toggleEyeball("ph");
+        if (CURRENT_LEED.opts[ LEED_KEYS.PH ] == "hide")
+            toggleEyeball( LEED_KEYS.PH );
 
 
 
         element = document.getElementById("td_det");
         element.innerHTML = CURRENT_LEED.det;
-        if (CURRENT_LEED.opts["det"] == "hide")
-        toggleEyeball("det");
+        if (CURRENT_LEED.opts[ LEED_KEYS.DET ] == "hide")
+        toggleEyeball( LEED_KEYS.DET );
 
 
 
         element = document.getElementById("td_reqs");
         element.innerHTML = CURRENT_LEED.reqs;
-        if (CURRENT_LEED.opts["reqs"] == "hide")
-            toggleEyeball("reqs");
+        if (CURRENT_LEED.opts[ LEED_KEYS.REQS ] == "hide")
+            toggleEyeball( LEED_KEYS.REQS );
 
 
 
@@ -581,14 +583,14 @@
                 theImg.src = "./img/eye_show.png";
                 theImg.eyeball = "show";
                 theImg.style.opacity = 1;
-                LEED_CHANGES.opts[fieldName] = "show";
+                LEED_CHANGES.opts[fieldName] = '1';
 
             } else {
                 
                 theImg.src = "./img/eye_hide.png";
                 theImg.eyeball = "hide";
                 theImg.style.opacity = 0.35;
-                LEED_CHANGES.opts[fieldName] = "hide";
+                LEED_CHANGES.opts[fieldName] = '0';
             }
 
         }

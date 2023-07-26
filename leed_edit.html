@@ -1,4 +1,9 @@
-
+<!--
+--
+-- EDIT the current leed shown in the action window
+-- the current user is the creator of the leed
+--    
+-->
    
 <!DOCTYPE html>
 <html lang="en">
@@ -64,14 +69,15 @@
         <table>
 
 
-            <tr id="row_trade">
-                            
-                <TD class="labelTD">Trade Name: </TD>
-                
-                <td id="td_trade" data-inlineType="trade_name" data-inlineName="trade" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
-                <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="inlineEdit('row_trade', defaultOptions)"/>
+            <tr id="row_creator">
+                            
+                <TD class="labelTD">Creator: </TD>
+                
+                <td id="td_creator"></td>
+
+                <td>
+                   <!-- no edit button for creator  --> 
                 </td>
 
                 <TD class="eyeballTD"><img src="./img/eye_show.png"  id="2_eye" class="lock"></TD>
@@ -79,7 +85,22 @@
 
 
 
+            <tr id="row_trade">
+                            
+                <TD class="labelTD">Trade Name: </TD>
+                
+                <td id="td_trade" data-inlineType="trade_name" data-inlineName="trade" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="inlineEdit('row_trade', editOptions)"/>
+                </td>
+
+                <TD class="eyeballTD"><img src="./img/eye_show.png"  id="3_eye" class="lock"></TD>
+            </tr>
+
+
+
+            <!-- NOTE (TITLE) -->
             <tr id="row_note">
                         
                 <TD class="labelTD">Title: </TD>
@@ -87,15 +108,15 @@
                 <td id="td_note" data-inlineType="text" data-inlineName="note" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
                 <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="inlineEdit('row_note', defaultOptions)"/>
+                    <input type="button" value="Edit" onclick="inlineEdit('row_note', editOptions)"/>
                 </td>
 
-               <TD class="eyeballTD"><img src="./img/eye_show.png" id="9_eye" class="lock"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="1_eye" class="lock"></TD>
             </tr>
 
 
 
-            <!-- FIXMEFIXMEFIXME date/time chooser -->
+            <!-- START TIME -->
             <tr id="row_start">
                         
                 <TD class="labelTD">Start Time: </TD>
@@ -103,15 +124,15 @@
                 <td id="td_start" data-inlineType="date" data-inlineName="start" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
                 <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="inlineEdit('row_start', defaultOptions)"/>
+                    <input type="button" value="Edit" onclick="inlineEdit('row_start', editOptions)"/>
                 </td>
 
-               <TD class="eyeballTD"><img src="./img/eye_show.png" id="5_eye" class="lock"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="6_eye" class="lock"></TD>
             </tr>
 
 
                     
-            <!-- FIXMEFIXMEFIXME date/time chooser -->
+            <!-- END TIME -->
             <tr id="row_end">
                         
                 <TD class="labelTD">End Time: </TD>
@@ -119,10 +140,10 @@
                 <td id="td_end" data-inlineType="date" data-inlineName="end" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
                 <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="inlineEdit('row_end', defaultOptions)"/>
+                    <input type="button" value="Edit" onclick="inlineEdit('row_end', editOptions)"/>
                 </td>
 
-               <TD class="eyeballTD"><img src="./img/eye_show.png"  id="6_eye" class="lock"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_show.png"  id="7_eye" class="lock"></TD>
             </tr>
 
 
@@ -140,11 +161,11 @@
                 <td id="td_loc" data-inlineType="text" data-inlineName="loc" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
                 <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="inlineEdit('row_loc', defaultOptions)"/>
+                    <input type="button" value="Edit" onclick="inlineEdit('row_loc', editOptions)"/>
                 </td>
 
                 
-               <TD class="eyeballTD"><img src="./img/eye_show.png" id="3_eye" eyeball="show" onclick="toggleEyeball( 3 )"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="5_eye" eyeball="show" onclick="toggleEyeball( 5 )"></TD>
             </tr>
 
 
@@ -153,8 +174,7 @@
             
 
 
-            <!-- LEED EMAIL 
-            -->
+            <!-- EMAIL  -->
             <tr id="row_em">
                             
                 <TD class="labelTD">Client Email: </TD>
@@ -162,17 +182,16 @@
                 <td id="td_em" data-inlineType="email" data-inlineName="em" data-inlineRequired="0"></td>
 
                 <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="inlineEdit('row_em', defaultOptions)"/>
+                    <input type="button" value="Edit" onclick="inlineEdit('row_em', editOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="7_eye" eyeball="show" onclick="toggleEyeball( 7 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="8_eye" eyeball="show" onclick="toggleEyeball( 8 )"></TD>
             </tr>
 
 
 
 
-            <!-- LEED PHONE 
-            -->
+            <!-- PHONE -->
             <tr id="row_ph">
                             
                 <TD class="labelTD">Client Phone: </TD>
@@ -180,11 +199,11 @@
                 <td id="td_ph" data-inlineType="tel" data-inlineName="ph" data-inlineRequired="0"></td>
 
                 <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="inlineEdit('row_ph', defaultOptions)"/>
+                    <input type="button" value="Edit" onclick="inlineEdit('row_ph', editOptions)"/>
                 </td>
 
                 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="8_eye" eyeball="show" onclick="toggleEyeball( 8 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="9_eye" eyeball="show" onclick="toggleEyeball( 9 )"></TD>
             </tr>
 
 
@@ -199,7 +218,7 @@
                 <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
                 <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="inlineEdit('row_det', defaultOptions)"/>
+                    <input type="button" value="Edit" onclick="inlineEdit('row_det', editOptions)"/>
                 </td>
 
                 <TD class="eyeballTD"><img src="./img/eye_show.png" id="10_eye" eyeball="show" onclick="toggleEyeball( 10 )"></TD>
@@ -216,7 +235,7 @@
                 <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0"></td>
 
                 <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="inlineEdit('row_reqs', defaultOptions)"/>
+                    <input type="button" value="Edit" onclick="inlineEdit('row_reqs', editOptions)"/>
                 </td>
 
                 <TD class="eyeballTD"><img src="./img/eye_show.png" id="11_eye" eyeball="show" onclick="toggleEyeball( 11 )"></TD>
@@ -225,14 +244,14 @@
 
             
             <!-- LEED PRICE -->
-            <tr id="row_det">
+            <tr id="row_pr">
                         
                 <TD class="labelTD">Price: </TD>
                 
                 <td id="td_pr" data-inlineType="text" data-inlineName="pr" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
                 <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="inlineEdit('row_price', defaultOptions)"/>
+                    <input type="button" value="Edit" onclick="inlineEdit('row_pr', editOptions)"/>
                 </td>
 
                <TD class="eyeballTD"><img src="./img/eye_show.png" id="12_eye" class="lock"></TD>
@@ -282,14 +301,14 @@
         import { clearCurrentLeed, getCurrentLeed, blankLeedObject, saveLeedChanges } from "./js/leed.js";
 		import { printError, throwError, errorModal } from "./js/error.js";
 		
-        import { CACHE_LEED_KEY } from "./js/leed.js";
+        import { CACHE_LEED_KEY, LEED_KEYS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
         import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 
-        import { LEED_KEYS }  from "./js/leed.js";
 
 
 
 
+		window.inlineEdit = inlineEdit;
         
         //
         //
@@ -329,15 +348,33 @@
 
         var element = null;
         
+
+
+
+        // CREATOR
+        //
+        element = document.getElementById("td_creator");
+        element.innerHTML = CURRENT_LEED.creator;
+
+
+
+        // TRADE
+        //
         element = document.getElementById("td_trade");
         element.innerHTML = CURRENT_LEED.trade;
 
+
+
+        // NOTE
+        // title of this leed
         element = document.getElementById("td_note");
         element.innerHTML = CURRENT_LEED.note;
 
 
-        // THE DATE
-        // start and end times
+
+
+        // START DATE
+        // 
         const startDate = new Date( CURRENT_LEED.start );
         const isoStart = startDate.toISOString();
 
@@ -348,6 +385,9 @@
         let start_date = isoStart.substring(8, 10);
         if (start_date.startsWith('0')) { start_date = start_date.substring(1) };
 
+
+        // END DATE
+        // 
         const endDate = new Date( CURRENT_LEED.end );
         const isoEnd = endDate.toISOString();
        
@@ -381,45 +421,50 @@
         element.innerHTML = fullEndDate + " at " + end_time;
 
 
-
-
+        // LOCATION
+        // 
         element = document.getElementById("td_loc");
         element.innerHTML = CURRENT_LEED.loc;
-        if (CURRENT_LEED.opts[ LEED_KEYS.LOC ] == "hide")
+        if (CURRENT_LEED.opts[ LEED_KEYS.LOC ] == OPTS_HIDDEN )
             toggleEyeball( LEED_KEYS.LOC );
             
 
-
+        // EMAIL
+        // 
         element = document.getElementById("td_em");
         element.innerHTML = CURRENT_LEED.em;
-        if (CURRENT_LEED.opts[ LEED_KEYS.EM ] == "hide")
+        if (CURRENT_LEED.opts[ LEED_KEYS.EM ] == OPTS_HIDDEN )
             toggleEyeball( LEED_KEYS.EM );
 
 
-
+        // PHONE
+        // 
         element = document.getElementById("td_ph");
         element.innerHTML = CURRENT_LEED.ph
-        if (CURRENT_LEED.opts[ LEED_KEYS.PH ] == "hide")
+        if (CURRENT_LEED.opts[ LEED_KEYS.PH ] == OPTS_HIDDEN )
             toggleEyeball( LEED_KEYS.PH );
 
 
-
+        // DETAILS
+        // 
         element = document.getElementById("td_det");
         element.innerHTML = CURRENT_LEED.det;
-        if (CURRENT_LEED.opts[ LEED_KEYS.DET ] == "hide")
-        toggleEyeball( LEED_KEYS.DET );
+        if (CURRENT_LEED.opts[ LEED_KEYS.DET ] == OPTS_HIDDEN )
+            toggleEyeball( LEED_KEYS.DET );
 
 
-
+        // REQS
+        // 
         element = document.getElementById("td_reqs");
         element.innerHTML = CURRENT_LEED.reqs;
-        if (CURRENT_LEED.opts[ LEED_KEYS.REQS ] == "hide")
+        if (CURRENT_LEED.opts[ LEED_KEYS.REQS ] == OPTS_HIDDEN )
             toggleEyeball( LEED_KEYS.REQS );
 
 
-
+        // PRICE
+        // 
         element = document.getElementById("td_pr");
-        element.innerHTML = "<B>$&nbsp;" + CURRENT_LEED.pr + "</B>";
+        element.innerHTML = CURRENT_LEED.pr;
 
 
 
@@ -451,10 +496,6 @@
 		function defaultCallback(rowData, rowName) {
 
 			beginEditing();
-
-
-            console.log("%cIN CB", "color:orange;");
-
 
 			switch(rowName) {
 
@@ -504,8 +545,8 @@
 					break; 
 
 
-				case "row_price":
-					LEED_CHANGES.price = rowData["price"];
+				case "row_pr":
+					LEED_CHANGES.pr = rowData["pr"];
 					break; 
 
 				default:
@@ -567,6 +608,8 @@
 
 
 
+
+
         //
         //
         //
@@ -583,14 +626,18 @@
                 theImg.src = "./img/eye_show.png";
                 theImg.eyeball = "show";
                 theImg.style.opacity = 1;
-                LEED_CHANGES.opts[fieldName] = '1';
+
+
+                changeLeedOpts( LEED_CHANGES, fieldName, OPTS_SHOWING );
 
             } else {
                 
                 theImg.src = "./img/eye_hide.png";
                 theImg.eyeball = "hide";
-                theImg.style.opacity = 0.35;
-                LEED_CHANGES.opts[fieldName] = '0';
+                theImg.style.opacity = 0.5;
+                
+            
+                changeLeedOpts( LEED_CHANGES, fieldName, OPTS_HIDDEN );
             }
 
         }
@@ -599,19 +646,28 @@
         
 
 
-		function deleteLeed() {
-            console.log("DELETE LEED");
 
-            // FIXME FIXME FIXME some kind of feedback that leed successfully deleted
+
+
+		function deleteLeed() {
+
+            // FIXME FIXME FIXME
+            // FIXME FIXME FIXME 
+            // some kind of feedback that leed successfully deleted
+            //
+            // GO BACK to server and delete leed
+            // compliment of add leed
+
+            console.log("SENDING DELETE TO SERVER, ID=" + LEED_CHANGES.id);
 		}
 		window.deleteLeed = deleteLeed;
 
 
 
-		var defaultOptions = { "finishCallback": defaultCallback };
-
-		window.inlineEdit = inlineEdit;
-		window.defaultOptions = defaultOptions;
+		var editOptions = { "origin" : "edit",
+                            "finishCallback": defaultCallback 
+                            };
+		window.edittOptions = editOptions;
 
 
 	

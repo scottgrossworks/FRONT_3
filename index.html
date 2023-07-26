@@ -79,7 +79,7 @@
       
       <div class="column _15 dropdown" id="up_right_column">
         
-        <span id="up_addLeed"><a href="#add_leed" title="+ Sell Leed">+</a></span>
+        <span id="up_addLeed"><a href="./leed_create.html" title="Create Leed">+</a></span>
         
         <span id="up_logo"><a href="javascript:dropdownMenu();"><img src="./img/logo_wide.png"></a></span>
         <div id="dropdown_menu" class="dropdown-content">
@@ -234,7 +234,7 @@
 
 
 
-      <div id="action_panel" class="column _35">
+      <div id="action_panel" style="display:none" class="column _35">
 
 
         <div class="leed_info_container">
@@ -546,7 +546,7 @@
         var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
         var action = document.getElementById("action_panel");
 
-        console.log("%cCSS SCREEN SIZE=" + screen, "color:violet");
+        // console.log("%cCSS SCREEN SIZE=" + screen, "color:violet");
 
         switch (screen) {
   
@@ -643,11 +643,9 @@
         let closeBut = document.getElementById("buy_modal_close");
         closeBut.style.display = "flex";
 
-
         let action = document.getElementById("action_panel");
         action.classList.replace("column", "modal"); 
-        console.log("ACTION MODAL");
-
+  
       }
       window.actionModal = actionModal;
 

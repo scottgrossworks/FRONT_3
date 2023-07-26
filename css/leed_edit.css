@@ -16,9 +16,6 @@ body {
 	max-width:1200px;
 	height:max-content;
 
-
-
-
 }
 
 
@@ -141,9 +138,10 @@ table tbody td {
 }
 
 .lock {
-	cursor:default;
-	opacity:25%;
-	filter:brightness(55%);
+	cursor:not-allowed;
+	color:black;
+	opacity:60%;
+	filter:brightness(30%);
 }
 
 
@@ -228,6 +226,37 @@ table tbody td {
 }
 
 
+
+
+.cancel_button {
+
+    position:relative;
+
+    background-color:cornflowerblue;
+    border: none;
+    color: white;
+   
+    
+    text-decoration: none;
+    display: flex;
+
+    font-size:1.2em;
+    font-weight: bolder;
+
+    width:max-content;
+    height:max-content;
+
+    margin-top:20px;
+
+    padding-top:20px;
+    padding-bottom:15px;
+    padding-left:30px;
+    padding-right:30px;
+ 
+    border-radius: 12px;
+
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
+}
 
 
 

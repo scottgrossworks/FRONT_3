@@ -13,12 +13,12 @@ import { db_getLeedz } from "./dbTools.js";
 LEED PREVIEW
         {
             "id": 1001, 
+            "note": "This is Leed ID 1001 fun times",
             "creator": "dave.reyes", 
             "zip": "90034", 
             "start": 1680635460000, 
             "end": 1680639060000, 
-            "trade": "caricatures",
-            "note": "This is Leed ID 1001 fun times"
+            "trade": "caricatures"
         },
 
 LEED DETAILS
@@ -30,7 +30,8 @@ LEED DETAILS
         "reqs": "1004 staff app2 These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
         "em": "scottgrossworks@gmail.com",
         "ph": "123456789",
-        "pr": "40"
+        "pr": "40",
+        opts":"0000021122110"
     }
 
 */
@@ -39,29 +40,48 @@ LEED DETAILS
 
 
 export const LEED_KEYS = {
+  
   ID: 0,
-  CREATOR: 1,
-  TRADE: 2,
-  LOC: 3,
+  NOTE: 1,
+  CREATOR: 2,
+  TRADE: 3,
   ZIP: 4,
-  START: 5,
-  END: 6,
-  EM: 7,
-  PH: 8,
-  NOTE: 9,
+
+  LOC: 5,
+  START: 6,
+  END: 7,
+  EM: 8,
+  PH: 9,
   DET: 10,
   REQS: 11,
+  
   PR: 12,
 };
-
-
 
 
 
 export const CACHE_LEED_KEY ="LD";
 
 
-const START_OPTS = "000000000000000"; // 15 chars long
+
+
+//
+// 13 chars long
+// 3 states
+// 0 - locked showing
+// 1 - showing
+// 2 - hidden
+//
+// hidden by default:
+// 5 location
+// 8 email
+// 9 phone
+//
+//
+export const START_OPTS = "0000021122110";
+export const OPTS_LOCKED  = 0;
+export const OPTS_SHOWING = 1;
+export const OPTS_HIDDEN  = 2;
 
 const CACHE_LEEDZ_CAL_KEY = "LC";
 const CACHE_DELIM = "|";
@@ -70,6 +90,20 @@ const CACHE_DELIM = "|";
 const CURRENT_LEED = blankLeedObject();
 
 
+/**
+ * 
+ */
+export function changeLeedOpts( theLeed, index, newVal ) {
+  
+  if (theLeed == null) {
+    throwError("changeLeedOpts", "null Leed object");
+  }
+
+  // can't do a direct opts[index] = newVal
+  // must do a substring + insert + concatenate
+  theLeed.opts = theLeed.opts.substring(0, index) + newVal + theLeed.opts.substring( index + 1 );
+  
+}
 
 /**
  *
@@ -120,19 +154,21 @@ export function blankLeedObject() {
     const BLANK_LEED = new Object();
 
     BLANK_LEED.id = null;
+    BLANK_LEED.note = null;
+
     BLANK_LEED.creator = null;
 
     BLANK_LEED.trade = null;
-    
-    BLANK_LEED.loc = null;
+
     BLANK_LEED.zip = null;
+    BLANK_LEED.loc = null;
+
     BLANK_LEED.start = null;
     BLANK_LEED.end = null;
 
     BLANK_LEED.em = null;
     BLANK_LEED.ph = null;
 
-    BLANK_LEED.note = null;
     BLANK_LEED.det = null;
     BLANK_LEED.reqs = null;
 
@@ -179,6 +215,8 @@ export function setCurrentLeed( jsonObj ) {
 
     CURRENT_LEED.id = jsonObj.id;
 
+    
+    if (jsonObj.note != null) CURRENT_LEED.note = jsonObj.note;
     if (jsonObj.creator != null) CURRENT_LEED.creator = jsonObj.creator;
 
     if (jsonObj.trade != null) CURRENT_LEED.trade = jsonObj.trade;
@@ -191,7 +229,6 @@ export function setCurrentLeed( jsonObj ) {
     if (jsonObj.em != null) CURRENT_LEED.em = jsonObj.em;
     if (jsonObj.ph != null) CURRENT_LEED.ph = jsonObj.ph;
 
-    if (jsonObj.note != null) CURRENT_LEED.note = jsonObj.note;
     if (jsonObj.det != null) CURRENT_LEED.det = jsonObj.det;
     if (jsonObj.reqs != null) CURRENT_LEED.reqs = jsonObj.reqs;
 
@@ -202,10 +239,6 @@ export function setCurrentLeed( jsonObj ) {
     } else {
         CURRENT_LEED.opts = jsonObj.opts;
     }
-
-    // console.log("CACHING LEED");
-    // console.log(CURRENT_LEED);
-
 
     saveCacheLeed( CURRENT_LEED );
 }
@@ -220,6 +253,9 @@ export function setCurrentLeed( jsonObj ) {
 export function clearCurrentLeed() {
 
     CURRENT_LEED.id = null;
+
+    CURRENT_LEED.note = null;
+
     CURRENT_LEED.creator = null;
 
     CURRENT_LEED.trade =null;
@@ -233,7 +269,6 @@ export function clearCurrentLeed() {
     CURRENT_LEED.start = null;
     CURRENT_LEED.end = null;
 
-    CURRENT_LEED.note = null;
     CURRENT_LEED.det = null;
     CURRENT_LEED.reqs = null;
 
@@ -317,6 +352,9 @@ export function saveCacheLeed( theLeed ) {
     
 
     CURRENT_LEED.id = cacheObj.id;
+    
+    CURRENT_LEED.note = cacheObj.note;
+
     CURRENT_LEED.creator = cacheObj.creator;
 
     CURRENT_LEED.trade =cacheObj.trade;
@@ -330,7 +368,6 @@ export function saveCacheLeed( theLeed ) {
     CURRENT_LEED.em = cacheObj.em;
     CURRENT_LEED.ph = cacheObj.ph;
 
-    CURRENT_LEED.note = cacheObj.note;
     CURRENT_LEED.det = cacheObj.det;
     CURRENT_LEED.reqs = cacheObj.reqs;
 
@@ -504,10 +541,15 @@ export function saveLeedChanges( leedObj ) {
 
   /*
    * cannot be changed
-   *
+
   CURRENT_LEED.id = leedObj.id;
   CURRENT_LEED.creator = leedObj.creator;
-  */
+   */
+
+  
+
+  if (leedObj.note != null)
+    CURRENT_LEED.note = leedObj.note;
 
 
   if (leedObj.trade != null)
@@ -537,9 +579,6 @@ export function saveLeedChanges( leedObj ) {
   if (leedObj.ph != null)
     CURRENT_LEED.ph = leedObj.ph;
 
-
-  if (leedObj.note != null)
-    CURRENT_LEED.note = leedObj.note;
     
   if (leedObj.det != null)
     CURRENT_LEED.det = leedObj.det;
@@ -553,6 +592,8 @@ export function saveLeedChanges( leedObj ) {
 
   if ((leedObj.opts != null) && (leedObj.opts.length != 0))
     CURRENT_LEED.opts = leedObj.opts;
+  else
+    CURRENT_LEED.opts = START_OPTS;
 
   
   // cache this Leed   
@@ -565,11 +606,9 @@ export function saveLeedChanges( leedObj ) {
   // post User changes to server
   // FIXME FIXME FIXME
   // db_updateUser()
-  console.log("******** POSTING LEED CHANGES TO SERVER ******* ");
+  console.log("----------> ******** POSTING LEED CHANGES TO SERVER ******* ");
   console.log("OPTS=" + leedObj.opts);
   console.log(CURRENT_LEED);
   // FIXME FIXME FIXME
 
 }
-
-

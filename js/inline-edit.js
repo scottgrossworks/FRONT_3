@@ -6,7 +6,7 @@
 import { printError, throwError } from "./error.js";
 import { getCurrentLeed } from "./leed.js";
 import { isValidTrade } from "./trades.js";
-import { prettyFormatDT, formatDTforInput } from "./dates.js";
+import { prettyFormatDT, formatDTforInput, getTodayUTC } from "./dates.js";
 
 
 
@@ -18,11 +18,6 @@ import { prettyFormatDT, formatDTforInput } from "./dates.js";
 
 
 var inlineEditRowContents = {};
-
-
-
-
-
 
 
 
@@ -145,10 +140,22 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
             case "date":
 
-            // var theVal = inlineEditRowContents[rowName][i];
 
-            var current_leed = getCurrentLeed();
-            var dateTime = (rowName == "row_start") ? current_leed.start : current_leed.end;
+
+            // START / END DATES
+            // loading the initial value
+            //
+            
+            // var theVal = inlineEditRowContents[rowName][i];
+            var dateTime = null;
+            if (options.origin = "create") {   // coming from create page                
+                dateTime = getTodayUTC().getTime();
+
+            } else {   // coming from edit page
+                var current_leed = getCurrentLeed();
+                dateTime = (rowName == "row_start") ? current_leed.start : current_leed.end;
+            }
+
             var theVal = formatDTforInput( dateTime );
 
 
@@ -160,6 +167,13 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             }
             cellContent += "/>";
             break;
+
+
+
+
+
+            // TEL
+            //
         case "tel":
             cellContent += `<input type='tel' value='${inlineEditRowContents[rowName][i]}' form='${rowName}Form'`;
             for (key in cell.dataset) {
@@ -407,7 +421,7 @@ function inlineDefaultFinish(rowName, options) {
                 var safeVal = replaceHTMLTags( trimVal );
 
                 rowData[cell.dataset.inlinename] = safeVal;
-                inlineEditRowContents[rowName][i] = safemVal;
+                inlineEditRowContents[rowName][i] = safeVal;
 
 
 

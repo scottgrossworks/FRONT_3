@@ -21,12 +21,19 @@ const DEFAULT_TRADES = [
   },
 
   {
-    trade_name: "balloon decor"
-
+    trade_name: "airbrush"
   },
   
   {
-    trade_name: "balloon twisting"
+    trade_name: "balloon decor"
+  },
+
+  {
+    trade_name: "balloon twister"
+  },
+
+  {
+    trade_name: "bar tender"
   },
 
 
@@ -45,6 +52,10 @@ const DEFAULT_TRADES = [
   },
 
   {
+    trade_name: "clown"
+  },
+
+  {
     trade_name: "comedian"
   },
 
@@ -53,6 +64,11 @@ const DEFAULT_TRADES = [
     trade_name: "dancer"
   },
   
+  {
+    trade_name: "detailer"
+  },
+  
+
   {
     trade_name: "dj"
   },
@@ -84,6 +100,12 @@ const DEFAULT_TRADES = [
   {
     trade_name: "henna"
   },
+
+    
+  {
+    trade_name: "hula hoop"
+  },
+
 
  
   {
@@ -173,13 +195,7 @@ const DEFAULT_TRADES = [
 
 
   {
-    trade_name: "tutoring"
-
-  },
-
-
-  {
-    trade_name: "video games"
+    trade_name: "tutor"
 
   },
 

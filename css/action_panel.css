@@ -6,6 +6,7 @@
 
 #action_panel {
 
+    display:none;
     top:0;
 
     /* screen size-dependent -->  display:flex; */
@@ -111,8 +112,11 @@
 .buy2show {
 
     background-color: var(--LEEDZ_GREEN);
-    color:black;
+ 
     font-weight: 600;
+    color:darkgreen;
+    font-size:1.1em !important;
+
 }
 
 

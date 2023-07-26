@@ -40,10 +40,12 @@ export function formatDTforInput(dateTimeString) {
         
     
     const hours = twoDigitInt(dateObj.getUTCHours());
-    const minutes = twoDigitInt(String(dateObj.getUTCMinutes()).padStart(2, "0"));
+    // const minutes = twoDigitInt(String(dateObj.getUTCMinutes()).padStart(2, "0"));
+    const minutes = twoDigitInt(String(dateObj.getUTCMinutes()).padStart(1, "0"));
+
     
-    
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
+    let retStr = `${year}-${month}-${day}T${hours}:${minutes}`;
+    return retStr;
   }
 
 
@@ -166,7 +168,7 @@ export function twoDigitInt( d ) {
 /**
  *
  */
-function getTodayUTC() {
+export function getTodayUTC() {
 
     let today = new Date();
     let utcDate = new Date(Date.UTC(today.getUTCFullYear(), 

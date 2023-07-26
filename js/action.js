@@ -5,7 +5,7 @@ import { getColorForTrade } from "./trades.js";
 import { db_getDeetz } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 import { getCurrentUser } from "./user.js";
-import { getCurrentLeed, saveCacheLeed, setCurrentLeed } from "./leed.js";
+import { getCurrentLeed, saveCacheLeed, LEED_KEYS, OPTS_LOCKED, OPTS_SHOWING, OPTS_HIDDEN } from "./leed.js";
 
 
 
@@ -74,7 +74,8 @@ leed_details contains
         "reqs": "These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
         "em": "scottgrossworks@gmail.com",
         "ph": "123456789",
-        "pr": "40"
+        "pr": "40",
+        "opts":"0001000010000"
     }
 ]
 *
@@ -123,7 +124,9 @@ export async function showLeedAction( leed_preview ) {
     console.log(CURRENT_LEED);
 
 
+    //
     // START DATE
+    //
     let startDate = new Date(leed_preview.start);
     let isoStart = startDate.toISOString();
     const leed_weekday = getWeekday( getShortDateString( isoStart ) );
@@ -147,7 +150,10 @@ export async function showLeedAction( leed_preview ) {
     
     let hours_start = getHours(isoStart);
     
+
+    //
     // END DATE
+    //
     let endDate = new Date(leed_preview.end);
     let isoEnd = endDate.toISOString();
     let hours_end = getHours(isoEnd);
@@ -176,10 +182,11 @@ export async function showLeedAction( leed_preview ) {
 
 
 
-    // TITLE NOTE
+    // NOTE
     //
     let theDiv = document.querySelector("#note_value");
     theDiv.innerHTML = leed_preview.note;
+
 
     // START TIME - END TIME
     //
@@ -192,7 +199,7 @@ export async function showLeedAction( leed_preview ) {
     // LOCATION
     // loc == full address
     theDiv = document.querySelector("#loc_value");
-    if (CURRENT_LEED.opts["loc"] == "hide") {
+    if (CURRENT_LEED.opts[ LEED_KEYS.LOC ] == OPTS_HIDDEN ) {
         theDiv.classList.add("buy2show");
         theDiv.innerHTML = "Buy to show";
     } else {
@@ -221,7 +228,7 @@ export async function showLeedAction( leed_preview ) {
 
     } else {
         theDiv = document.querySelector("#em_value");
-        if (CURRENT_LEED.opts["em"] == "hide") {
+        if (CURRENT_LEED.opts[ LEED_KEYS.EM ] == OPTS_HIDDEN ) { 
             theDiv.classList.add("buy2show");
             theDiv.innerHTML = "Buy to show";
         } else {
@@ -243,7 +250,7 @@ export async function showLeedAction( leed_preview ) {
 
     } else {
         theDiv = document.querySelector("#ph_value");
-        if (CURRENT_LEED.opts["ph"] == "hide") {
+        if (CURRENT_LEED.opts[ LEED_KEYS.PH ] == OPTS_HIDDEN ) { 
             theDiv.classList.add("buy2show");
             theDiv.innerHTML = "Buy to show";
         } else {
@@ -270,7 +277,7 @@ export async function showLeedAction( leed_preview ) {
 
     } else {
         theDiv = document.querySelector("#det_value");
-        if (CURRENT_LEED.opts["det"] == "hide") {
+        if (CURRENT_LEED.opts[ LEED_KEYS.DET ] == OPTS_HIDDEN ) {  
             theDiv.classList.add("buy2show");
             theDiv.innerHTML = "Buy to show";
         } else {
@@ -294,7 +301,7 @@ export async function showLeedAction( leed_preview ) {
 
     } else {
         theDiv = document.querySelector("#reqs_value");
-        if (CURRENT_LEED.opts["reqs"] == "hide") {
+        if (CURRENT_LEED.opts[ LEED_KEYS.REQS ] == OPTS_HIDDEN ) { 
             theDiv.classList.add("buy2show");
             theDiv.innerHTML = "Buy to show";
         } else {

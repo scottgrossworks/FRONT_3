@@ -139,9 +139,8 @@ table tbody td {
 
 .lock {
 	cursor:not-allowed;
-	color:black;
-	opacity:60%;
-	filter:brightness(30%);
+	opacity:75%;
+	filter: saturate(10%);
 }
 
 

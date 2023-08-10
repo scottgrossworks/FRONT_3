@@ -5,6 +5,7 @@ import { isSubscribed } from "./user.js";
 import { printError, throwError } from "./error.js";
 import { db_getLeedz } from "./dbTools.js";
 
+import { getMonth,getYear } from "./dates.js";
 
 
 
@@ -60,8 +61,6 @@ export const LEED_KEYS = {
 
 
 
-export const CACHE_LEED_KEY ="LD";
-
 
 
 
@@ -83,9 +82,12 @@ export const OPTS_LOCKED  = 0;
 export const OPTS_SHOWING = 1;
 export const OPTS_HIDDEN  = 2;
 
-const CACHE_LEEDZ_CAL_KEY = "LC";
-const CACHE_DELIM = "|";
 
+const CURRENT_LEED_KEY ="CL";
+const LEEDZ_CAL_KEY = "LC";
+
+
+const CACHE_DELIM = "|";
 
 const CURRENT_LEED = blankLeedObject();
 
@@ -130,14 +132,24 @@ export async function loadLeedzFromDB( subs, firstDay, lastDay, theCallback ) {
       
       // EXIT FUNCTION HERE
       throwError( "loadLeedzFromDB", error); 
+      return;
   }
 
   // query returns empty result set
-  // if (results.length == 0) { ; }
+  // if (results.length == 0) { return; }
 
-  // the callback function will populate the calendar and update the cache
-  theCallback( results );
+  // FIXME FIXME FIXME
+  // clear the cache?
+
+    // save to cache
+    // this will overwrite the current month / year in the cache
+    saveLeedzToCache( results, getMonth(), getYear() );
+
+    // the callback function will populate the calendar and update the cache
+    theCallback( results );
 }
+
+
 
 
 
@@ -240,7 +252,7 @@ export function setCurrentLeed( jsonObj ) {
         CURRENT_LEED.opts = jsonObj.opts;
     }
 
-    saveCacheLeed( CURRENT_LEED );
+    cacheCurrentLeed( CURRENT_LEED );
 }
 
 
@@ -305,7 +317,7 @@ export function isLeedActive() {
  * 
  *
  */
-export function saveCacheLeed( theLeed ) {
+export function cacheCurrentLeed( theLeed ) {
 
     if (theLeed == null)
         throwError("cacheLeed", "Cannot cache null leed");
@@ -320,7 +332,7 @@ export function saveCacheLeed( theLeed ) {
     }
    
 
-    window.sessionStorage.setItem( CACHE_LEED_KEY, leedJSON );
+    window.sessionStorage.setItem( CURRENT_LEED_KEY, leedJSON );
 }
 
 
@@ -335,9 +347,10 @@ export function saveCacheLeed( theLeed ) {
  */
  function loadCacheLeed() {
 
-    const leedJSON = window.sessionStorage.getItem( CACHE_LEED_KEY );
+    const leedJSON = window.sessionStorage.getItem( CURRENT_LEED_KEY );
     if (leedJSON == null) {
-        // printError("loadCacheLeed", "No value in cache for key: " + CACHE_LEED_KEY);
+      // this is not an error -- will happen any time program starts with empty cache  
+      // printError("loadCacheLeed", "No value in cache for key: " + CURRENT_LEED_KEY);
         return;
     }
 
@@ -347,35 +360,45 @@ export function saveCacheLeed( theLeed ) {
 
     } catch (error) {
         printError("loadCacheLeed", "Invalid JSON: " + leedJSON);
-        throwError("loadCahceLeed", "Cannot load leed from cache");
+        throwError("loadCahceLeed", "Cannot load leed from cache KEY=" + CURRENT_LEED_KEY);
     }
     
 
     CURRENT_LEED.id = cacheObj.id;
     
-    CURRENT_LEED.note = cacheObj.note;
-
-    CURRENT_LEED.creator = cacheObj.creator;
-
     CURRENT_LEED.trade =cacheObj.trade;
     
+    CURRENT_LEED.creator = cacheObj.creator;
+
+    CURRENT_LEED.note = cacheObj.note;
+
     CURRENT_LEED.zip = cacheObj.zip;
-    CURRENT_LEED.loc = cacheObj.loc;
 
     CURRENT_LEED.start = cacheObj.start;
+
     CURRENT_LEED.end = cacheObj.end;
 
+    
+    
+    CURRENT_LEED.loc = cacheObj.loc;
+
     CURRENT_LEED.em = cacheObj.em;
+
     CURRENT_LEED.ph = cacheObj.ph;
 
     CURRENT_LEED.det = cacheObj.det;
+
     CURRENT_LEED.reqs = cacheObj.reqs;
 
     CURRENT_LEED.pr = cacheObj.pr;
 
+
     CURRENT_LEED.opts = cacheObj.opts;
 
+
 }
+
+
 
 
 function JSON_to_Array(jsonString) {
@@ -415,7 +438,7 @@ function JSON_to_Array(jsonString) {
 export function saveLeedzToCache( new_leedz, the_month, the_year ) {
 
 
-  var cache_key = CACHE_LEEDZ_CAL_KEY + the_month + the_year;
+  var cache_key = LEEDZ_CAL_KEY + the_month + the_year;
   let cache_string = window.sessionStorage.getItem( cache_key );  
   let cache_leedz = JSON_to_Array(cache_string);
 
@@ -459,6 +482,14 @@ export function saveLeedzToCache( new_leedz, the_month, the_year ) {
 
 
 
+/**
+ * FIXME FIXME FIXME
+ * 
+ */
+function not_on_hitlist( theLeed ) {
+
+  return true;
+}
 
 
 /**
@@ -469,7 +500,7 @@ export function loadLeedzFromCache( the_month, the_year ) {
 
     // GET CACHE 
     // lists of JSON leedz are cached by month 
-    var cache_key = CACHE_LEEDZ_CAL_KEY + the_month + the_year;
+    var cache_key = LEEDZ_CAL_KEY + the_month + the_year;
     let JSON_leedz = window.sessionStorage.getItem( cache_key );
     if (JSON_leedz == null || JSON_leedz == "" || JSON_leedz == CACHE_DELIM) {
       // there may be nothing in the cache -- this is not an eror 
@@ -490,6 +521,8 @@ export function loadLeedzFromCache( the_month, the_year ) {
         // (re)create leed node using cache data
         var theLeed = JSON.parse( theJSON );
    
+
+
         // is the user stil subscribed to leedz of this trade?
         if ( isSubscribed( theLeed.trade ) ) {
             // if user has unsubscribed since last cache save
@@ -597,7 +630,7 @@ export function saveLeedChanges( leedObj ) {
 
   
   // cache this Leed   
-  saveCacheLeed( CURRENT_LEED );
+  cacheCurrentLeed( CURRENT_LEED );
   
 
 

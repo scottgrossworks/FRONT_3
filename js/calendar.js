@@ -220,7 +220,7 @@ export function loadDBLeedz() {
     // returns immediately -- provide callback for DB results when they come in
     try {
 
-            loadLeedzFromDB(getSubscriptions(), firstDayShowing(), lastDayShowing(), asyncDBCallback );
+            loadLeedzFromDB(getSubscriptions(), firstDayShowing(), lastDayShowing(), refreshCalendar );
             
     } catch (error) {
         printError("Loading leedz from DB", error);
@@ -233,34 +233,116 @@ export function loadDBLeedz() {
 
 
 
-//
-// FIXME FIXME FIXME
-// when new leedz come back from DB
-// must go back and remove identical leed from cache / calendar
-// in case where same id, new date -- leed will currently appear twice,
-// once from cache load, once from db load with new date info
-//
+
+
 /**
- * 
+ * CLEAR the current calendar of all LEEDZ
+ * add new leedz from DB
  */
-function asyncDBCallback( results ) {
+function refreshCalendar( results ) {
 
-    console.log("*** IN asyncDBCallback!!! **** ");
-    // update calendar
-    addLeedzToCalendar( results );
+    try {
+        console.log("*** IN asyncDBCallback!!! **** ");
 
-    // immediately save to cache
-    saveLeedzToCache( results, getMonth(), getYear() );
+        // START with empty calendar
+        // clear calendar of all leedz
+        removeLeedzShowing();
 
+        // add new leedz fresh
+        addLeedzToCalendar( results );
+
+    } catch (error) {
+
+        printError("Refreshing Calendar", error);
+        errorModal(error.message, false);
+        return;
+    }
 }
 
+
+
+
+
+
+
+
+
+
+/**
+ *  IGNORE leedz that do not match current calendar day
+ *  they should not be sent from DB
+ * 
+ */
+function addLeedzToCalendar( results ) {
+
+    // the UI contains all the each_date days
+    const theList = document.querySelector("#calendar_list");
+
+    // use a global day_counter so that the same day can be used for multiple DB leedz 
+    // with same start date, without having to start a for-loop again at day 1 for each leed
+    var day_counter = 1;
+
+    // FOR EACH LEED COMING IN FRON THE DB (Date sorted)....
+    for (const the_Leed of results) {
+        
+        console.log("LOADING LEED ID=" + the_Leed.id);
+
+        // what color are all leedz of this trade?
+        let trade_color = getColorForTrade( the_Leed.trade );
+
+        // when does leed appear on calendar?
+        const startDate = new Date( the_Leed.start );
+        
+        
+        // console.log("%c---FROM DB=" + leed_fromDB.trade + "--" + startDate.toString() +  "---" + startDate.toISOString(), "color:" + trade_color + ";" );
+
+        // starting at 1 (skipping template index:0 )
+        // iterate through the calendar and find the corresponding date
+        let shortDate_fromLeed = getShortDateString( startDate.toISOString() );
+        
+        // FOR EACH DATE IN THE CALENDAR....
+        while (day_counter < theList.children.length) {
+
+            // compare the date for this row in the calendar to the date of the leed
+            // theDate is a String
+            let each_day = theList.children[ day_counter ];
+            let theDate = each_day.getAttribute("LEEDZ_DATE");
+
+            if (theDate == null) {
+            // this should NEVER be null
+                printError("loadCalLeedz", "LEEDZ_DATE attribute not being set for each day");
+                printError("loadCalLeedz", "Unable to load leedz for " + the_Leed.trade);
+                return;  
+            }
+
+            // MATCHING DATE
+            // calendar date row == short date in leed_fromDB
+            if ( shortDate_fromLeed == theDate ) {
+
+                // CREATE CALENDAR LEED
+                //
+                createCalendarLeed( each_day, trade_color, the_Leed);
+              
+                break; // leed will only have one start date -- one calendar day  
+                // DO NOT increment day_counter because next leed from DB may have same start_date
+                // leedz are Date-sorted
+                
+            } else {
+                day_counter++; // GOTO the next day
+            }
+        }
+
+        // start day_counter back at 1
+        if (day_counter >= theList.children.length) day_counter = 1;
+    }
+}
 
 
 /**
  *  
  * 
- */
-function addLeedzToCalendar( results ) {
+ *
+function old_addLeedzToCalendar( results ) {
 
         // the UI contains all the each_date days
         const theList = document.querySelector("#calendar_list");
@@ -316,12 +398,12 @@ function addLeedzToCalendar( results ) {
         }
 
 }
-
+*/
  
 /**
  * 
  *
- */
+ *
 function removeMatchingLeed( each_day, leed_id ) {
 
     // start with 1 to skip the date square
@@ -336,6 +418,7 @@ function removeMatchingLeed( each_day, leed_id ) {
     }
     
 }
+*/
 
 
 

@@ -5,7 +5,7 @@ import { getColorForTrade } from "./trades.js";
 import { db_getDeetz } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 import { getCurrentUser } from "./user.js";
-import { getCurrentLeed, saveCacheLeed, LEED_KEYS, OPTS_LOCKED, OPTS_SHOWING, OPTS_HIDDEN } from "./leed.js";
+import { getCurrentLeed, cacheCurrentLeed, LEED_KEYS, OPTS_HIDDEN } from "./leed.js";
 
 
 
@@ -336,7 +336,7 @@ export async function showLeedAction( leed_preview ) {
 
     // Now that the new data is copied into CURRENT_LEED
     // cache the leed
-    saveCacheLeed( CURRENT_LEED );
+    cacheCurrentLeed( CURRENT_LEED );
 
 
 

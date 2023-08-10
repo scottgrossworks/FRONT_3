@@ -143,7 +143,8 @@
                     <input type="button" value="Edit" onclick="inlineEdit('row_end', editOptions)"/>
                 </td>
 
-               <TD class="eyeballTD"><img src="./img/eye_show.png"  id="7_eye" class="lock"></TD>
+                <!-- END TIME IS NOT LOCKED AND MAY BE HIDDEN -->
+               <TD class="eyeballTD"><img src="./img/eye_show.png"  id="7_eye"></TD>
             </tr>
 
 
@@ -301,7 +302,7 @@
         import { clearCurrentLeed, getCurrentLeed, blankLeedObject, saveLeedChanges } from "./js/leed.js";
 		import { printError, throwError, errorModal } from "./js/error.js";
 		
-        import { CACHE_LEED_KEY, LEED_KEYS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
+        import { LEED_KEYS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
         import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 
 
@@ -309,37 +310,18 @@
 
 
 		window.inlineEdit = inlineEdit;
-        
-        //
-        //
-        let leedJSON = window.sessionStorage.getItem( CACHE_LEED_KEY );
-        if (leedJSON == undefined || leedJSON == null) {
-            printError("Edit Leed", "Cannot retrieve cache leed with key:" + CACHE_LEED_KEY );
-            errorModal("Cannot load Leed info from cache", true);
-            throwError("Error loading cache leed");
-        }
-    
-        let cache_leed = null;
-        // load leed obj from cache
-        try {
-        cache_leed = JSON.parse( leedJSON );
-    
-        } catch (error) {
-            printError("Cannot parse leed JSON", leedJSON);
-            errorModal("Cache leed has invalid JSON format", true);
-            throwError("Error parsing cahce leed JSON");
-        }
+       
 
-    
-          //
-          //
 		var EDITING = false;
 
 		const CURRENT_LEED = getCurrentLeed();
         const LEED_CHANGES = blankLeedObject();
 
+
         console.log("GOT CURRENT LEED");
         console.log(CURRENT_LEED);
+
+
 
         if (CURRENT_LEED == null)
             throwError("Cannot initialize leed editor: CURRENT_LEED is null");
@@ -417,8 +399,14 @@
         element.innerHTML = fullStartDate + " at " + start_time;
 
 
+        // END TIME CAN BE HIDDEN OR SHOWN
+        //
         element = document.getElementById("td_end");
         element.innerHTML = fullEndDate + " at " + end_time;
+        if (CURRENT_LEED.opts[ LEED_KEYS.END ] == OPTS_HIDDEN )
+        toggleEyeball( LEED_KEYS.END );
+
+
 
 
         // LOCATION
@@ -625,7 +613,7 @@
 
                 theImg.src = "./img/eye_show.png";
                 theImg.eyeball = "show";
-                theImg.style.opacity = 1;
+                // theImg.style.opacity = 1;
 
 
                 changeLeedOpts( LEED_CHANGES, fieldName, OPTS_SHOWING );
@@ -634,7 +622,7 @@
                 
                 theImg.src = "./img/eye_hide.png";
                 theImg.eyeball = "hide";
-                theImg.style.opacity = 0.5;
+                // theImg.style.opacity = 1;
                 
             
                 changeLeedOpts( LEED_CHANGES, fieldName, OPTS_HIDDEN );
@@ -667,7 +655,7 @@
 		var editOptions = { "origin" : "edit",
                             "finishCallback": defaultCallback 
                             };
-		window.edittOptions = editOptions;
+		window.editOptions = editOptions;
 
 
 	

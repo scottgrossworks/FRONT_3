@@ -58,7 +58,7 @@ export function formatDTforInput(dateTimeString) {
 
         const the_weekday = getWeekday( getShortDateString( isoString ) );
         const the_monthname = getShortMonthname( isoString.substring(5, 7) ); 
-
+ 
         // remove '0' at front if any
         let the_date = isoString.substring(8, 10);
         if (the_date.startsWith('0')) { the_date = the_date.substring(1) };

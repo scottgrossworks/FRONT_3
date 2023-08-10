@@ -246,7 +246,8 @@ function loadCacheUser() {
     let userObj = null;
     if (userJSON == undefined || userJSON == null) {
 
-      printError("loadCacheUser", "No value for cache key=" + CACHE_USER_KEY);
+      // NOT an error -- will happen any time app started with fresh cache and new user
+      // printError("loadCacheUser", "No value for cache key=" + CACHE_USER_KEY);
       return null; // return NULL and be done
     }
 

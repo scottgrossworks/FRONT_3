@@ -1,4 +1,4 @@
-import { loadCacheLeedz, removeLeedzShowing } from "./calendar.js";
+import { loadCacheLeedz, loadDBLeedz, removeLeedzShowing } from "./calendar.js";
 import { isSubscribed, saveSubscription, removeSubscription } from "./user.js";
 import { db_getTrades } from "./dbTools.js";
 import { printError, errorModal } from "./error.js";
@@ -8,7 +8,7 @@ import { hideActionWindow } from "./action.js";
 
 const COLORS = new Map();
 
-const DEFAULT_TRADES = [
+let TRADES_LIST = [
     
     
   {
@@ -174,11 +174,19 @@ const DEFAULT_TRADES = [
   },
 
   {
+    trade_name: "security"
+
+  },
+
+  {
     trade_name: "surfing"
 
   },
 
+  {
+    trade_name: "sushi"
 
+  },
 
   {
     trade_name: "tattoos"
@@ -204,17 +212,15 @@ const DEFAULT_TRADES = [
 
 
 
-
-
 /**
  * is this a valid trade name?
  *  compare against default trades 
  */
 export function isValidTrade( tradeName ) {
   
-  for (var i = 0; i < DEFAULT_TRADES.length; i++) {
+  for (var i = 0; i < TRADES_LIST.length; i++) {
     
-    if ( DEFAULT_TRADES[i].trade_name == tradeName ) {
+    if ( TRADES_LIST[i].trade_name == tradeName ) {
      return true;
     }
   }
@@ -237,16 +243,23 @@ export async function getAllTrades() {
       // if it stays null or there's any problem, report it but do not fail
       if (retJSON == null) throw new Error("NO trades received from server");
 
+      // store trades for checking against future new leedz posts
+      TRADES_LIST = retJSON;      
+
+
     } catch (error) {
 
       printError("db_getTrades()", error );
-      printError("getAllTrades()", "Using DEFAULT trades");
-      retJSON = DEFAULT_TRADES;
-      // throwError("getAllTrades", error);
+      printError("getAllTrades()", "Using DEFAULT trades list");
+      retJSON = TRADES_LIST;
+
+      // show error modal dialog
       errorModal("Error getting trades: " + error.message, true);
-
+      
+      // use default trades
+      // do not fail at this point
+      // throwError("getAllTrades", error);
     }
-
 
       return retJSON;
   }
@@ -366,8 +379,13 @@ export function initTradesColumn( all_trades ) {
       removeLeedzShowing();
 
       // reload current month leedz from cache
-      // DO NOT go back to DB for new leedz
       loadCacheLeedz();
+
+      // ASYNC
+      // go back to DB for fresh view -- will return immediately
+      // update calendar later
+      loadDBLeedz();
+
     });
 
 
@@ -403,8 +421,12 @@ export function initTradesColumn( all_trades ) {
       removeLeedzShowing();
 
       // reload current month leedz from cache
-      // DO NOT go back to DB for new leedz
       loadCacheLeedz();
+
+      // ASYNC
+      // go back to DB for fresh view -- will return immediately
+      // update calendar later
+      loadDBLeedz();
 
     });
 
@@ -439,7 +461,12 @@ export function initTradesColumn( all_trades ) {
 
       // reload the leedz for the current month showing
       removeLeedzShowing();
-      loadCalLeedz(true);
+ 
+
+      // reload current month leedz from cache
+      // DO NOT go back to DB for new leedz
+      loadCacheLeedz();
+
     });
   
 
@@ -457,9 +484,6 @@ export function initTradesColumn( all_trades ) {
       theList.prepend(subs[i]);
     }
     
-
-  // DEBUG DEBUG DEBUG
-  // printColors();
 }
 
 

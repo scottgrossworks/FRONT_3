@@ -349,7 +349,7 @@ export function initTradesColumn( all_trades ) {
     
 
     //
-    // click listener for the checkbox
+    // CHECKBOX CLICK LISTENER
     //
     checkBox.addEventListener("click", function( event ) {
      
@@ -391,7 +391,7 @@ export function initTradesColumn( all_trades ) {
 
 
     //
-    // click listener for the radio button
+    // RADIO BUTTON CLICK LISTENER
     //
     radioButton.addEventListener("click", function( event ) {
 

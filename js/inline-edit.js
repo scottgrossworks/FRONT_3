@@ -27,14 +27,20 @@ var inlineEditRowContents = {};
  *
  */
 export function inlineEdit(rowName, options) {
-    var tableRow = document.getElementById(rowName);
-    
-    inlineEditRowContents[rowName] = {};
-    for (var i = 0; i < tableRow.childElementCount; i++) {
-        var cell = tableRow.children[i];
 
-        inlineEditRowContents[rowName][i] = cell.innerHTML.trim();
-        inlineDefaultUpdateCell(cell, i, rowName, options);   
+    try {
+        var tableRow = document.getElementById(rowName);
+        
+        inlineEditRowContents[rowName] = {};
+        for (var i = 0; i < tableRow.childElementCount; i++) {
+            var cell = tableRow.children[i];
+
+            inlineEditRowContents[rowName][i] = cell.innerHTML.trim();
+            inlineDefaultUpdateCell(cell, i, rowName, options);   
+        }
+    } catch (error) {
+        console.log("INLINE EDIT ERROR!");
+        throwError("inlineEdit", error);
     }
 }
 
@@ -60,6 +66,7 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
     
     }
     
+
     
     switch (cell.dataset.inlinetype) {
         
@@ -128,6 +135,9 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             cellContent += "/>";
             break;
         case "text":
+
+
+
             cellContent += `<input type='text' value='${inlineEditRowContents[rowName][i]}' form='${rowName}Form'`;
             for (key in cell.dataset) {
                 if (cell.dataset.hasOwnProperty(key) && key.substr(0, 6) == "inline" && attributesFilter.indexOf(key) == -1) {
@@ -136,6 +146,7 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             }
             cellContent += "/>";
             break;
+
 
 
             case "date":
@@ -231,6 +242,7 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
 
     cell.innerHTML = cellContent;
+    
     if (i === 0) {
         // set the onsubmit function of the form of this row
         document.getElementById(rowName + "Form").onsubmit = function() {
@@ -238,8 +250,19 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             if (this.reportValidity()) {
                 if (options.hasOwnProperty("finish"))
                     options.finish(rowName, options);
-                else
-                    inlineDefaultFinish(rowName, options);
+                else {
+
+                    try {
+                        inlineDefaultFinish(rowName, options);
+                    } catch (error) {
+
+                        // CAN'T THROW ERROR OUT OF THIS FILE
+                        // would like to throw here and catch in leed_create and put up a modal there
+                        // throwError("inlineDefaultFinish", error);
+                        printError("inlineDefaultFinish", error);
+                    }
+                  
+                }
             }
         };
     }
@@ -306,16 +329,29 @@ function trimAndRemoveSpaces(inputString) {
 
 
 
+
+
+/**
+ * 
+ * 
+ */
+
 function inlineDefaultFinish(rowName, options) {
    
-   
-   
+
     var tableRow = document.getElementById(rowName);
     var rowData = {};
     for (var i = 0; i < tableRow.childElementCount; i++) {
         var cell = tableRow.children[i];
         var getFromChildren = (i === 0) ? 1 : 0;
+
+
+
         switch (cell.dataset.inlinetype) {
+
+
+
+
             case "zip":
 
                 var theVal = cell.children[getFromChildren].value;
@@ -350,7 +386,7 @@ function inlineDefaultFinish(rowName, options) {
                 var trimVal = trimAndRemoveSpaces( theVal );
 
                 if (trimVal.length < 10) {
-                    let errMsg = "Invalid phone #: " + theVal;
+                    let errMsg = "Invalid phone number: " + theVal;
                     printError("inlineDefaultFinish", errMsg );
                     alert(errMsg);
                     return;
@@ -358,11 +394,22 @@ function inlineDefaultFinish(rowName, options) {
 
 
                 if (trimVal.length != 10) {
-                    let errMsg = "Phone # must be 10 digits";
+                    let errMsg = "Phone number must be 10 digits";
                     printError("inlineDefaultFinish", errMsg );
                     alert(errMsg);
                     return;
                 }
+
+
+
+                if (! checkPhone( trimVal )) {
+                    let errMsg = "Invalid phone number: " + theVal;
+                    printError("inlineDefaultFinish", errMsg);
+                    alert(errMsg);
+                    return;
+                }
+
+
 
                 rowData[cell.dataset.inlinename] = trimVal;
                 inlineEditRowContents[rowName][i] = trimVal;
@@ -373,6 +420,7 @@ function inlineDefaultFinish(rowName, options) {
 
             case "trade_name":
 
+
                 var theVal = cell.children[getFromChildren].value;
                 var trimVal = theVal.trim();
 
@@ -381,7 +429,7 @@ function inlineDefaultFinish(rowName, options) {
                 //
                 if (! (isValidTrade( trimVal )))  {
                     let errMsg = "Invalid trade name: " + theVal;
-                    printError("inlineDefaultFinish()", errMsg );
+                    printError("inlineDefaultFinish", errMsg );
                     alert(errMsg);
                     return;
                 }
@@ -415,17 +463,61 @@ function inlineDefaultFinish(rowName, options) {
 
             case "text":
 
-            
                 var theVal = cell.children[getFromChildren].value;
                 var trimVal = theVal.trim();
                 var safeVal = replaceHTMLTags( trimVal );
 
+
+       
+                // Validate loc
+                //
+                if (cell.dataset.inlinename == "loc") {
+
+                    if (! checkForZip( safeVal )) {
+                        let errMsg = "Address must end in zip code"
+                        printError("inlineDefaultFinish", errMsg );
+                        alert(errMsg);
+                        return;
+                    }
+                    
+
+                // Validate email
+                //
+                } else if (cell.dataset.inlinename == "em") {
+
+                    if (safeVal.indexOf('@') == -1) {
+                        let errMsg = "Invalid email address"
+                        printError("inlineDefaultFinish", errMsg );
+                        alert(errMsg);
+                       return;
+                    }
+
+
+                // Validate price
+                //
+                } else if (cell.dataset.inlinename == "pr") {
+
+                    // Check if safeVal begins with a '$' and trim it off if it does
+                    if (safeVal.charAt(0) === '$') {
+                        safeVal = safeVal.substring(1);
+                    }
+
+                    if (! ( /^[0-9]+$/.test( safeVal ))) {
+                        let errMsg = "Price must be a whole number"
+                        printError("inlineDefaultFinish", errMsg );
+                        alert(errMsg);
+                       return;
+                    }
+                }
+
+
+
                 rowData[cell.dataset.inlinename] = safeVal;
                 inlineEditRowContents[rowName][i] = safeVal;
-
-
+           
 
             break;
+
 
 
 
@@ -434,6 +526,7 @@ function inlineDefaultFinish(rowName, options) {
             case "date":
 
                 var theVal = cell.children[getFromChildren].value;
+
                 var trimVal = prettyFormatDT( theVal.trim() );
 
                 rowData[cell.dataset.inlinename] = trimVal;
@@ -501,24 +594,71 @@ function inlineDefaultFinish(rowName, options) {
     }
 
 
-    // update the table cell with the new value
-    for (i = 0; i < tableRow.childElementCount; i++) {
-        var cell = tableRow.children[i];
-        
-        if (options.hasOwnProperty("urlFinish")) {
+    try {
+        // update the table cell with the new value
+        for (i = 0; i < tableRow.childElementCount; i++) {
+            var cell = tableRow.children[i];
+            
+            if (options.hasOwnProperty("urlFinish")) {
 
-            inlineURLFinishCell(cell, i, rowName);
+                inlineURLFinishCell(cell, i, rowName);
 
-        } else if (options.hasOwnProperty("emailFinish")) {
+            } else if (options.hasOwnProperty("emailFinish")) {
 
-            inlineEmailFinishCell(cell, i, rowName);
+                inlineEmailFinishCell(cell, i, rowName);
 
 
-        } else {
-            inlineDefaultFinishCell(cell, i, rowName);
+            } else {
+                inlineDefaultFinishCell(cell, i, rowName);
+            }
         }
+
+    } catch (error) {
+        throwError("inlineDefaultFinish", error);
     }
 }
+
+
+
+
+/**
+ * check that we can extract a zip code from the address string
+ * @param {*} s address string coming in from form
+ * @returns true if s ends in zip code
+ */
+function checkForZip(s) {
+    // Check if s is less than 5 characters
+    if (s.length < 5) {
+      return false;
+    }
+    
+    // Check if the last 5 characters of s are numeric digits 0-9
+    var lastFiveChars = s.slice(-5);
+    for (var i = 0; i < lastFiveChars.length; i++) {
+      var c = lastFiveChars.charAt(i);
+      if (c < '0' || c > '9') {
+        return false;
+      }
+    }
+    
+    // If both conditions are false, return true
+    return true;
+  }
+
+
+
+/**
+ * Verify phone number
+ * @param {c} s from form
+ * @returns true if phone number only contains digits, . and - otherwise return false
+ */
+  function checkPhone(s) {
+    // Remove any whitespace from the string
+    s = s.replace(/\s/g, '');
+    
+    // Check if the string only contains valid phone number characters
+    return /^[0-9.\-]+$/.test(s);
+  }
 
 
 

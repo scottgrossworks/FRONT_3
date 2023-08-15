@@ -213,6 +213,7 @@ export function loadDBLeedz() {
 export function loadDBLeedz() {
 
 
+    console.log("****************   in loadDBLeedz()   ************");
     CURRENT_SELECTION = null;
 
     // API request --> DB 
@@ -272,6 +273,7 @@ function refreshCalendar( results ) {
  *  IGNORE leedz that do not match current calendar day
  *  they should not be sent from DB
  * 
+ * Current system DEPENDS on ALL leeds being sorted by DATE, not grouped by TRADE
  */
 function addLeedzToCalendar( results ) {
 
@@ -284,8 +286,6 @@ function addLeedzToCalendar( results ) {
 
     // FOR EACH LEED COMING IN FRON THE DB (Date sorted)....
     for (const the_Leed of results) {
-        
-        console.log("LOADING LEED ID=" + the_Leed.id);
 
         // what color are all leedz of this trade?
         let trade_color = getColorForTrade( the_Leed.trade );

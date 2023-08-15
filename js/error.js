@@ -67,7 +67,7 @@ export function errorModalClose() {
 export function errorModal( error, no_close ) {
 
   let modal = document.getElementById("error_modal");
-  modal.setAttribute("no_close", no_close);
+  modal.setAttribute("no_close", (no_close) ? 1 : 0 );
 
   let errorString = modal.getAttribute( ERR_KEY );
 

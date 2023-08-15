@@ -52,7 +52,7 @@ export function formatDTforInput(dateTimeString) {
 
   /**
    * 
-   * 1680444660000 --> Tuesday Apr 2, 2023 at 6:11PM
+   * 2023-08-12T18:31 --> Saturday Aug 12, 2023 at 6:31PM
    */
   export function prettyFormatDT( isoString ) {
 
@@ -71,7 +71,6 @@ export function formatDTforInput(dateTimeString) {
 
         const retString = fullStartDate + " at " + the_time;
 
-        // console.log("RETURNING: " + retString);
 
         return retString;
     }
@@ -88,30 +87,41 @@ export function formatDTforInput(dateTimeString) {
  */
 export function DTfromPretty( prettyStr ) {
 
-   
+
     // MONTH
     var space = prettyStr.indexOf(' ');
-    const the_month = prettyStr.substring( space + 1, space + 4);
-    
+    var monthStr = prettyStr.substring( space + 1, space + 4);
+    const the_month = getMonthIndex( monthStr ); // WRONGbvvb
+    // console.log("THE MONTH=" + the_month);
 
     // DAY
     var space2 = prettyStr.indexOf(' ', space + 1);
     var comma = prettyStr.indexOf(',');
     const the_day = prettyStr.substring(space2 + 1, comma);
-
+    // console.log("THE DAY=" + the_day);
 
     // YEAR
     var at = prettyStr.indexOf('at');
     const the_year = prettyStr.substring(comma + 1, at).trim();
-
+    // console.log("THE YEAR=" + the_year);
 
     // HOURS
     var colon = prettyStr.indexOf(':');
-    const the_hour = prettyStr.substring(at + 2, colon).trim();
+    var the_hour = parseInt( prettyStr.substring(at + 2, colon).trim() );
+    // AM / PM
+    let amPm = prettyStr.substring( prettyStr.length - 2 );
+    if (amPm == "PM") {
+        the_hour += 12;
+    }
+    // console.log("THE HOUR=" + the_hour);
 
 
     // MINUTES
     const the_min = prettyStr.substring(colon + 1, colon + 3);
+    // console.log("THE MIN=" + the_min);
+
+
+    
 
 
     const the_date = new Date( Date.UTC( the_year,
@@ -124,7 +134,7 @@ export function DTfromPretty( prettyStr ) {
 
     const the_DT = the_date.getTime();
 
-    console.log("%cTHE DATE=" + the_date, "color:darkgreen");
+    // console.log("%cTHE DATE=" + the_date, "color:darkgreen");
 
     return the_DT;
 
@@ -257,6 +267,59 @@ export function getMonth() {
     if (DATE_SHOWING == null) getDateShowing();        
     let month = DATE_SHOWING.getUTCMonth() + 1;
     return month;
+}
+
+
+/**
+ * return numerical index for this month
+ * 0-based
+ * @param monthname - first three chars of month used
+ */
+export function getMonthIndex( monthname ) {
+
+        let shortMonth = monthname.substring(0, 3).toLowerCase();
+
+        switch (shortMonth) {
+            case "jan":
+                return 0;
+            
+            case "feb":
+                return 1;
+
+            case "mar":
+                return 2;
+            
+            case "apr":
+                return 3;
+
+            case "may":
+                return 4;
+            
+            case "jun":
+                return 5;
+
+            case "jul":
+                return 6;
+            
+            case "aug":
+                return 7;
+
+            case "sep":
+                return 8;
+            
+            case "oct":
+                return 9;
+                
+            case "nov":
+                return 10;
+
+            case "dec":
+                return 11;
+
+            default:
+                return 0;
+        }
+
 }
 
 
@@ -500,8 +563,6 @@ export function getShortDate( theDate ) {
  * trim time / timezone info off and return substring
  */
 export function getShortDateString( dateString ) {
-
-    // console.log("%cSHORT STRING:" + dateString, "color:darkgreen;");
 
     var theString = dateString.substring(0, 10);
     return theString;

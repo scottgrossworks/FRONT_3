@@ -135,11 +135,15 @@ export async function loadLeedzFromDB( subs, firstDay, lastDay, theCallback ) {
       return;
   }
 
-  // query returns empty result set
-  // if (results.length == 0) { return; }
+    // query returns empty result set
+    if (results.length == 0) {
 
-  // FIXME FIXME FIXME
-  // clear the cache?
+      // CLEAR the CACHE for this date
+      var cache_key = LEEDZ_CAL_KEY + getMonth() + getYear();
+      window.sessionStorage.setItem( cache_key, "");
+      return;
+
+    }
 
     // save to cache
     // this will overwrite the current month / year in the cache
@@ -480,16 +484,6 @@ export function saveLeedzToCache( new_leedz, the_month, the_year ) {
 }
 
 
-
-
-/**
- * FIXME FIXME FIXME
- * 
- */
-function not_on_hitlist( theLeed ) {
-
-  return true;
-}
 
 
 /**

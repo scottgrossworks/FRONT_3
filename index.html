@@ -234,7 +234,8 @@
 
 
 
-      <div id="action_panel" style="display:none" class="column _35">
+      <div id="action_panel" style="display:none;" class="column _35">
+
 
 
         <div class="leed_info_container">
@@ -339,15 +340,26 @@
           <button id="action_buy" class="button buy_button">Buy<img id="shopping_cart" src="img/shopping-cart.png"></button>
         </div>
 
-        <div class="row" id="row_edit_button">
-          <button id="action_edit" class="button edit_button" onclick="openLeedEdit()">Edit&nbsp;<img id="edit_icon" src="img/edit.png"></button>
-        </div>
-
         <div class="row" id="row_report_button">
           <button id="action_report" class="button report_button">Report</button>
         </div>
     
+
+        <div class="row" id="row_edit_button">
+          <button id="action_edit" class="button edit_button" onclick="openLeedEdit()">Edit&nbsp;<img id="edit_icon" src="img/edit.png"></button>
+        </div>
+
+        <div class="row" id="row_del_button">
+          <button id="action_del" class="button del_button" onclick="deleteLeed()">Delete&nbsp;</button>
+        </div>
+
       </div>
+
+
+
+
+
+
       
     </div>
 
@@ -489,10 +501,33 @@
 
 
 
-      
+      //
+      // DELETE the leed showing in the action window
+      //
+      function deleteLeed() {
 
+        // FIXME FIXME FIXME DELETE BUTTON CALLBACK
+         console.log("%cDELETE BUTTON CALLBACK", "color:green");
+        // FIXME FIXME FIXME
+    
+        const the_leed = getCurrentLeed();
+        console.log("CURRENT LEED:");
+        console.log(the_leed);
+      }
+      window.deleteLeed = deleteLeed;
+
+
+      
+      //
       // open LEED edit page
+      //
+      //
       function openLeedEdit() {
+
+              
+            // FIXME FIXME FIXME
+        console.log("%cEDIT BUTTON CALLBACK IN OPEN LEED EDIT", "color:green");
+            // FIXME FIXME FIXME
 
          window.open("./leed_edit.html", "location=1,status=0, menubar=0");
         

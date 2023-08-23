@@ -343,6 +343,11 @@ textarea {
 }
 
 
+input#finish_button {
+	color:black;
+	background-color: var(--LEEDZ_GREEN);
+}
+
 
 
 input[type="button"],

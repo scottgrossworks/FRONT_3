@@ -3,7 +3,7 @@
  */
 import { isSubscribed } from "./user.js";
 import { printError, throwError } from "./error.js";
-import { db_getLeedz } from "./dbTools.js";
+import { db_getLeedz, db_saveLeed } from "./dbTools.js";
 
 import { getMonth,getYear } from "./dates.js";
 
@@ -553,12 +553,9 @@ export function loadLeedzFromCache( the_month, the_year ) {
  * the leed has updated info
  * JSON-serialize the changes
  */
-export function saveLeedChanges( leedObj ) {
+export async function saveLeedChanges( leedObj ) {
 
-  console.log("saveLeedChanges()");
-  console.log(leedObj);
   
-
   if (leedObj == null)
     throwError("saveLeedChanges", "null leed object");
 
@@ -568,9 +565,9 @@ export function saveLeedChanges( leedObj ) {
 
   /*
    * cannot be changed
-
-  CURRENT_LEED.id = leedObj.id;
-  CURRENT_LEED.creator = leedObj.creator;
+   *
+    CURRENT_LEED.id = leedObj.id;
+    CURRENT_LEED.creator = leedObj.creator;
    */
 
   
@@ -623,19 +620,40 @@ export function saveLeedChanges( leedObj ) {
     CURRENT_LEED.opts = START_OPTS;
 
   
-  // cache this Leed   
-  cacheCurrentLeed( CURRENT_LEED );
+    try {
+    // cache this Leed   
+    cacheCurrentLeed( CURRENT_LEED );
   
+    } catch (error) {
+      throwError("cacheCurrentLeed", error);
+    }
 
 
-  
-  // FIXME FIXME FIXME
-  // post User changes to server
-  // FIXME FIXME FIXME
-  // db_updateUser()
-  console.log("----------> ******** POSTING LEED CHANGES TO SERVER ******* ");
-  console.log("OPTS=" + leedObj.opts);
-  console.log(CURRENT_LEED);
-  // FIXME FIXME FIXME
+    console.log("----------> ******** POSTING LEED CHANGES TO SERVER ******* ");
+    console.log(CURRENT_LEED);
+
+
+    // API request --> DB 
+    // save leed to DB
+    //
+    let results = null;
+    try {
+        // 
+        //  client <---> API Gateway <===> DB
+        //
+        results = await db_saveLeed( CURRENT_LEED );
+
+
+    } catch (error) {   
+        printError( "Save Leed to DB", error.message );
+        printError( "Received JSON", results);
+        
+        // EXIT FUNCTION HERE
+        throwError( "db_saveLeed", error); 
+        return;
+    }
+
+    console.log("BACK FROM DB SAVE RESULTS=" + results);
+
 
 }

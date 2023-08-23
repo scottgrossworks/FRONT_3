@@ -119,7 +119,7 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
             
         case "doneButton":
-            cellContent += `<input type='submit' value='Finish' form='${rowName}Form'/>`;
+            cellContent += `<input type='submit' id="finish_button" value='Finish' form='${rowName}Form'/>`;
             break;
         case "button":
 

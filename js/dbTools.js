@@ -193,6 +193,59 @@ export async function db_getLeedz( subs, start_date, end_date ) {
 
 
 
+
+
+
+
+/**
+ * 
+ */
+export async function db_saveLeed( the_leed ) {
+    
+    if (the_leed == null) {
+        throwError("db_saveLeed()", "no leed provided");
+    }
+    let json_obj = '{"id": 1001, "cr": "dave.reyes", "result":1 }';
+
+    console.log("SAVING LEED TO DB.....");
+    
+    /**
+        const theURL = new URL(API_GATEWAY + "getUser");
+        const params = new URLSearchParams({ [USERNAME_URL_PARAM]: username });
+        theURL.search = params.toString();
+        
+        await doGet( theURL )
+        .then(data => {
+
+          json_obj = data;
+
+        })
+        .catch(error => {
+          printError("doGet()", error);
+          throwError('doGet()', 'There was a problem with the fetch operation:' + error.message);
+        });
+
+
+
+    } catch (error) {
+        printError("db_getUser()", error.message);
+        throwError("db_getUser()", error);
+    }
+    */
+
+
+    
+    console.log("SAVE COMPLETE!!!!");
+
+
+    return json_obj;  // SHOULD NOT BE NULL
+}    
+
+
+
+
+
+
 /**
  * 
  *

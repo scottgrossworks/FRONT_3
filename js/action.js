@@ -92,7 +92,7 @@ export async function showLeedAction( leed_preview ) {
     let action = document.getElementById("action_panel");
     // var action_height = Math.floor( window.innerHeight * 0.7 );
     action.style.height = "100%";
-    
+
 
 
     // API request --> DB   
@@ -353,8 +353,9 @@ export async function showLeedAction( leed_preview ) {
     */
 
     let row_buy_button = document.getElementById("row_buy_button");
-    let row_edit_button = document.getElementById("row_edit_button");
     let row_report_button = document.getElementById("row_report_button");
+    let row_edit_button = document.getElementById("row_edit_button");
+    let row_del_button = document.getElementById("row_del_button");
 
     // the action buttons at the bottom depend on whether the
     // current user posted the leed being examined
@@ -362,21 +363,13 @@ export async function showLeedAction( leed_preview ) {
     if (current_user.username == leed_preview.creator) {
 
         // the current user POSTED this leed
-        // show the EDIT button
+        // show the EDIT/DEL buttons
         row_buy_button.style.display = "none";
         row_report_button.style.display = "none";
         row_edit_button.style.display = "flex";
+        row_del_button.style.display = "flex";
 
 
-        // pass the current leed from this page
-        // to the leed_edit page using the session cache
-        document.getElementById("action_edit").addEventListener( "click", (event) => { 
-            console.log("%cEDIT BUTTON CALLBACK", "color:darkorange");
-
-            // FIXMEFIXMEFIXME
-            
-
-        });
 
 
     } else {
@@ -386,19 +379,8 @@ export async function showLeedAction( leed_preview ) {
         row_buy_button.style.display = "flex";
         row_report_button.style.display = "flex";
         row_edit_button.style.display = "none";
+        row_del_button.style.display = "none";
 
-        // BUY LEED
-        // program the BUY button
-        document.getElementById("action_buy").addEventListener( "click", (event) => { 
-            console.log("%cBUY BUTTON CALLBACK", "color:green");
-        });
-    
-
-        // REPORT BAD LEED
-        // program the REPORT button
-           document.getElementById("action_report").addEventListener( "click", (event) => { 
-            console.log("%cREPORT BUTTON CALLBACK", "color:darkorange");
-        });
     
     }
 
@@ -439,19 +421,6 @@ export function hideActionWindow() {
 
 
 }
-
-
-
-
-/** 
- * 
- *
- *
- */
-
-
-
-
 
 
 

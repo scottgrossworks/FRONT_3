@@ -3,7 +3,7 @@
  */
 import { isSubscribed } from "./user.js";
 import { printError, throwError } from "./error.js";
-import { db_getLeedz, db_saveLeed } from "./dbTools.js";
+import { db_getLeedz, db_saveLeed, db_deleteLeed, db_buyLeed, db_reportLeed } from "./dbTools.js";
 
 import { getMonth,getYear } from "./dates.js";
 
@@ -156,12 +156,6 @@ export async function loadLeedzFromDB( subs, firstDay, lastDay, theCallback ) {
 
 
 
-
-
-
-
-
-
 /**
  * create an empty JSON-compatible leed object
  */
@@ -196,7 +190,6 @@ export function blankLeedObject() {
   }
   
   
-
 
 
 
@@ -262,7 +255,6 @@ export function setCurrentLeed( jsonObj ) {
 
 
 
-
 /**
  * 
  */
@@ -301,8 +293,6 @@ export function clearCurrentLeed() {
 /**
  * 
  */
-
-
 export function isLeedActive() {
     
     if (CURRENT_LEED == null)
@@ -310,8 +300,6 @@ export function isLeedActive() {
 
     return (CURRENT_LEED.id != null);
 }
-
-
 
 
 
@@ -338,7 +326,6 @@ export function cacheCurrentLeed( theLeed ) {
 
     window.sessionStorage.setItem( CURRENT_LEED_KEY, leedJSON );
 }
-
 
 
 
@@ -631,7 +618,7 @@ export async function saveLeedChanges( leedObj ) {
 
     console.log("----------> ******** POSTING LEED CHANGES TO SERVER ******* ");
     console.log(CURRENT_LEED);
-
+ 
 
     // API request --> DB 
     // save leed to DB
@@ -650,10 +637,145 @@ export async function saveLeedChanges( leedObj ) {
         
         // EXIT FUNCTION HERE
         throwError( "db_saveLeed", error); 
-        return;
+
     }
 
     console.log("BACK FROM DB SAVE RESULTS=" + results);
 
+    return;
+}
+
+
+
+
+
+/** 
+ *
+ * BUY the Leed
+ */
+export async function buyCurrentLeed() {
+
+  if (CURRENT_LEED == null)
+    throwError("buyCurrentLeed", "CURRENT_LEED is null");
+
+ 
+    console.log("----------> ******** BUYING CURRENT LEED TO SERVER ******* ");
+
+ 
+
+    // API request --> DB 
+    // save leed to DB
+    //
+    let results = null;
+    try {
+        // 
+        //  client <---> API Gateway <===> DB
+        //
+        results = await db_buyLeed( CURRENT_LEED );
+
+
+    } catch (error) {   
+        printError( "DB Buy Leed", error.message );
+        printError( "Received JSON", results);
+        
+        // EXIT FUNCTION HERE
+       throw error; 
+
+    }
+
+    console.log("BACK FROM DB BUY RESULTS=" + results);
+
+    return results;
+}
+
+
+
+
+
+
+
+/** 
+ *
+ * BUY the Leed
+ */
+export async function deleteCurrentLeed() {
+
+  
+  if (CURRENT_LEED == null)
+    throwError("deleteCurrentLeed", "CURRENT_LEED is null");
+
+ 
+
+    console.log("----------> ******** DELETE CURRENT LEED TO SERVER ******* ");
+
+
+    // API request --> DB 
+    // save leed to DB
+    //
+    let results = null;
+    try {
+        // 
+        //  client <---> API Gateway <===> DB
+        //
+        results = await db_deleteLeed( CURRENT_LEED );
+
+
+    } catch (error) {   
+        printError( "DB Delete Leed", error.message );
+        printError( "Received JSON", results);
+        
+        // EXIT FUNCTION HERE
+        throwError( "db_deleteLeed", error); 
+
+    }
+
+    console.log("BACK FROM DB DELETE RESULTS=" + results);
+    return results;
 
 }
+
+
+
+
+
+/** 
+ *
+ * REPORT the Leed
+ */
+export async function reportCurrentLeed() {
+
+  if (CURRENT_LEED == null)
+    throwError("reportCurrentLeed", "CURRENT_LEED is null");
+
+ 
+    console.log("----------> ******** REPORTING CURRENT LEED TO SERVER ******* ");
+
+ 
+
+    // API request --> DB 
+    // save leed to DB
+    //
+    let results = null;
+    try {
+        // 
+        //  client <---> API Gateway <===> DB
+        //
+        results = await db_reportLeed( CURRENT_LEED );
+
+
+    } catch (error) {   
+        printError( "DB Report Leed", error.message );
+        printError( "Received JSON", results);
+        
+        // EXIT FUNCTION HERE
+        throwError( "db_reportLeed", error); 
+
+    }
+
+    
+    console.log("BACK FROM DB REPORT RESULTS=" + results);
+    return results;
+
+}
+
+

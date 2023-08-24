@@ -64,6 +64,11 @@ export function errorModalClose() {
 
 
 
+/**
+ * 
+ * @param {*} error 
+ * @param {*} no_close 
+ */
 export function errorModal( error, no_close ) {
 
   let modal = document.getElementById("error_modal");

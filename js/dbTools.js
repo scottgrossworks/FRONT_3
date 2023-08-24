@@ -197,6 +197,35 @@ export async function db_getLeedz( subs, start_date, end_date ) {
 
 
 
+
+/**
+ * 
+ */
+export async function db_deleteLeed( the_leed ) {
+
+
+    if (the_leed == null) {
+        throwError("db_deleteLeed()", "no leed provided");
+    }
+
+   //
+    // FIXME FIXME FIXME
+    //
+    let the_id = the_leed.id;
+    let json_obj = '{ "id": 1001, "result":1 }';
+
+    console.log("DELETE LEED ID=" + the_id);
+
+
+    
+    console.log("DELETE COMPLETE!!!!");
+
+
+    return json_obj;  // SHOULD NOT BE NULL
+}    
+
+
+
 /**
  * 
  */
@@ -205,6 +234,10 @@ export async function db_saveLeed( the_leed ) {
     if (the_leed == null) {
         throwError("db_saveLeed()", "no leed provided");
     }
+
+    //
+    // FIXME FIXME FIXME
+    //
     let json_obj = '{"id": 1001, "cr": "dave.reyes", "result":1 }';
 
     console.log("SAVING LEED TO DB.....");
@@ -242,6 +275,79 @@ export async function db_saveLeed( the_leed ) {
 }    
 
 
+
+
+
+
+
+
+
+
+/**
+ * 
+ * 
+ */
+export async function db_buyLeed( the_leed ) {
+
+
+    if (the_leed == null) {
+        throwError("db_buyLeed()", "no leed provided");
+    }
+
+   //
+    // FIXME FIXME FIXME
+    //
+    let the_id = the_leed.id;
+    let json_obj = '{ "id": 1001, "result":1 }';
+
+    console.log("BUY LEED ID=" + the_id);
+    
+    console.log("BUY COMPLETE!!!!");
+
+
+    return json_obj;  // SHOULD NOT BE NULL
+}    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * 
+ */
+export async function db_reportLeed( the_leed ) {
+
+
+    if (the_leed == null) {
+        throwError("db_reportLeed()", "no leed provided");
+    }
+
+   //
+    // FIXME FIXME FIXME
+    //
+    let the_id = the_leed.id;
+    let json_obj = '{ "id": 1001, "result":1 }';
+
+    console.log("REPORT LEED ID=" + the_id);
+
+
+    
+    console.log("REPORT COMPLETE!!!!");
+
+
+    return json_obj;  // SHOULD NOT BE NULL
+}    
 
 
 

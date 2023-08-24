@@ -335,13 +335,18 @@
 
         </div>
 
+        <!--
+          --
+          --  ACTION BUTTONS 
+          --
+        -->
 
         <div class="row" id="row_buy_button">
-          <button id="action_buy" class="button buy_button">Buy<img id="shopping_cart" src="img/shopping-cart.png"></button>
+          <button id="action_buy" class="button buy_button"  onclick="buyLeed()">Buy<img id="shopping_cart" src="img/shopping-cart.png"></button>
         </div>
 
         <div class="row" id="row_report_button">
-          <button id="action_report" class="button report_button">Report</button>
+          <button id="action_report" class="button report_button" onclick="reportLeed()">Report</button>
         </div>
     
 
@@ -390,7 +395,7 @@
     import { initTradesColumn, getAllTrades } from "./js/trades.js";   
     import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
-    import { getCurrentLeed, clearCurrentLeed,  }  from "./js/leed.js";
+    import { getCurrentLeed, clearCurrentLeed, buyCurrentLeed, deleteCurrentLeed, reportCurrentLeed  }  from "./js/leed.js";
     import { showLeedAction } from "./js/action.js";
     import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
 
@@ -500,21 +505,7 @@
 
 
 
-
-      //
-      // DELETE the leed showing in the action window
-      //
-      function deleteLeed() {
-
-        // FIXME FIXME FIXME DELETE BUTTON CALLBACK
-         console.log("%cDELETE BUTTON CALLBACK", "color:green");
-        // FIXME FIXME FIXME
-    
-        const the_leed = getCurrentLeed();
-        console.log("CURRENT LEED:");
-        console.log(the_leed);
-      }
-      window.deleteLeed = deleteLeed;
+      
 
 
       
@@ -524,17 +515,144 @@
       //
       function openLeedEdit() {
 
-              
-            // FIXME FIXME FIXME
-        console.log("%cEDIT BUTTON CALLBACK IN OPEN LEED EDIT", "color:green");
-            // FIXME FIXME FIXME
+        // should NEVER happen
+        if (isGuestUser()) {
+          printError("openLeedEdit", "Guest User cannot edit leeds");
+          errorModal("Guest User cannot edit leeds", false);
 
-         window.open("./leed_edit.html", "location=1,status=0, menubar=0");
-        
+        } else {
+
+          window.open("./leed_edit.html", "location=1,status=0, menubar=0");
+        }
       }
       window.openLeedEdit = openLeedEdit;
 
 
+
+
+      //
+      // REPORT a problem leed
+      // showing in the action window
+      // responsible for showing modal on error
+      //
+      async function reportLeed() {
+
+        // FIXME FIXME FIXME REPORT BUTTON CALLBACK
+        console.log("%REPORT BUTTON CALLBACK", "color:pink");
+    
+        let response = null;
+        try {
+            await reportCurrentLeed().then(( fromDB ) => response = fromDB );
+
+            if (response == null) {
+              throw new Error("Error reporting current leed: null server response");
+            }
+
+
+          } catch (error) {
+            
+            // DO NOT FAIL -- show error modal dialog and print error to console
+            var msg = "Cannot report current leed.<BR>Please refresh page."
+            msg = error.message + "<BR>" + msg;
+            
+            printError("Report Leed", error);
+            errorModal( msg , true );
+          }
+
+
+        // go back to landing page
+
+      }
+      window.reportLeed = reportLeed;
+
+
+
+
+      
+
+      //
+      // BUY current leed 
+      // showing in the action window
+      // responsible for showing modal on error
+      //
+      async function buyLeed() {
+
+        // FIXME FIXME FIXME REPORT BUTTON CALLBACK
+        console.log("%BUY BUTTON CALLBACK", "color:pink");
+    
+        let response = null;
+        try {
+            await buyCurrentLeed().then(( fromDB ) => response = fromDB );
+
+            if (response == null) {
+              throw new Error("Error reporting current leed: null server response");
+            }
+
+
+          } catch (error) {
+            
+            // DO NOT FAIL -- show error modal dialog and print error to console
+            var msg = "Cannot buy current leed.<BR>Please refresh page."
+            msg = error.message + "<BR>" + msg;
+            
+            printError("Buy Leed", error);
+            errorModal( msg , true );
+          }
+
+
+        // go back to landing page
+
+      }
+      window.buyLeed = buyLeed;
+
+
+
+
+
+
+
+      //
+      // DELETE the leed showing in the action window
+      // responsible for showing modal on error
+      //
+      async function deleteLeed() {
+
+        // FIXME FIXME FIXME BUY BUTTON CALLBACK
+         console.log("%DELETE BUTTON CALLBACK", "color:pink");
+ 
+        let response = null;
+        try {
+            await deleteCurrentLeed().then(( fromDB ) => response = fromDB );
+
+            if (response == null) {
+              throw new Error("Error deleting current leed: null server response");
+            }
+
+            // response checking specific to delete function
+            //
+            /**
+            if (trades.length == undefined || trades.length == 0) {
+              throw new Error("server returned empty (0) trades.");
+            }
+            */
+  
+
+          } catch (error) {
+            
+            // DO NOT FAIL -- show error modal dialog and print error to console
+            var msg = "Cannot delete current leed.<BR>Please refresh page."
+            msg = error.message + "<BR>" + msg;
+            
+            printError("Delete Leed", error);
+            errorModal( msg , true );
+          }
+
+      }
+      window.deleteLeed = deleteLeed;
+
+
+
+      
 
 
 

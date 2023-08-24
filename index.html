@@ -86,11 +86,11 @@
 
           <a href="#" onclick="openUserEdit()" id="dd_account">Account</a>
 
-          <a href="./how_to.html" id="dd_howto">How To</a>
+          <a href="./leedz_how-to.html" id="dd_howto">How To</a>
           
-          <a href="./terms.html">About</a>
+          <a href="./leedz_about.html">About</a>
 
-          <a href="./contact.html">Contact</a>
+          <a href="./leedz_contact.html">Contact</a>
 
 
           <a href="#" id="dd_logout">Log Out</a>
@@ -490,6 +490,8 @@
 
 
       // do NOT open user edit page for guest account
+      //
+      //
       function openUserEdit() {
 
         if (isGuestUser()) {
@@ -765,8 +767,9 @@
 
 
       
-
-
+/**
+ * Right-hand WELCOM column
+ */
       function welcomeColumn() {
 
         let action = document.getElementById("action_panel");
@@ -784,8 +787,9 @@
 
 
 
-
-
+/**
+ * Right-hand ACTTION column
+ */
       function actionModal() {
         let welcome = document.getElementById("welcome_panel");
         welcome.style.display = "none";
@@ -806,10 +810,9 @@
 
 
 
-
-
-
-
+/**
+ * CLOSE (ANY) MODAL DIALOG
+ */
       function modalClose() {
 
         let action = document.getElementById("action_panel");
@@ -841,8 +844,12 @@
     * USER
     *
     */
-
     function initUserPanel(current_user) {
+
+
+      console.log("IN INIT USER");
+      console.log(current_user);
+      
 
       // whatever the current user identity -- continue ....
       // UPDATE the UI with the current user info
@@ -851,7 +858,7 @@
       user_href.innerHTML = current_user.username;
       user_href.setAttribute("href", "#");
       user_href.addEventListener( "click", (event) => {    
-      openUserEdit();
+          openUserEdit();
       });
 
 
@@ -1005,6 +1012,8 @@
           // INIT USER PANEL
           //
           try {
+
+            console.log("   !!!!!   INITIALIZING USER PANEL  !!!!  ")
             initUserPanel( current_user );
 
           } catch (error) {

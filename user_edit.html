@@ -257,13 +257,15 @@
 
 
 
+		/**
+		 *
+		 */
 		function backButton() {
 			const CURRENT_USER = getCurrentUser(true);
 	
 			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
 			window.open(href);
 
-			clearCurrentLeed();
 			self.close();
 
 		}
@@ -272,7 +274,7 @@
 
 
 
-		const USER_CHANGES = blankUserObject();
+		const USER_CHANGES = CURRENT_USER;
 
 		function defaultCallback(rowData, rowName) {
 

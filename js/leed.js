@@ -2,7 +2,7 @@
  * 
  */
 import { getCurrentUser, isSubscribed } from "./user.js";
-import { printError, throwError } from "./error.js";
+import { errorModal, printError, throwError } from "./error.js";
 import { db_getLeedz, db_updateLeed } from "./dbTools.js";
 
 import { getMonth,getYear } from "./dates.js";
@@ -643,8 +643,10 @@ export async function saveLeedChanges( leedObj ) {
         printError( "db_updateLeed", error.message );
         printError( "Received JSON", results);
         
+        // FOOBAR
         // EXIT FUNCTION HERE
-        throwError( "Update Leed", error); 
+        // throwError( "Update Leed", error); 
+        errorModal(error.message, false);
 
     }
 

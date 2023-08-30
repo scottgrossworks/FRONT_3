@@ -292,6 +292,26 @@
     <BR>
 
 
+
+
+        
+
+
+
+
+  <!-- 
+    -- ERROR MODAL 
+    -- 
+    -->
+  <div class="row modal" id="error_modal">
+    <center><img id="error_logo" src="img/logo_2.png"></center> 
+    <h1></h1>
+    <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
+  </div>
+
+
+  
+
 </body>
 
 
@@ -578,21 +598,6 @@
 		}
 
 
-
-		//
-		//
-		//
-		function saveChanges() {
-
-			if (! EDITING) return;
-
-			saveLeedChanges( LEED_CHANGES );
-
-			endEditing();
-		}
-		window.saveChanges = saveChanges;
-
-
         
 
 
@@ -654,12 +659,38 @@
         
 
 
+    /**
+    *
+    *
+    */
+    function saveChanges() {
 
-        //
-        //
-        //
-        //
-		function deleteLeed() {
+        if (! EDITING) return;
+
+        try {
+
+            saveLeedChanges( LEED_CHANGES );
+
+        } catch ( error ) {
+            errorModal("Error saving changes: " + error.message, false);
+
+        } finally {
+            endEditing();
+        }
+    }
+    window.saveChanges = saveChanges;
+
+
+
+
+    /**
+    *
+    *
+    */
+    function deleteLeed() {
+
+
+        try {
 
             // FIXME FIXME FIXME
             // some kind of feedback that leed successfully deleted
@@ -668,12 +699,27 @@
             // compliment of add leed
 
             console.log("in leed_edit.html.deleteLeed().........");
-            console.log("SENDING DELETE TO SERVER, ID=" + LEED_CHANGES.id);
-		}
-		window.deleteLeed = deleteLeed;
+
+            deleteCurrentLeed();
+
+            backButton();
+
+        } catch ( error ) {
+            errorModal("Error deleting leed: " + error.message, false);
+
+        } 
+
+
+    }
+    window.deleteLeed = deleteLeed;
 
 
 
+
+        /**
+         *
+         *
+         */
 		var editOptions = { "origin" : "edit",
                             "finishCallback": defaultCallback 
                             };

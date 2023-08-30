@@ -8,7 +8,7 @@ import { daysInMonth, getShortDateString, getShortWeekday, getMonth,
 import { showLeedAction } from "./action.js";
 import { setCurrentLeed, loadLeedzFromDB, loadLeedzFromCache, saveLeedzToCache } from "./leed.js";
 import { getColorForTrade } from "./trades.js";
-import { getSubscriptions } from "./user.js";
+import { getSubscriptions, getCurrentUser } from "./user.js";
 import { printError, throwError, errorModal } from "./error.js";
 
 
@@ -176,44 +176,14 @@ export function loadCacheLeedz() {
  *  GOTO DB for new leedz
  *  will populate the calendar and save new leedz to cache
  * 
- 
-export function loadDBLeedz() {
-
-
-    CURRENT_SELECTION = null;
-
-    // API request --> DB 
-    // load leedz for this trade and date range showing
-    //
-    let results = null;
-    try {
-
-            results = await loadLeedzFromDB(getSubscriptions(), firstDayShowing(), lastDayShowing());
-            
-            // immediately save to cache
-            saveLeedzToCache( results, getMonth(), getYear() );
-      
-    } catch (error) {
-        printError("Loading leedz from DB", error);
-        errorModal(error.message, false);
-        return;
-    }
-    
-    // update calendar
-    addLeedzToCalendar( results );
-}
-*/
-
-
-/**
- *  GOTO DB for new leedz
- *  will populate the calendar and save new leedz to cache
- * 
  */
 export function loadDBLeedz() {
 
 
     console.log("****************   in loadDBLeedz()   ************");
+    console.log(getCurrentUser());
+
+
     CURRENT_SELECTION = null;
 
     // API request --> DB 
@@ -244,6 +214,7 @@ function refreshCalendar( results ) {
 
     try {
         console.log("*** IN asyncDBCallback!!! **** ");
+
 
         // START with empty calendar
         // clear calendar of all leedz
@@ -436,10 +407,7 @@ function removeMatchingLeed( each_day, leed_id ) {
 ]
  */
 
-//
-// FIXME FIXME FIXME
-// check to see if this is OUR leed
-//
+
 function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
 
@@ -454,6 +422,16 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     // each leed knows what trade it comes 
     newLeed.setAttribute("tn", leed_fromDB.trade);
     newLeed.setAttribute("id", leed_fromDB.id); // unique ID
+
+
+    // is this leed created by the current user?
+    console.log("CREATOR=" + leed_fromDB.creator + "   UN=" + getCurrentUser().username);
+    if (leed_fromDB.creator == getCurrentUser().username) {
+        newLeed.classList.add("user_leed");
+    } else {
+        newLeed.classList.add("forsale_leed");
+    }
+
 
 
     // LEED DATE

@@ -5,6 +5,8 @@
  */
 
 
+
+
 import { printError, throwError } from "./error.js";
 
 
@@ -20,6 +22,100 @@ export const END_DATE_URL_PARAM = "de";
 export const LEED_ID_URL_PARAM = "id";
 
 
+export const FAILURE = 0;
+export const SUCCESS = 1;
+// 2
+export const DEL_USER = 3;
+export const CHG_USER = 4;
+export const ADD_SUB  = 5;
+export const REM_SUB  = 6;
+
+export const ADD_LEED = 7;
+export const DEL_LEED = 8;
+export const CHG_LEED = 9;
+export const REP_LEED = 10;
+
+
+/**
+ * 
+ * 
+ */
+
+export async function db_updateUser( code, user_obj ) { 
+    
+
+    switch (code) {
+
+        case DEL_USER:
+            console.log("dbTools.db_updateUser() DEL_USER"); 
+            break
+        
+        case CHG_USER:
+            console.log("dbTools.db_updateUser() CHG_USER"); 
+            break
+
+        case ADD_SUB:
+            console.log("dbTools.db_updateUser() ADD SUB"); 
+            break
+        
+        case REM_SUB:
+            console.log("dbTools.db_updateUser() REM SUB"); 
+            break
+
+        default:
+            throwError("db_updateUser", "Uknown code received: " + code);
+    }
+
+
+    let json_obj = '{ "un": user_obj.username, "cd": code, "res":SUCCESS }';
+
+    return json_obj;
+}
+
+
+
+
+
+
+
+/**
+ * 
+ * 
+ */
+
+export async function db_updateLeed( code, user_obj, leed_obj ) { 
+    
+    switch (code) {
+
+        case ADD_LEED:
+            console.log("dbTools.db_updateLeed() ADD_LEED"); 
+            break
+        
+        case DEL_LEED:
+            console.log("dbTools.db_updateLeed() DELETE LEED"); 
+            break
+
+        case CHG_LEED:
+            console.log("dbTools.db_updateLeed() CHG LEED"); 
+            break
+        
+        case REP_LEED:
+            console.log("dbTools.db_updateLeed() REPORT LEED"); 
+            break
+
+        default:
+            throwError("db_updateUser", "Uknown code received: " + code);
+    }
+
+
+    let json_obj = '{ "id": leed_obj.id, "cd": code, "res":SUCCESS }';
+
+    return json_obj;
+}
+
+
+
+
 
 
 /**
@@ -28,6 +124,8 @@ export const LEED_ID_URL_PARAM = "id";
  */
 export async function db_getTrades() {
 
+    let json_obj = null;
+    
     try {
 
         const theURL = new URL(API_GATEWAY + "getTrades");
@@ -48,11 +146,12 @@ export async function db_getTrades() {
         return json_obj;
 
     } catch (error) {
-        printError("db_getTrades()", error);
         throwError( error );
 
     }
-    return null;
+
+    // should NOT be NULL
+    return json_obj;
 
 }
 
@@ -87,7 +186,6 @@ export async function db_getUser( username ) {
 
 
     } catch (error) {
-        printError("db_getUser()", error.message);
         throwError("db_getUser()", error);
     }
 
@@ -130,7 +228,6 @@ export async function db_getDeetz( leed_id ) {
 
     
     } catch (error) {
-        printError("db_getDeetz()", error.message);
         throwError("db_getDeetz()", error);
     }
 
@@ -198,156 +295,7 @@ export async function db_getLeedz( subs, start_date, end_date ) {
 
 
 
-/**
- * 
- */
-export async function db_deleteLeed( the_leed ) {
 
-
-    if (the_leed == null) {
-        throwError("db_deleteLeed()", "no leed provided");
-    }
-
-   //
-    // FIXME FIXME FIXME
-    //
-    let the_id = the_leed.id;
-    let json_obj = '{ "id": 1001, "result":1 }';
-
-    console.log("DELETE LEED ID=" + the_id);
-
-
-    
-    console.log("DELETE COMPLETE!!!!");
-
-
-    return json_obj;  // SHOULD NOT BE NULL
-}    
-
-
-
-/**
- * 
- */
-export async function db_saveLeed( the_leed ) {
-    
-    if (the_leed == null) {
-        throwError("db_saveLeed()", "no leed provided");
-    }
-
-    //
-    // FIXME FIXME FIXME
-    //
-    let json_obj = '{"id": 1001, "cr": "dave.reyes", "result":1 }';
-
-    console.log("SAVING LEED TO DB.....");
-    
-    /**
-        const theURL = new URL(API_GATEWAY + "getUser");
-        const params = new URLSearchParams({ [USERNAME_URL_PARAM]: username });
-        theURL.search = params.toString();
-        
-        await doGet( theURL )
-        .then(data => {
-
-          json_obj = data;
-
-        })
-        .catch(error => {
-          printError("doGet()", error);
-          throwError('doGet()', 'There was a problem with the fetch operation:' + error.message);
-        });
-
-
-
-    } catch (error) {
-        printError("db_getUser()", error.message);
-        throwError("db_getUser()", error);
-    }
-    */
-
-
-    
-    console.log("SAVE COMPLETE!!!!");
-
-
-    return json_obj;  // SHOULD NOT BE NULL
-}    
-
-
-
-
-
-
-
-
-
-
-/**
- * 
- * 
- */
-export async function db_buyLeed( the_leed ) {
-
-
-    if (the_leed == null) {
-        throwError("db_buyLeed()", "no leed provided");
-    }
-
-   //
-    // FIXME FIXME FIXME
-    //
-    let the_id = the_leed.id;
-    let json_obj = '{ "id": 1001, "result":1 }';
-
-    console.log("BUY LEED ID=" + the_id);
-    
-    console.log("BUY COMPLETE!!!!");
-
-
-    return json_obj;  // SHOULD NOT BE NULL
-}    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * 
- */
-export async function db_reportLeed( the_leed ) {
-
-
-    if (the_leed == null) {
-        throwError("db_reportLeed()", "no leed provided");
-    }
-
-   //
-    // FIXME FIXME FIXME
-    //
-    let the_id = the_leed.id;
-    let json_obj = '{ "id": 1001, "result":1 }';
-
-    console.log("REPORT LEED ID=" + the_id);
-
-
-    
-    console.log("REPORT COMPLETE!!!!");
-
-
-    return json_obj;  // SHOULD NOT BE NULL
-}    
 
 
 

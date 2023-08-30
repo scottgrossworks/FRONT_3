@@ -117,6 +117,19 @@
         outline:none;
     }
 
+
+    .forsale_leed {
+      height: 22px;
+      width: 22px;
+      transform: translateY(-6px);
+    }
+
+    .user_leed {
+      height: 14px;
+      width: 14px;
+      outline: 5px double var(--LEEDZ_DARKGREEN);
+      transform: translateY(-6px);
+    }
     
 
   

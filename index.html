@@ -465,12 +465,14 @@
             let theDiv = event.target;
 
             if (event.target.matches('a')) {
-              // console.log("%cDROPDOWN=" + event.target, "color:green;");
+              
               // triggered also for modal close
               //
               // FIXME FIXME FIXME
               // event.target will be http link
-
+              console.log("%cDROPDOWN=" + event.target, "color:green;");
+              console.log("URL=" + event.target);
+              window.open( event.target , "location=1,status=0, menubar=0");
 
 
 
@@ -847,9 +849,9 @@
     function initUserPanel(current_user) {
 
 
-      console.log("IN INIT USER");
+      console.log("user.initUserPanel()..........");
       console.log(current_user);
-      
+
 
       // whatever the current user identity -- continue ....
       // UPDATE the UI with the current user info
@@ -967,7 +969,7 @@
             // use guest account
             printError("No username parameter", "Using Guest Account");
             
-            // USE GUEST USER
+            // ! USE GUEST USER
             current_user = guestUser();
 
 
@@ -976,7 +978,7 @@
           } else if (! (alphaNum.test( url_username ))) {
             printError("Invalid username: " + url_username, "username can only contain alphanumeric chars");
             
-            // USE GUEST USER
+            // ! USE GUEST USER
             current_user = guestUser();
       
 
@@ -1000,7 +1002,8 @@
               printError("User Init", msg);
               errorModal( msg , true );
   
-              // DO NOT FAIL -- use guest user
+              // DO NOT FAIL
+              // ! USE GUEST USER
               current_user = guestUser();   
 
             }

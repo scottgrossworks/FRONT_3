@@ -1,5 +1,5 @@
 import { loadCacheLeedz, loadDBLeedz, removeLeedzShowing } from "./calendar.js";
-import { isSubscribed, saveSubscription, removeSubscription } from "./user.js";
+import { isSubscribed, saveSubscription, removeSubscription, getCurrentUser } from "./user.js";
 import { db_getTrades } from "./dbTools.js";
 import { printError, errorModal } from "./error.js";
 import { hideActionWindow } from "./action.js";
@@ -396,6 +396,9 @@ export function initTradesColumn( all_trades ) {
     radioButton.addEventListener("click", function( event ) {
 
 
+      console.log(getCurrentUser());
+
+
       if ( isSubscribed( trade.trade_name) ) { // radio button is ON
 
         removeSubscription( trade.trade_name );
@@ -406,6 +409,7 @@ export function initTradesColumn( all_trades ) {
 
         try {
           saveSubscription( trade.trade_name );
+
         } catch (error) {
           errorModal(error, false);
           return;
@@ -439,7 +443,15 @@ export function initTradesColumn( all_trades ) {
     
       if ( isSubscribed( trade.trade_name) ) { // radio button is ON
 
-        removeSubscription( trade.trade_name );
+       
+        try {
+          removeSubscription( trade.trade_name );
+        } catch (error) {
+          errorModal(error, false);
+          return;
+        }
+
+
         turnTrade_Off(checkBox, radioButton, theLabel);
 
       } else { // radio button is OFF
@@ -513,7 +525,7 @@ function createColor(numOfSteps, step) {
       case 4: r = f; g = 0; b = 1; break;
       case 5: r = 1; g = 0; b = q; break;
   }
-  var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 215)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
+  var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
   return (c);
 }
 

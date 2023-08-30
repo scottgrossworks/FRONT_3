@@ -1,7 +1,7 @@
 /**
  * 
  */
-import { db_getUser } from "./dbTools.js";
+import { db_getUser, db_updateUser, ADD_SUB, REM_SUB, DEL_USER, CHG_USER, FAILURE } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 
 export const CACHE_USER_KEY = "U";
@@ -12,6 +12,55 @@ GUEST_USER.username = "guest.user";
 GUEST_USER.email = "scottgrossworks@gmail.com";
 
 let CURRENT_USER = blankUserObject();
+
+
+
+/**
+ * delete current user account
+ */
+export async function deleteCurrentUser() {
+
+  if (CURRENT_USER == null)
+    throwError("deleteCurrentUser", "CURRENT_USER should never be null");
+
+
+    let resObj = [];   
+    try {
+      // get the user object
+      await db_updateUser( DEL_USER, CURRENT_USER )
+      .then(data => {
+
+        if (data == null) throw new Error("null response from GET");
+        resObj = data[0];
+
+        // received error code
+        if (resObj.res == FAILURE) {
+          throwError("Delete User", resObj.msg);
+        }
+
+
+      })
+      .catch(error => {
+
+        let msg = "Error deleting user [ " + CURRENT_USER.username + " ]:" + error.message;
+        printError("deleteCurrentUser", msg);
+        throwError('Delete User', msg);
+      });
+
+
+    
+    } catch (error) {
+      throwError( "deleteCurrentUser", error);
+    }
+
+    // if it doesn't throw an error -- SUCCESS!
+    CURRENT_USER = GUEST_USER;
+    
+    // save modified CURRENT_USER to session storage
+    saveCacheUser( CURRENT_USER );
+
+
+}
 
 
 
@@ -88,9 +137,9 @@ export async function initUser( login ) {
   
         })
         .catch(error => {
-          printError("initUser", "Error initializing user: " + login);
-          printError("db_getUser", error);
-          throwError('db_getUser', 'Problem with fetch operation:' + error.message);
+          let msg =  "Error initializing user [ " + login + " ]: " + error.message;
+          printError("db_getUser", msg);
+          throwError('Init User', error);
         });
 
         // copy the new values into CURRENT_USER
@@ -125,7 +174,7 @@ export async function initUser( login ) {
       saveCacheUser( CURRENT_USER );
     }
     
-    // console.log("%cLOADED USER: " + CURRENT_USER.username, "color:darkorange");
+    console.log("%cuser.initUser(): " + CURRENT_USER.username, "color:darkorange");
     // console.log(CURRENT_USER);
 
   }
@@ -163,12 +212,11 @@ export function blankUserObject() {
 
 
 
-// FIXME FIXME FIXME FIXME
 /**
  * the user has updated info
  * JSON-serialize the changes
  */
-export function saveUserChanges( userObj ) {
+export async function saveUserChanges( userObj ) {
 
 
   if (userObj == null)
@@ -206,17 +254,21 @@ export function saveUserChanges( userObj ) {
     CURRENT_USER.badges = userObj.badges;
 
   
-
+  // save changes to CACHE
   saveCacheUser( CURRENT_USER );
   
-  // FIXME FIXME FIXME
-  // post User changes to server
-  // FIXME FIXME FIXME
-  // db_updateUser()
-  console.log("******** POSTING USER CHANGES TO SERVER ******* ");
-  console.log(CURRENT_USER);
+  // send user updates --> DB
+  try {
+    db_updateUser( CHG_USER, CURRENT_USER );		
 
+  } catch ( error ) {
 
+      printError("db_updateUser", error);
+      throwError("Save User", error.message);
+  }
+
+  console.log("user.saveUserChanges()  ******** SUCCESS! ******* ");
+  // console.log(CURRENT_USER);
 }
 
 
@@ -245,7 +297,6 @@ function loadCacheUser() {
     let userJSON = window.sessionStorage.getItem( CACHE_USER_KEY );
     let userObj = null;
     if (userJSON == undefined || userJSON == null) {
-
       // NOT an error -- will happen any time app started with fresh cache and new user
       // printError("loadCacheUser", "No value for cache key=" + CACHE_USER_KEY);
       return null; // return NULL and be done
@@ -330,12 +381,13 @@ export function isSubscribed( trade_name ) {
  * 
  * @param String trade_name 
  */
-export function saveSubscription( trade_name ) {
+export async function saveSubscription( trade_name ) {
+
 
   if (CURRENT_USER.subs.length == MAX_USER_SUBS) {
     var error = "MAX subscriptions reached: " + MAX_USER_SUBS;
-    printError("Save Subscription", error);
-    throwError("Save Subscription", error);
+    printError("saveSubscription", error);
+    throwError("Trade Subscribe", error);
   }
 
     if (CURRENT_USER.subs.indexOf(trade_name) == -1) { // not in list already
@@ -344,21 +396,59 @@ export function saveSubscription( trade_name ) {
 
     saveCacheUser( CURRENT_USER );
 
-    //
-    // FIXME FIXME FIXME
+    // GUEST_USER can save / remove subscriptions from the current session cache user but
+    // no subscription added to DB
+    if ( isGuestUser() ) return;
+
     // if not guest user
-    // save subscription to the database
+    // Trade Subscribe to DB
     //
-
-
-  }
+    console.log("user.saveSubscription()......");
+      
+      //   client <---> API Gateway <===> DB
+      //
+      // FOOBAR FOOBAR FOOBAR
+      let resObj = [];   
+      try {
+        
+          await db_updateUser( ADD_SUB, CURRENT_USER )
+          .then(data => {
   
+          if (data == null) throw new Error("null response from GET");
+          
+          resObj = data[0];
+          if (resObj.res == FAILURE) {
+            // ERROR CODE
+            throwError("Trade Subscribe", resObj.msg);
+          }
+          
+          // else -- SUCCESS! subscription saved
+  
+          })
+          .catch(error => {
+            printError("db_updateUser", error);
+            throwError('Trade Subscribe',  + error);
+          });
+
+      } catch (error) {
+        let msg = 'Error subscribing to trade [ ' + trade_name + ' ]:' + error.message;
+        throwError('Trade Subscribe', msg);
+      }
+}
+            
+
+  
+
+
+
+
+
   
   /**
    * 
    * @param String trade_name 
    */
-  export function removeSubscription( trade_name ) {
+  export async function removeSubscription( trade_name ) {
      
     if (CURRENT_USER.subs.length == 0) {
       console.error("Cannot removeSubscription() from empty list: " + trade_name);
@@ -370,14 +460,50 @@ export function saveSubscription( trade_name ) {
     saveCacheUser( CURRENT_USER );
 
 
-    //
-    // FIXME FIXME FIXME
+    // GUEST_USER can save / remove subscriptions from the current session cache user but
+    // no subscription added to DB
+    if ( isGuestUser() ) return;
+
     // if not guest user
-    // remove subscription to the database
+    // remove subscription from DB
     //
 
-  }
+    console.log("user.removeSubscription()......");
+
+
+        //   client <---> API Gateway <===> DB
+      //
+      //
+      let resObj = [];   
+      try {
+        // get the user object
+          await db_updateUser( REM_SUB, CURRENT_USER )
+          .then(data => {
   
+          if (data == null) throw new Error("null response from GET");
+          
+          resObj = data[0];
+          if (resObj.res == 0) {
+            // ERROR CODE
+            throwError("db_updateUser", resObj.msg);
+          }
+          
+          // else -- SUCCESS! subscription removed
+  
+          })
+          .catch(error => {
+            printError("db_updateUser", error);
+            throwError('Remove Subscription',  + error);
+          });
+
+      } catch (error) {
+        let msg = 'Error removing subscription to trade [ ' + trade_name + ' ]:' + error.message;
+        throwError('Remove Subscription', msg);
+      }
+}
+
+
+
 
 
 /**

@@ -150,10 +150,6 @@
 
 
             <!-- ADDRESS 
-            
-            FIXME FIXME FIXME
-            need special validation for address
-            read zip from last 5 digits of address.trim()
             -->
             <tr id="row_loc">
                         
@@ -666,12 +662,12 @@
 		function deleteLeed() {
 
             // FIXME FIXME FIXME
-            // FIXME FIXME FIXME 
             // some kind of feedback that leed successfully deleted
             //
             // GO BACK to server and delete leed
             // compliment of add leed
 
+            console.log("in leed_edit.html.deleteLeed().........");
             console.log("SENDING DELETE TO SERVER, ID=" + LEED_CHANGES.id);
 		}
 		window.deleteLeed = deleteLeed;

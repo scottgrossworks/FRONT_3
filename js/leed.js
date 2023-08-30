@@ -1,9 +1,9 @@
 /**
  * 
  */
-import { isSubscribed } from "./user.js";
+import { getCurrentUser, isSubscribed } from "./user.js";
 import { printError, throwError } from "./error.js";
-import { db_getLeedz, db_saveLeed, db_deleteLeed, db_buyLeed, db_reportLeed } from "./dbTools.js";
+import { db_getLeedz, db_updateLeed } from "./dbTools.js";
 
 import { getMonth,getYear } from "./dates.js";
 
@@ -534,7 +534,6 @@ export function loadLeedzFromCache( the_month, the_year ) {
 
 
 
-
 /** 
  *
  * the leed has updated info
@@ -558,7 +557,6 @@ export async function saveLeedChanges( leedObj ) {
    */
 
   
-
   if (leedObj.note != null)
     CURRENT_LEED.note = leedObj.note;
 
@@ -608,8 +606,8 @@ export async function saveLeedChanges( leedObj ) {
 
   
     try {
-    // cache this Leed   
-    cacheCurrentLeed( CURRENT_LEED );
+      // cache this Leed   
+      cacheCurrentLeed( CURRENT_LEED );
   
     } catch (error) {
       throwError("cacheCurrentLeed", error);
@@ -628,23 +626,31 @@ export async function saveLeedChanges( leedObj ) {
         // 
         //  client <---> API Gateway <===> DB
         //
-        results = await db_saveLeed( CURRENT_LEED );
+        results = await db_updateLeed( CHG_LEED, getCurrentUser(), CURRENT_LEED );
+
+        // should never happen
+        if (results == null) {
+          throwError("Update Leed", "Null response received from server");
+        }
+
+        // received error code
+        if (results.res == FAILURE) {
+          throwError("Update Leed", results.msg);
+        }
 
 
     } catch (error) {   
-        printError( "Save Leed to DB", error.message );
+        printError( "db_updateLeed", error.message );
         printError( "Received JSON", results);
         
         // EXIT FUNCTION HERE
-        throwError( "db_saveLeed", error); 
+        throwError( "Update Leed", error); 
 
     }
 
     console.log("BACK FROM DB SAVE RESULTS=" + results);
-
     return;
 }
-
 
 
 
@@ -658,11 +664,12 @@ export async function buyCurrentLeed() {
   if (CURRENT_LEED == null)
     throwError("buyCurrentLeed", "CURRENT_LEED is null");
 
- 
+
     console.log("----------> ******** BUYING CURRENT LEED TO SERVER ******* ");
 
- 
+    const current_user = getCurrentUser();
 
+ 
     // API request --> DB 
     // save leed to DB
     //
@@ -671,16 +678,32 @@ export async function buyCurrentLeed() {
         // 
         //  client <---> API Gateway <===> DB
         //
-        results = await db_buyLeed( CURRENT_LEED );
+        results = await db_updateLeed( BUY_LEED, current_user, CURRENT_LEED );
+        
+        // should never happen
+        if (results == null) {
+          throwError("Buy Leed", "Null response received from server");
+        }
+
+        // received error code
+        if (results.res == FAILURE) {
+          throwError("Buy Leed", results.msg);
+        }
 
 
     } catch (error) {   
-        printError( "DB Buy Leed", error.message );
+        printError( "db_updateLeed", error.message );
         printError( "Received JSON", results);
         
         // EXIT FUNCTION HERE
-       throw error; 
+        throwError("Buy Leed", error);
 
+    }
+
+
+    // on success -- update current user object with new leed bought
+    if (current_user.leedz_bought.indexOf( CURRENT_LEED.id ) == -1) { // not in list already
+      current_user.leedz_bought.push( CURRENT_LEED.id );
     }
 
     console.log("BACK FROM DB BUY RESULTS=" + results);
@@ -692,48 +715,64 @@ export async function buyCurrentLeed() {
 
 
 
-
-
 /** 
  *
- * BUY the Leed
+ * DELETE the Leed
  */
 export async function deleteCurrentLeed() {
 
-  
   if (CURRENT_LEED == null)
     throwError("deleteCurrentLeed", "CURRENT_LEED is null");
 
+
+    console.log("----------> ******** DELETING CURRENT LEED TO SERVER ******* ");
+
+    const current_user = getCurrentUser();
+
  
-
-    console.log("----------> ******** DELETE CURRENT LEED TO SERVER ******* ");
-
-
     // API request --> DB 
-    // save leed to DB
+    // delete leed to DB
     //
     let results = null;
     try {
         // 
         //  client <---> API Gateway <===> DB
         //
-        results = await db_deleteLeed( CURRENT_LEED );
+        results = await db_updateLeed( DEL_LEED, current_user, CURRENT_LEED );
+        
+        // should never happen
+        if (results == null) {
+          throwError("Delete Leed", "Null response received from server");
+        }
+
+        // received error code
+        if (results.res == FAILURE) {
+          throwError("Delete Leed", results.msg);
+        }
 
 
     } catch (error) {   
-        printError( "DB Delete Leed", error.message );
+        printError( "db_updateLeed", error.message );
         printError( "Received JSON", results);
         
         // EXIT FUNCTION HERE
-        throwError( "db_deleteLeed", error); 
+        throwError("Delete Leed", error);
 
     }
 
-    console.log("BACK FROM DB DELETE RESULTS=" + results);
+
+    // on success -- remove leed from list of leedz_bought
+    //
+    let index = current_user.leedz_bought.indexOf( CURRENT_LEED.id );
+    if (index != -1) {
+      current_user.leedz_bought.splice( index, 1 );
+    }
+
+  
+    console.log("BACK FROM DB BUY RESULTS=" + results);
+
     return results;
-
 }
-
 
 
 
@@ -746,21 +785,28 @@ export async function reportCurrentLeed() {
 
   if (CURRENT_LEED == null)
     throwError("reportCurrentLeed", "CURRENT_LEED is null");
-
  
     console.log("----------> ******** REPORTING CURRENT LEED TO SERVER ******* ");
 
- 
-
     // API request --> DB 
-    // save leed to DB
+    // report leed to DB
     //
     let results = null;
     try {
         // 
         //  client <---> API Gateway <===> DB
         //
-        results = await db_reportLeed( CURRENT_LEED );
+        results = await db_updateLeed( REP_LEED, getCurrentUser(), CURRENT_LEED );
+        
+        // should never happen
+        if (results == null) {
+          throwError("Report Leed", "Null response received from server");
+        }
+
+        // received error code
+        if (results.res == FAILURE) {
+          throwError("Report Leed", results.msg);
+        }
 
 
     } catch (error) {   
@@ -772,10 +818,9 @@ export async function reportCurrentLeed() {
 
     }
 
-    
+
     console.log("BACK FROM DB REPORT RESULTS=" + results);
     return results;
-
 }
 
 

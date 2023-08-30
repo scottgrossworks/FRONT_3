@@ -30,15 +30,14 @@
 
 
 			
-			<div class="row" style="width:100vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+			<div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
 
 			<div class="column _1">
 
 				<button class="back_button" style="margin:35px 20px; width:50px"><a href="#" onclick="backButton()">&#10140;</a></button>
 				</div>
 
-				<div class="column _2"></div>
-				<div class="column _4" style="margin:auto 0;transform:translateY(6px)">
+				<div class="column" style="margin:auto 0;transform:translateY(6px)">
 					<h1 class="user_title">Edit Account</h1>
 				</div>
 				
@@ -59,8 +58,9 @@
 
 
 			
+<div class="row" style="width:100vw" id="form_container">
 
-				<table>
+				<table cellpadding="10px" cellspacing="10px">
 					
 					
 
@@ -84,6 +84,10 @@
 						<TD class="labelTD">Login &amp; Password: </TD>
 						<td data-inlineType="text" data-inlineName="login"></td>
 		
+						<!-- FIXME FIXME FIXME 
+						URL TO CHANGE LOGIN / PASSWORD
+						-->
+
 						<td data-inlineType="doneButton" class="buttonTD">
 							<input type="button" value="Edit" onclick=""/>
 						</td>
@@ -98,6 +102,12 @@
 						<TD class="labelTD">Payment Information: </TD>
 						<td data-inlineType="text" data-inlineName="payment"></td>
 						
+
+						<!-- FIXME FIXME FIXME 
+						URL TO CHANGE PAYMENT INFO
+						-->
+
+
 						<td data-inlineType="doneButton" class="buttonTD">
 							<input type="button" value="Edit" onclick=""/>
 						</td>
@@ -184,11 +194,19 @@
 			</table>	
 
 
+</div>
 
 
+<!--
+  -- BUTTONS
+  --
+ -->
 			<!-- SAVE CHANGES BUTTON -->
 			<button id="saveButton" class="button save_button" value="save" style="opacity:0.5" onclick="saveChanges()">Save Changes</button>
 			
+
+			<!-- DELETE ACCOUNT BUTTON -->
+			<button id="delAccount" class="button delAcct_button" value="delete" style="opacity:1" onclick="deleteAccount()">Delete Account</button>
 			
 	
 
@@ -205,7 +223,7 @@
 		import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
 		import { inlineEdit } from "./js/inline-edit.js";
 		import { clearCurrentLeed } from "./js/leed.js";
-		import { blankUserObject, saveUserChanges, getCurrentUser } from "./js/user.js";
+		import { blankUserObject, saveUserChanges, getCurrentUser, deleteCurrentUser } from "./js/user.js";
 		import { printError, throwError } from "./js/error.js";
 		
 		import { USERNAME_URL_PARAM } from "./js/dbTools.js";
@@ -368,16 +386,55 @@
 
 
 
-		//
-		//
-		//
+		/**
+		 * EDIT the current user account and save changes to DB
+		 */
 		function saveChanges() {
 
 			if (! EDITING) return;
 
-			saveUserChanges( USER_CHANGES );
 
-			endEditing();
+			try {
+				saveUserChanges( USER_CHANGES );		
+		
+				// reload page with new guest account
+				backButton();
+
+			} catch ( error ) {
+
+				printError("saveChanges", error);
+          		errorModal("Cannot edit user account: " + error.message, false);
+
+			} finally {
+				endEditing();
+			}	
+		
+		}
+
+
+
+
+		/**
+		 * DELETE the current user account and reload the page in Guest user mode
+		 */
+		function deleteAccount() {
+
+
+			try {
+				deleteCurrentUser();			
+		
+				// reload page with new guest account
+				backButton();
+
+			} catch ( error ) {
+
+				printError("deleteAccount", error);
+          		errorModal("Cannot delete user account: " + error.message, false);
+
+			} finally {
+				endEditing();
+			}	
+		
 		}
 
 

@@ -379,16 +379,14 @@ export function isSubscribed( trade_name ) {
 
 /**
  * 
- * @param String trade_name 
  */
 export async function saveSubscription( trade_name ) {
 
-
-  if (CURRENT_USER.subs.length == MAX_USER_SUBS) {
-    var error = "MAX subscriptions reached: " + MAX_USER_SUBS;
-    printError("saveSubscription", error);
-    throwError("Trade Subscribe", error);
-  }
+    if (CURRENT_USER.subs.length == MAX_USER_SUBS) {
+      var error = "MAX subscriptions reached: " + MAX_USER_SUBS;
+      printError("saveSubscription", error);
+      return;
+    }
 
     if (CURRENT_USER.subs.indexOf(trade_name) == -1) { // not in list already
       CURRENT_USER.subs.push( trade_name );
@@ -405,35 +403,35 @@ export async function saveSubscription( trade_name ) {
     //
     console.log("user.saveSubscription()......");
       
-      //   client <---> API Gateway <===> DB
-      //
-      // FOOBAR FOOBAR FOOBAR
-      let resObj = [];   
-      try {
-        
-          await db_updateUser( ADD_SUB, CURRENT_USER )
-          .then(data => {
-  
-          if (data == null) throw new Error("null response from GET");
-          
-          resObj = data[0];
-          if (resObj.res == FAILURE) {
-            // ERROR CODE
-            throwError("Trade Subscribe", resObj.msg);
-          }
-          
-          // else -- SUCCESS! subscription saved
-  
-          })
-          .catch(error => {
-            printError("db_updateUser", error);
-            throwError('Trade Subscribe',  + error);
-          });
+    //   client <---> API Gateway <===> DB
+    //
+    let resObj = [];   
+    try {
+      
+        await db_updateUser( ADD_SUB, CURRENT_USER )
+        .then(data => {
 
-      } catch (error) {
-        let msg = 'Error subscribing to trade [ ' + trade_name + ' ]:' + error.message;
-        throwError('Trade Subscribe', msg);
-      }
+        if (data == null) throw new Error("null response from GET");
+        
+        resObj = data[0];
+        if (resObj.res == FAILURE) {
+          // ERROR CODE
+          throwError("Trade Subscribe", resObj.msg);
+        }
+        
+        // else -- SUCCESS! subscription saved
+
+        })
+        .catch(error => {
+          printError("db_updateUser", error);
+          throwError('Trade Subscribe',  + error);
+        });
+
+    } catch (error) {
+      let msg = 'Error subscribing to trade [ ' + trade_name + ' ]:' + error.message;
+      throwError('Trade Subscribe', msg);
+    }
+    
 }
             
 
@@ -445,13 +443,12 @@ export async function saveSubscription( trade_name ) {
 
   
   /**
-   * 
    * @param String trade_name 
    */
   export async function removeSubscription( trade_name ) {
      
     if (CURRENT_USER.subs.length == 0) {
-      console.error("Cannot removeSubscription() from empty list: " + trade_name);
+      printError("removeSubscription", "Empty list for: " + trade_name);
       return;
     }
 
@@ -468,7 +465,7 @@ export async function saveSubscription( trade_name ) {
     // remove subscription from DB
     //
 
-    console.log("user.removeSubscription()......");
+    console.log("user.removeSubscription() " + trade_name + " ......");
 
 
         //   client <---> API Gateway <===> DB
@@ -500,6 +497,7 @@ export async function saveSubscription( trade_name ) {
         let msg = 'Error removing subscription to trade [ ' + trade_name + ' ]:' + error.message;
         throwError('Remove Subscription', msg);
       }
+
 }
 
 

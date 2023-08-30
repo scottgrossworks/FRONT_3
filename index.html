@@ -848,11 +848,7 @@
     */
     function initUserPanel(current_user) {
 
-
-      console.log("user.initUserPanel()..........");
-      console.log(current_user);
-
-
+      
       // whatever the current user identity -- continue ....
       // UPDATE the UI with the current user info
       // user clicks on username --> user edit account page
@@ -1016,7 +1012,6 @@
           //
           try {
 
-            console.log("   !!!!!   INITIALIZING USER PANEL  !!!!  ")
             initUserPanel( current_user );
 
           } catch (error) {
@@ -1060,7 +1055,7 @@
             var msg = "Cannot load trades.<BR>Please refresh page."
             msg = error.message + "<BR>" + msg;
             
-            printError("Trades Column", error);
+            printError("Init Trades Column", error);
             errorModal( msg , true );
           }
 

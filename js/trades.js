@@ -1,7 +1,7 @@
 import { loadCacheLeedz, loadDBLeedz, removeLeedzShowing } from "./calendar.js";
 import { isSubscribed, saveSubscription, removeSubscription, getCurrentUser } from "./user.js";
 import { db_getTrades } from "./dbTools.js";
-import { printError, errorModal } from "./error.js";
+import { printError, errorModal, throwError } from "./error.js";
 import { hideActionWindow } from "./action.js";
 
 
@@ -254,7 +254,7 @@ export async function getAllTrades() {
       retJSON = TRADES_LIST;
 
       // show error modal dialog
-      errorModal("Error getting trades: " + error.message, true);
+      errorModal("Error getting trades: " + error.message, false);
       
       // use default trades
       // do not fail at this point
@@ -321,6 +321,10 @@ export function initTradesColumn( all_trades ) {
   const theTemplate = document.querySelector("#template_each_trade");
 
 
+  let theLabel = null;
+  let checkBox = null;
+  let radioButton = null;
+
   // for JSON each trade object that comes from the DB
   all_trades.forEach(( trade ) => {     
 
@@ -328,7 +332,7 @@ export function initTradesColumn( all_trades ) {
     const newNode = theTemplate.content.cloneNode(true).querySelector(".each_trade");
   
     // set the label
-    let theLabel = newNode.querySelector("label");
+    theLabel = newNode.querySelector("label");
     theLabel.textContent = trade.trade_name;
 
     // set the leed count as a superscript
@@ -336,8 +340,9 @@ export function initTradesColumn( all_trades ) {
     if (trade.num_leedz != undefined)
       newNode.querySelector("sup").textContent = trade.num_leedz;
 
-    let checkBox = newNode.querySelector(".trade_checkbox");
-    let radioButton = newNode.querySelector(".trade_radio");
+
+    checkBox = newNode.querySelector(".trade_checkbox");
+    radioButton = newNode.querySelector(".trade_radio");
   
     // check SUBSCRIPTIONS
     // is the user subscribed to this trade?
@@ -348,11 +353,64 @@ export function initTradesColumn( all_trades ) {
     }
     
 
+    if (is_sub) {
+      subs.push( newNode ); 
+    } else {
+      theList.appendChild( newNode );
+    }
+    
+  });
+
+    // this allows for a sorted list of subscriptions
+    for (var i = subs.length - 1; i >= 0; i--) {
+      theList.prepend(subs[i]);
+    }
+    
+
+
     //
     // CHECKBOX CLICK LISTENER
     //
     checkBox.addEventListener("click", function( event ) {
-     
+
+      tradeListener( trade, checkBox, radioButton, theLabel );
+      
+    });
+
+
+
+    //
+    // RADIO BUTTON CLICK LISTENER
+    //
+    radioButton.addEventListener("click", function( event ) {
+
+      tradeListener( trade, checkBox, radioButton, theLabel );
+
+    });
+
+
+
+    //
+    // LABEL CLICK LISTENER
+    //
+    theLabel.addEventListener("click", function( event ) {
+
+      tradeListener( trade, checkBox, radioButton, theLabel );
+      
+    });
+  
+}
+
+
+
+
+/**
+ * Helper function
+ */
+function tradeListener(trade, checkBox, radioButton, theLabel) {
+
+  try {
+
       if ( isSubscribed( trade.trade_name)  ) { // checkbox is ON
 
         removeSubscription( trade.trade_name );
@@ -363,10 +421,13 @@ export function initTradesColumn( all_trades ) {
 
 
         try {
+        
           saveSubscription( trade.trade_name );
+
         } catch (error) {
+          
           errorModal(error, false);
-          return;
+          return false;
         }
 
         turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
@@ -386,118 +447,12 @@ export function initTradesColumn( all_trades ) {
       // update calendar later
       loadDBLeedz();
 
-    });
+  } catch (error) {
+    errorModal(error, false);
+    return false;
+  }
 
-
-
-    //
-    // RADIO BUTTON CLICK LISTENER
-    //
-    radioButton.addEventListener("click", function( event ) {
-
-
-      console.log(getCurrentUser());
-
-
-      if ( isSubscribed( trade.trade_name) ) { // radio button is ON
-
-        removeSubscription( trade.trade_name );
-        turnTrade_Off(checkBox, radioButton, theLabel);
-
-
-      } else { // radio button is OFF
-
-        try {
-          saveSubscription( trade.trade_name );
-
-        } catch (error) {
-          errorModal(error, false);
-          return;
-        }
-
-        turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
-
-      }
-
-      // clear the action window
-      hideActionWindow();
-
-      removeLeedzShowing();
-
-      // reload current month leedz from cache
-      loadCacheLeedz();
-
-      // ASYNC
-      // go back to DB for fresh view -- will return immediately
-      // update calendar later
-      loadDBLeedz();
-
-    });
-
-
-
-    //
-    // click listener for the label
-    //
-    theLabel.addEventListener("click", function( event ) {
-    
-      if ( isSubscribed( trade.trade_name) ) { // radio button is ON
-
-       
-        try {
-          removeSubscription( trade.trade_name );
-        } catch (error) {
-          errorModal(error, false);
-          return;
-        }
-
-
-        turnTrade_Off(checkBox, radioButton, theLabel);
-
-      } else { // radio button is OFF
-
-
-        try {
-          saveSubscription( trade.trade_name );
-        } catch (error) {
-          errorModal(error, false);
-          return;
-        }
-
-        turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
-
-      }
-
-      // clear the action window
-      hideActionWindow();
-
-      // reload the leedz for the current month showing
-      removeLeedzShowing();
- 
-
-      // reload current month leedz from cache
-      // DO NOT go back to DB for new leedz
-      loadCacheLeedz();
-
-    });
-  
-
- 
-    if (is_sub) {
-      subs.push( newNode ); 
-    } else {
-      theList.appendChild( newNode );
-    }
-    
-  });
-
-    // this allows for a sorted list of subscriptions
-    for (var i = subs.length - 1; i >= 0; i--) {
-      theList.prepend(subs[i]);
-    }
-    
 }
-
 
 
 
@@ -525,7 +480,7 @@ function createColor(numOfSteps, step) {
       case 4: r = f; g = 0; b = 1; break;
       case 5: r = 1; g = 0; b = q; break;
   }
-  var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
+  var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 215)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
   return (c);
 }
 

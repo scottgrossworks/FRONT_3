@@ -91,6 +91,7 @@ export function errorModal( error, no_close ) {
   theMsg.innerHTML = errorString + "<BR><BR>" + email_link;
 
   modal.style.display = "block";
+  console.log("SHOWING MODAL");
 }
 
 

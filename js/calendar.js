@@ -425,7 +425,6 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
 
     // is this leed created by the current user?
-    console.log("CREATOR=" + leed_fromDB.creator + "   UN=" + getCurrentUser().username);
     if (leed_fromDB.creator == getCurrentUser().username) {
         newLeed.classList.add("user_leed");
     } else {

@@ -31,9 +31,10 @@ export const ADD_SUB  = 5;
 export const REM_SUB  = 6;
 
 export const ADD_LEED = 7;
-export const DEL_LEED = 8;
-export const CHG_LEED = 9;
-export const REP_LEED = 10;
+export const BUY_LEED = 8
+export const DEL_LEED = 9;
+export const CHG_LEED = 10;
+export const REP_LEED = 11;
 
 
 /**
@@ -89,6 +90,11 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
         case ADD_LEED:
             console.log("dbTools.db_updateLeed() ADD_LEED"); 
+            break
+
+
+        case BUY_LEED:
+            console.log("dbTools.db_updateLeed() BUY LEED"); 
             break
         
         case DEL_LEED:

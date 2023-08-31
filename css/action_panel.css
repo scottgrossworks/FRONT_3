@@ -255,8 +255,8 @@
     width:max-content;
     height:max-content;
 
-    margin-top:30px;
-    margin-bottom:10px;
+    margin-top:3vh;
+    margin-bottom:3vh;
 
 
     padding-top:25px;
@@ -302,13 +302,13 @@ img#shopping_cart {
     width:max-content;
     height:max-content;
 
-    margin-top:5vh;
-    margin-bottom:20px;
+    margin-top:3vh;
+    margin-bottom:3vh;
 
     padding-top:25px;
     padding-bottom:15px;
-    padding-left:30px;
-    padding-right:30px;
+    padding-left:25px;
+    padding-right:25px;
  
     border-radius: 20px;
 
@@ -379,8 +379,8 @@ img#edit_icon {
     
     position:relative;
 
-    background-color: coral;
-    border: none;
+    background-color: #0071CE;
+    border: 1px solid #0071CE;
     color: white;
    
     
@@ -392,13 +392,13 @@ img#edit_icon {
     width:max-content;
     height:max-content;
 
-    margin-top:20px;
+    margin-top:0;
     margin-bottom:100px;
 
     padding-top:25px;
     padding-bottom:25px;
-    padding-left:30px;
-    padding-right:30px;
+    padding-left:33px;
+    padding-right:37px;
  
     border-radius: 20px;
 

@@ -3,7 +3,7 @@
  */
 import { getCurrentUser, isSubscribed } from "./user.js";
 import { errorModal, printError, throwError } from "./error.js";
-import { db_getLeedz, db_updateLeed } from "./dbTools.js";
+import { db_getLeedz, db_updateLeed, CHG_LEED, DEL_LEED, BUY_LEED, REP_LEED, FAILURE } from "./dbTools.js";
 
 import { getMonth,getYear } from "./dates.js";
 
@@ -131,7 +131,8 @@ export async function loadLeedzFromDB( subs, firstDay, lastDay, theCallback ) {
       printError( "Received JSON", results);
       
       // EXIT FUNCTION HERE
-      throwError( "loadLeedzFromDB", error); 
+      // throwError( "loadLeedzFromDB", error);
+      errorModal("Cannot load Leedz from DB: " + error.message, false); 
       return;
   }
 
@@ -643,10 +644,11 @@ export async function saveLeedChanges( leedObj ) {
         printError( "db_updateLeed", error.message );
         printError( "Received JSON", results);
         
-        // FOOBAR
+
         // EXIT FUNCTION HERE
         // throwError( "Update Leed", error); 
-        errorModal(error.message, false);
+        errorModal("Cannot update leed: " + error.message, false);
+        return;
 
     }
 
@@ -698,7 +700,9 @@ export async function buyCurrentLeed() {
         printError( "Received JSON", results);
         
         // EXIT FUNCTION HERE
-        throwError("Buy Leed", error);
+        // throwError("Buy Leed", error);
+        errorModal("Cannot buy leed: " + error.message, false);
+        return results; 
 
     }
 
@@ -758,8 +762,9 @@ export async function deleteCurrentLeed() {
         printError( "Received JSON", results);
         
         // EXIT FUNCTION HERE
-        throwError("Delete Leed", error);
-
+        // throwError("Delete Leed", error);
+        errorModal("Cannot delete leed: " + error.message, false); 
+        return results;
     }
 
 
@@ -771,7 +776,7 @@ export async function deleteCurrentLeed() {
     }
 
   
-    console.log("BACK FROM DB BUY RESULTS=" + results);
+    console.log("BACK FROM DB DELETE RESULTS=" + results);
 
     return results;
 }
@@ -816,8 +821,9 @@ export async function reportCurrentLeed() {
         printError( "Received JSON", results);
         
         // EXIT FUNCTION HERE
-        throwError( "db_reportLeed", error); 
-
+        // throwError( "db_reportLeed", error); 
+        errorModal("Error reporting leed: " + error.message, false); 
+        return results;
     }
 
 

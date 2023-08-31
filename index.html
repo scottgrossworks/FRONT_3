@@ -472,7 +472,7 @@
               // event.target will be http link
               console.log("%cDROPDOWN=" + event.target, "color:green;");
               console.log("URL=" + event.target);
-              window.open( event.target , "location=1,status=0, menubar=0");
+              window.open( event.target , "_self");
 
 
 
@@ -501,7 +501,7 @@
           errorModal("Cannot edit Guest user account", false);
 
         } else {
-          window.open("./user_edit.html", "location=1,status=0, menubar=0");
+          window.open("./user_edit.html", "_self");
         }
       }
 
@@ -526,7 +526,7 @@
 
         } else {
 
-          window.open("./leed_edit.html", "location=1,status=0, menubar=0");
+          window.open("./leed_edit.html", "_self");
         }
       }
       window.openLeedEdit = openLeedEdit;
@@ -541,9 +541,6 @@
       //
       async function reportLeed() {
 
-        // FIXME FIXME FIXME REPORT BUTTON CALLBACK
-        console.log("%REPORT BUTTON CALLBACK", "color:pink");
-    
         let response = null;
         try {
             await reportCurrentLeed().then(( fromDB ) => response = fromDB );
@@ -564,7 +561,10 @@
           }
 
 
-        // go back to landing page
+        // GOTO report leed landing page
+        // with link to get back to main page
+        window.open( URL_REPORT_LEED , "_self");
+
 
       }
       window.reportLeed = reportLeed;
@@ -604,7 +604,11 @@
           }
 
 
-        // go back to landing page
+
+        // GOTO BUY leed landing page
+        // with link to get back to main page
+        window.open( URL_BUY_LEED , "_self");
+
 
       }
       window.buyLeed = buyLeed;
@@ -657,8 +661,8 @@
 
 
       
-
-
+      const URL_BUY_LEED = "./leed_buy.html";
+      const URL_REPORT_LEED = "./leed_report.html";
 
         
       const col = document.getElementById("trades_column");      
@@ -667,6 +671,8 @@
       
       let SIDE_OPEN = true;
       let SCREEN_SIZE = 0; // 0, 1, 2 small
+
+      
       
 
 

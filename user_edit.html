@@ -13,9 +13,9 @@
 		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
 		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
  
- 
 		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
 		 <link rel="stylesheet" href="./css/user_edit.css" tyep="text/css"/>
+         <link rel="stylesheet" href="css/modal.css" type="text/css" />
 
 		 <script src="./js/inline-edit.js" type="module" defer></script> 
 	</head>
@@ -303,7 +303,7 @@
 			const CURRENT_USER = getCurrentUser(true);
 	
 			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
-			window.open(href);
+			window.open(href, "_self");
 
 			self.close();
 

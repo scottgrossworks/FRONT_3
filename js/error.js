@@ -60,6 +60,11 @@ export function errorModalClose() {
     error.style.display = "none";
 
     error.setAttribute(ERR_KEY, "");
+
+    const current_user = getCurrentUser(true);
+	
+		self.close();
+
 }
 
 

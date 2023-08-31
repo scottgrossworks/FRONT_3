@@ -21,6 +21,7 @@
  
 		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
 		 <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
+         <link rel="stylesheet" href="css/modal.css" type="text/css" />
 
 		 <script src="./js/inline-edit.js" type="module" defer></script> 
 	</head>
@@ -310,7 +311,7 @@
   </div>
 
 
-  
+
 
 </body>
 
@@ -323,7 +324,7 @@
         import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
 		import { inlineEdit } from "./js/inline-edit.js";
         import { getCurrentUser } from "./js/user.js";
-        import { clearCurrentLeed, getCurrentLeed, blankLeedObject, saveLeedChanges } from "./js/leed.js";
+        import { clearCurrentLeed, getCurrentLeed, blankLeedObject, saveLeedChanges, deleteCurrentLeed } from "./js/leed.js";
 		import { printError, throwError, errorModal } from "./js/error.js";
 		
         import { LEED_KEYS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
@@ -332,6 +333,9 @@
 
 		window.inlineEdit = inlineEdit;
        
+        const URL_LEED_DELETE = "./leed_delete.html";
+
+
 
 		var EDITING = false;
 
@@ -486,7 +490,7 @@
 			const CURRENT_USER = getCurrentUser(true);
 	
 			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
-			window.open(href);
+			window.open(href, "_self");
 
 			clearCurrentLeed();
 			self.close();
@@ -692,9 +696,6 @@
 
         try {
 
-            // FIXME FIXME FIXME
-            // some kind of feedback that leed successfully deleted
-            //
             // GO BACK to server and delete leed
             // compliment of add leed
 
@@ -702,7 +703,9 @@
 
             deleteCurrentLeed();
 
-            backButton();
+            // GOTO delete leed landing page
+            window.open(  URL_LEED_DELETE, "_self" );
+            
 
         } catch ( error ) {
             errorModal("Error deleting leed: " + error.message, false);

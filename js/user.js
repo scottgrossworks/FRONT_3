@@ -385,7 +385,7 @@ export async function saveSubscription( trade_name ) {
     if (CURRENT_USER.subs.length == MAX_USER_SUBS) {
       var error = "MAX subscriptions reached: " + MAX_USER_SUBS;
       printError("saveSubscription", error);
-      return;
+      throwError("Save Subscription", error);
     }
 
     if (CURRENT_USER.subs.indexOf(trade_name) == -1) { // not in list already

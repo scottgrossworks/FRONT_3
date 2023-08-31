@@ -93,7 +93,7 @@
           <a href="./leedz_contact.html">Contact</a>
 
 
-          <a href="#" id="dd_logout">Log Out</a>
+          <a href="./index.html" id="dd_logout">Log Out</a>
         </div>
       </div>
 
@@ -456,36 +456,37 @@
          
 
 
-         
 
-          // Close the dropdown menu if the user clicks outside of it
+
+
+          //
+          // ANY window click registers here
+          //
           window.addEventListener( "click", (event) => {
 
-            // console.log("GOT CLICK target=" + event.target);
-            let theDiv = event.target;
+       
+            if ( event.target.id.endsWith("modal_close") ) {
+              // modal dialog close
 
-            if (event.target.matches('a')) {
+            } else if (event.target.matches('a')) {
               
-              // triggered also for modal close
-              //
-              // FIXME FIXME FIXME
               // event.target will be http link
-              console.log("%cDROPDOWN=" + event.target, "color:green;");
-              console.log("URL=" + event.target);
               window.open( event.target , "_self");
-
+            
 
 
             } else if (! (event.target.matches('img'))) {
+              
               // click -- not on a link and not on the dropdown image
-              // HIDE THE DROPDOWN
+              // Close the dropdown menu if the user clicks outside of it
+        
               var dropdown = document.getElementById("dropdown_menu");
               dropdown.classList.remove("show");
 
             }
+           
+
           }, true);
-
-
 
           
       

@@ -321,9 +321,6 @@ export function initTradesColumn( all_trades ) {
   const theTemplate = document.querySelector("#template_each_trade");
 
 
-  let theLabel = null;
-  let checkBox = null;
-  let radioButton = null;
 
   // for JSON each trade object that comes from the DB
   all_trades.forEach(( trade ) => {     
@@ -332,7 +329,7 @@ export function initTradesColumn( all_trades ) {
     const newNode = theTemplate.content.cloneNode(true).querySelector(".each_trade");
   
     // set the label
-    theLabel = newNode.querySelector("label");
+    let theLabel = newNode.querySelector("label");
     theLabel.textContent = trade.trade_name;
 
     // set the leed count as a superscript
@@ -341,8 +338,9 @@ export function initTradesColumn( all_trades ) {
       newNode.querySelector("sup").textContent = trade.num_leedz;
 
 
-    checkBox = newNode.querySelector(".trade_checkbox");
-    radioButton = newNode.querySelector(".trade_radio");
+    let checkBox = newNode.querySelector(".trade_checkbox");
+    let radioButton = newNode.querySelector(".trade_radio");
+ 
   
     // check SUBSCRIPTIONS
     // is the user subscribed to this trade?
@@ -353,26 +351,14 @@ export function initTradesColumn( all_trades ) {
     }
     
 
-    if (is_sub) {
-      subs.push( newNode ); 
-    } else {
-      theList.appendChild( newNode );
-    }
     
-  });
-
-    // this allows for a sorted list of subscriptions
-    for (var i = subs.length - 1; i >= 0; i--) {
-      theList.prepend(subs[i]);
-    }
     
-
 
     //
     // CHECKBOX CLICK LISTENER
     //
     checkBox.addEventListener("click", function( event ) {
-
+  
       tradeListener( trade, checkBox, radioButton, theLabel );
       
     });
@@ -383,7 +369,7 @@ export function initTradesColumn( all_trades ) {
     // RADIO BUTTON CLICK LISTENER
     //
     radioButton.addEventListener("click", function( event ) {
-
+  
       tradeListener( trade, checkBox, radioButton, theLabel );
 
     });
@@ -399,6 +385,22 @@ export function initTradesColumn( all_trades ) {
       
     });
   
+
+    
+    if (is_sub) {
+      subs.push( newNode ); 
+    } else {
+      theList.appendChild( newNode );
+    }
+    
+  });
+
+    // this allows for a sorted list of subscriptions
+    for (var i = subs.length - 1; i >= 0; i--) {
+      theList.prepend(subs[i]);
+    }
+
+
 }
 
 
@@ -411,27 +413,28 @@ function tradeListener(trade, checkBox, radioButton, theLabel) {
 
   try {
 
-      if ( isSubscribed( trade.trade_name)  ) { // checkbox is ON
+      if ( isSubscribed( trade.trade_name)  ) { // TRADE is ON
 
         removeSubscription( trade.trade_name );
         turnTrade_Off(checkBox, radioButton, theLabel);
 
 
-      } else { // checkbox is OFF
+      } else { // TRADE is OFF
 
-
-        try {
+        saveSubscription( trade.trade_name )
         
-          saveSubscription( trade.trade_name );
-
-        } catch (error) {
+        .then( response => { 
           
-          errorModal(error, false);
+          turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
+
+        }).catch(error => {
+          // Handle error
+          printError("tradeListener", error.message);
+          // Display modal error dialog to the user
+          errorModal(error.message, false);
+          
           return false;
-        }
-
-        turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
-
+        });
       }
 
       // clear the action window

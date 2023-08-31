@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+
+
+<head>
+
+    
+        <link rel="stylesheet" href="css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="css/modal.css" type="text/css" />
+
+
+   
+		 <meta charset="UTF-8">
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 
+		 <TITLE>Create Leed</TITLE>
+	 
+	 	<!-- Favicon -->
+		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+ 
+ 
+		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+		 <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
+
+		 <script src="./js/inline-edit.js" type="module" defer></script> 
+	</head>
+
+
+		 
+	<center>
+
+
+	<body>
+	
+
+
+			
+			<div class="row titleRow">
+
+			    <div class="column _1">
+
+                    <button class="back_button" style="margin:35px 20px; width:50px"><a href="#" onclick="backButton()">&#10140;</a></button>
+                    </div>
+
+                    <div class="column _2"></div>
+                    <div class="column _4" style="margin:auto 0;transform:translateY(6px)">
+                        <h1 class="user_title">Create Leed</h1>
+                    </div>
+                    
+                    <div class="column _3" style="padding:6px;text-align:center">
+                    <img src="./img/logo_2.png" style="width:120px">
+                    </div>
+                
+			
+		
+			    </div>
+            <div>
+
+			
+
+	<BR>	
+
+
+<div class="row" id="form_container">
+    <ul style="list-style:none;">
+
+
+        <li>
+        <table>
+
+
+
+            <tr id="row_creator">
+                            
+                <TD class="labelTD">Creator: </TD>
+                
+                <td id="td_creator"></td>
+
+                <td>
+                   <!-- no edit button for creator  --> 
+                </td>
+
+                <TD class="eyeballTD"><img src="./img/eye_show.png"  id="2_eye" class="lock"></TD>
+            </tr>
+
+
+
+            <tr id="row_trade">
+                            
+                <TD class="labelTD">Trade Name: </TD>
+                
+                <td id="td_trade" data-inlineType="trade_name" data-inlineName="trade" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="editField('row_trade', createOptions)"/>
+                </td>
+
+                <TD class="eyeballTD"><img src="./img/eye_show.png"  id="3_eye" class="lock"></TD>
+            </tr>
+
+
+
+            <!-- NOTE (TITLE) -->
+            <tr id="row_note">
+                        
+                <TD class="labelTD">Title: </TD>
+                
+                <td id="td_note" data-inlineType="text" data-inlineName="note" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="editField('row_note', createOptions)"/>
+                </td>
+
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="1_eye" class="lock"></TD>
+            </tr>
+
+
+
+            <!-- START TIME -->
+            <tr id="row_start">
+                        
+                <TD class="labelTD">Start Time: </TD>
+                
+                <td id="td_start" data-inlineType="date" data-inlineName="start" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="editField('row_start', createOptions)"/>
+                </td>
+
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="6_eye" class="lock"></TD>
+            </tr>
+
+
+                    
+            <!-- END TIME -->
+            <tr id="row_end">
+                        
+                <TD class="labelTD">End Time: </TD>
+                
+                <td id="td_end" data-inlineType="date" data-inlineName="end" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="editField('row_end', createOptions)"/>
+                </td>
+
+                <!-- END TIME IS NOT LOCKED AND MAY BE HIDDEN -->
+               <TD class="eyeballTD"><img src="./img/eye_show.png"  id="7_eye" onclick="toggleEyeball( 7 )"></TD>
+            </tr>
+
+
+
+            <!-- 
+                ADDRESS 
+            
+
+            -->
+            <tr id="row_loc">
+                        
+                <TD class="labelTD">Address: </TD>
+                
+                <td id="td_loc" data-inlineType="text" data-inlineName="loc" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="editField('row_loc', createOptions)"/>
+                </td>
+
+                
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="5_eye" eyeball="show" onclick="toggleEyeball( 5 )"></TD>
+            </tr>
+
+
+
+
+            
+
+
+            <!-- EMAIL  -->
+            <tr id="row_em">
+                            
+                <TD class="labelTD">Client Email: </TD>
+                
+                <td id="td_em" data-inlineType="email" data-inlineName="em" data-inlineRequired="0"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="editField('row_em', createOptions)"/>
+                </td>
+
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="8_eye" eyeball="show" onclick="toggleEyeball( 8 )"></TD>
+            </tr>
+
+
+
+
+            <!-- PHONE -->
+            <tr id="row_ph">
+                            
+                <TD class="labelTD">Client Phone: </TD>
+                
+                <td id="td_ph" data-inlineType="tel" data-inlineName="ph" data-inlineRequired="0"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="editField('row_ph', createOptions)"/>
+                </td>
+
+                
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="9_eye" eyeball="show" onclick="toggleEyeball( 9 )"></TD>
+            </tr>
+
+
+
+
+
+            <!-- LEED DETAILS -->
+            <tr id="row_det">
+                        
+                <TD class="labelTD">Details: </TD>
+                
+                <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="editField('row_det', createOptions)"/>
+                </td>
+
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="10_eye" eyeball="show" onclick="toggleEyeball( 10 )"></TD>
+            </tr>
+
+
+
+            
+       
+            <!-- LEED REQUIREMENTS -->
+            <tr id="row_reqs">
+                        
+                <TD class="labelTD">Requirements: </TD>
+                
+                <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="editField('row_reqs', createOptions)"/>
+                </td>
+
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="11_eye" eyeball="show" onclick="toggleEyeball( 11 )"></TD>
+            </tr>
+
+
+            
+            <!-- LEED PRICE -->
+            <tr id="row_pr">
+                        
+                <TD class="labelTD">Price: </TD>
+                
+                <td id="td_pr" data-inlineType="text" data-inlineName="pr" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+
+                <td data-inlineType="doneButton" class="buttonTD">
+                    <input type="button" value="Edit" onclick="editField('row_pr', createOptions)"/>
+                </td>
+
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="12_eye" class="lock"></TD>
+            </tr>
+
+
+
+                    
+
+
+        </table>	
+        </li>
+
+    </ul>
+</div>
+
+
+<div class="row">
+        <!-- SAVE CHANGES BUTTON -->
+        <button id="saveButton" class="button save_button" value="save" style="opacity:0.5" onclick="postLeed()">Post Leed</button>
+</div>
+        
+
+
+<div class="row">
+        <!-- CANCEL BUTTON -->
+        <button id="cancelButton" class="button cancel_button" value="cancel" style="opacity:1.0" onclick="cancelCreate()">Start Over</button>
+</div>
+
+
+
+    <BR>
+    <BR>
+
+
+        
+
+
+  <!-- 
+    -- ERROR MODAL 
+    -- 
+    -->
+  <div class="row modal" id="error_modal">
+    <center><img id="error_logo" src="img/logo_2.png"></center> 
+    <h1></h1>
+    <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
+  </div>
+
+
+
+  
+
+</body>
+
+
+	<script type="module">
+			
+        import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } from "./js/dates.js";
+        import { getShortDateString, DTfromPretty, getMonthIndex } from "./js/dates.js";
+		
+        import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
+		import { inlineEdit } from "./js/inline-edit.js";
+        import { getCurrentUser } from "./js/user.js";
+        import { blankLeedObject, clearCurrentLeed  } from "./js/leed.js";
+        import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
+		
+        import { LEED_KEYS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
+        import { USERNAME_URL_PARAM } from "./js/dbTools.js";
+
+
+
+
+        window.errorModalClose = errorModalClose;
+		window.inlineEdit = inlineEdit;
+
+    
+
+          // flag indicates edits are in progress
+          //
+          var EDITING = false;
+
+          // struct to hold form data
+          //
+          const LEED_CHANGES = blankLeedObject();
+
+
+
+
+
+		function backButton() {
+			const current_user = getCurrentUser(true);
+	
+			let href="./index.html?" + USERNAME_URL_PARAM + "=" + current_user.username;
+			window.open(href, "_self");
+
+			clearCurrentLeed();
+			self.close();
+
+		}
+		window.backButton = backButton;
+
+
+
+
+
+
+
+
+		function defaultCallback(rowData, rowName) {
+
+			beginEditing();
+
+			switch(rowName) {
+
+                case "row_trade":
+                    LEED_CHANGES.trade = rowData["trade"];
+                    break;
+
+				case "row_note":
+					LEED_CHANGES.note = rowData["note"];
+					break;
+
+				case "row_start":
+                    var dateTime = DTfromPretty( rowData["start"] );
+					LEED_CHANGES.start = dateTime;
+					break;
+
+                case "row_end":
+                    var dateTime = DTfromPretty( rowData["end"] );
+                    LEED_CHANGES.end = dateTime;
+                    break;
+
+
+                case "row_em":
+                    LEED_CHANGES.em = rowData["em"];
+                    break;
+
+                case "row_ph":
+                    LEED_CHANGES.ph = rowData["ph"];
+                    break;
+
+
+                    /**
+                    // set later on submit
+                case "row_zip":
+                    LEED_CHANGES.zip = rowData["zip"];
+                    break;
+                    */
+
+				case "row_loc":
+					LEED_CHANGES.loc = rowData["loc"];
+					break;
+
+				case "row_det":
+					LEED_CHANGES.det = rowData["det"];
+					break; 
+					
+				case "row_reqs":
+					LEED_CHANGES.reqs = rowData["reqs"];
+					break; 
+
+
+				case "row_pr":
+					LEED_CHANGES.pr = rowData["pr"];
+					break; 
+
+				default:
+					printError("defaultCallback()", "received unknown form field: " + rowName);
+					break;
+
+			}
+
+			
+            console.log("SHOWING LEED CHANGES");
+            console.log(LEED_CHANGES);
+
+		}
+
+
+
+
+
+
+		//
+		//
+		//
+		function beginEditing() {
+			var element = document.getElementById("saveButton");
+			element.innerHTML = "Save Changes";
+			element.style.backgroundColor = "var(--LEEDZ_GREEN)";
+			element.style.opacity = 1;
+
+			EDITING = true;
+		}
+
+
+		//
+		//
+		//
+		function endEditing() {
+			var element = document.getElementById("saveButton");
+			element.innerHTML = "Saved!";
+			element.style.backgroundColor = "darkorange";
+			element.style.opacity = 0.5;
+
+			EDITING = false;
+		}
+
+
+
+       
+
+
+
+		/**
+         * save changes to create form
+         * Post new leed to DB
+         *
+         */
+		function postLeed() {
+
+			if (! EDITING) return;
+
+
+            
+			// postLeedToDB( LEED_CHANGES );
+            console.log("POSTING NEW LEED:");
+            console.log(LEED_CHANGES);
+
+
+
+            // LEED verification
+            
+            if (LEED_CHANGES.trade == null) {
+                printError("Post Leed", "Trade must be set");
+                errorModal("Error Posting Leed: Trade must be set.", true);
+                return;
+            }
+
+
+            
+            if (LEED_CHANGES.note == null) {
+                printError("Post Leed", "Title must be set");
+                errorModal("Error Posting Leed: Title must be set.", true);
+                return;
+            }
+
+
+            if (LEED_CHANGES.start == null) {
+                printError("Post Leed", "Start must be set");
+                errorModal("Error Posting Leed: Start must be set.", true);
+                return;
+            }
+
+            if (LEED_CHANGES.start > LEED_CHANGES.end) {
+                printError("Post Leed", "Start date must precede end date");
+                errorModal("Error Posting Leed: Start date must precede end date.", true);
+                return;
+            }
+
+            if (LEED_CHANGES.loc == null) {
+                printError("Post Leed", "Location must be set");
+                errorModal("Error Posting Leed: Location must be set.", true);
+                return;
+
+
+            } else {
+
+                // SET THE LEED_CHANGES ZIP HERE
+                let the_zip = LEED_CHANGES.loc.slice(-5);
+                LEED_CHANGES.zip = the_zip;
+            }
+
+     
+
+            if (LEED_CHANGES.pr == null) {
+                printError("Post Leed", "Details must be set");
+                errorModal("Error Posting Leed: Some details must be set.", true);
+                return;
+            }
+
+            if (LEED_CHANGES.pr == null) {
+                printError("Post Leed", "Price must be set");
+                errorModal("Error Posting Leed: Price must be set.", true);
+                return;
+            }
+
+
+            
+			endEditing();
+
+
+		}
+		window.postLeed = postLeed;
+
+
+
+
+
+        //
+        //
+        //
+        function toggleEyeball( fieldName ) {
+            
+            beginEditing();
+
+
+            let theImg = document.getElementById(fieldName + "_eye");
+      
+
+            if (theImg.eyeball == "hide") {
+
+                theImg.src = "./img/eye_show.png";
+                theImg.eyeball = "show";
+                theImg.style.opacity = 1;
+
+
+                changeLeedOpts( LEED_CHANGES, fieldName, OPTS_SHOWING );
+
+            } else {
+                
+                theImg.src = "./img/eye_hide.png";
+                theImg.eyeball = "hide";
+                theImg.style.opacity = 0.8;
+                
+            
+                changeLeedOpts( LEED_CHANGES, fieldName, OPTS_HIDDEN );
+            }
+
+        }
+        window.toggleEyeball = toggleEyeball;
+
+        
+
+
+
+
+
+        /**
+         * Clear all fields and start over
+         *
+         */
+		function cancelCreate() {
+
+            var elements = ["td_trade", "td_note",
+                            "td_start", "td_end", "td_loc", "td_em", 
+                            "td_ph", "td_det", "td_reqs", "td_pr" ];
+
+            for (let i = 0; i < elements.length; i++) {
+                let theDiv = elements[ i ];
+                theDiv.innerHTML = "";
+            }       
+		}
+		window.cancelCreate = cancelCreate;
+
+
+
+		var createOptions = {   "origin": "create",
+                                "finishCallback": defaultCallback };
+		window.createOptions = createOptions;
+
+
+	
+        /**
+         *
+         */
+         function editField( row_name, options ) {
+
+            try {
+                inlineEdit( row_name, options );
+            } catch (error) {
+                printError("Error editing " + row_name,"Error");
+                errorModal("Error Posting Leed: Trade must be set.", true);
+                return;
+            }
+        }
+        window.editField = editField;
+        
+
+
+        /**
+         * On page load 
+         * call inlineEdit for every editable field 
+         *   creates blank text boxes and Finish buttons
+         *   links in inline-edit.js code
+         */
+        window.onload = (event) => {
+
+
+            let current_user = getCurrentUser(true);
+            let element = document.getElementById("td_creator");
+            element.innerHTML = "<B>" + current_user.username + "</B>";
+
+            inlineEdit('row_trade', createOptions);            
+            inlineEdit('row_note', createOptions);
+            inlineEdit('row_start', createOptions);
+            inlineEdit('row_end', createOptions);
+            inlineEdit('row_loc', createOptions);
+            inlineEdit('row_em', createOptions);
+            inlineEdit('row_ph', createOptions);
+            inlineEdit('row_det', createOptions);
+            inlineEdit('row_reqs', createOptions);
+            inlineEdit('row_pr', createOptions);
+        };
+
+          
+	</script>
+
+	
+		
+
+
+</html>

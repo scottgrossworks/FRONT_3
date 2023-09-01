@@ -60,9 +60,7 @@ export function errorModalClose() {
     error.style.display = "none";
 
     error.setAttribute(ERR_KEY, "");
-
-		self.close();
-
+    console.log("CLOSING MODAL");
 }
 
 

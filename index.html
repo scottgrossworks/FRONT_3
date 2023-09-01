@@ -79,7 +79,7 @@
       
       <div class="column _15 dropdown" id="up_right_column">
         
-        <span id="up_addLeed"><a href="./leed_create.html" title="Create Leed">+</a></span>
+        <span id="up_addLeed"><a href="javascript:openCreateLeed();" title="Create Leed">+</a></span>
         
         <span id="up_logo"><a href="javascript:dropdownMenu();"><img src="./img/logo_wide.png"></a></span>
         <div id="dropdown_menu" class="dropdown-content">
@@ -255,7 +255,7 @@
             <div class="column lic_column" id="lic_date"></div>
             
             <div class="column _1 lic_column" id="lic_close">
-              <a id="buy_modal_close" href="javascript:modalClose();">X</a>
+              <a id="" href="javascript:modalClose();">X</a>
             </div>
 
           </div>
@@ -373,6 +373,30 @@
 
 
 
+
+  <!-- 
+    -- GUEST WELCOME MODAL 
+    -- 
+    -->
+    <div class="row modal" id="guest_modal">
+      <center><img id="guest_logo" src="img/logo_2.png"></center> 
+      <h1>
+          <center>
+          <table style="width:70vw">
+            <TR><TD>
+              Some features are not available to Guest users.
+              <P>
+              To edit your user profile, buy, post, edit, or report a leed, <a href="http://scottgross.works">sign-up</a> for a FREE account.
+            </TD></TR>
+          </table>
+          </center> 
+
+      </h1>
+      <a id="guest_modal_close" href="javascript:modalClose();" href="">X</a>
+    </div>
+
+
+
   <!-- 
     -- ERROR MODAL 
     -- 
@@ -380,7 +404,7 @@
   <div class="row modal" id="error_modal">
     <center><img id="error_logo" src="img/logo_2.png"></center> 
     <h1></h1>
-    <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
+    <a id="error_modal_close" href="javascript:modalClose();" href="">X</a>
   </div>
 
 
@@ -492,6 +516,55 @@
       
 
 
+
+
+          
+      
+
+      
+      //
+      // open GUEST welcome modal
+      // some features not available to guest accounts
+      // invite user to sign up for account -- provide sign-up link
+      //
+      function openGuestWelcome() {
+        let guest = document.getElementById("guest_modal");
+        guest.style.display = "block";
+      }
+      window.openGuestWelcome = openGuestWelcome;
+
+
+
+
+
+
+
+      
+
+      // do NOT open leed create for guest account
+      //
+      //
+      function openCreateLeed() {
+
+        console.log("IN OCL");
+
+        if (isGuestUser()) {
+          printError("openCreateLeed", "Guest user cannot create leedz");
+          openGuestWelcome();
+
+        } else {
+          console.log("NOPE!");
+          window.open("./leed_create.html", "_self");
+        }
+      }
+
+      window.openCreateLeed = openCreateLeed;
+
+
+
+
+
+
       // do NOT open user edit page for guest account
       //
       //
@@ -499,7 +572,7 @@
 
         if (isGuestUser()) {
           printError("openUserEdit", "Cannot edit Guest user account");
-          errorModal("Cannot edit Guest user account", false);
+          openGuestWelcome();
 
         } else {
           window.open("./user_edit.html", "_self");
@@ -513,6 +586,7 @@
       
 
 
+
       
       //
       // open LEED edit page
@@ -523,7 +597,7 @@
         // should NEVER happen
         if (isGuestUser()) {
           printError("openLeedEdit", "Guest User cannot edit leeds");
-          errorModal("Guest User cannot edit leeds", false);
+          openGuestWelcome();
 
         } else {
 
@@ -542,6 +616,13 @@
       //
       async function reportLeed() {
 
+        if (isGuestUser()) {
+          printError("reportLeed", "Guest User cannot report leeds");
+          openGuestWelcome();
+          return;
+        }
+
+
         let response = null;
         try {
             await reportCurrentLeed().then(( fromDB ) => response = fromDB );
@@ -559,6 +640,7 @@
             
             printError("Report Leed", error);
             errorModal( msg , true );
+            return;
           }
 
 
@@ -581,10 +663,14 @@
       // responsible for showing modal on error
       //
       async function buyLeed() {
+        
+        if (isGuestUser()) {
+          printError("buyLeed", "Guest User cannot buy leeds");
+          openGuestWelcome();
+          return;
+        }
+        
 
-        // FIXME FIXME FIXME REPORT BUTTON CALLBACK
-        console.log("%BUY BUTTON CALLBACK", "color:pink");
-    
         let response = null;
         try {
             await buyCurrentLeed().then(( fromDB ) => response = fromDB );
@@ -626,8 +712,12 @@
       //
       async function deleteLeed() {
 
-        // FIXME FIXME FIXME BUY BUTTON CALLBACK
-         console.log("%DELETE BUTTON CALLBACK", "color:pink");
+
+        if (isGuestUser()) {
+          printError("deleteLeed", "Guest User cannot delete leeds");
+          openGuestWelcome();
+          return;
+        }
  
         let response = null;
         try {
@@ -639,11 +729,7 @@
 
             // response checking specific to delete function
             //
-            /**
-            if (trades.length == undefined || trades.length == 0) {
-              throw new Error("server returned empty (0) trades.");
-            }
-            */
+            // json_obj = '{ "id": leed_obj.id, "cd": code, "res":SUCCESS }';
   
 
           } catch (error) {
@@ -706,6 +792,7 @@
        */
       function cssScreenSize() {
 
+        // errorModalClose();
 
         var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
         var action = document.getElementById("action_panel");
@@ -788,8 +875,8 @@
         welcome.classList.replace("modal", "column");
         welcome.style.display = "flex";
         
-        let closeBut = document.getElementById("buy_modal_close");
-        closeBut.style.display = "none";
+        // let closeBut = document.getElementById("buy_modal_close");
+        // closeBut.style.display = "none";
       }
       window.welcomeColumn = welcomeColumn;
 
@@ -806,8 +893,8 @@
         var closeColumn = document.getElementById("lic_close");
         closeColumn.style.display = "flex";
 
-        let closeBut = document.getElementById("buy_modal_close");
-        closeBut.style.display = "flex";
+        // let closeBut = document.getElementById("buy_modal_close");
+        // closeBut.style.display = "flex";
 
         let action = document.getElementById("action_panel");
         action.classList.replace("column", "modal"); 
@@ -824,22 +911,18 @@
  */
       function modalClose() {
 
+
         let action = document.getElementById("action_panel");
         action.classList.remove("modal");
         action.style.display = "none";
 
-        let closeBut = document.getElementById("buy_modal_close");
-        closeBut.style.display = "none";
+        // let closeBut = document.getElementById("buy_modal_close");
+        // closeBut.style.display = "none";
 
-        let error = document.getElementById("error_modal");
-        let no_close = error.getAttribute("no_close");
+        let guest = document.getElementById("guest_modal");
+        guest.style.display = "none";
 
-        if (no_close) {
-          error.style.display = "block";
-
-        } else {
-          error.style.display = "none";
-        }
+        errorModalClose();
 
       }
       window.modalClose = modalClose;
@@ -1155,7 +1238,7 @@
           /**
           * RESIZE
           * called on window resize -- but AFTER css applied -- can read values from 
-          * different media_query css files depending on size
+          * different media_query css files depending on sizefvs
           */
           window.onresize = (event) => {
             cssScreenSize();

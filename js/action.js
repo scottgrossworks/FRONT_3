@@ -398,8 +398,8 @@ export async function showLeedAction( leed_preview ) {
 
     // got screen above
     // var screen = action.getAttribute("screen");
-    let closeBut = document.getElementById("buy_modal_close");
-    closeBut.style.display = "flex";
+    // let closeBut = document.getElementById("buy_modal_close");
+    // closeBut.style.display = "flex";
 
 }
 

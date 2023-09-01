@@ -92,7 +92,6 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
             console.log("dbTools.db_updateLeed() ADD_LEED"); 
             break
 
-
         case BUY_LEED:
             console.log("dbTools.db_updateLeed() BUY LEED"); 
             break
@@ -114,6 +113,8 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
     }
 
 
+    // FIXME FIXMFIXME
+    // 
     let json_obj = '{ "id": leed_obj.id, "cd": code, "res":SUCCESS }';
 
     return json_obj;

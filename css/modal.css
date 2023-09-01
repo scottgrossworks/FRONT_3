@@ -66,6 +66,82 @@
 
 
 
+
+
+/*
+ *
+ *
+ */
+ #guest_modal {
+
+  display: none;
+  
+  margin-left:10vw;
+  margin-top: 15vh;
+
+  text-decoration: none;
+
+  background-color: white;
+  color:black;
+
+  padding:20px;
+
+  width:75vw;
+  height:70vh;
+  
+  border: 4px solid var(--LEEDZ_GREEN);
+  border-radius: 20px;
+}
+
+
+
+#guest_modal a {
+
+
+  font-weight: 600;
+  text-decoration: none;
+}
+
+
+
+#guest_logo {
+
+  padding: 10px 10px 30px 10px;
+
+  height:150px;
+}
+
+
+
+
+#guest_modal_close {
+
+    display:block;
+    position:relative;
+
+  font-family: var(--FONT_3);
+  background-color:var(--LEEDZ_DARKGREEN);
+
+  color:white;
+
+  top: 20px;
+  left:5px;
+
+  padding:10px;
+  width:30px;
+  border-radius: 10px;
+
+  transform: rotate(180deg);
+  font-size: x-large;
+  font-weight: bolder;
+  text-decoration: none;
+  text-align: center;
+}
+
+
+
+
+
 /*
  *
  *
@@ -138,28 +214,6 @@
 
 
 
-
-
-#buy_modal_close {
-
-  font-family: var(--FONT_3);
-  background-color:var(--LEEDZ_DARKGREEN);
-
-  color:white;
-
-  padding:10px 14px;
-  margin-right:6px;
-
-
-  width:fit-content;
-  border-radius: 10px;
-
-  font-size: x-large;
-  font-weight: bolder;
-  text-decoration: none;
-
-  text-align: center;
-}
 
 
 

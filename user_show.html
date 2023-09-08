@@ -1,0 +1,376 @@
+
+   
+<!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+		 <meta charset="UTF-8">
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 
+		 <TITLE>LEEDZ User Info</TITLE>
+	 
+	 	<!-- Favicon -->
+		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+ 
+		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+		 <link rel="stylesheet" href="./css/user_edit.css" tyep="text/css"/>
+         <link rel="stylesheet" href="css/modal.css" type="text/css" />
+
+		 <script src="./js/inline-edit.js" type="module" defer></script> 
+	</head>
+
+
+		 
+	<center>
+
+
+	<body>
+	
+
+
+			
+			<div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+
+			<div class="column _1">
+
+				<button class="back_button" style="margin:35px 20px; width:50px"><a href="#" onclick="backButton()">&#10140;</a></button>
+				</div>
+
+				<div class="column" style="margin:auto 0;transform:translateY(6px)">
+					<h1 class="user_title">User Info</h1>
+				</div>
+				
+				<div class="column _3" style="padding:6px;text-align:center">
+				<img src="./img/logo_2.png" style="width:120px">
+				</div>
+			
+			
+		
+			</div>
+
+
+			
+<section>
+
+	<BR>	
+	<BR>
+
+
+			
+<div class="row" style="width:100vw" id="form_container">
+
+				<table cellpadding="10px" cellspacing="10px">
+					
+					
+
+
+
+                <tr id="row_username">
+                
+                    <TD class="labelTD">Username: </TD>
+                    
+                    <td colspan=2 id="td_username" data-inlineType="text" data-inlineName="username" 
+                    data-inlineRequired="true" data-inlinePlaceholder="(Required)" style="color:green;font-weight:600"></td>
+    
+                    
+                </tr>
+
+
+                
+
+
+				<tr id="row_subs">
+
+					<TD class="labelTD">Trades: </TD>
+					
+					<td colspan=2 id="td_subs" data-inlineType="textarea" data-inlineName="subs">Subscribers:</td>
+					
+                </tr>
+
+
+
+
+                
+				
+
+				<tr id="row_badges">
+
+					<TD class="labelTD">Badges: </TD>
+					
+					<td colspan=2 id="td_badges" data-inlineType="textarea" data-inlineName="badges">Badges:</td>
+					
+                </tr>
+
+
+
+
+
+
+
+
+				<tr id="row_email">
+					
+					<TD class="labelTD">Email: </TD>
+					
+					<td colspan=2 id="td_email" data-inlineType="email" data-inlineName="email" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
+	
+		
+				</tr>
+
+
+
+				<tr id="row_website">
+					
+					<TD class="labelTD">Website: </TD>
+					
+					<td colspan=2 id="td_website" data-inlineType="link" data-inlineName="website" data-inlineRequired="0" data-inlinePlaceholder="(Website)"></td>
+	
+				</tr>
+
+
+
+				<tr id="row_about">
+
+					<TD class="labelTD">About Me: </TD>
+					
+		
+					<td colspan=2 id="td_about" data-inlineType="textarea" data-inlineName="about">Help sell the leedz you post</td>
+					
+				</tr>
+
+				
+
+
+
+
+			</table>	
+
+
+</div>
+
+
+	
+
+			<BR>
+			<BR>
+				
+
+
+
+
+				
+
+
+
+
+  <!-- 
+    -- ERROR MODAL 
+    -- 
+    -->
+  <div class="row modal" id="error_modal">
+    <center><img id="error_logo" src="img/logo_2.png"></center> 
+    <h1></h1>
+    <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
+  </div>
+
+
+  
+
+	</body>
+
+    <script src="./js/badges.js">
+
+        console.log("BADGES 1=" + badge_1.cap);
+        console.log("BADGES 2=" + badge_2.cap);
+
+    </script>
+
+
+	<script type="module">
+			
+
+		import { blankUserObject, saveUserChanges, deleteCurrentUser } from "./js/user.js";
+		import { printError, throwError } from "./js/error.js";
+		
+		import { db_getUser, USERNAME_URL_PARAM } from "./js/dbTools.js";
+
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const url_username = urlParams.get( USERNAME_URL_PARAM );
+
+        var element = null;
+
+
+        // top of page
+        // HEADER
+        // element = document.querySelector(".user_title");
+        // element.innerHTML = url_username;
+
+
+        const SHOW_USER = blankUserObject();
+
+        let success = null;
+        try {
+
+            await initShowUser( url_username ).then((response) => success = response);
+
+        } catch (error) {
+            const msg = "Cannot show user profile for:<BR>" + url_username + "<BR>" + error.message;
+            errorModal(msg, true);
+            
+        }
+
+
+        if (success) {
+            if (SHOW_USER.username != null) {
+                element = document.getElementById("td_username");
+                element.innerHTML = SHOW_USER.username;
+            }
+
+            if (SHOW_USER.email != null) {
+                element = document.getElementById("td_email");
+                element.innerHTML = SHOW_USER.email;
+            }
+
+            if (SHOW_USER.website != null) {
+                element = document.getElementById("td_website");
+                element.innerHTML = SHOW_USER.website;
+            }
+
+
+            if (SHOW_USER.about != null) {
+                element = document.getElementById("td_about");
+                element.innerHTML = SHOW_USER.about;
+            }
+
+
+            // TRADES SUBSCRIBED
+            if (SHOW_USER.subs != null) {
+                element = document.getElementById("td_subs");
+                var the_subs = "";
+                for (let i = 0; i < SHOW_USER.subs.length; i++) {
+                    the_subs = the_subs + SHOW_USER.subs[ i ] + ",";
+                }
+                
+                element.innerHTML = the_subs.slice(0, -1);
+            }
+
+
+
+            // FIXME FIXME FIXME
+            // better badges display
+            // 
+            // BADGES
+            if (SHOW_USER.badges != null) {
+                element = document.getElementById("td_badges");
+                var the_badges = "";
+                for (let i = 0; i < SHOW_USER.badges.length; i++) {
+                    the_badges = the_badges + SHOW_USER.badges[ i ] + ",";
+                }
+                
+                element.innerHTML = the_badges.slice(0, -1);
+
+                element.innerHTML += "<BR><BR>" + badge_1.cap;
+            }
+        }
+
+
+
+
+/**
+ *
+ *
+ */
+ async function initShowUser( username ) {
+
+    //   client <---> API Gateway <===> DB
+    //
+    // GET the user JSON data from the server
+    // UPDATE SHOW_USER with new values from DB
+    //
+    let resObj = [];   
+    try {
+    // get the user object
+        await db_getUser( username )
+        .then(data => {
+    
+            if (data == null) throw new Error("null response from GET");
+            resObj = data[0];
+    
+        })
+        .catch(error => {
+            let msg =  "Error initializing user [ " + username + " ]: " + error.message;
+            printError("db_getUser", msg);
+            throwError('Init User', error);
+            return false;
+        });
+
+        // copy the new values into SHOW_USER
+
+        // some fields are mandatory and will always contain values
+        // some are optional and may be null
+        // if statements are in case cache version is more recent
+        // 
+        SHOW_USER.username = resObj.creator;
+        SHOW_USER.email = (resObj.email != null) ? resObj.email : null;
+
+        SHOW_USER.website = (resObj.website != null) ? resObj.website : null;
+        SHOW_USER.about = (resObj.about != null) ? resObj.about : null;
+
+        // TRADES
+        SHOW_USER.subs = (resObj.subs != null) ? resObj.subs : [];
+
+        // POSTED
+        SHOW_USER.leedz_posted = (resObj.leedz_posted != null) ? resObj.leedz_posted : [];
+    
+        // USER BADGES
+        SHOW_USER.badges = (resObj.badges != null) ? resObj.badges : [];
+           
+    
+    } catch (error) {
+
+        printError( "db_getUser", error.message );
+        throwError( "initShowUser", error); 
+        return false;
+    }
+
+    return true;
+}
+       
+   
+
+
+
+
+
+         
+
+		/**
+		 *
+		 */
+		function backButton() {
+			const CURRENT_USER = getCurrentUser(true);
+	
+			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
+			window.open(href, "_self");
+
+			self.close();
+
+        }
+		window.backButton = backButton;
+
+
+
+
+
+
+
+	
+	</script>
+
+	
+		
+
+
+</html>

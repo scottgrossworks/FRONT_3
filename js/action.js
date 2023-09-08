@@ -2,7 +2,7 @@
 
 import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname, getShortDateString } from "./dates.js";
 import { getColorForTrade } from "./trades.js";
-import { db_getDeetz } from "./dbTools.js";
+import { db_getDeetz, USERNAME_URL_PARAM } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 import { getCurrentUser } from "./user.js";
 import { getCurrentLeed, cacheCurrentLeed, LEED_KEYS, OPTS_HIDDEN } from "./leed.js";
@@ -314,14 +314,17 @@ export async function showLeedAction( leed_preview ) {
 
 
 
-
-
+    // 
     // creator
     // from leed_preview
+    // open the user_show.html with the creator passed as a URL param
+    //
     theDiv = document.querySelector("#creator_value");    
-    var theHTML = "<a href='mailto:" + current_user.email + "'>";
-    theHTML = theHTML + leed_preview.creator + "</a>";
+    const theURL = "./user_show.html?" + USERNAME_URL_PARAM + "=" + leed_preview.creator;
+    var theHTML = "<a href=" + theURL + ">" + leed_preview.creator + "</a>";
     theDiv.innerHTML = theHTML;
+
+    
 
 
     

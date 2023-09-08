@@ -213,8 +213,6 @@ export function loadDBLeedz() {
 function refreshCalendar( results ) {
 
     try {
-        console.log("*** IN asyncDBCallback!!! **** ");
-
 
         // START with empty calendar
         // clear calendar of all leedz

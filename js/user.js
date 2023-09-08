@@ -174,7 +174,7 @@ export async function initUser( login ) {
       saveCacheUser( CURRENT_USER );
     }
     
-    console.log("%cuser.initUser(): " + CURRENT_USER.username, "color:darkorange");
+    // console.log("%cuser.initUser(): " + CURRENT_USER.username, "color:darkorange");
     // console.log(CURRENT_USER);
 
   }

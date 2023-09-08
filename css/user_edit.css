@@ -20,6 +20,32 @@ body {
 }
 
 
+td.badge_icon {
+	width:60px;	
+	max-width: 60px;
+	margin: 0 5vw;
+
+}
+
+table#badges_list {
+
+	padding:1vh 0.5vw;
+	margin: auto 0;
+}
+
+td#td_badges {
+	width: min-content;
+	height:fit-content;
+	background-color: white;
+	margin: 0 auto;
+
+}
+
+
+table#badges_list tbody td {
+	border:0;
+	padding:1vh 0.5vw;
+}
 
 
 #form_container {
@@ -135,6 +161,7 @@ section > img {
 
 
 
+
 table {
 
 	margin: 0 auto;
@@ -157,12 +184,7 @@ table {
 
 table tbody td {
 	
-    width:max-content;
-	border: none;
 	text-align: left;
-
-
-	padding: 2vh 2vw;
 
 	border-bottom: 2px solid lightgray;
 
@@ -176,14 +198,11 @@ table tbody td {
 
 .labelTD {
 	
-	width:max-content;
-	min-width: 100px;
+	width:fit-content;
+	min-width: 50px;
 	max-width: 350px;
 	
-	padding-left:0px;
-	padding-right:0px;
-	
-	margin-right:0px;
+	padding: 2vh 2vw;
 
 	font-family: var(--FONT_3);
 	font-weight: 600;

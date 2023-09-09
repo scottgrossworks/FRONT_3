@@ -5,8 +5,6 @@
 }
 
 :root {
-	font-size: 16px;
-	font-family: var(--FONT_1);
 
 	overflow-x: hidden;
 	overflow-y: scroll;
@@ -141,12 +139,28 @@ input[type="submit"]:active {
 	font-size:1.8em;
 }
 
-section {
-	
-	margin:0 auto;
-	width:100vw;
 
+
+
+section {
+	font-size: 1.15em;
+	font-family: var(--FONT_3);
+	margin:0 auto;
 }
+
+
+
+@media screen and (max-width:499px) {
+	section {
+		font-size: 0.9em;
+		font-family: var(--FONT_3);
+		margin:0 auto;
+
+	}
+}
+
+
+
 
 section > h1 {
 
@@ -165,14 +179,15 @@ section > img {
 
 table {
 
-	margin: 0 auto;
+
 	border-spacing: 0;
 
-	padding:2vh 2vw;
-	
-		
+	height:fit-content;
 	width:100%;
 	max-width:700px;
+
+	margin: 0 auto;
+	padding: 2vh 2vw;
 
 }
 

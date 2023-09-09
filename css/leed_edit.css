@@ -1,35 +1,30 @@
 * {
 	padding: 0;
 	margin: 0;
-
+	max-width:1200px;
 }
+
+
+:root {
+
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+
+
 
 
 body {
 	display: block;
 	margin:0 auto;
-	
-	font-size: 16px;
-	font-family: var(--FONT_1);
-
-	width:100%;
-	max-width:1200px;
-	height:max-content;
-
+	overflow-x: hidden;
+	overflow-y: auto;
 	background-color: white;
 
-}
-
-
-
-.titleRow {
-
-	width:100%;
-	vertical-align:bottom;
-
-	border-bottom: 2px solid var(--LEEDZ_DARKGREEN);
 
 }
+
 
 
 
@@ -43,80 +38,105 @@ body {
 }
 
 
-#form_container {
 
-	height:58vh;
+
+
+
+
+section {
+	font-size: 1.15em;
+	font-family: var(--FONT_3);
+	margin:0 auto;
+}
+
+
+
+@media screen and (max-width:499px) {
+	section {
+		font-size: 0.9em;
+		font-family: var(--FONT_3);
+		margin:0 auto;
+
+	}
+}
+
+
+
+
+section > h1 {
+
+	padding: 4px 20px;
+	margin-bottom: 10px 20px;
+}
+
+
+section > img {
+
+	margin: 10px 20px;
+}
+
+
+
+
+
+#form_container {	
+
+	padding:2vw;
+
+	height:max-content;
 	max-height:1000px;
 	overflow-y:scroll;
+	overflow-x: auto;
 	margin:0 auto;
-
-
 	background-color: var(--LEEDZ_LIGHTGREEN);
 }
 
 
 
+
 table {
 
-	margin: 0 auto;
+
 	border-spacing: 0;
 
 	height:fit-content;
-	width:100%;
-	max-width:900px;
+	width:fit-content;
+	max-width:760px;
 
 	margin: 0 auto;
-	padding-left: 2vw;
-	padding-right: 2vw;
+	padding: 2vh 2vw;
+
+}
+
+@media screen and (max-width:499px) {
+	table {
+		max-width:480px;
+		width:90%;
+	}
+
 }
 
 
-
- 
-@media screen and (min-width: 900px) {
-
-
-    table {
-        max-width:1024px;
-		margin: 0 auto;
-
-    }
-}
-
-
-
-table tbody tr {
-
-
-	text-align:right;
-	align-content:space-between;
-	
-}
 
 
 table tbody td {
 	
-    width:max-content;
-	border: none;
 	text-align: left;
 
-	padding:25px;
-	border-top: 2px solid lightgray;
+	border-bottom: 2px solid lightgray;
 
 }
 
+
+
 .labelTD {
 	
-	width:max-content;
-	min-width: 100px;
-	max-width: 200px;;
+	width:fit-content;
+	min-width: 50px;
+	max-width: 350px;
 	
-	padding-left:0px;
-	padding-right:0px;
-	
-	margin-right:0px;
+	padding: 2vh 2vw;
 
-	font-family: var(--FONT_3);
 	font-weight: 600;
 }
 
@@ -151,10 +171,10 @@ table tbody td {
 
 
 .buttonTD {
-
 	
 	width:min-content;
 	max-width: 150px;
+	padding:10px;
 
 }
 
@@ -174,7 +194,6 @@ table tbody td {
     text-decoration: none;
     display: flex;
 
-    font-size:1.3em;
     font-weight: bolder;
 
     width:max-content;
@@ -244,7 +263,7 @@ table tbody td {
     width:max-content;
     height:max-content;
 
-    margin-top:20px;
+    margin: 0 2vw;
 
     padding-top:20px;
     padding-bottom:15px;
@@ -327,7 +346,6 @@ select {
 	
 	padding:12px 8px;
 
-	font-size: 1rem;
 	outline: none;
 	border-radius: 8px;
 

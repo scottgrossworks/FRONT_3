@@ -206,7 +206,7 @@
 			
 
 			<!-- DELETE ACCOUNT BUTTON -->
-			<button id="delAccount" class="button delAcct_button" value="delete" style="opacity:1" onclick="deleteAccount()">Delete Account</button>
+			<button id="delAccount" class="button del_button" value="delete" style="opacity:1" onclick="deleteAccount()">Delete Account</button>
 			
 	
 
@@ -255,43 +255,43 @@
 
 		const CURRENT_USER = getCurrentUser( true );
 
-		if (CURRENT_USER != null) {
+		if (CURRENT_USER == null || CURRENT_USER.username == null) {
+			printError("User Edit", "No user currently logged in");
+			errorModal("Cannot Edit User<BR>Not currently logged in.", true);
+			throwError("User Edit", "Not logged in");
+		}	
 
-			var element = null;
-			
-			if (CURRENT_USER.username != null) {
-				element = document.getElementById("td_username");
-				element.innerHTML = CURRENT_USER.username;
-			}
-
-
-			if (CURRENT_USER.email != null) {
-				element = document.getElementById("td_email");
-				element.innerHTML = CURRENT_USER.email;
-			}
-
-			if (CURRENT_USER.website != null) {
-				element = document.getElementById("td_website");
-				element.innerHTML = CURRENT_USER.website;
-			}
+		
+		var element = document.getElementById("td_username");
+		element.innerHTML = CURRENT_USER.username;
 
 
-			if (CURRENT_USER.about != null) {
-				element = document.getElementById("td_about");
-				element.innerHTML = CURRENT_USER.about;
-			}
-
-			if (CURRENT_USER.zip_home != null) {
-				element = document.getElementById("td_zip");
-				element.innerHTML = CURRENT_USER.zip_home;
-			}
-
-			if (CURRENT_USER.zip_radius != null) {
-				element = document.getElementById("td_radius");
-				element.innerHTML = CURRENT_USER.zip_radius;
-			}
-
+		if (CURRENT_USER.email != null) {
+			element = document.getElementById("td_email");
+			element.innerHTML = CURRENT_USER.email;
 		}
+
+		if (CURRENT_USER.website != null) {
+			element = document.getElementById("td_website");
+			element.innerHTML = CURRENT_USER.website;
+		}
+
+
+		if (CURRENT_USER.about != null) {
+			element = document.getElementById("td_about");
+			element.innerHTML = CURRENT_USER.about;
+		}
+
+		if (CURRENT_USER.zip_home != null) {
+			element = document.getElementById("td_zip");
+			element.innerHTML = CURRENT_USER.zip_home;
+		}
+
+		if (CURRENT_USER.zip_radius != null) {
+			element = document.getElementById("td_radius");
+			element.innerHTML = CURRENT_USER.zip_radius;
+		}
+
 
 
 

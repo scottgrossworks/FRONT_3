@@ -14,9 +14,10 @@
 
 body {
 	display: block;
-	margin:0 auto;	
+	margin:0 auto;
 	overflow-x: hidden;
 	overflow-y: auto;
+	background-color: white;
 }
 
 
@@ -167,11 +168,7 @@ table {
 	margin: 0 auto;
 	border-spacing: 0;
 
-	padding-left: 5vw;
-	padding-right:5vw;
-
-	padding-top: 5vh;
-	padding-bottom:5vh;
+	padding:2vh 2vw;
 	
 		
 	width:100%;
@@ -254,6 +251,40 @@ table tbody td {
 
 
 
+.del_button {
+
+    position:relative;
+
+    background-color: coral;
+    border: none;
+    color: white;
+   
+    
+    text-decoration: none;
+    display: flex;
+
+    font-size:1.2em;
+    font-weight: bolder;
+
+    width:max-content;
+    height:max-content;
+
+    margin-top:0px;
+
+    padding-top:20px;
+    padding-bottom:15px;
+    padding-left:30px;
+    padding-right:30px;
+ 
+    border-radius: 12px;
+
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
+}
+
+
+
+
+
 
 .save_button {
 
@@ -273,9 +304,7 @@ table tbody td {
     width:max-content;
     height:max-content;
 
-    margin-top:50px;
-	
-	margin-bottom:100px;
+    margin:25px 0;
 
     padding-top:20px;
     padding-bottom:15px;

@@ -20,11 +20,7 @@
 	</head>
 
 
-		 
-	<center>
-
-
-	<body>
+	<body style="border:none">
 	
 
 
@@ -49,17 +45,15 @@
 			</div>
 
 
-			
-<section>
 
 	<BR>	
 	<BR>
 
 
 			
-<div class="row" style="width:100vw" id="form_container">
+<div class="row" style="width:100vw;border:none" id="form_container">
 
-				<table>
+				<table style="background-color:white">
 					
 				
                 <tr id="row_username">
@@ -188,7 +182,7 @@
 	<script type="module">
 			
 
-		import { blankUserObject, saveUserChanges, deleteCurrentUser } from "./js/user.js";
+		import { blankUserObject, getCurrentUser } from "./js/user.js";
 		import { printError, throwError } from "./js/error.js";
 		
 		import { db_getUser, USERNAME_URL_PARAM } from "./js/dbTools.js";
@@ -374,9 +368,7 @@ function showUserBadges( element, badges ) {
         // TRADES
         SHOW_USER.subs = (resObj.subs != null) ? resObj.subs : [];
 
-        // POSTED
-        SHOW_USER.leedz_posted = (resObj.leedz_posted != null) ? resObj.leedz_posted : [];
-    
+       
         // USER BADGES
         SHOW_USER.badges = (resObj.badges != null) ? resObj.badges : [];
            

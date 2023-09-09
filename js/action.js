@@ -320,9 +320,19 @@ export async function showLeedAction( leed_preview ) {
     // open the user_show.html with the creator passed as a URL param
     //
     theDiv = document.querySelector("#creator_value");    
-    const theURL = "./user_show.html?" + USERNAME_URL_PARAM + "=" + leed_preview.creator;
-    var theHTML = "<a href=" + theURL + ">" + leed_preview.creator + "</a>";
-    theDiv.innerHTML = theHTML;
+    
+    if (current_user.username == leed_preview.creator) {
+
+        // this leed is posted by the current user
+
+        theDiv.innerHTML = "<a href='./user_edit.html'>" + leed_preview.creator + "</a>";
+
+    } else {
+    
+        var theURL = "./user_show.html?" + USERNAME_URL_PARAM + "=" + leed_preview.creator;
+        var theHTML = "<a href=" + theURL + ">" + leed_preview.creator + "</a>";
+        theDiv.innerHTML = theHTML;
+    }
 
     
 

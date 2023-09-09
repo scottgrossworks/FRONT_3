@@ -9,8 +9,6 @@
     display:none;
     top:0;
 
-    height: fit-content;
-
     /* screen size-dependent -->  display:flex; */
     background-color:white;
 
@@ -67,8 +65,8 @@
 @media screen and (min-height: 800px) {
 
     #action_panel {
-        height: fit-content;
-        max-height:800px; 
+        height: 96%;
+        max-height:900px; 
     }
 }
 

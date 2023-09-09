@@ -53,7 +53,7 @@ section {
 
 @media screen and (max-width:499px) {
 	section {
-		font-size: 0.9em;
+		font-size: 1em;
 		font-family: var(--FONT_3);
 		margin:0 auto;
 
@@ -81,15 +81,22 @@ section > img {
 
 #form_container {	
 
-	padding:2vw;
 
-	height:max-content;
+	width:100%;
+	
+	height:70%;
 	max-height:1000px;
+	
 	overflow-y:scroll;
 	overflow-x: auto;
-	margin:0 auto;
+
 	background-color: var(--LEEDZ_LIGHTGREEN);
+
 }
+
+
+
+
 
 
 
@@ -100,18 +107,19 @@ table {
 	border-spacing: 0;
 
 	height:fit-content;
-	width:fit-content;
-	max-width:760px;
+	width:80%;
+	max-width:800px;
 
 	margin: 0 auto;
-	padding: 2vh 2vw;
+	padding: 5vh 2vw;
 
 }
 
 @media screen and (max-width:499px) {
 	table {
-		max-width:480px;
-		width:90%;
+		
+		margin: 3vh 0;
+		padding:0;
 	}
 
 }
@@ -131,14 +139,29 @@ table tbody td {
 
 .labelTD {
 	
-	width:fit-content;
-	min-width: 50px;
-	max-width: 350px;
-	
-	padding: 2vh 2vw;
+	width:150px;
+
+	padding: 2vh 0;
+	margin:0;
 
 	font-weight: 600;
 }
+
+
+
+@media screen and (max-width:499px) {
+
+	.labelTD {
+	
+		width:fit-content;
+		max-width: 80px;
+		padding: 2vh 1vw;
+	
+		font-weight: 600;
+	}
+
+}
+
 
 
 
@@ -172,8 +195,7 @@ table tbody td {
 
 .buttonTD {
 	
-	width:min-content;
-	max-width: 150px;
+	width:80px;
 	padding:10px;
 
 }
@@ -196,7 +218,7 @@ table tbody td {
 
     font-weight: bolder;
 
-    width:max-content;
+    width:fit-content;
     height:max-content;
 
     margin-top:20px;
@@ -227,7 +249,7 @@ table tbody td {
     font-size:1.2em;
     font-weight: bolder;
 
-    width:max-content;
+    width:fit-content;
     height:max-content;
 
     margin: 25px 0px;
@@ -339,12 +361,12 @@ input,
 textarea,
 select {
 
-	width:100%;
+	width:93%;
 	
 	border: none;
 	background-color: var(--LEEDZ_GRAY);
 	
-	padding:12px 8px;
+	padding:12px 1vw;
 
 	outline: none;
 	border-radius: 8px;
@@ -352,6 +374,22 @@ select {
 	font-family: var(--FONT_2);
 	border-bottom: 1px solid var(--LEEDZ_DARKGREEN);
 }
+
+
+@media screen and (max-width:499px) {
+
+	input,
+	textarea,
+	select {
+		max-width:160px;
+	}
+
+}
+
+
+
+
+
 
 input,
 textarea {
@@ -362,6 +400,7 @@ textarea {
 
 input#finish_button {
 	color:black;
+	width:fit-content;
 	background-color: var(--LEEDZ_GREEN);
 }
 

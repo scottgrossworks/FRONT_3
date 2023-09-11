@@ -250,7 +250,7 @@
 		
 		import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 
-
+		const URL_USER_DELETED = "./user_deleted.html";
 
 		var EDITING = false;
 
@@ -441,12 +441,10 @@
 		 */
 		function deleteAccount() {
 
-
 			try {
+				// will throw error if guest user
 				deleteCurrentUser();			
 		
-				// reload page with new guest account
-				backButton();
 
 			} catch ( error ) {
 
@@ -457,6 +455,13 @@
 				endEditing();
 			}	
 		
+			
+				
+				//
+				// GOTO landing page
+				//
+				window.open( URL_USER_DELETED , "_self");
+
 		}
 
 

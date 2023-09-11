@@ -1,6 +1,6 @@
 <!--
 --
--- LEED CREATED / POSTED LANDING PAGE
+-- LEED DELETED TO DB LANDING PAGE
 --    
 -->
 
@@ -20,7 +20,7 @@
 		 <meta charset="UTF-8">
 		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	 
-		 <TITLE>Leed Posted</TITLE>
+		 <TITLE>Leed Deleted</TITLE>
 	 
 	 	<!-- Favicon -->
 		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
@@ -51,7 +51,7 @@
 				</div>
 
 				<div class="column" style="margin:auto 0;transform:translateY(6px)">
-					<h1 class="user_title">Leed Posted</h1>
+					<h1 class="user_title">Leed Deleted</h1>
 				</div>
 				
 				<div class="column _3" style="padding:6px;text-align:center">
@@ -68,18 +68,23 @@
 
                 <BR>
 
-                   Congratulations <span style="font-weight:600; color:darkgreen;size:1.2em" id="user_welcome"></span>, 
-                    your leed has been posted.  The database will refresh shortly.
+                   <span style="font-weight:600; color:darkgreen;size:1.2em" id="user_welcome"></span>, 
+                    
+                   your leed has been deleted.  Allow a minute for the DB to refresh.
+                   <BR>
+         
+                        <BR>
+                            We will email a confirmation to <span style="font-weight:600;color:darkgreen;size:1.2em" id="user_email"></span>
+                        <BR
+                    
+                        <BR>
+                    <BR>
+                   
+                   here's a link for some more info....
                 <BR>
+               
                 <BR>
-                    An email will be sent to <span style="font-weight:600;color:darkgreen;size:1.2em" id="user_email"></span>
-                <BR>
-                <BR>
-                Here's a link to post another
-
-                <button class="button save_button" onclick="createLeed()">Post</button>
-
-
+              
                 <BR>
 
                 Here's a back button
@@ -122,6 +127,7 @@
     import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
 
 
+
         const CURRENT_USER = getCurrentUser(true);
  
         if (CURRENT_USER == null || CURRENT_USER.username == null) {
@@ -133,11 +139,11 @@
 
             let user_welcome = document.getElementById("user_welcome");
             user_welcome.innerHTML = CURRENT_USER.username;
-
+           
             let user_email = document.getElementById("user_email");
             user_email.innerHTML = CURRENT_USER.email;
-
         }
+
 
 
 
@@ -145,7 +151,7 @@
         /**
          *
          */
-		function backButton() {
+         function backButton() {
 
 			clearCurrentLeed();
 

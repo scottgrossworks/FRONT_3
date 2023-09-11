@@ -1,6 +1,6 @@
 <!--
 --
--- LEED CREATED / POSTED LANDING PAGE
+-- USER DELETED TO DB LANDING PAGE
 --    
 -->
 
@@ -20,7 +20,7 @@
 		 <meta charset="UTF-8">
 		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	 
-		 <TITLE>Leed Posted</TITLE>
+		 <TITLE>User Deleted</TITLE>
 	 
 	 	<!-- Favicon -->
 		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
@@ -51,7 +51,7 @@
 				</div>
 
 				<div class="column" style="margin:auto 0;transform:translateY(6px)">
-					<h1 class="user_title">Leed Posted</h1>
+					<h1 class="user_title">User Deleted</h1>
 				</div>
 				
 				<div class="column _3" style="padding:6px;text-align:center">
@@ -67,19 +67,19 @@
             <section>
 
                 <BR>
-
-                   Congratulations <span style="font-weight:600; color:darkgreen;size:1.2em" id="user_welcome"></span>, 
-                    your leed has been posted.  The database will refresh shortly.
+                    Your user account has been deleted.
+                   <BR>
+                    <BR>
+         
+                      If you think this is an error here's a link .....
+                    <BR>
+                    <BR>
+                   
+                   here's a link for some more info....
                 <BR>
+               
                 <BR>
-                    An email will be sent to <span style="font-weight:600;color:darkgreen;size:1.2em" id="user_email"></span>
-                <BR>
-                <BR>
-                Here's a link to post another
-
-                <button class="button save_button" onclick="createLeed()">Post</button>
-
-
+              
                 <BR>
 
                 Here's a back button
@@ -116,28 +116,10 @@
 <script type="module">
 
 
-    import { getCurrentUser } from "./js/user.js";
     import { clearCurrentLeed } from "./js/leed.js";
-    import { USERNAME_URL_PARAM } from "./js/dbTools.js";    
+
     import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
 
-
-        const CURRENT_USER = getCurrentUser(true);
- 
-        if (CURRENT_USER == null || CURRENT_USER.username == null) {
-            
-            printError("Leed Posted", "No current user");
-            errorModal("No current user logged in.", true);
-  
-        } else {
-
-            let user_welcome = document.getElementById("user_welcome");
-            user_welcome.innerHTML = CURRENT_USER.username;
-
-            let user_email = document.getElementById("user_email");
-            user_email.innerHTML = CURRENT_USER.email;
-
-        }
 
 
 
@@ -145,19 +127,11 @@
         /**
          *
          */
-		function backButton() {
+         function backButton() {
 
 			clearCurrentLeed();
-
-            if (CURRENT_USER.username == null) {
-                window.open("./index.html", "_self");	
-                
-            } else {
-
-                var href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
-                window.open(href, "_self");	
-            }
-
+            window.open("./index.html", "_self");	
+        
 		}
 		window.backButton = backButton;
 

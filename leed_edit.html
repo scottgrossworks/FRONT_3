@@ -329,7 +329,7 @@
 
 		window.inlineEdit = inlineEdit;
        
-        const URL_LEED_DELETE = "./leed_delete.html";
+        const URL_LEED_DELETED = "./leed_delete.html";
 
 
 
@@ -695,15 +695,14 @@
             // GO BACK to server and delete leed
             // compliment of add leed
 
-            console.log("in leed_edit.html.deleteLeed().........");
-
             deleteCurrentLeed();
 
             // GOTO delete leed landing page
-            window.open(  URL_LEED_DELETE, "_self" );
+            window.open(  URL_LEED_DELETED, "_self" );
             
 
         } catch ( error ) {
+            printError("Delete Leed", error.message);
             errorModal("Error deleting leed: " + error.message, false);
 
         } 

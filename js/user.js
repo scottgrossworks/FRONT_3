@@ -24,6 +24,10 @@ export async function deleteCurrentUser() {
     throwError("deleteCurrentUser", "CURRENT_USER should never be null");
 
 
+  if (isGuestUser())
+    throwError("deleteCurrentUser", "Cannot delete Guest User");
+
+    
     let resObj = [];   
     try {
       // get the user object

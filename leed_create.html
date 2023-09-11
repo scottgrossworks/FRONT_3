@@ -338,15 +338,15 @@
         import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
 		
         import { LEED_KEYS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
-        import { USERNAME_URL_PARAM } from "./js/dbTools.js";
+        import { db_updateLeed, POST_LEED, USERNAME_URL_PARAM } from "./js/dbTools.js";
 
 
 
+        const LEED_POSTED_LANDING_URL = "./leed_posted.html";
 
         window.errorModalClose = errorModalClose;
 		window.inlineEdit = inlineEdit;
 
-    
 
           // flag indicates edits are in progress
           //
@@ -356,14 +356,19 @@
           //
           const LEED_CHANGES = blankLeedObject();
 
+          // the currently logged-in user
+          //
+          const CURRENT_USER = getCurrentUser(true);
 
 
 
 
+        /**
+         *
+         */
 		function backButton() {
-			const current_user = getCurrentUser(true);
-	
-			let href="./index.html?" + USERNAME_URL_PARAM + "=" + current_user.username;
+
+			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
 			window.open(href, "_self");
 
 			clearCurrentLeed();
@@ -378,7 +383,9 @@
 
 
 
-
+        /**
+         *
+         */
 		function defaultCallback(rowData, rowName) {
 
 			beginEditing();
@@ -485,86 +492,141 @@
 
 
 
-		/**
-         * save changes to create form
-         * Post new leed to DB
-         *
-         */
-		function postLeed() {
+    /**
+        * save changes to create form
+        * Post new leed to DB
+        *
+        */
+async function postLeed() {
 
-			if (! EDITING) return;
+        if (! EDITING) return;
 
-
-            
-			// postLeedToDB( LEED_CHANGES );
-            console.log("POSTING NEW LEED:");
-            console.log(LEED_CHANGES);
+        console.log("POSTING NEW LEED:");
+        console.log(LEED_CHANGES);
 
 
+        // LEED verification
+        //            
+        if (LEED_CHANGES.trade == null) {
+            printError("Post Leed", "Trade must be set");
+            errorModal("Error Posting Leed: Trade must be set.", true);
+            return;
+        }
 
-            // LEED verification
-            
-            if (LEED_CHANGES.trade == null) {
-                printError("Post Leed", "Trade must be set");
-                errorModal("Error Posting Leed: Trade must be set.", true);
+        
+        if (LEED_CHANGES.note == null) {
+            printError("Post Leed", "Title must be set");
+            errorModal("Error Posting Leed: Title must be set.", true);
+            return;
+        }
+
+
+        if (LEED_CHANGES.start == null) {
+            printError("Post Leed", "Start must be set");
+            errorModal("Error Posting Leed: Start must be set.", true);
+            return;
+        }
+
+        if (LEED_CHANGES.start > LEED_CHANGES.end) {
+            printError("Post Leed", "Start date must precede end date");
+            errorModal("Error Posting Leed: Start date must precede end date.", true);
+            return;
+        }
+
+        if (LEED_CHANGES.loc == null) {
+            printError("Post Leed", "Location must be set");
+            errorModal("Error Posting Leed: Location must be set.", true);
+            return;
+
+
+        } else {
+
+            // SET THE LEED_CHANGES ZIP HERE
+            let the_zip = LEED_CHANGES.loc.slice(-5);
+
+
+            // NOT A 5-DIGIT NUMBER
+            if (! new Number( the_zip ).valueOf()) {
+
+                printError("Post Leed", "zip code not found");
+                errorModal("Error Posting Leed: Location must end in 5-digit zip.", true);
                 return;
+
+            }   
+            LEED_CHANGES.zip = the_zip;
+        }
+
+    
+        if (LEED_CHANGES.det == null) {
+            printError("Post Leed", "Details must be set");
+            errorModal("Error Posting Leed: Some details must be set.", true);
+            return;
+        }
+
+        if (LEED_CHANGES.pr == null) {
+            printError("Post Leed", "Price must be set");
+            errorModal("Error Posting Leed: Price must be set.", true);
+            return;
+        }
+
+
+        
+        endEditing();
+
+
+
+
+
+    //   client <---> API Gateway <===> DB
+    //
+    //
+    let resObj = [];
+
+    try {
+        // get the result object
+            await db_updateLeed( POST_LEED, CURRENT_USER, LEED_CHANGES )
+            .then(data => {
+        
+                if (data == null) throw new Error("null response from GET");
+                resObj = data[0];
+        
+            })
+            .catch(error => {
+                printError("db_updateLeed", error.message);
+                throwError('DB Error', error);
+                return;
+            });
+
+        
+
+            // look for the error code
+            if (resObj.res == DB_FAIL) {
+
+                let msg = "Error code received from server: " + resObj.msg;
+                printError("db_updateLeed", msg);
+                throwError("From DB", msg) 
             }
 
+        
+    } catch (error) {
 
-            
-            if (LEED_CHANGES.note == null) {
-                printError("Post Leed", "Title must be set");
-                errorModal("Error Posting Leed: Title must be set.", true);
-                return;
-            }
-
-
-            if (LEED_CHANGES.start == null) {
-                printError("Post Leed", "Start must be set");
-                errorModal("Error Posting Leed: Start must be set.", true);
-                return;
-            }
-
-            if (LEED_CHANGES.start > LEED_CHANGES.end) {
-                printError("Post Leed", "Start date must precede end date");
-                errorModal("Error Posting Leed: Start date must precede end date.", true);
-                return;
-            }
-
-            if (LEED_CHANGES.loc == null) {
-                printError("Post Leed", "Location must be set");
-                errorModal("Error Posting Leed: Location must be set.", true);
-                return;
+        printError( "db_updateLeed", error.message );
+        throwError( "Post Leed", error); 
+        return;
+    }
 
 
-            } else {
+    // result was SUCCESS
+    // GOTO landing page
+    if (resObj.res == DB_SUCCESS) {
+        // take user to success landing page
+        // let landing_url = LEED_POSTED_LANDING_URL + "?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
+       let landing_URL = LEED_POSTED_LANDING_URL;
+        window.open( landing_url, "_self");
+    }
 
-                // SET THE LEED_CHANGES ZIP HERE
-                let the_zip = LEED_CHANGES.loc.slice(-5);
-                LEED_CHANGES.zip = the_zip;
-            }
-
-     
-
-            if (LEED_CHANGES.pr == null) {
-                printError("Post Leed", "Details must be set");
-                errorModal("Error Posting Leed: Some details must be set.", true);
-                return;
-            }
-
-            if (LEED_CHANGES.pr == null) {
-                printError("Post Leed", "Price must be set");
-                errorModal("Error Posting Leed: Price must be set.", true);
-                return;
-            }
-
-
-            
-			endEditing();
-
-
-		}
-		window.postLeed = postLeed;
+    }
+    window.postLeed = postLeed;
 
 
 
@@ -659,10 +721,8 @@
          */
         window.onload = (event) => {
 
-
-            let current_user = getCurrentUser(true);
             let element = document.getElementById("td_creator");
-            element.innerHTML = "<B>" + current_user.username + "</B>";
+            element.innerHTML = "<B>" + CURRENT_USER.username + "</B>";
 
             inlineEdit('row_trade', createOptions);            
             inlineEdit('row_note', createOptions);

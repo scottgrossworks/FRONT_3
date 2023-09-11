@@ -1,0 +1,166 @@
+<!--
+--
+-- CREATE a leed from blank form
+-- the current user is the creator of the leed
+--    
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	
+
+
+<head>
+
+    
+        <link rel="stylesheet" href="css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="css/modal.css" type="text/css" />
+
+
+   
+		 <meta charset="UTF-8">
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 
+		 <TITLE>Create A Leed</TITLE>
+	 
+	 	<!-- Favicon -->
+		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+ 
+ 
+		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+		 <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
+
+		 <script src="./js/inline-edit.js" type="module" defer></script> 
+	</head>
+
+
+		 
+	<center>
+
+
+	<body>
+	
+
+
+			
+        <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+
+			<div class="column _1">
+
+				<button class="back_button" style="margin:35px 20px; width:50px"><a href="#" onclick="backButton()">&#10140;</a></button>
+				</div>
+
+				<div class="column" style="margin:auto 0;transform:translateY(6px)">
+					<h1 class="user_title">Leed Posted</h1>
+				</div>
+				
+				<div class="column _3" style="padding:6px;text-align:center">
+				<img src="./img/logo_2.png" style="width:120px">
+				</div>
+			
+			
+		
+			</div>
+			
+
+
+            <section>
+
+                <BR>
+
+                   Congratulations <span style="font-weight:600; color:darkgreen;size:1.2em" id="user_welcome"></span>, 
+                    your leed has been posted.  The database will refresh shortly.
+                <BR>
+                <BR>
+                    An email will be sent to <span style="font-weight:600;color:darkgreen;size:1.2em" id="user_email"></span>
+                <BR>
+                <BR>
+                Here's a link to post another
+
+                <button class="button save_button" onclick="createLeed()">Post</button>
+
+
+                <BR>
+
+                Here's a back button
+
+                <button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="backButton()">Back</button>
+
+		
+			
+              
+
+    </section>  
+        
+
+
+    <!-- 
+      -- ERROR MODAL 
+      -- 
+      -->
+    <div class="row modal" id="error_modal">
+      <center><img id="error_logo" src="img/logo_2.png"></center> 
+      <h1></h1>
+      <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
+    </div>
+  
+  
+  
+    
+  
+  </body>
+  
+
+
+
+<script type="module">
+
+
+    import { getCurrentUser } from "./js/user.js";
+    import { USERNAME_URL_PARAM } from "./js/dbTools.js";    
+    import { printError, throwError, errorModal } from "./js/error.js";
+
+
+
+        const current_user = getCurrentUser(true);
+ 
+        if (current_user == null || current_user.username == null) {
+            
+            printError("Leed Posted", "No current user");
+            errorModal("No current user logged in.", true);
+  
+        } else {
+
+            let user_welcome = document.getElementById("user_welcome");
+            user_welcome.innerHTML = current_user.username;
+
+            let user_email = document.getElementById("user_email");
+            user_email.innerHTML = current_user.email;
+
+            console.log("HELLO=" + current_user);
+        }
+
+
+
+
+        /**
+         *
+         */
+		function backButton() {
+
+			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
+			window.open(href, "_self");
+
+			clearCurrentLeed();
+			self.close();
+
+		}
+		window.backButton = backButton;
+
+
+
+
+
+</script>
+</html>

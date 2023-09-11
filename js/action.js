@@ -178,8 +178,6 @@ export async function showLeedAction( leed_preview ) {
     let theDate = document.querySelector("#lic_date");
     theDate.innerHTML = leed_weekday + " " + leed_monthname + " " + leed_date + ", " + leed_year; 
 
-    const current_user = getCurrentUser();
-
 
 
     // NOTE
@@ -321,6 +319,8 @@ export async function showLeedAction( leed_preview ) {
     //
     theDiv = document.querySelector("#creator_value");    
     
+    const current_user = getCurrentUser(false);
+
     if (current_user.username == leed_preview.creator) {
 
         // this leed is posted by the current user

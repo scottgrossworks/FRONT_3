@@ -30,18 +30,25 @@ export const CHG_USER = 4;
 export const ADD_SUB  = 5;
 export const REM_SUB  = 6;
 
-export const ADD_LEED = 7;
+export const POST_LEED = 7;
 export const BUY_LEED = 8
 export const DEL_LEED = 9;
 export const CHG_LEED = 10;
 export const REP_LEED = 11;
+
+export const DB_FAIL = 0;
+export const DB_SUCCESS = 1;
+
+
+
 
 
 /**
  * 
  * 
  */
-
+// FIXME FIXME FIXME
+// yet to implement
 export async function db_updateUser( code, user_obj ) { 
     
 
@@ -68,7 +75,7 @@ export async function db_updateUser( code, user_obj ) {
     }
 
 
-    let json_obj = '{ "un": user_obj.username, "cd": code, "res":SUCCESS }';
+    let json_obj = '{ "un": user_obj.username, "cd": code, "res":1 }';
 
     return json_obj;
 }
@@ -83,13 +90,14 @@ export async function db_updateUser( code, user_obj ) {
  * 
  * 
  */
-
+// FIXME FIXME FIXME
+// yet to implement
 export async function db_updateLeed( code, user_obj, leed_obj ) { 
     
     switch (code) {
 
-        case ADD_LEED:
-            console.log("dbTools.db_updateLeed() ADD_LEED"); 
+        case POST_LEED:
+            console.log("dbTools.db_updateLeed() POST_LEED"); 
             break
 
         case BUY_LEED:
@@ -115,7 +123,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
     // FIXME FIXMFIXME
     // 
-    let json_obj = '{ "id": leed_obj.id, "cd": code, "res":SUCCESS }';
+    let json_obj = '{ "id": leed_obj.id, "cd": code, "res":1 }';
 
     return json_obj;
 }

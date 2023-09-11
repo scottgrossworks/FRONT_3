@@ -627,7 +627,7 @@ export async function saveLeedChanges( leedObj ) {
         // 
         //  client <---> API Gateway <===> DB
         //
-        results = await db_updateLeed( CHG_LEED, getCurrentUser(), CURRENT_LEED );
+        results = await db_updateLeed( CHG_LEED, getCurrentUser(false), CURRENT_LEED );
 
         // should never happen
         if (results == null) {
@@ -671,7 +671,7 @@ export async function buyCurrentLeed() {
 
     console.log("----------> ******** BUYING CURRENT LEED TO SERVER ******* ");
 
-    const current_user = getCurrentUser();
+    const current_user = getCurrentUser(false);
 
  
     // API request --> DB 
@@ -733,7 +733,7 @@ export async function deleteCurrentLeed() {
 
     console.log("----------> ******** DELETING CURRENT LEED TO SERVER ******* ");
 
-    const current_user = getCurrentUser();
+    const current_user = getCurrentUser(false);
 
  
     // API request --> DB 
@@ -803,7 +803,7 @@ export async function reportCurrentLeed() {
         // 
         //  client <---> API Gateway <===> DB
         //
-        results = await db_updateLeed( REP_LEED, getCurrentUser(), CURRENT_LEED );
+        results = await db_updateLeed( REP_LEED, getCurrentUser(false), CURRENT_LEED );
         
         // should never happen
         if (results == null) {

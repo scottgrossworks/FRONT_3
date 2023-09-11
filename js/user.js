@@ -464,8 +464,7 @@ export async function saveSubscription( trade_name ) {
     // if not guest user
     // remove subscription from DB
     //
-
-    console.log("user.removeSubscription() " + trade_name + " ......");
+    // console.log("user.removeSubscription() " + trade_name + " ......");
 
 
         //   client <---> API Gateway <===> DB

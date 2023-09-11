@@ -7,6 +7,8 @@ const BUG_EMAIL = "scottgrossworks@gmail.com";
 const ERR_KEY = "er";
 
 
+let IS_SHOWING = false;
+
 
 class LeedzError extends Error {
 
@@ -55,12 +57,15 @@ export function throwError(src, error) {
 
 export function errorModalClose() {
 
+    if (! IS_SHOWING) return;
+
     let error = document.getElementById("error_modal");
     error.style.setProperty("no_close", false);
     error.style.display = "none";
 
     error.setAttribute(ERR_KEY, "");
-    console.log("CLOSING MODAL");
+
+    IS_SHOWING = false;
 }
 
 
@@ -92,7 +97,8 @@ export function errorModal( error, no_close ) {
   theMsg.innerHTML = errorString + "<BR><BR>" + email_link;
 
   modal.style.display = "block";
-  console.log("SHOWING MODAL");
+  
+  IS_SHOWING = true;
 }
 
 

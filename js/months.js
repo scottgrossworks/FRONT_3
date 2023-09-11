@@ -10,8 +10,6 @@ import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./calendar.js";
  */
 export function initMonthChooser() {
 
-    console.log("INIT MONTH CHOOSER");
-
     let theMonth = getMonth();
     let theYear = getYear();
 
@@ -46,7 +44,6 @@ export function initMonthChooser() {
         // will return immediately - data shows up later
         loadDBLeedz();
 
-        console.log("((((1)))))  BACK FROM LOAD");
     });
 
 
@@ -74,7 +71,6 @@ export function initMonthChooser() {
         // will return immediately - data shows up later
        loadDBLeedz();
 
-       console.log("((((2)))))  BACK FROM LOAD");
     });
 
 }

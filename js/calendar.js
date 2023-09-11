@@ -179,11 +179,6 @@ export function loadCacheLeedz() {
  */
 export function loadDBLeedz() {
 
-
-    console.log("****************   in loadDBLeedz()   ************");
-    console.log(getCurrentUser());
-
-
     CURRENT_SELECTION = null;
 
     // API request --> DB 
@@ -423,7 +418,7 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
 
     // is this leed created by the current user?
-    if (leed_fromDB.creator == getCurrentUser().username) {
+    if (leed_fromDB.creator == getCurrentUser(false).username) {
         newLeed.classList.add("user_leed");
     } else {
         newLeed.classList.add("forsale_leed");

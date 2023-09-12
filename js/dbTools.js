@@ -22,22 +22,21 @@ export const END_DATE_URL_PARAM = "de";
 export const LEED_ID_URL_PARAM = "id";
 
 
-export const FAILURE = 0;
-export const SUCCESS = 1;
+export const DB_FAIL = 0;
+export const DB_SUCCESS = 1;
 // 2
 export const DEL_USER = 3;
 export const CHG_USER = 4;
+
 export const ADD_SUB  = 5;
 export const REM_SUB  = 6;
 
 export const POST_LEED = 7;
-export const BUY_LEED = 8
+export const BUY_LEED = 8;
 export const DEL_LEED = 9;
 export const CHG_LEED = 10;
 export const REP_LEED = 11;
 
-export const DB_FAIL = 0;
-export const DB_SUCCESS = 1;
 
 
 

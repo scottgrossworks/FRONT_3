@@ -1,0 +1,187 @@
+<!--
+--
+-- TEST TEST TEST getLeedz() TEST TEST TEST
+--
+-- 
+--    
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	
+
+
+<head>
+
+    
+        <link rel="stylesheet" href="../css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="../css/modal.css" type="text/css" />
+
+
+   
+		 <meta charset="UTF-8">
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 
+		 <TITLE>Test getLeedz() Test</TITLE>
+	 
+	 	<!-- Favicon -->
+		 <link rel="shortcut icon" type="image/png" href="../img/favicon.png"> 
+		 <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+ 
+ 
+		 <link rel="stylesheet" href="../css/globals.css" type="text/css" />
+		 <link rel="stylesheet" href="../css/leed_edit.css" tyep="text/css"/>
+
+		 <script src="../js/inline-edit.js" type="module" defer></script> 
+	</head>
+
+
+		 
+
+
+	<body style="margin:auto 5vw">
+	
+
+
+			
+        <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+
+			<div class="column _9" style="margin:3vh auto; font-size:2em;">
+
+                    TEST getLeedz()
+				</div>
+				
+				<div class="column _3" style="padding:6px;text-align:center">
+				<img src="../img/logo_2.png" style="width:120px">
+				</div>
+			
+			
+		
+			</div>
+			
+
+
+            <section>
+
+                <BR>
+                <b>Sending:</b>
+                <BR>
+
+                <BR>
+                <span id="testing">
+                    results = await db_getLeedz( subs, firstDay, lastDay );
+                    <BR>
+                    <BR>
+                            
+        let subs = ["airbrush", "caricatures", "martial arts"];
+<BR>
+        let firstDay = getNewDate(2023, 4, 1).getTime();
+<BR>
+        let lastDay = getNewDate(2023, 12, 30).getTime();
+                
+                </span>
+
+
+
+                <BR>
+                <BR>
+
+                <b>Results:</b>
+                
+                <BR>
+                <BR>
+
+                <span style="left:0; font-size:smaller" id="results"></span>
+        
+              
+                <BR>
+
+
+                <button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="runTest()">Run Test</button>
+
+		
+			
+              
+
+    </section>  
+        
+
+    
+  
+  </body>
+  
+
+
+
+<script type="module">
+
+    import { getAllTrades } from "../js/trades.js";
+    import { throwError, printError } from "../js/error.js";
+    import { getNewDate } from "../js/dates.js";
+    import { db_getLeedz } from "../js/dbTools.js";
+
+
+    async function runTest() {
+        
+        
+        // let testing = document.getElementById("testing");
+        // testing.innerHTML = "";
+
+        
+        let the_results = document.getElementById("results");
+    
+        let subs = ["airbrush", "caricatures", "martial arts"];
+
+        // let firstDay = getNewDate(year, month, day);
+        let firstDay = getNewDate(2023, 4, 1).getTime();
+        let lastDay = getNewDate(2023, 12, 30).getTime();
+
+
+
+        let results = null;
+        try {
+            // 
+            //  client <---> API Gateway <===> DB
+            //
+            // get the leedz for all trade names in subs and the dates showing
+            results = await db_getLeedz( subs, firstDay, lastDay );
+      
+      
+        } catch (error) {   
+            printError( "DB getLeedz", error.message );
+            printError( "Received JSON", results);
+            
+            // EXIT FUNCTION HERE
+            // throwError( "loadLeedzFromDB", error);
+            errorModal("Cannot load Leedz from DB: " + error.message, false); 
+            return;
+        }
+      
+          // query returns empty result set
+          if (results.length == 0) {
+            printError( "db_getLeedz", "ZERO (0) length results");
+            
+            // EXIT FUNCTION HERE
+            return;
+          }
+
+          
+
+        // insert test results into HTML above
+        //
+        let the_html = "LEEDZ RECEIVED: " + results.length + "<BR>";
+        for (var i = 0; i < results.length; i++) {
+
+            the_html += JSON.stringify( results[i] ) + "<BR>";
+
+        }
+
+        the_results.innerHTML = the_html;
+
+
+    }
+    window.runTest = runTest;
+
+
+</script>
+</html>

@@ -1,0 +1,172 @@
+<!--
+--
+-- TEST TEST TEST getUser() TEST TEST TEST
+--
+-- 
+--    
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	
+
+
+<head>
+
+    
+        <link rel="stylesheet" href="../css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="../css/modal.css" type="text/css" />
+
+
+   
+		 <meta charset="UTF-8">
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 
+		 <TITLE>Test getUser() Test</TITLE>
+	 
+	 	<!-- Favicon -->
+		 <link rel="shortcut icon" type="image/png" href="../img/favicon.png"> 
+		 <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+ 
+ 
+		 <link rel="stylesheet" href="../css/globals.css" type="text/css" />
+		 <link rel="stylesheet" href="../css/leed_edit.css" tyep="text/css"/>
+
+		 <script src="../js/inline-edit.js" type="module" defer></script> 
+	</head>
+
+
+
+
+	<body style="margin:auto 5vw">
+
+
+			
+        <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+
+			<div class="column _9" style="margin:3vh auto; font-size:2em;">
+
+                    TEST getUser()
+				</div>
+				
+				<div class="column _3" style="padding:6px;text-align:center">
+				<img src="../img/logo_2.png" style="width:120px">
+				</div>
+			
+			
+		
+			</div>
+			
+
+
+            <section>
+
+                <BR>
+                <b>Sending:</b>
+                <BR>
+
+                <BR>
+                <span id="testing">
+                    dbTools.js getUser( dave.reyes )
+                    <BR>
+                        GET API_GATEAWAY/getUser?un=dave.reyes
+                        127.0.0.1 - - "GET /getUser?un=dave.reyes HTTP/1.1" 200 -
+                </span>
+
+
+
+                <BR>
+                <BR>
+
+                <b>Results:</b>
+                
+                <BR>
+
+                <BR>            
+                
+                
+                <span id="results"></span>
+                <BR>
+                   
+              
+              
+                <BR>
+
+
+                <button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="runTest()">Run Test</button>
+
+		
+			
+              
+
+    </section>  
+        
+
+    
+  
+  </body>
+  
+
+
+
+<script type="module">
+
+    import { db_getUser } from "../js/dbTools.js";
+    import { throwError, printError } from "../js/error.js";
+
+
+    async function runTest() {
+        
+        
+        // let testing = document.getElementById("testing");
+        // testing.innerHTML = "";
+
+        
+        let results = document.getElementById("results");
+    
+        const USERNAME = "dave.reyes";
+        let json_obj = null;
+          
+        try {
+        
+        
+            // get the user object
+          await db_getUser( USERNAME )
+          .then(data => {
+    
+            if (data == null) throw new Error("null response from GET");
+            json_obj = data[0];
+    
+          })
+          .catch(error => {
+            let msg =  "(1) db_getUser(" + USERNAME + ")";
+            printError(msg, error.message);
+
+            return;
+          });
+
+
+        } catch (error) {
+            let msg =  "(2) db_getUser(" + USERNAME + ")";
+            printError(msg, error.message);
+
+            return;
+        }
+
+
+
+
+        // insert test results into HTML above
+        //
+        let the_html = "USER PROFILE RECEIVED: <BR>";
+        the_html += JSON.stringify(json_obj);
+
+        results.innerHTML = the_html;
+
+
+    }
+    window.runTest = runTest;
+
+
+</script>
+</html>

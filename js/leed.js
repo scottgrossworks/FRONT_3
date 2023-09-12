@@ -3,7 +3,7 @@
  */
 import { getCurrentUser, isSubscribed } from "./user.js";
 import { errorModal, printError, throwError } from "./error.js";
-import { db_getLeedz, db_updateLeed, CHG_LEED, DEL_LEED, BUY_LEED, REP_LEED, FAILURE } from "./dbTools.js";
+import { db_getLeedz, db_updateLeed, CHG_LEED, DEL_LEED, BUY_LEED, REP_LEED, DB_FAIL } from "./dbTools.js";
 
 import { getMonth,getYear } from "./dates.js";
 
@@ -635,7 +635,7 @@ export async function saveLeedChanges( leedObj ) {
         }
 
         // received error code
-        if (results.res == FAILURE) {
+        if (results.res == DB_FAIL) {
           throwError("Update Leed", results.msg);
         }
 
@@ -690,7 +690,7 @@ export async function buyCurrentLeed() {
         }
 
         // received error code
-        if (results.res == FAILURE) {
+        if (results.res == DB_FAIL) {
           throwError("Buy Leed", results.msg);
         }
 
@@ -752,7 +752,7 @@ export async function deleteCurrentLeed() {
         }
 
         // received error code
-        if (results.res == FAILURE) {
+        if (results.res == DB_FAIL) {
           throwError("Delete Leed", results.msg);
         }
 
@@ -811,7 +811,7 @@ export async function reportCurrentLeed() {
         }
 
         // received error code
-        if (results.res == FAILURE) {
+        if (results.res == DB_FAIL) {
           throwError("Report Leed", results.msg);
         }
 

@@ -1,0 +1,169 @@
+<!--
+--
+-- TEST TEST TEST getTrades() TEST TEST TEST
+--
+-- 
+--    
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	
+
+
+<head>
+
+    
+        <link rel="stylesheet" href="../css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="../css/modal.css" type="text/css" />
+
+
+   
+		 <meta charset="UTF-8">
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 
+		 <TITLE>Test getTrades() Test</TITLE>
+	 
+	 	<!-- Favicon -->
+		 <link rel="shortcut icon" type="image/png" href="../img/favicon.png"> 
+		 <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+ 
+ 
+		 <link rel="stylesheet" href="../css/globals.css" type="text/css" />
+		 <link rel="stylesheet" href="../css/leed_edit.css" tyep="text/css"/>
+
+		 <script src="../js/inline-edit.js" type="module" defer></script> 
+	</head>
+
+
+		 
+
+
+	<body style="margin:auto 5vw">
+	
+
+
+			
+        <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+
+			<div class="column _9" style="margin:3vh auto; font-size:2em;">
+
+                    TEST getTrades()
+				</div>
+				
+				<div class="column _3" style="padding:6px;text-align:center">
+				<img src="../img/logo_2.png" style="width:120px">
+				</div>
+			
+			
+		
+			</div>
+			
+
+
+            <section>
+
+                <BR>
+                <b>Sending:</b>
+                <BR>
+
+                <BR>
+                <span id="testing">
+                    trades.js getAllTrades().then((response) => trades = response 
+                    <BR>
+                    GET API_GATEWAY/getTrades
+                </span>
+
+
+
+                <BR>
+                <BR>
+
+                <b>Results:</b>
+                
+                <BR>
+
+                <BR>            
+                
+                
+                <span id="results"></span>
+                <BR>
+                   
+              
+              
+                <BR>
+
+
+                <button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="runTest()">Run Test</button>
+
+		
+			
+              
+
+    </section>  
+        
+
+    
+  
+  </body>
+  
+
+
+
+<script type="module">
+
+    import { getAllTrades } from "../js/trades.js";
+    import { throwError, printError } from "../js/error.js";
+
+
+    async function runTest() {
+        
+        
+        // let testing = document.getElementById("testing");
+        // testing.innerHTML = "";
+
+        
+        let results = document.getElementById("results");
+    
+
+        let trades = [];
+        try {
+          await getAllTrades().then((response) => trades = response ); 
+          
+          if (trades == null) {
+            throw new Error("server returned null trades.");
+          }
+
+          if (trades.length == undefined || trades.length == 0) {
+            throw new Error("server returned empty (0) trades.");
+          }
+
+
+        } catch (error) {
+          
+            
+          printError("getTrades", error);
+        
+          let errorMsg = "ERROR in getTrades()<BR>" + error.message;
+          results.innerHTML = errorMsg;
+          return;
+        }
+
+
+        // insert test results into HTML above
+        //
+        let the_html = "TRADES RECEIVED: " + trades.length + "<BR>";
+        for (var i = 0; i < trades.length; i++) {
+            var the_trade = trades[i].tn + "--" + trades[i].nl;
+            the_html += the_trade + "<BR>";
+        }
+
+        results.innerHTML = the_html;
+
+
+    }
+    window.runTest = runTest;
+
+
+</script>
+</html>

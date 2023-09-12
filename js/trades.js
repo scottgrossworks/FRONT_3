@@ -12,149 +12,149 @@ let TRADES_LIST = [
     
     
   {
-    trade_name: "acrobat"
+    tn: "acrobat"
   },
   
   {
-    trade_name: "aerialist"
+    tn: "aerialist"
  
   },
 
   {
-    trade_name: "airbrush"
+    tn: "airbrush"
   },
   
   {
-    trade_name: "balloon decor"
+    tn: "balloon decor"
   },
 
   {
-    trade_name: "balloon twister"
+    tn: "balloon twister"
   },
 
   {
-    trade_name: "bar tender"
-  },
-
-
-  {
-    trade_name: "braiding"
-
-  },
-
-  {
-    trade_name: "caricatures"
+    tn: "bar tender"
   },
 
 
   {
-    trade_name: "casino"
+    tn: "braiding"
+
   },
 
   {
-    trade_name: "clown"
-  },
-
-  {
-    trade_name: "comedian"
+    tn: "caricatures"
   },
 
 
   {
-    trade_name: "dancer"
+    tn: "casino"
   },
-  
+
   {
-    trade_name: "detailer"
+    tn: "clown"
+  },
+
+  {
+    tn: "comedian"
+  },
+
+
+  {
+    tn: "dancer"
   },
   
+  {
+    tn: "detailer"
+  },
+  
 
   {
-    trade_name: "dj"
+    tn: "dj"
   },
 
   {
-    trade_name: "facepainter"
-  },
-
-
-  {
-    trade_name: "food truck"
-  },
-
-  {
-    trade_name: "golf"
+    tn: "facepainter"
   },
 
 
   {
-    trade_name: "gymnastics"
+    tn: "food truck"
+  },
+
+  {
+    tn: "golf"
   },
 
 
   {
-    trade_name: "hairstylist"
+    tn: "gymnastics"
+  },
+
+
+  {
+    tn: "hairstylist"
   },
 
   
   {
-    trade_name: "henna"
+    tn: "henna"
   },
 
     
   {
-    trade_name: "hula hoop"
+    tn: "hula hoop"
   },
 
 
  
   {
-    trade_name: "inflatables"
+    tn: "inflatables"
   },
 
 
   
   
   {
-    trade_name: "magician"
+    tn: "magician"
 
   },
 
 
   {
-    trade_name: "makeup"
+    tn: "makeup"
 
   },
 
   {
-    trade_name: "martial arts"
-
-  },
-
-
-  
-
-  {
-    trade_name: "musician"
+    tn: "martial arts"
 
   },
 
 
   
+
   {
-    trade_name: "nails"
+    tn: "musician"
+
+  },
+
+
+  
+  {
+    tn: "nails"
 
   },
 
 
   {
-    trade_name: "piano tuner"
+    tn: "piano tuner"
 
 
   },
 
   {
-    trade_name: "pizza"
+    tn: "pizza"
 
 
   },
@@ -162,48 +162,48 @@ let TRADES_LIST = [
   
 
   {
-    trade_name: "photo booth"
+    tn: "photo booth"
 
   },
 
 
   {
-    trade_name: "pony rides"
+    tn: "pony rides"
 
 
   },
 
   {
-    trade_name: "security"
+    tn: "security"
 
   },
 
   {
-    trade_name: "surfing"
+    tn: "surfing"
 
   },
 
   {
-    trade_name: "sushi"
+    tn: "sushi"
 
   },
 
   {
-    trade_name: "tattoos"
-
-
-  },
-
-
-  {
-    trade_name: "tacos"
+    tn: "tattoos"
 
 
   },
 
 
   {
-    trade_name: "tutor"
+    tn: "tacos"
+
+
+  },
+
+
+  {
+    tn: "tutor"
 
   },
 
@@ -220,7 +220,7 @@ export function isValidTrade( tradeName ) {
   
   for (var i = 0; i < TRADES_LIST.length; i++) {
     
-    if ( TRADES_LIST[i].trade_name == tradeName ) {
+    if ( TRADES_LIST[i].tn == tradeName ) {
      return true;
     }
   }
@@ -303,8 +303,8 @@ export function getColorForTrade(trade_name) {
  * 
  * [
  * {
-   trade_name: "caricatures",
-   num_leedz: 5
+   tn: "caricatures",
+   nl: 5
  * }, .... 
  * ]
 */
@@ -330,12 +330,12 @@ export function initTradesColumn( all_trades ) {
   
     // set the label
     let theLabel = newNode.querySelector("label");
-    theLabel.textContent = trade.trade_name;
+    theLabel.textContent = trade.tn;
 
     // set the leed count as a superscript
     // if there is an error we are using default leedz without numbers
-    if (trade.num_leedz != undefined)
-      newNode.querySelector("sup").textContent = trade.num_leedz;
+    if (trade.nl != undefined)
+      newNode.querySelector("sup").textContent = trade.nl;
 
 
     let checkBox = newNode.querySelector(".trade_checkbox");
@@ -345,8 +345,8 @@ export function initTradesColumn( all_trades ) {
     // check SUBSCRIPTIONS
     // is the user subscribed to this trade?
     var is_sub = false;
-    if ( isSubscribed( trade.trade_name ) ) {
-      turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
+    if ( isSubscribed( trade.tn ) ) {
+      turnTrade_On(checkBox, radioButton, theLabel, trade.tn);
       is_sub = true;
     }
     
@@ -413,19 +413,19 @@ function tradeListener(trade, checkBox, radioButton, theLabel) {
 
   try {
 
-      if ( isSubscribed( trade.trade_name)  ) { // TRADE is ON
+      if ( isSubscribed( trade.tn)  ) { // TRADE is ON
 
-        removeSubscription( trade.trade_name );
+        removeSubscription( trade.tn );
         turnTrade_Off(checkBox, radioButton, theLabel);
 
 
       } else { // TRADE is OFF
 
-        saveSubscription( trade.trade_name )
+        saveSubscription( trade.tn )
         
         .then( response => { 
           
-          turnTrade_On(checkBox, radioButton, theLabel, trade.trade_name);
+          turnTrade_On(checkBox, radioButton, theLabel, trade.tn);
 
         }).catch(error => {
           // Handle error
@@ -501,8 +501,8 @@ function createColor(numOfSteps, step) {
  * all_trades:
  * [
  * {
-    trade_name: "caricatures",
-    num_leedz: 5,
+    tn: "caricatures",
+    nl: 5,
  * }, .... 
  * ]
  * 
@@ -515,22 +515,20 @@ function seedColors( all_trades ) {
     for (let i = 0; i < num_trades; i++ ) {
       
       // is there ALREADY a color assigned to this trade_name in cache?
-      var theColor = window.sessionStorage.getItem( all_trades[i].trade_name );
+      var theColor = window.sessionStorage.getItem( all_trades[i].tn );
       if (theColor != null) {
-        COLORS.set( all_trades[i].trade_name,  theColor ); 
+        COLORS.set( all_trades[i].tn,  theColor ); 
       
-        // console.log("%cCACHE COLOR FOR " + all_trades[i].trade_name, "color: " + theColor + ";");
       
       } else {
         // create a new color and assign it to trade_name
         theColor = createColor( num_trades, i );
-        COLORS.set( all_trades[i].trade_name,  theColor );
+        COLORS.set( all_trades[i].tn,  theColor );
 
         // cache this in case of browser refresh
-        window.sessionStorage.setItem( all_trades[i].trade_name, theColor );
+        window.sessionStorage.setItem( all_trades[i].tn, theColor );
       }
 
-      // console.log("%c" + i + "=" + all_trades[i].trade_name, "color: " + theColor);
     
     }
   }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-import { db_getUser, db_updateUser, ADD_SUB, REM_SUB, DEL_USER, CHG_USER, FAILURE } from "./dbTools.js";
+import { db_getUser, db_updateUser, ADD_SUB, REM_SUB, DEL_USER, CHG_USER, DB_FAIL } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 
 export const CACHE_USER_KEY = "U";
@@ -27,7 +27,7 @@ export async function deleteCurrentUser() {
   if (isGuestUser())
     throwError("deleteCurrentUser", "Cannot delete Guest User");
 
-    
+
     let resObj = [];   
     try {
       // get the user object
@@ -38,7 +38,7 @@ export async function deleteCurrentUser() {
         resObj = data[0];
 
         // received error code
-        if (resObj.res == FAILURE) {
+        if (resObj.res == DB_FAIL) {
           throwError("Delete User", resObj.msg);
         }
 
@@ -418,7 +418,7 @@ export async function saveSubscription( trade_name ) {
         if (data == null) throw new Error("null response from GET");
         
         resObj = data[0];
-        if (resObj.res == FAILURE) {
+        if (resObj.res == DB_FAIL) {
           // ERROR CODE
           throwError("Trade Subscribe", resObj.msg);
         }

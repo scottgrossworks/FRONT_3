@@ -1087,6 +1087,14 @@
             current_user = guestUser();
       
 
+
+          //
+          // is this the guest user coming back from cache or another landing page
+          //
+          } else if (url_username == "guest.user") {
+
+            current_user = guestUser();
+
       
           } else {
 

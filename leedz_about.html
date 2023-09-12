@@ -108,22 +108,6 @@
 
         const CURRENT_USER = getCurrentUser(true);
  
-        if (CURRENT_USER == null || CURRENT_USER.username == null) {
-            
-            printError("Leed Posted", "No current user");
-            errorModal("No current user logged in.", true);
-  
-        } else {
-
-            let user_welcome = document.getElementById("user_welcome");
-            user_welcome.innerHTML = CURRENT_USER.username;
-           
-            let user_email = document.getElementById("user_email");
-            user_email.innerHTML = CURRENT_USER.email;
-        }
-
-
-
 
 
         /**

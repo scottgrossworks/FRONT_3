@@ -8,216 +8,18 @@ import { hideActionWindow } from "./action.js";
 
 const COLORS = new Map();
 
-let TRADES_LIST = [
+let TRADES_LIST = []; // no default trades -- use empty list
     
-    
-  {
-    tn: "acrobat"
-  },
-  
-  {
-    tn: "aerialist"
- 
-  },
-
-  {
-    tn: "airbrush"
-  },
-  
-  {
-    tn: "balloon decor"
-  },
-
-  {
-    tn: "balloon twister"
-  },
-
-  {
-    tn: "bar tender"
-  },
-
-
-  {
-    tn: "braiding"
-
-  },
-
-  {
-    tn: "caricatures"
-  },
-
-
-  {
-    tn: "casino"
-  },
-
-  {
-    tn: "clown"
-  },
-
-  {
-    tn: "comedian"
-  },
-
-
-  {
-    tn: "dancer"
-  },
-  
-  {
-    tn: "detailer"
-  },
-  
-
-  {
-    tn: "dj"
-  },
-
-  {
-    tn: "facepainter"
-  },
-
-
-  {
-    tn: "food truck"
-  },
-
-  {
-    tn: "golf"
-  },
-
-
-  {
-    tn: "gymnastics"
-  },
-
-
-  {
-    tn: "hairstylist"
-  },
-
-  
-  {
-    tn: "henna"
-  },
-
-    
-  {
-    tn: "hula hoop"
-  },
-
-
- 
-  {
-    tn: "inflatables"
-  },
-
-
-  
-  
-  {
-    tn: "magician"
-
-  },
-
-
-  {
-    tn: "makeup"
-
-  },
-
-  {
-    tn: "martial arts"
-
-  },
-
-
-  
-
-  {
-    tn: "musician"
-
-  },
-
-
-  
-  {
-    tn: "nails"
-
-  },
-
-
-  {
-    tn: "piano tuner"
-
-
-  },
-
-  {
-    tn: "pizza"
-
-
-  },
-
-  
-
-  {
-    tn: "photo booth"
-
-  },
-
-
-  {
-    tn: "pony rides"
-
-
-  },
-
-  {
-    tn: "security"
-
-  },
-
-  {
-    tn: "surfing"
-
-  },
-
-  {
-    tn: "sushi"
-
-  },
-
-  {
-    tn: "tattoos"
-
-
-  },
-
-
-  {
-    tn: "tacos"
-
-
-  },
-
-
-  {
-    tn: "tutor"
-
-  },
-
-];
-
-
-
+   
 
 /**
  * is this a valid trade name?
- *  compare against default trades 
+ *  
  */
 export function isValidTrade( tradeName ) {
-  
+
+  if (TRADES_LIST.length == 0) return false;
+
   for (var i = 0; i < TRADES_LIST.length; i++) {
     
     if ( TRADES_LIST[i].tn == tradeName ) {
@@ -230,7 +32,7 @@ export function isValidTrade( tradeName ) {
 
 
 /**
- * 
+ * populates TRADES_LIST
  */
 export async function getAllTrades() {
 
@@ -250,7 +52,7 @@ export async function getAllTrades() {
     } catch (error) {
 
       printError("db_getTrades()", error );
-      printError("getAllTrades()", "Using DEFAULT trades list");
+      printError("getAllTrades()", "Using EMPTY trades list");
       retJSON = TRADES_LIST;
 
       // show error modal dialog

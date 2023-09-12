@@ -161,7 +161,7 @@ export async function initUser( login ) {
         CURRENT_USER.zip_radius = (resObj.zip_radius != null) ? resObj.zip_radius : null;
 
         CURRENT_USER.subs = (resObj.subs != null) ? resObj.subs : [];
-        CURRENT_USER.leedz_bought = (resObj.leedz_bought != null) ? resObj.leedz_bought : [];
+        // CURRENT_USER.leedz_bought = (resObj.leedz_bought != null) ? resObj.leedz_bought : [];
 
 
         // USER BADGES
@@ -203,7 +203,7 @@ export function blankUserObject() {
   BLANK_USER.zip_radius = null;
 
   BLANK_USER.subs = [];
-  BLANK_USER.leedz_bought = [];
+  // BLANK_USER.leedz_bought = [];
   BLANK_USER.badges = [];
 
   return BLANK_USER;
@@ -251,8 +251,8 @@ export async function saveUserChanges( userObj ) {
   if (userObj.subs != null)
     CURRENT_USER.subs = userObj.subs;
 
-  if (userObj.leedz_bought != null)
-    CURRENT_USER.leedz_bought = userObj.leedz_bought;
+  // if (userObj.leedz_bought != null)
+  //  CURRENT_USER.leedz_bought = userObj.leedz_bought;
 
   if (userObj.badges != null)
     CURRENT_USER.badges = userObj.badges;

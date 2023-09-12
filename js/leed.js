@@ -708,11 +708,10 @@ export async function buyCurrentLeed() {
 
 
     // on success -- update current user object with new leed bought
-    if (current_user.leedz_bought.indexOf( CURRENT_LEED.id ) == -1) { // not in list already
-      current_user.leedz_bought.push( CURRENT_LEED.id );
-    }
+    // if (current_user.leedz_bought.indexOf( CURRENT_LEED.id ) == -1) { // not in list already
+    //   current_user.leedz_bought.push( CURRENT_LEED.id );
+    // }
 
-    console.log("BACK FROM DB BUY RESULTS=" + results);
 
     return results;
 }
@@ -770,10 +769,10 @@ export async function deleteCurrentLeed() {
 
     // on success -- remove leed from list of leedz_bought
     //
-    let index = current_user.leedz_bought.indexOf( CURRENT_LEED.id );
-    if (index != -1) {
-      current_user.leedz_bought.splice( index, 1 );
-    }
+    // let index = current_user.leedz_bought.indexOf( CURRENT_LEED.id );
+    // if (index != -1) {
+    //   current_user.leedz_bought.splice( index, 1 );
+    // }
 
   
     console.log("BACK FROM DB DELETE RESULTS=" + results);

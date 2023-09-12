@@ -1,0 +1,176 @@
+<!--
+--
+-- TEST TEST TEST getDeetz() TEST TEST TEST
+--
+-- 
+--    
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	
+
+
+<head>
+
+    
+        <link rel="stylesheet" href="../css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="../css/modal.css" type="text/css" />
+
+
+   
+		 <meta charset="UTF-8">
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 
+		 <TITLE>Test getDeetz() Test</TITLE>
+	 
+	 	<!-- Favicon -->
+		 <link rel="shortcut icon" type="image/png" href="../img/favicon.png"> 
+		 <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+ 
+ 
+		 <link rel="stylesheet" href="../css/globals.css" type="text/css" />
+		 <link rel="stylesheet" href="../css/leed_edit.css" tyep="text/css"/>
+
+		 <script src="../js/inline-edit.js" type="module" defer></script> 
+	</head>
+
+
+		 
+
+
+	<body style="margin:auto 5vw">
+	
+
+
+			
+        <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+
+			<div class="column _9" style="margin:3vh auto; font-size:2em;">
+
+                    TEST getDeetz()
+				</div>
+				
+				<div class="column _3" style="padding:6px;text-align:center">
+				<img src="../img/logo_2.png" style="width:120px">
+				</div>
+			
+			
+		
+			</div>
+			
+
+
+            <section>
+
+                <BR>
+                <b>Sending:</b>
+                <BR>
+                    Request URL: /getDeetz?id=3001
+                    <BR>
+                    127.0.0.1 - - "GET /getDeetz?id=3001 HTTP/1.1" 200 -
+                <BR>
+                <span id="testing">
+
+
+
+                    
+                
+                </span>
+
+
+
+                <BR>
+                <BR>
+
+                <b>Results:</b>
+                
+                <BR>
+                <BR>
+
+                <span style="left:0; font-size:smaller" id="results"></span>
+        
+              
+                <BR>
+
+
+                <button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="runTest()">Run Test</button>
+
+		
+			
+              
+
+    </section>  
+        
+
+    
+  
+  </body>
+  
+
+
+
+<script type="module">
+
+    import { throwError, printError } from "../js/error.js";
+
+    import { db_getDeetz } from "../js/dbTools.js";
+
+
+    async function runTest() {
+        
+        
+        // let testing = document.getElementById("testing");
+        // testing.innerHTML = "";
+
+        
+   
+        let leed_details = null;
+
+        try {
+        
+            // API request --> DB   
+            // load full leed details for leed_preview.id
+            //
+
+            await db_getDeetz( 3001 )
+                .then(data => {
+
+                if (data == null) throw new Error("null response from GET");
+                leed_details = data[0];
+                
+                // query returns empty result set
+                if (leed_details == null) throw new Error("No leed details for id: " + leed_preview.id);
+                    
+                })
+            .catch(error => {
+
+                printError( "getDeetz()", error.message );
+                // EXIT FUNCTION HERE
+                throwError( "showLeedAction()", error); 
+            });
+   
+        } catch (error) {
+            let msg =  "db_getDeetz(3001)";
+            printError(msg, error.message);
+
+            return;
+        }
+
+
+        // insert test results into HTML above
+        //
+        let the_results = document.getElementById("results");
+        let the_html = "DEETZ RECEIVED: <BR>";
+
+        the_html += JSON.stringify( leed_details );
+
+        the_results.innerHTML = the_html;
+    }
+
+        
+    window.runTest = runTest;
+
+
+</script>
+</html>

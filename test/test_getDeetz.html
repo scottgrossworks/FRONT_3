@@ -146,8 +146,7 @@
             .catch(error => {
 
                 printError( "getDeetz()", error.message );
-                // EXIT FUNCTION HERE
-                throwError( "showLeedAction()", error); 
+                return;
             });
    
         } catch (error) {

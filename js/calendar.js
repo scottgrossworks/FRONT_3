@@ -404,8 +404,6 @@ function removeMatchingLeed( each_day, leed_id ) {
 function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
 
-    console.log("%cCREATING CALENDAR LEED " + leed_fromDB.trade, "color: " + trade_color + ";");
-
     // create the DOM node
     const newLeed = document.createElement("button");
     newLeed.className = "trade_radio";
@@ -440,6 +438,8 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     const endTime = hours_end[0] + ":" + getMinutes( isoEnd ) + hours_end[1];
 
 
+
+    // console.log("%cCREATING CALENDAR LEED " + leed_fromDB.trade + " START=" + isoStart, "color: " + trade_color + ";");
 
   
     /////////////////////////////////////////////////////////////////////////////////
@@ -492,7 +492,7 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
         
 
         try {
-            showLeedAction( leed_fromDB );
+            showLeedAction( leed_fromDB, true );
 
         } catch (error) {
             printError("showLeedAction", error);

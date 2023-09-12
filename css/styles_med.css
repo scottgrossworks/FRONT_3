@@ -1,18 +1,19 @@
 
 /*
- * LARGE SCREENS
+ * MEDIUM SCREENS
  */
 
  @import "./globals.css";
 
 
  
-@media screen and (min-width: 600px) and (max-width: 899px) {
+@media screen and (min-width: 600px) and (max-width: 949px) {
 
 
       
     html {
       
+    width:100vw;
     font-size: 14px;
     line-height: 1.2;
     font-family: var(--FONT_3);
@@ -40,10 +41,14 @@
   
     
 
-  #calendar_main {
-    left:0 !important;
 
-  }
+    #calendar_main {
+
+      left:0 !important;
+      width:100%;
+      margin:0, auto;
+  
+    }
 
 
 

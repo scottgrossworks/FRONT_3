@@ -85,45 +85,44 @@ leed_details contains
 * if someone else has posted this leed -- show BUY and REPORT buttons
 *
 */
-export async function showLeedAction( leed_preview ) {
+export async function showLeedAction( leed_preview , gotoDB ) {
 
     // SET THE WINDOW SIZE
-    // will show everyhing at the very end
+    // will show everything at the very end
     let action = document.getElementById("action_panel");
     // var action_height = Math.floor( window.innerHeight * 0.7 );
     action.style.height = "100%";
 
 
 
+    const CURRENT_LEED = getCurrentLeed();
+    let leed_details = CURRENT_LEED;
+
+
     // API request --> DB   
     // load full leed details for leed_preview.id
     //
-    let leed_details = null;
-    await db_getDeetz( leed_preview.id )
-        .then(data => {
+    if (gotoDB) {
 
-          if (data == null) throw new Error("null response from GET");
-          leed_details = data[0];
-        
-          // query returns empty result set
-          if (leed_details == null) throw new Error("No leed details for id: " + leed_preview.id);
+        await db_getDeetz( leed_preview.id )
+            .then(data => {
+
+            if (data == null) throw new Error("null response from GET");
+            leed_details = data[0];
             
-        })
-    .catch(error => {
+            // query returns empty result set
+            if (leed_details == null) throw new Error("No leed details for id: " + leed_preview.id);
+                
+            })
+        .catch(error => {
 
-        printError( "getDeetz()", error.message );
-        // EXIT FUNCTION HERE
-        throwError( "showLeedAction()", error); 
-    });
+            printError( "getDeetz()", error.message );
+            // EXIT FUNCTION HERE
+            throwError( "showLeedAction()", error); 
+        });
+    }
 
-
-    
-    const CURRENT_LEED = getCurrentLeed();
-    
-    console.log("---------CURRENT LEED---------");
-    console.log(CURRENT_LEED);
-
-
+        
     //
     // START DATE
     //
@@ -408,9 +407,12 @@ export async function showLeedAction( leed_preview ) {
     // got action above
     // let action = document.getElementById("action_panel");
     action.style.display = "block";
+    var screen = action.getAttribute("screen");
+    if (screen == 0) {
+        action.className = "modal";
+    }
 
-    // got screen above
-    // var screen = action.getAttribute("screen");
+
     // let closeBut = document.getElementById("buy_modal_close");
     // closeBut.style.display = "flex";
 

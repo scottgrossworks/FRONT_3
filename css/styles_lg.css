@@ -7,19 +7,19 @@
 
 
  
-@media screen and (min-width: 900px) {
+@media screen and (min-width: 950px) {
 
 
       
     html {
       
-      max-width: 1600px;
-
+    width:100%;
     font-size: 14px;
     line-height: 1.2;
     font-family: var(--FONT_3);
 
 
+    margin: 0 1vw;
     
     --screen_size: L;
     } 
@@ -43,13 +43,13 @@
 
 
 
+
   #calendar_main {
 
     align-self: flex-start;
-    max-width: 650px;
-
-    margin-left: 35px;
-    margin-right:0;
+    width:100%;
+    padding-left:1vw;
+    margin: 0 auto;
   }
 
 

@@ -870,14 +870,11 @@
             
   
             // Is there a current leed in cache
-            // possibly just being edited in another window?
             let current_leed = getCurrentLeed();
-
-        
             if (( current_leed.id != null ) && (isSubscribed( current_leed.trade ))) {
                     
                 try {
-                  showLeedAction(current_leed);
+                  showLeedAction(current_leed, false );
 
                 } catch (error) {
                   printError("cssScreenSize", error);
@@ -940,7 +937,7 @@
         // closeBut.style.display = "flex";
 
         let action = document.getElementById("action_panel");
-        action.classList.replace("column", "modal"); 
+        action.className = "modal";
   
       }
       window.actionModal = actionModal;
@@ -957,6 +954,8 @@
 
         let action = document.getElementById("action_panel");
         action.classList.remove("modal");
+        action.classList.add("column");
+        action.classList.add("_35");
         action.style.display = "none";
 
         // let closeBut = document.getElementById("buy_modal_close");

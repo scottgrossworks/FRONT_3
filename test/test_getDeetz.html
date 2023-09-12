@@ -38,8 +38,7 @@
 
 		 
 
-
-	<body style="margin:auto 5vw">
+	<body style="width:100vw;margin:auto 5vw">
 	
 
 
@@ -146,8 +145,7 @@
             .catch(error => {
 
                 printError( "getDeetz()", error.message );
-                // EXIT FUNCTION HERE
-                throwError( "showLeedAction()", error); 
+                return;
             });
    
         } catch (error) {

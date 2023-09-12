@@ -93,7 +93,7 @@
           <a href="./leedz_contact.html">Contact</a>
 
 
-          <a href="./index.html" id="dd_logout">Log Out</a>
+          <a id="dd_logout">Log Out</a>
         </div>
       </div>
 
@@ -430,6 +430,8 @@
     window.printError = printError;
     window.errorModalClose = errorModalClose;
       
+    const URL_LOGIN = "./index.html";
+
     const URL_LEED_BOUGHT = "./leed_bought.html";
     const URL_LEED_CREATE = "./leed_create.html";
     const URL_LEED_DELETED = "./leed_deleted.html";
@@ -473,10 +475,32 @@
          export function dropdownMenu() {
 
           if (isGuestUser()) {  
-            const ddAccount = document.getElementById("dd_account");
+
+            // ACCOUNT DROPDOWN
+            //
+            var ddAccount = document.getElementById("dd_account");
             ddAccount.style.opacity = 0.5;
             ddAccount.setAttribute("onclick", "printError('openUserEdit', 'Cannot edit Guest user account')");
+
+
+            // LOGIN / LOGOUT DROPDOWN
+            // <a href="./index.html" id="dd_logout">Log Out</a>
+            var ddLogout = document.getElementById("dd_logout");
+            ddLogout.style.opacity = 1;
+            ddLogout.setAttribute("onclick", "window.open('" + URL_LOGIN + "', '_self')");
+            ddLogout.innerHTML = "Log In";
+
+          } else {
+            
+            // <a href="./index.html" id="dd_logout">Log Out</a>
+            var ddLogout = document.getElementById("dd_logout");
+            ddLogout.style.opacity = 0.5;
+            var the_url = "./index.html?" + USERNAME_URL_PARAM + "=guest.user";
+            ddLogout.setAttribute("onclick", "window.open('" + the_url + "', '_self')");
+            ddLogout.innerHTML = "Log Out";
           }
+
+
 
           const menu = document.getElementById("dropdown_menu");
           menu.classList.toggle("show");

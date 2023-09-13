@@ -74,7 +74,7 @@ export async function db_updateUser( code, user_obj ) {
     }
 
 
-    let json_obj = '{ "un": user_obj.username, "cd": code, "res":1 }';
+    let json_obj = '{ "un": ' + user_obj.un + ', "cd": code, "res":1 }';
 
     return json_obj;
 }
@@ -122,7 +122,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
     // FIXME FIXMFIXME
     // 
-    let json_obj = '{ "id": leed_obj.id, "cd": code, "res":1 }';
+    let json_obj = '{ "id": ' + leed_obj.id + ' "cd": code, "res":1 }';
 
     return json_obj;
 }

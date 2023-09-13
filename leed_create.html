@@ -105,15 +105,15 @@
 
 
 
-            <!-- NOTE (TITLE) -->
-            <tr id="row_note">
+            <!-- TITLE -->
+            <tr id="row_title">
                         
                 <TD class="labelTD">Title: </TD>
                 
-                <td id="td_note" data-inlineType="text" data-inlineName="note" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+                <td id="td_title" data-inlineType="text" data-inlineName="title" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
                 <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="editField('row_note', createOptions)"/>
+                    <input type="button" value="Edit" onclick="editField('row_title', createOptions)"/>
                 </td>
 
                <TD class="eyeballTD"><img src="./img/eye_show.png" id="1_eye" class="lock"></TD>
@@ -368,7 +368,7 @@
          */
 		function backButton() {
 
-			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
+			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
 			window.open(href, "_self");
 
 			clearCurrentLeed();
@@ -393,21 +393,21 @@
 			switch(rowName) {
 
                 case "row_trade":
-                    LEED_CHANGES.trade = rowData["trade"];
+                    LEED_CHANGES.tn = rowData["trade"];
                     break;
 
-				case "row_note":
-					LEED_CHANGES.note = rowData["note"];
+				case "row_title":
+					LEED_CHANGES.ti = rowData["title"];
 					break;
 
 				case "row_start":
                     var dateTime = DTfromPretty( rowData["start"] );
-					LEED_CHANGES.start = dateTime;
+					LEED_CHANGES.st = dateTime;
 					break;
 
                 case "row_end":
                     var dateTime = DTfromPretty( rowData["end"] );
-                    LEED_CHANGES.end = dateTime;
+                    LEED_CHANGES.et = dateTime;
                     break;
 
 
@@ -423,20 +423,20 @@
                     /**
                     // set later on submit
                 case "row_zip":
-                    LEED_CHANGES.zip = rowData["zip"];
+                    LEED_CHANGES.zp = rowData["zip"];
                     break;
                     */
 
 				case "row_loc":
-					LEED_CHANGES.loc = rowData["loc"];
+					LEED_CHANGES.lc = rowData["loc"];
 					break;
 
 				case "row_det":
-					LEED_CHANGES.det = rowData["det"];
+					LEED_CHANGES.dt = rowData["det"];
 					break; 
 					
 				case "row_reqs":
-					LEED_CHANGES.reqs = rowData["reqs"];
+					LEED_CHANGES.rq = rowData["reqs"];
 					break; 
 
 
@@ -507,33 +507,33 @@ async function postLeed() {
 
         // LEED verification
         //            
-        if (LEED_CHANGES.trade == null) {
+        if (LEED_CHANGES.tn == null) {
             printError("Post Leed", "Trade must be set");
             errorModal("Error Posting Leed: Trade must be set.", true);
             return;
         }
 
         
-        if (LEED_CHANGES.note == null) {
+        if (LEED_CHANGES.ti == null) {
             printError("Post Leed", "Title must be set");
             errorModal("Error Posting Leed: Title must be set.", true);
             return;
         }
 
 
-        if (LEED_CHANGES.start == null) {
+        if (LEED_CHANGES.st == null) {
             printError("Post Leed", "Start must be set");
             errorModal("Error Posting Leed: Start must be set.", true);
             return;
         }
 
-        if (LEED_CHANGES.start > LEED_CHANGES.end) {
+        if (LEED_CHANGES.st > LEED_CHANGES.et) {
             printError("Post Leed", "Start date must precede end date");
             errorModal("Error Posting Leed: Start date must precede end date.", true);
             return;
         }
 
-        if (LEED_CHANGES.loc == null) {
+        if (LEED_CHANGES.lc == null) {
             printError("Post Leed", "Location must be set");
             errorModal("Error Posting Leed: Location must be set.", true);
             return;
@@ -542,7 +542,7 @@ async function postLeed() {
         } else {
 
             // SET THE LEED_CHANGES ZIP HERE
-            let the_zip = LEED_CHANGES.loc.slice(-5);
+            let the_zip = LEED_CHANGES.lc.slice(-5);
 
 
             // NOT A 5-DIGIT NUMBER
@@ -553,11 +553,11 @@ async function postLeed() {
                 return;
 
             }   
-            LEED_CHANGES.zip = the_zip;
+            LEED_CHANGES.zp = the_zip;
         }
 
     
-        if (LEED_CHANGES.det == null) {
+        if (LEED_CHANGES.dt == null) {
             printError("Post Leed", "Details must be set");
             errorModal("Error Posting Leed: Some details must be set.", true);
             return;
@@ -620,7 +620,7 @@ async function postLeed() {
     // GOTO landing page
     if (resObj.res == DB_SUCCESS) {
         // take user to success landing page
-        // let landing_url = LEED_POSTED_LANDING_URL + "?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
+        // let landing_url = LEED_POSTED_LANDING_URL + "?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
        let landing_URL = LEED_POSTED_LANDING_URL;
         window.open( landing_url, "_self");
     }
@@ -677,7 +677,7 @@ async function postLeed() {
          */
 		function cancelCreate() {
 
-            var elements = ["td_trade", "td_note",
+            var elements = ["td_trade", "td_",
                             "td_start", "td_end", "td_loc", "td_em", 
                             "td_ph", "td_det", "td_reqs", "td_pr" ];
 
@@ -722,10 +722,10 @@ async function postLeed() {
         window.onload = (event) => {
 
             let element = document.getElementById("td_creator");
-            element.innerHTML = "<B>" + CURRENT_USER.username + "</B>";
+            element.innerHTML = "<B>" + CURRENT_USER.un + "</B>";
 
             inlineEdit('row_trade', createOptions);            
-            inlineEdit('row_note', createOptions);
+            inlineEdit('row_title', createOptions);
             inlineEdit('row_start', createOptions);
             inlineEdit('row_end', createOptions);
             inlineEdit('row_loc', createOptions);

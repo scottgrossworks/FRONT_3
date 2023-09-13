@@ -263,9 +263,9 @@
 
 
 
-          <div class="row lic_row" id="note">
-            <div class="column lic_column _25 label" id="note_label">Event</div>
-            <div class="column lic_column _75" id="note_value"></div>
+          <div class="row lic_row" id="title">
+            <div class="column lic_column _25 label" id="title_label">Event</div>
+            <div class="column lic_column _75" id="title_value"></div>
           </div>
 
 
@@ -871,7 +871,7 @@
   
             // Is there a current leed in cache
             let current_leed = getCurrentLeed();
-            if (( current_leed.id != null ) && (isSubscribed( current_leed.trade ))) {
+            if (( current_leed.id != null ) && (isSubscribed( current_leed.tn ))) {
                     
                 try {
                   showLeedAction(current_leed, false );

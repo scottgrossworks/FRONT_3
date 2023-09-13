@@ -56,12 +56,12 @@ leed_preview already contains
 
 {   
         "id": 1004, 
-        "creator": "scott.gross", 
-        "zip": "90056", 
-        "start": 1682452800000, 
-        "end": 1682460000000, 
-        "trade": "airbrush",
-        "note": "staff appreciation party"
+        "cr": "scott.gross", 
+        "zp": "90056", 
+        "st": 1682452800000, 
+        "et": 1682460000000, 
+        "tn": "airbrush",
+        "nt": "staff appreciation party"
     }
 
 leed_details contains
@@ -69,13 +69,13 @@ leed_details contains
 [
     {
         "id": 1004,
-        "loc": "1001 Airbrush Lane, Los Angeles, CA 90056",  
-        "det": "These are the potentially-longwinded leed details for staff appreciation party, leed id: 1004",
-        "reqs": "These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
+        "lc": "1001 Airbrush Lane, Los Angeles, CA 90056",  
+        "dt": "These are the potentially-longwinded leed details for staff appreciation party, leed id: 1004",
+        "rq": "These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
         "em": "scottgrossworks@gmail.com",
         "ph": "123456789",
         "pr": "40",
-        "opts":"0001000010000"
+        "op":"0001000010000"
     }
 ]
 *
@@ -126,7 +126,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     //
     // START DATE
     //
-    let startDate = new Date(leed_preview.start);
+    let startDate = new Date(leed_preview.st);
     let isoStart = startDate.toISOString();
     const leed_weekday = getWeekday( getShortDateString( isoStart ) );
 
@@ -153,7 +153,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     //
     // END DATE
     //
-    let endDate = new Date(leed_preview.end);
+    let endDate = new Date(leed_preview.et);
     let isoEnd = endDate.toISOString();
     let hours_end = getHours(isoEnd);
 
@@ -165,12 +165,12 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 
     // LEED TITLE
     //
-    let trade_color = getColorForTrade( leed_preview.trade );
+    let trade_color = getColorForTrade( leed_preview.tn );
     const radioButton = document.querySelector("#lic_trade_radio");
     radioButton.style.backgroundColor = trade_color; 
 
     let theTrade = document.querySelector("#lic_trade");
-    theTrade.innerHTML = leed_preview.trade;
+    theTrade.innerHTML = leed_preview.tn;
     theTrade.style.border = "2px solid " + trade_color;
     theTrade.style.backgroundColor = trade_color;
 
@@ -179,10 +179,10 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 
 
 
-    // NOTE
+    // TITLE
     //
-    let theDiv = document.querySelector("#note_value");
-    theDiv.innerHTML = leed_preview.note;
+    let theDiv = document.querySelector("#title_value");
+    theDiv.innerHTML = leed_preview.ti;
 
 
     // START TIME - END TIME
@@ -196,22 +196,22 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // LOCATION
     // loc == full address
     theDiv = document.querySelector("#loc_value");
-    if (CURRENT_LEED.opts[ LEED_KEYS.LOC ] == OPTS_HIDDEN ) {
+    if (CURRENT_LEED.op[ LEED_KEYS.LOC ] == OPTS_HIDDEN ) {
         theDiv.classList.add("buy2show");
         theDiv.innerHTML = "Buy to show";
     } else {
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = leed_details.loc;
+        theDiv.innerHTML = leed_details.lc;
     }
-    CURRENT_LEED.loc = leed_details.loc;
+    CURRENT_LEED.lc = leed_details.lc;
 
 
 
 
     // ZIP
     theDiv = document.querySelector("#zip_value");
-    theDiv.innerHTML = leed_preview.zip;
-    CURRENT_LEED.zip = leed_preview.zip;
+    theDiv.innerHTML = leed_preview.zp;
+    CURRENT_LEED.zp = leed_preview.zp;
     
     
         
@@ -225,7 +225,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 
     } else {
         theDiv = document.querySelector("#em_value");
-        if (CURRENT_LEED.opts[ LEED_KEYS.EM ] == OPTS_HIDDEN ) { 
+        if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN ) { 
             theDiv.classList.add("buy2show");
             theDiv.innerHTML = "Buy to show";
         } else {
@@ -247,7 +247,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 
     } else {
         theDiv = document.querySelector("#ph_value");
-        if (CURRENT_LEED.opts[ LEED_KEYS.PH ] == OPTS_HIDDEN ) { 
+        if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN ) { 
             theDiv.classList.add("buy2show");
             theDiv.innerHTML = "Buy to show";
         } else {
@@ -268,22 +268,22 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // from leed_details
     // (OPTIONAL)
     //
-    if (leed_details.det == null || leed_details.det == "") {
+    if (leed_details.dt == null || leed_details.dt == "") {
         theDiv = document.querySelector("#det");
         theDiv.style.display = "none";
 
     } else {
         theDiv = document.querySelector("#det_value");
-        if (CURRENT_LEED.opts[ LEED_KEYS.DET ] == OPTS_HIDDEN ) {  
+        if (CURRENT_LEED.op[ LEED_KEYS.DET ] == OPTS_HIDDEN ) {  
             theDiv.classList.add("buy2show");
             theDiv.innerHTML = "Buy to show";
         } else {
             theDiv.classList.remove("buy2show");
-            theDiv.innerHTML = leed_details.det;
+            theDiv.innerHTML = leed_details.dt;
         }
         theDiv.style.display = "flex";
     }
-    CURRENT_LEED.det = leed_details.det;
+    CURRENT_LEED.dt = leed_details.dt;
 
 
 
@@ -292,22 +292,22 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // from leed_details
     // (OPTIONAL)
     // 
-    if (leed_details.reqs == null || leed_details.reqs == "") {
+    if (leed_details.rq == null || leed_details.rq == "") {
         theDiv = document.querySelector("#reqs");
         theDiv.style.display = "none";
 
     } else {
         theDiv = document.querySelector("#reqs_value");
-        if (CURRENT_LEED.opts[ LEED_KEYS.REQS ] == OPTS_HIDDEN ) { 
+        if (CURRENT_LEED.op[ LEED_KEYS.REQS ] == OPTS_HIDDEN ) { 
             theDiv.classList.add("buy2show");
             theDiv.innerHTML = "Buy to show";
         } else {
             theDiv.classList.remove("buy2show");
-            theDiv.innerHTML = leed_details.reqs;
+            theDiv.innerHTML = leed_details.rq;
         }
         theDiv.style.display = "flex";
     }
-    CURRENT_LEED.reqs = leed_details.reqs;
+    CURRENT_LEED.rq = leed_details.rq;
 
 
 
@@ -320,16 +320,16 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     
     const current_user = getCurrentUser(false);
 
-    if (current_user.username == leed_preview.creator) {
+    if (current_user.un == leed_preview.cr) {
 
         // this leed is posted by the current user
 
-        theDiv.innerHTML = "<a href='./user_edit.html'>" + leed_preview.creator + "</a>";
+        theDiv.innerHTML = "<a href='./user_edit.html'>" + leed_preview.cr + "</a>";
 
     } else {
     
-        var theURL = "./user_show.html?" + USERNAME_URL_PARAM + "=" + leed_preview.creator;
-        var theHTML = "<a href=" + theURL + ">" + leed_preview.creator + "</a>";
+        var theURL = "./user_show.html?" + USERNAME_URL_PARAM + "=" + leed_preview.cr;
+        var theHTML = "<a href=" + theURL + ">" + leed_preview.cr + "</a>";
         theDiv.innerHTML = theHTML;
     }
 
@@ -358,11 +358,6 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     //
     //
 
-    /*
-    console.log("%cNOW SHOWING LEED ACTION","color:darkred");
-    console.log(current_user.username);
-    console.log(leed_preview.creator);
-    */
 
     let row_buy_button = document.getElementById("row_buy_button");
     let row_report_button = document.getElementById("row_report_button");
@@ -372,7 +367,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // the action buttons at the bottom depend on whether the
     // current user posted the leed being examined
     // 
-    if (current_user.username == leed_preview.creator) {
+    if (current_user.un == leed_preview.cr) {
 
         // the current user POSTED this leed
         // show the EDIT/DEL buttons

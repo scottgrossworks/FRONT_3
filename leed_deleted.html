@@ -130,7 +130,7 @@
 
         const CURRENT_USER = getCurrentUser(true);
  
-        if (CURRENT_USER == null || CURRENT_USER.username == null) {
+        if (CURRENT_USER == null || CURRENT_USER.un == null) {
             
             printError("Leed Posted", "No current user");
             errorModal("No current user logged in.", true);
@@ -138,10 +138,10 @@
         } else {
 
             let user_welcome = document.getElementById("user_welcome");
-            user_welcome.innerHTML = CURRENT_USER.username;
+            user_welcome.innerHTML = CURRENT_USER.un;
            
             let user_email = document.getElementById("user_email");
-            user_email.innerHTML = CURRENT_USER.email;
+            user_email.innerHTML = CURRENT_USER.em;
         }
 
 
@@ -155,12 +155,12 @@
 
 			clearCurrentLeed();
 
-            if (CURRENT_USER.username == null) {
+            if (CURRENT_USER.un== null) {
                 window.open("./index.html", "_self");	
                 
             } else {
 
-                var href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
+                var href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
                 window.open(href, "_self");	
             }
 

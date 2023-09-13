@@ -1,3 +1,9 @@
+/**
+ * 
+ * 
+ * 
+ */
+
 import { loadCacheLeedz, loadDBLeedz, removeLeedzShowing } from "./calendar.js";
 import { isSubscribed, saveSubscription, removeSubscription, getCurrentUser } from "./user.js";
 import { db_getTrades } from "./dbTools.js";
@@ -5,18 +11,27 @@ import { printError, errorModal, throwError } from "./error.js";
 import { hideActionWindow } from "./action.js";
 
 
+const TRADES_LIST_KEY = "TL";
+
+
 
 const COLORS = new Map();
 
-let TRADES_LIST = []; // no default trades -- use empty list
-    
-   
+
+
 
 /**
  * is this a valid trade name?
  *  
  */
 export function isValidTrade( tradeName ) {
+
+
+  let fromCache = window.sessionStorage.getItem( TRADES_LIST_KEY );
+  if (fromCache == null)
+    throwError("isValidTrade", "No Trades Loaded");
+
+  const TRADES_LIST = JSON.parse( fromCache );
 
   if (TRADES_LIST.length == 0) return false;
 
@@ -46,21 +61,18 @@ export async function getAllTrades() {
       if (retJSON == null) throw new Error("NO trades received from server");
 
       // store trades for checking against future new leedz posts
-      TRADES_LIST = retJSON;      
+      window.sessionStorage.setItem( TRADES_LIST_KEY, JSON.stringify( retJSON ));
 
 
     } catch (error) {
 
       printError("db_getTrades()", error );
       printError("getAllTrades()", "Using EMPTY trades list");
-      retJSON = TRADES_LIST;
-
+      retJSON = [];
+      window.sessionStorage.setItem( TRADES_LIST_KEY, JSON.stringify( retJSON ));
       // show error modal dialog
       errorModal("Error getting trades: " + error.message, false);
       
-      // use default trades
-      // do not fail at this point
-      // throwError("getAllTrades", error);
     }
 
       return retJSON;

@@ -256,7 +256,7 @@
 
 		const CURRENT_USER = getCurrentUser( true );
 
-		if (CURRENT_USER == null || CURRENT_USER.username == null) {
+		if (CURRENT_USER == null || CURRENT_USER.un == null) {
 			printError("User Edit", "No user currently logged in");
 			errorModal("Cannot Edit User<BR>Not currently logged in.", true);
 			throwError("User Edit", "Not logged in");
@@ -264,33 +264,33 @@
 
 		
 		var element = document.getElementById("td_username");
-		element.innerHTML = CURRENT_USER.username;
+		element.innerHTML = CURRENT_USER.un;
 
 
-		if (CURRENT_USER.email != null) {
+		if (CURRENT_USER.em != null) {
 			element = document.getElementById("td_email");
-			element.innerHTML = CURRENT_USER.email;
+			element.innerHTML = CURRENT_USER.em;
 		}
 
-		if (CURRENT_USER.website != null) {
+		if (CURRENT_USER.ws != null) {
 			element = document.getElementById("td_website");
-			element.innerHTML = CURRENT_USER.website;
+			element.innerHTML = CURRENT_USER.ws;
 		}
 
 
-		if (CURRENT_USER.about != null) {
+		if (CURRENT_USER.ab != null) {
 			element = document.getElementById("td_about");
-			element.innerHTML = CURRENT_USER.about;
+			element.innerHTML = CURRENT_USER.ab;
 		}
 
-		if (CURRENT_USER.zip_home != null) {
+		if (CURRENT_USER.zh != null) {
 			element = document.getElementById("td_zip");
-			element.innerHTML = CURRENT_USER.zip_home;
+			element.innerHTML = CURRENT_USER.zh;
 		}
 
-		if (CURRENT_USER.zip_radius != null) {
+		if (CURRENT_USER.zr != null) {
 			element = document.getElementById("td_radius");
-			element.innerHTML = CURRENT_USER.zip_radius;
+			element.innerHTML = CURRENT_USER.zr
 		}
 
 
@@ -303,7 +303,7 @@
 		function backButton() {
 			const CURRENT_USER = getCurrentUser(true);
 	
-			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
+			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
 			window.open(href, "_self");
 
 			self.close();
@@ -323,23 +323,23 @@
 			switch(rowName) {
 
 				case "row_username":
-					USER_CHANGES.username = rowData["username"];
+					USER_CHANGES.un = rowData["username"];
 					break;
 
 				case "row_zip":
-					USER_CHANGES.zip_home = rowData["zip"];
+					USER_CHANGES.zh = rowData["zip"];
 					break;
 
 				case "row_about":
-					USER_CHANGES.about = rowData["about"];
+					USER_CHANGES.ab = rowData["about"];
 					break;
 
 				case "row_website":
-					USER_CHANGES.website = rowData["website"];
+					USER_CHANGES.ws = rowData["ws"];
 					break; 
 					
 				case "row_email":
-					USER_CHANGES.email = rowData["email"];
+					USER_CHANGES.em = rowData["em"];
 					break; 
 
 
@@ -365,7 +365,7 @@
 
 				case "row_radius":
 					const theData = rowData["_radiusValue"];
-					USER_CHANGES.zip_radius = theData;
+					USER_CHANGES.zr = theData;
 					break;
 
 				default:

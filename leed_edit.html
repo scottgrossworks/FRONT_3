@@ -99,15 +99,15 @@
 
 
 
-            <!-- NOTE (TITLE) -->
-            <tr id="row_note">
+            <!-- TITLE -->
+            <tr id="row_title">
                         
                 <TD class="labelTD">Title: </TD>
                 
-                <td id="td_note" data-inlineType="text" data-inlineName="note" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+                <td id="td_title" data-inlineType="text" data-inlineName="title" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
                 <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="inlineEdit('row_note', editOptions)"/>
+                    <input type="button" value="Edit" onclick="inlineEdit('row_title', editOptions)"/>
                 </td>
 
                <TD class="eyeballTD"><img src="./img/eye_show.png" id="1_eye" class="lock"></TD>
@@ -352,24 +352,24 @@
         // CREATOR
         //
         element = document.getElementById("td_creator");
-        element.innerHTML = CURRENT_LEED.creator;
+        element.innerHTML = CURRENT_LEED.cr;
 
 
         // TRADE
         //
         element = document.getElementById("td_trade");
-        element.innerHTML = CURRENT_LEED.trade;
+        element.innerHTML = CURRENT_LEED.tn;
 
 
-        // NOTE
+        // TITLE
         // title of this leed
-        element = document.getElementById("td_note");
-        element.innerHTML = CURRENT_LEED.note;
+        element = document.getElementById("td_title");
+        element.innerHTML = CURRENT_LEED.ti;
 
 
         // START DATE
         // 
-        const startDate = new Date( CURRENT_LEED.start );
+        const startDate = new Date( CURRENT_LEED.st );
         const isoStart = startDate.toISOString();
 
         const start_weekday = getWeekday( getShortDateString( isoStart ) );
@@ -382,7 +382,7 @@
 
         // END DATE
         // 
-        const endDate = new Date( CURRENT_LEED.end );
+        const endDate = new Date( CURRENT_LEED.et );
         const isoEnd = endDate.toISOString();
        
         const end_weekday = getWeekday( getShortDateString( isoEnd ) );
@@ -415,7 +415,7 @@
         //
         element = document.getElementById("td_end");
         element.innerHTML = fullEndDate + " at " + end_time;
-        if (CURRENT_LEED.opts[ LEED_KEYS.END ] == OPTS_HIDDEN )
+        if (CURRENT_LEED.op[ LEED_KEYS.END ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.END );
 
 
@@ -424,8 +424,8 @@
         // LOCATION
         // 
         element = document.getElementById("td_loc");
-        element.innerHTML = CURRENT_LEED.loc;
-        if (CURRENT_LEED.opts[ LEED_KEYS.LOC ] == OPTS_HIDDEN )
+        element.innerHTML = CURRENT_LEED.lc;
+        if (CURRENT_LEED.op[ LEED_KEYS.LOC ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.LOC );
             
 
@@ -433,7 +433,7 @@
         // 
         element = document.getElementById("td_em");
         element.innerHTML = CURRENT_LEED.em;
-        if (CURRENT_LEED.opts[ LEED_KEYS.EM ] == OPTS_HIDDEN )
+        if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.EM );
 
 
@@ -441,23 +441,23 @@
         // 
         element = document.getElementById("td_ph");
         element.innerHTML = CURRENT_LEED.ph
-        if (CURRENT_LEED.opts[ LEED_KEYS.PH ] == OPTS_HIDDEN )
+        if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.PH );
 
 
         // DETAILS
         // 
         element = document.getElementById("td_det");
-        element.innerHTML = CURRENT_LEED.det;
-        if (CURRENT_LEED.opts[ LEED_KEYS.DET ] == OPTS_HIDDEN )
+        element.innerHTML = CURRENT_LEED.dt;
+        if (CURRENT_LEED.op[ LEED_KEYS.DET ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.DET );
 
 
         // REQS
         // 
         element = document.getElementById("td_reqs");
-        element.innerHTML = CURRENT_LEED.reqs;
-        if (CURRENT_LEED.opts[ LEED_KEYS.REQS ] == OPTS_HIDDEN )
+        element.innerHTML = CURRENT_LEED.rq;
+        if (CURRENT_LEED.op[ LEED_KEYS.REQS ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.REQS );
 
 
@@ -485,7 +485,7 @@
 		function backButton() {
 			const CURRENT_USER = getCurrentUser(true);
 	
-			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
+			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
 			window.open(href, "_self");
 
 			clearCurrentLeed();
@@ -507,21 +507,21 @@
 			switch(rowName) {
 
                 case "row_trade":
-                    LEED_CHANGES.trade = rowData["trade"];
+                    LEED_CHANGES.tn = rowData["trade"];
                     break;
 
-				case "row_note":
-					LEED_CHANGES.note = rowData["note"];
+				case "row_title":
+					LEED_CHANGES.ti = rowData["title"];
 					break;
 
 				case "row_start":
                     var dateTime = DTfromPretty( rowData["start"] );
-					LEED_CHANGES.start = dateTime;
+					LEED_CHANGES.st = dateTime;
 					break;
 
                 case "row_end":
                     var dateTime = DTfromPretty( rowData["end"] );
-                    LEED_CHANGES.end = dateTime;
+                    LEED_CHANGES.et = dateTime;
                     break;
 
 
@@ -535,20 +535,20 @@
 
 
                 case "row_zip":
-                    LEED_CHANGES.loc = rowData["zip"];
+                    LEED_CHANGES.zp = rowData["zip"];
                     break;
 
 
 				case "row_loc":
-					LEED_CHANGES.loc = rowData["loc"];
+					LEED_CHANGES.lc = rowData["loc"];
 					break;
 
 				case "row_det":
-					LEED_CHANGES.det = rowData["det"];
+					LEED_CHANGES.dt = rowData["det"];
 					break; 
 					
 				case "row_reqs":
-					LEED_CHANGES.reqs = rowData["reqs"];
+					LEED_CHANGES.rq = rowData["reqs"];
 					break; 
 
 

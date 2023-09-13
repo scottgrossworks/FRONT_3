@@ -8,8 +8,8 @@ export const CACHE_USER_KEY = "U";
 export const MAX_USER_SUBS = 5;
 
 const GUEST_USER = blankUserObject();
-GUEST_USER.username = "guest.user";
-GUEST_USER.email = "scottgrossworks@gmail.com";
+GUEST_USER.un = "guest.user";
+GUEST_USER.em = "scottgrossworks@gmail.com";
 
 let CURRENT_USER = blankUserObject();
 
@@ -46,7 +46,7 @@ export async function deleteCurrentUser() {
       })
       .catch(error => {
 
-        let msg = "Error deleting user [ " + CURRENT_USER.username + " ]:" + error.message;
+        let msg = "Error deleting user [ " + CURRENT_USER.un + " ]:" + error.message;
         printError("deleteCurrentUser", msg);
         throwError('Delete User', msg);
       });
@@ -119,7 +119,7 @@ export function isGuestUser() {
 export async function initUser( login ) {
 
     const cacheUser = getCurrentUser(true);
-    if (cacheUser.username == login) {
+    if (cacheUser.un == login) {
       // this is the same user from another browser window -- do NOT go back to server
       // CURRENT_USER == cacheUser;
 
@@ -152,20 +152,19 @@ export async function initUser( login ) {
         // some are optional and may be null
         // if statements are in case cache version is more recent
         // 
-        CURRENT_USER.username = resObj.creator;
-        CURRENT_USER.email = resObj.email;
+        CURRENT_USER.un = resObj.cr;
+        CURRENT_USER.em = resObj.em;
 
-        CURRENT_USER.website = (resObj.website != null) ? resObj.website : null;
-        CURRENT_USER.about = (resObj.about != null) ? resObj.about : null;
-        CURRENT_USER.zip_home = (resObj.zip_home != null) ? resObj.zip_home : null;
-        CURRENT_USER.zip_radius = (resObj.zip_radius != null) ? resObj.zip_radius : null;
+        CURRENT_USER.ws = (resObj.ws != null) ? resObj.ws : null;
+        CURRENT_USER.ab = (resObj.ab != null) ? resObj.ab : null;
+        CURRENT_USER.zh = (resObj.zh != null) ? resObj.zh : null;
+        CURRENT_USER.zr = (resObj.zr != null) ? resObj.zr : null;
 
-        CURRENT_USER.subs = (resObj.subs != null) ? resObj.subs : [];
-        // CURRENT_USER.leedz_bought = (resObj.leedz_bought != null) ? resObj.leedz_bought : [];
+        CURRENT_USER.sb = (resObj.sb != null) ? resObj.sb : [];
 
 
         // USER BADGES
-        CURRENT_USER.badges = (resObj.badges != null) ? resObj.badges : [];
+        CURRENT_USER.bg = (resObj.bg != null) ? resObj.bg : [];
         
 
       } catch (error) {
@@ -178,7 +177,7 @@ export async function initUser( login ) {
       saveCacheUser( CURRENT_USER );
     }
     
-    // console.log("%cuser.initUser(): " + CURRENT_USER.username, "color:darkorange");
+    // console.log("%cuser.initUser(): " + CURRENT_USER.un, "color:darkorange");
     // console.log(CURRENT_USER);
 
   }
@@ -194,17 +193,16 @@ export function blankUserObject() {
   
   const BLANK_USER = new Object();
   
-  BLANK_USER.username = null;
-  BLANK_USER.email = null;
-  BLANK_USER.website = null;
-  BLANK_USER.about = null
+  BLANK_USER.un = null;
+  BLANK_USER.em = null;
+  BLANK_USER.wb = null;
+  BLANK_USER.ab = null
 
-  BLANK_USER.zip_home = null;
-  BLANK_USER.zip_radius = null;
+  BLANK_USER.zh = null;
+  BLANK_USER.zr = null;
 
-  BLANK_USER.subs = [];
-  // BLANK_USER.leedz_bought = [];
-  BLANK_USER.badges = [];
+  BLANK_USER.sb = [];
+  BLANK_USER.bg = [];
 
   return BLANK_USER;
 }
@@ -230,32 +228,29 @@ export async function saveUserChanges( userObj ) {
     throwError("saveUserChanges", "No CURRENT_USER initialized");
 
 
-  if (userObj.username != null)
-    CURRENT_USER.username = userObj.username;
+  if (userObj.un != null)
+    CURRENT_USER.un = userObj.un;
 
-  if (userObj.email != null)
-    CURRENT_USER.email = userObj.email;
+  if (userObj.em != null)
+    CURRENT_USER.em = userObj.em;
 
-    if (userObj.website != null)
-    CURRENT_USER.website = userObj.website;
+    if (userObj.ws != null)
+    CURRENT_USER.ws = userObj.ws;
 
-  if (userObj.zip_home != null)
-    CURRENT_USER.zip_home = userObj.zip_home;
+  if (userObj.zh != null)
+    CURRENT_USER.zh = userObj.zh;
 
-  if (userObj.zip_radius != null)
-    CURRENT_USER.zip_radius = userObj.zip_radius;
+  if (userObj.zr != null)
+    CURRENT_USER.zr = userObj.zr;
 
-  if (userObj.about != null)
-    CURRENT_USER.about = userObj.about;
+  if (userObj.ab != null)
+    CURRENT_USER.ab = userObj.ab;
 
-  if (userObj.subs != null)
-    CURRENT_USER.subs = userObj.subs;
+  if (userObj.sb != null)
+    CURRENT_USER.sb = userObj.sb;
 
-  // if (userObj.leedz_bought != null)
-  //  CURRENT_USER.leedz_bought = userObj.leedz_bought;
-
-  if (userObj.badges != null)
-    CURRENT_USER.badges = userObj.badges;
+  if (userObj.bg != null)
+    CURRENT_USER.bg = userObj.bg;
 
   
   // save changes to CACHE

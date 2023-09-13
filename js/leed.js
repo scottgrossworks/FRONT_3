@@ -14,25 +14,25 @@ import { getMonth,getYear } from "./dates.js";
 LEED PREVIEW
         {
             "id": 1001, 
-            "note": "This is Leed ID 1001 fun times",
-            "creator": "dave.reyes", 
-            "zip": "90034", 
-            "start": 1680635460000, 
-            "end": 1680639060000, 
-            "trade": "caricatures"
+            "ti": "This is Leed ID 1001 fun times",
+            "cr": "dave.reyes", 
+            "zp": "90034", 
+            "st": 1680635460000, 
+            "et": 1680639060000, 
+            "tn": "caricatures"
         },
 
 LEED DETAILS
     {
         "id": 1004,
-        "trade": "airbrush", 
-        "loc": "1001 Airbrush Lane, Los Angeles, CA 90056",  
-        "det": "1004 staff app1 These are the potentially-longwinded leed details for staff appreciation party, leed id: 1004",
-        "reqs": "1004 staff app2 These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
+        "tn": "airbrush", 
+        "lc": "1001 Airbrush Lane, Los Angeles, CA 90056",  
+        "dt": "1004 staff app1 These are the potentially-longwinded leed details for staff appreciation party, leed id: 1004",
+        "rq": "1004 staff app2 These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
         "em": "scottgrossworks@gmail.com",
         "ph": "123456789",
         "pr": "40",
-        opts":"0000021122110"
+        "op"":"0000021122110"
     }
 
 */
@@ -43,7 +43,7 @@ LEED DETAILS
 export const LEED_KEYS = {
   
   ID: 0,
-  NOTE: 1,
+  TITLE: 1,
   CREATOR: 2,
   TRADE: 3,
   ZIP: 4,
@@ -101,9 +101,9 @@ export function changeLeedOpts( theLeed, index, newVal ) {
     throwError("changeLeedOpts", "null Leed object");
   }
 
-  // can't do a direct opts[index] = newVal
+  // can't do a direct op[index] = newVal
   // must do a substring + insert + concatenate
-  theLeed.opts = theLeed.opts.substring(0, index) + newVal + theLeed.opts.substring( index + 1 );
+  theLeed.opts = theLeed.op.substring(0, index) + newVal + theLeed.op.substring( index + 1 );
   
 }
 
@@ -165,27 +165,27 @@ export function blankLeedObject() {
     const BLANK_LEED = new Object();
 
     BLANK_LEED.id = null;
-    BLANK_LEED.note = null;
+    BLANK_LEED.ti = null;
 
-    BLANK_LEED.creator = null;
+    BLANK_LEED.cr = null;
 
-    BLANK_LEED.trade = null;
+    BLANK_LEED.tn = null;
 
-    BLANK_LEED.zip = null;
-    BLANK_LEED.loc = null;
+    BLANK_LEED.zp = null;
+    BLANK_LEED.lc = null;
 
-    BLANK_LEED.start = null;
-    BLANK_LEED.end = null;
+    BLANK_LEED.st = null;
+    BLANK_LEED.et = null;
 
     BLANK_LEED.em = null;
     BLANK_LEED.ph = null;
 
-    BLANK_LEED.det = null;
-    BLANK_LEED.reqs = null;
+    BLANK_LEED.dt = null;
+    BLANK_LEED.rq = null;
 
     BLANK_LEED.pr = null;
 
-    BLANK_LEED.opts = START_OPTS;
+    BLANK_LEED.op = START_OPTS;
 
     return BLANK_LEED;
   }
@@ -226,28 +226,28 @@ export function setCurrentLeed( jsonObj ) {
     CURRENT_LEED.id = jsonObj.id;
 
     
-    if (jsonObj.note != null) CURRENT_LEED.note = jsonObj.note;
-    if (jsonObj.creator != null) CURRENT_LEED.creator = jsonObj.creator;
+    if (jsonObj.ti != null) CURRENT_LEED.ti = jsonObj.ti;
+    if (jsonObj.cr != null) CURRENT_LEED.cr = jsonObj.cr;
 
-    if (jsonObj.trade != null) CURRENT_LEED.trade = jsonObj.trade;
-    if (jsonObj.zip != null) CURRENT_LEED.zip = jsonObj.zip;
-    if (jsonObj.loc != null) CURRENT_LEED.loc = jsonObj.loc;
+    if (jsonObj.tn != null) CURRENT_LEED.tn = jsonObj.tn;
+    if (jsonObj.zp != null) CURRENT_LEED.zp = jsonObj.zp;
+    if (jsonObj.lc != null) CURRENT_LEED.lc = jsonObj.lc;
     
-    if (jsonObj.start != null) CURRENT_LEED.start = jsonObj.start;
-    if (jsonObj.end != null) CURRENT_LEED.end = jsonObj.end;
+    if (jsonObj.st != null) CURRENT_LEED.st = jsonObj.st;
+    if (jsonObj.et != null) CURRENT_LEED.et = jsonObj.et;
 
     if (jsonObj.em != null) CURRENT_LEED.em = jsonObj.em;
     if (jsonObj.ph != null) CURRENT_LEED.ph = jsonObj.ph;
 
-    if (jsonObj.det != null) CURRENT_LEED.det = jsonObj.det;
-    if (jsonObj.reqs != null) CURRENT_LEED.reqs = jsonObj.reqs;
+    if (jsonObj.dt != null) CURRENT_LEED.dt = jsonObj.dt;
+    if (jsonObj.rq != null) CURRENT_LEED.rq = jsonObj.rq;
 
     if (jsonObj.pr != null) CURRENT_LEED.pr = jsonObj.pr;
 
-    if ((jsonObj.opts == null) || (jsonObj.opts.length == 0)) {
-        CURRENT_LEED.opts = START_OPTS;
+    if ((jsonObj.op == null) || (jsonObj.op.length == 0)) {
+        CURRENT_LEED.op = START_OPTS;
     } else {
-        CURRENT_LEED.opts = jsonObj.opts;
+        CURRENT_LEED.op = jsonObj.op;
     }
 
     cacheCurrentLeed( CURRENT_LEED );
@@ -263,27 +263,27 @@ export function clearCurrentLeed() {
 
     CURRENT_LEED.id = null;
 
-    CURRENT_LEED.note = null;
+    CURRENT_LEED.ti = null;
 
-    CURRENT_LEED.creator = null;
+    CURRENT_LEED.cr = null;
 
-    CURRENT_LEED.trade =null;
+    CURRENT_LEED.tn =null;
     
-    CURRENT_LEED.zip = null;
-    CURRENT_LEED.loc = null;
+    CURRENT_LEED.zp = null;
+    CURRENT_LEED.lc = null;
 
     CURRENT_LEED.em = null;
     CURRENT_LEED.ph = null;
 
-    CURRENT_LEED.start = null;
-    CURRENT_LEED.end = null;
+    CURRENT_LEED.st = null;
+    CURRENT_LEED.et = null;
 
-    CURRENT_LEED.det = null;
-    CURRENT_LEED.reqs = null;
+    CURRENT_LEED.dt = null;
+    CURRENT_LEED.rq = null;
 
     CURRENT_LEED.pr = null;
 
-    CURRENT_LEED.opts = START_OPTS;
+    CURRENT_LEED.op = START_OPTS;
 
 }
 
@@ -358,34 +358,34 @@ export function cacheCurrentLeed( theLeed ) {
 
     CURRENT_LEED.id = cacheObj.id;
     
-    CURRENT_LEED.trade =cacheObj.trade;
+    CURRENT_LEED.tn =cacheObj.tn;
     
-    CURRENT_LEED.creator = cacheObj.creator;
+    CURRENT_LEED.cr = cacheObj.cr;
 
-    CURRENT_LEED.note = cacheObj.note;
+    CURRENT_LEED.ti = cacheObj.ti;
 
-    CURRENT_LEED.zip = cacheObj.zip;
+    CURRENT_LEED.zp = cacheObj.zp;
 
-    CURRENT_LEED.start = cacheObj.start;
+    CURRENT_LEED.st = cacheObj.st;
 
-    CURRENT_LEED.end = cacheObj.end;
+    CURRENT_LEED.et = cacheObj.et;
 
     
     
-    CURRENT_LEED.loc = cacheObj.loc;
+    CURRENT_LEED.lc = cacheObj.lc;
 
     CURRENT_LEED.em = cacheObj.em;
 
     CURRENT_LEED.ph = cacheObj.ph;
 
-    CURRENT_LEED.det = cacheObj.det;
+    CURRENT_LEED.dt = cacheObj.dt;
 
-    CURRENT_LEED.reqs = cacheObj.reqs;
+    CURRENT_LEED.rq = cacheObj.rq;
 
     CURRENT_LEED.pr = cacheObj.pr;
 
 
-    CURRENT_LEED.opts = cacheObj.opts;
+    CURRENT_LEED.op = cacheObj.op;
 
 
 }
@@ -506,7 +506,7 @@ export function loadLeedzFromCache( the_month, the_year ) {
 
 
         // is the user stil subscribed to leedz of this trade?
-        if ( isSubscribed( theLeed.trade ) ) {
+        if ( isSubscribed( theLeed.tn ) ) {
             // if user has unsubscribed since last cache save
             // do NOT return it or re-add it to the cache
             retLeedz.push( theLeed );       
@@ -554,32 +554,32 @@ export async function saveLeedChanges( leedObj ) {
    * cannot be changed
    *
     CURRENT_LEED.id = leedObj.id;
-    CURRENT_LEED.creator = leedObj.creator;
+    CURRENT_LEED.cr = leedObj.cr;
    */
 
   
-  if (leedObj.note != null)
-    CURRENT_LEED.note = leedObj.note;
+  if (leedObj.ti != null)
+    CURRENT_LEED.ti = leedObj.ti;
 
 
-  if (leedObj.trade != null)
-    CURRENT_LEED.trade = leedObj.trade;
+  if (leedObj.tn != null)
+    CURRENT_LEED.tn = leedObj.tn;
 
 
-  if (leedObj.zip != null)
-    CURRENT_LEED.zip = leedObj.zip;
+  if (leedObj.zp != null)
+    CURRENT_LEED.zp = leedObj.zp;
 
     
-  if (leedObj.loc != null)
-    CURRENT_LEED.loc = leedObj.loc;
+  if (leedObj.lc != null)
+    CURRENT_LEED.lc = leedObj.lc;
 
 
-  if (leedObj.start != null)
-    CURRENT_LEED.start = leedObj.start;
+  if (leedObj.st != null)
+    CURRENT_LEED.st = leedObj.st;
 
 
-  if (leedObj.end != null)
-    CURRENT_LEED.end = leedObj.end;
+  if (leedObj.et != null)
+    CURRENT_LEED.et = leedObj.et;
 
 
   if (leedObj.em != null)
@@ -590,20 +590,20 @@ export async function saveLeedChanges( leedObj ) {
     CURRENT_LEED.ph = leedObj.ph;
 
     
-  if (leedObj.det != null)
-    CURRENT_LEED.det = leedObj.det;
+  if (leedObj.dt != null)
+    CURRENT_LEED.dt = leedObj.dt;
 
-  if (leedObj.reqs != null)
-    CURRENT_LEED.reqs = leedObj.reqs;
+  if (leedObj.rq != null)
+    CURRENT_LEED.rq = leedObj.rq;
 
 
   if (leedObj.pr != null)
     CURRENT_LEED.pr = leedObj.pr;
 
-  if ((leedObj.opts != null) && (leedObj.opts.length != 0))
-    CURRENT_LEED.opts = leedObj.opts;
+  if ((leedObj.op != null) && (leedObj.op.length != 0))
+    CURRENT_LEED.op = leedObj.op;
   else
-    CURRENT_LEED.opts = START_OPTS;
+    CURRENT_LEED.op = START_OPTS;
 
   
     try {
@@ -707,12 +707,6 @@ export async function buyCurrentLeed() {
     }
 
 
-    // on success -- update current user object with new leed bought
-    // if (current_user.leedz_bought.indexOf( CURRENT_LEED.id ) == -1) { // not in list already
-    //   current_user.leedz_bought.push( CURRENT_LEED.id );
-    // }
-
-
     return results;
 }
 
@@ -765,14 +759,6 @@ export async function deleteCurrentLeed() {
         errorModal("Cannot delete leed: " + error.message, false); 
         return results;
     }
-
-
-    // on success -- remove leed from list of leedz_bought
-    //
-    // let index = current_user.leedz_bought.indexOf( CURRENT_LEED.id );
-    // if (index != -1) {
-    //   current_user.leedz_bought.splice( index, 1 );
-    // }
 
   
     console.log("BACK FROM DB DELETE RESULTS=" + results);

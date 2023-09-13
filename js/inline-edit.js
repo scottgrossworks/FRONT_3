@@ -164,7 +164,7 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
             } else {   // coming from edit page
                 var current_leed = getCurrentLeed();
-                dateTime = (rowName == "row_start") ? current_leed.start : current_leed.end;
+                dateTime = (rowName == "row_start") ? current_leed.st : current_leed.et;
             }
 
             var theVal = formatDTforInput( dateTime );

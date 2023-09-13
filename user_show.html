@@ -191,36 +191,36 @@
 
 
         if (success) {
-            if (SHOW_USER.username != null) {
+            if (SHOW_USER.un != null) {
                 element = document.getElementById("td_username");
-                element.innerHTML = SHOW_USER.username;
+                element.innerHTML = SHOW_USER.un;
             }
 
-            if (SHOW_USER.email != null) {
+            if (SHOW_USER.em != null) {
                 element = document.getElementById("td_email");
-                element.innerHTML = SHOW_USER.email;
+                element.innerHTML = SHOW_USER.em;
             }
 
-            if (SHOW_USER.website != null) {
+            if (SHOW_USER.ws != null) {
                 element = document.getElementById("td_website");
-                element.innerHTML = SHOW_USER.website;
+                element.innerHTML = SHOW_USER.ws;
             }
 
 
-            if (SHOW_USER.about != null) {
+            if (SHOW_USER.ab != null) {
                 element = document.getElementById("td_about");
-                element.innerHTML = SHOW_USER.about;
+                element.innerHTML = SHOW_USER.ab;
             }
 
 
             //
             // TRADES SUBSCRIBED
             //
-            if (SHOW_USER.subs != null) {
+            if (SHOW_USER.sb != null) {
                 element = document.getElementById("td_subs");
                 var the_subs = "";
-                for (let i = 0; i < SHOW_USER.subs.length; i++) {
-                    the_subs = the_subs + SHOW_USER.subs[ i ] + ",";
+                for (let i = 0; i < SHOW_USER.sb.length; i++) {
+                    the_subs = the_subs + SHOW_USER.sb[ i ] + ",";
                 }
                 
                 element.innerHTML = the_subs.slice(0, -1);
@@ -230,9 +230,9 @@
             //
             // BADGES
             //
-            if (SHOW_USER.badges != null) {
+            if (SHOW_USER.bg != null) {
                 element = document.getElementById("td_badges");
-                showUserBadges(element, SHOW_USER.badges);
+                showUserBadges(element, SHOW_USER.bg);
             }
 
 
@@ -335,18 +335,18 @@ function showUserBadges( element, badges ) {
         // some are optional and may be null
         // if statements are in case cache version is more recent
         // 
-        SHOW_USER.username = resObj.creator;
-        SHOW_USER.email = (resObj.email != null) ? resObj.email : null;
+        SHOW_USER.un = resObj.cr;
+        SHOW_USER.em = (resObj.em != null) ? resObj.em : null;
 
-        SHOW_USER.website = (resObj.website != null) ? resObj.website : null;
-        SHOW_USER.about = (resObj.about != null) ? resObj.about : null;
+        SHOW_USER.ws = (resObj.ws != null) ? resObj.ws : null;
+        SHOW_USER.ab = (resObj.ab != null) ? resObj.ab : null;
 
         // TRADES
-        SHOW_USER.subs = (resObj.subs != null) ? resObj.subs : [];
+        SHOW_USER.sb = (resObj.sb != null) ? resObj.sb : [];
 
        
         // USER BADGES
-        SHOW_USER.badges = (resObj.badges != null) ? resObj.badges : [];
+        SHOW_USER.bg = (resObj.bg != null) ? resObj.bg : [];
            
     
     } catch (error) {
@@ -373,7 +373,7 @@ function showUserBadges( element, badges ) {
 		function backButton() {
 			const CURRENT_USER = getCurrentUser(true);
 	
-			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
+			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
 			window.open(href, "_self");
 
 			self.close();

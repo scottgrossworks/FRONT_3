@@ -401,7 +401,7 @@
     -- ERROR MODAL 
     -- 
     -->
-  <div class="row modal" id="error_modal">
+  <div class="row" id="error_modal">
     <center><img id="error_logo" src="img/logo_2.png"></center> 
     <h1></h1>
     <a id="error_modal_close" href="javascript:modalClose();" href="">X</a>
@@ -423,7 +423,7 @@
     import { showLeedAction } from "./js/action.js";
     import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
 
-    import { USERNAME_URL_PARAM } from "./js/dbTools.js";
+    import { USERNAME_URL_PARAM, DB_FAIL, DB_SUCCESS } from "./js/dbTools.js";
 
 
     const BUG_EMAIL = "<a href='mailto:scottgrossworks@gmail.com'>Report Error</a>"
@@ -780,7 +780,7 @@
           // GOTO landing page
           if (response.res == DB_SUCCESS) {
               // take user to success landing page
-              // let landing_url = LEED_POSTED_LANDING_URL + "?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.username;
+              // let landing_url = LEED_POSTED_LANDING_URL + "?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
             window.open( URL_LEED_DELETED, "_self");
           }
 
@@ -985,7 +985,7 @@
       // UPDATE the UI with the current user info
       // user clicks on username --> user edit account page
       let user_href = document.getElementById("user_href");
-      user_href.innerHTML = current_user.username;
+      user_href.innerHTML = current_user.un;
       user_href.setAttribute("href", "#");
       user_href.addEventListener( "click", (event) => {    
           openUserEdit();

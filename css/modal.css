@@ -138,14 +138,26 @@
 
 
 
+
 /*
- *
+ * FIXME FIXME FIXME
+
+
+
+separate modal from errorModal so that rules governing actionPanel modal are not the same as errorModal
+
+
+
  *
  */
  #error_modal {
 
   display: none;
   
+  z-index:900;
+
+  position: fixed;
+
   margin-left:10vw;
   margin-top: 15vh;
 
@@ -163,7 +175,10 @@
   border-radius: 20px;
 }
 
+#error_modal h1 {
 
+  font-size: 1em;
+}
 
 #error_modal a {
 

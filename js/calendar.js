@@ -6,10 +6,10 @@
 import { daysInMonth, getShortDateString, getShortWeekday, getMonth,
     firstDayShowing, lastDayShowing, getYear, getHours, getMinutes, twoDigitInt } from "./dates.js";
 import { showLeedAction } from "./action.js";
-import { setCurrentLeed, loadLeedzFromDB, loadLeedzFromCache, saveLeedzToCache } from "./leed.js";
+import { setCurrentLeed, loadLeedzFromDB, loadLeedzFromCache } from "./leed.js";
 import { getColorForTrade } from "./trades.js";
 import { getSubscriptions, getCurrentUser } from "./user.js";
-import { printError, throwError, errorModal } from "./error.js";
+import { printError, errorModal, throwError } from "./error.js";
 
 
 
@@ -181,12 +181,17 @@ export function loadDBLeedz() {
 
     CURRENT_SELECTION = null;
 
+    const current_user = getCurrentUser();
+    if (current_user.un == null)
+        throwError("LoadDBLeedz", "Current user is not initialized");
+
+
     // API request --> DB 
     // load leedz for this trade and date range showing
     // returns immediately -- provide callback for DB results when they come in
     try {
 
-            loadLeedzFromDB(getSubscriptions(), firstDayShowing(), lastDayShowing(), refreshCalendar );
+            loadLeedzFromDB(getSubscriptions(), firstDayShowing(), lastDayShowing(), current_user.zh, current_user.zr, refreshCalendar );
             
     } catch (error) {
         printError("Loading leedz from DB", error);

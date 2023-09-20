@@ -18,6 +18,8 @@ export const USERNAME_URL_PARAM = "un";
 export const SUBS_URL_PARAM = "sb";
 export const START_DATE_URL_PARAM = "ds";
 export const END_DATE_URL_PARAM = "de";
+export const ZIP_HOME_URL_PARAM = "zh";
+export const ZIP_RADIUS_URL_PARAM = "zr";
 
 export const LEED_ID_URL_PARAM = "id";
 
@@ -257,7 +259,7 @@ export async function db_getDeetz( leed_id ) {
  * 
  * 
  */
-export async function db_getLeedz( subs, start_date, end_date ) {
+export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_radius ) {
 
     if (subs == null || start_date == null || end_date == null ) {
         throwError("db_getLeedz()", "null / undefined args");
@@ -279,6 +281,9 @@ export async function db_getLeedz( subs, start_date, end_date ) {
         searchParams.append( SUBS_URL_PARAM, subs_string );
         searchParams.append( START_DATE_URL_PARAM, start_date );
         searchParams.append( END_DATE_URL_PARAM, end_date );
+        searchParams.append( ZIP_HOME_URL_PARAM, zip_home );
+        searchParams.append( ZIP_RADIUS_URL_PARAM, zip_radius );
+
         theURL.search = searchParams.toString();
 
         await doGet( theURL )

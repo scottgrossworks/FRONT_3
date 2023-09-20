@@ -111,7 +111,7 @@ export function changeLeedOpts( theLeed, index, newVal ) {
  *
  * 
  */
-export async function loadLeedzFromDB( subs, firstDay, lastDay, theCallback ) {
+export async function loadLeedzFromDB( subs, firstDay, lastDay, zip_home, zip_radius, theCallback ) {
     
 
   // API request --> DB 
@@ -123,7 +123,7 @@ export async function loadLeedzFromDB( subs, firstDay, lastDay, theCallback ) {
       //  client <---> API Gateway <===> DB
       //
       // get the leedz for all trade names in subs and the dates showing
-      results = await db_getLeedz( subs, firstDay, lastDay );
+      results = await db_getLeedz( subs, firstDay, lastDay, zip_home, zip_radius );
 
 
   } catch (error) {   

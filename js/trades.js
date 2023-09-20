@@ -5,7 +5,7 @@
  */
 
 import { loadCacheLeedz, loadDBLeedz, removeLeedzShowing } from "./calendar.js";
-import { isSubscribed, saveSubscription, removeSubscription, getCurrentUser } from "./user.js";
+import { isSubscribed, saveSubscription, removeSubscription } from "./user.js";
 import { db_getTrades } from "./dbTools.js";
 import { printError, errorModal, throwError } from "./error.js";
 import { hideActionWindow } from "./action.js";
@@ -222,6 +222,8 @@ export function initTradesColumn( all_trades ) {
 
 /**
  * Helper function
+ * 
+ * 
  */
 function tradeListener(trade, checkBox, radioButton, theLabel) {
 

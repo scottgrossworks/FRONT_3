@@ -211,6 +211,34 @@ export function blankUserObject() {
 
 
 
+/**
+ * save CURRENT_USER to cache and then to DB
+ */
+
+export async function saveCurrentUser() {
+
+  if (CURRENT_USER == null)
+    throwError("saveCurrentUser", "No CURRENT_USER initialized");
+
+  
+  // save changes to CACHE
+  saveCacheUser( CURRENT_USER );
+  
+  // send user updates --> DB
+  try {
+    db_updateUser( CHG_USER, CURRENT_USER );		
+
+  } catch ( error ) {
+
+      printError("db_updateUser", error);
+      throwError("Save Current User", error.message);
+  }
+
+  console.log("user.saveCurrentUser()  ******** SUCCESS! ******* ");
+  // console.log(CURRENT_USER);
+
+}
+
 
 
 
@@ -252,34 +280,15 @@ export async function saveUserChanges( userObj ) {
   if (userObj.bg != null)
     CURRENT_USER.bg = userObj.bg;
 
-  
-  // save changes to CACHE
-  saveCacheUser( CURRENT_USER );
-  
-  // send user updates --> DB
   try {
-    db_updateUser( CHG_USER, CURRENT_USER );		
+    saveCurrentUser();
 
-  } catch ( error ) {
-
-      printError("db_updateUser", error);
-      throwError("Save User", error.message);
+  } catch (error) {
+    
+    printError("saveCurrentUser", error);
+    throwError("Save User Changes", error.message);
   }
-
-  console.log("user.saveUserChanges()  ******** SUCCESS! ******* ");
-  // console.log(CURRENT_USER);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -365,10 +374,10 @@ export function guestUser() {
  */
 export function isSubscribed( trade_name ) {
 
-    if (CURRENT_USER.subs.length == 0) return false;
+    if (CURRENT_USER.sb.length == 0) return false;
 
     const equalsTrade = (element) => (element == trade_name);
-    var index = CURRENT_USER.subs.findIndex( equalsTrade );
+    var index = CURRENT_USER.sb.findIndex( equalsTrade );
     
     return (index > -1); // true if index is 0,1,2....
     
@@ -381,14 +390,14 @@ export function isSubscribed( trade_name ) {
  */
 export async function saveSubscription( trade_name ) {
 
-    if (CURRENT_USER.subs.length == MAX_USER_SUBS) {
+    if (CURRENT_USER.sb.length == MAX_USER_SUBS) {
       var error = "MAX subscriptions reached: " + MAX_USER_SUBS;
       printError("saveSubscription", error);
       throwError("Save Subscription", error);
     }
 
-    if (CURRENT_USER.subs.indexOf(trade_name) == -1) { // not in list already
-      CURRENT_USER.subs.push( trade_name );
+    if (CURRENT_USER.sb.indexOf(trade_name) == -1) { // not in list already
+      CURRENT_USER.sb.push( trade_name );
     }
 
     saveCacheUser( CURRENT_USER );
@@ -399,8 +408,6 @@ export async function saveSubscription( trade_name ) {
 
     // if not guest user
     // Trade Subscribe to DB
-    //
-    console.log("user.saveSubscription()......");
       
     //   client <---> API Gateway <===> DB
     //
@@ -446,12 +453,12 @@ export async function saveSubscription( trade_name ) {
    */
   export async function removeSubscription( trade_name ) {
      
-    if (CURRENT_USER.subs.length == 0) {
+    if (CURRENT_USER.sb.length == 0) {
       printError("removeSubscription", "Empty list for: " + trade_name);
       return;
     }
 
-    CURRENT_USER.subs.splice( CURRENT_USER.subs.indexOf(trade_name), 1);
+    CURRENT_USER.sb.splice( CURRENT_USER.sb.indexOf(trade_name), 1);
 
     saveCacheUser( CURRENT_USER );
 
@@ -511,5 +518,5 @@ export function getSubscriptions() {
     throwError("getSubscriptions()", new Error("CURRENT_USER is null"));
 
     // probably would be better to make a copy and return that
-    return CURRENT_USER.subs;
+    return CURRENT_USER.sb;
   } 

@@ -75,7 +75,7 @@ export async function getAllTrades() {
       
     }
 
-      return retJSON;
+    return retJSON;
   }
 
 
@@ -129,11 +129,11 @@ export function initTradesColumn( all_trades ) {
   // initialize the spectrum of colors
   seedColors( all_trades );
 
+
   // import DOM elements from html
   const theList = document.querySelector("#trades_list");
   const subs = [];
   const theTemplate = document.querySelector("#template_each_trade");
-
 
 
   // for JSON each trade object that comes from the DB
@@ -156,6 +156,7 @@ export function initTradesColumn( all_trades ) {
     let radioButton = newNode.querySelector(".trade_radio");
  
   
+
     // check SUBSCRIPTIONS
     // is the user subscribed to this trade?
     var is_sub = false;
@@ -163,9 +164,6 @@ export function initTradesColumn( all_trades ) {
       turnTrade_On(checkBox, radioButton, theLabel, trade.tn);
       is_sub = true;
     }
-    
-
-    
     
 
     //
@@ -208,6 +206,8 @@ export function initTradesColumn( all_trades ) {
     }
     
   });
+
+
 
     // this allows for a sorted list of subscriptions
     for (var i = subs.length - 1; i >= 0; i--) {

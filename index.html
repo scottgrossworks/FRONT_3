@@ -132,7 +132,7 @@
           <form id="distance_form">
             <input id="distance_miles" type="text" title="Miles"> Miles From
             <input id="distance_from" type="text" title="From Zip"> Zip Code
-            <input type="button" value="Find Leedz" id="distance_button">
+            <input type="button" value="Find Leedz" id="distance_button" onclick="findLeedz()">
           </form>
 
         </div>
@@ -415,7 +415,7 @@
 
   <script type="module" charset=”utf-8″>
 
-    import { initUser, guestUser, getCurrentUser, isGuestUser, isSubscribed } from "./js/user.js";      
+    import { initUser, guestUser, getCurrentUser, saveCurrentUser, isGuestUser, isSubscribed } from "./js/user.js";      
     import { initTradesColumn, getAllTrades } from "./js/trades.js";   
     import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
@@ -424,6 +424,7 @@
     import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
 
     import { USERNAME_URL_PARAM, DB_FAIL, DB_SUCCESS } from "./js/dbTools.js";
+
 
 
     const BUG_EMAIL = "<a href='mailto:scottgrossworks@gmail.com'>Report Error</a>"
@@ -549,10 +550,124 @@
 
 
 
-          
-      
+      //  
+      //  DISTANCE CHOOSER
+      //
+      // search for leedz using distance chooser 'Find Leedz' dialog and current trades subscribed
+      // 
+      //
+      // <div id="distance_chooser">
+      // <form id="distance_form">
+      //   <input id="distance_miles" type="text" title="Miles"> Miles From
+      //   <input id="distance_from" type="text" title="From Zip"> Zip Code
+      //   <input type="button" value="Find Leedz" id="distance_button" onclick="findLeedz()">
+      // </form>
+      //
+      function findLeedz() {
 
-      
+        let miles = document.getElementById("distance_miles");
+        let zip = document.getElementById("distance_from");
+        
+        // verify that miles is a number <= 9999
+        var trimVal = trimAndRemoveSpaces( miles.value );
+       
+        if (! isNumOnly( trimVal )) {
+          let errMsg = "Miles From must be a number";
+          printError("Miles contains non-numeric", errMsg );
+          
+          errorModal("Cannot search for Leedz<BR>" + errMsg, false);
+          return;
+        }
+        
+        const theMiles = new Number(trimVal);
+        if (theMiles > 9999) {
+          let msg = "Miles From is too large: " + theMiles;
+          let errMsg = "Search radius must be < 9999 miles";
+          printError(msg, errMsg );
+
+          errorModal("Cannot search for Leedz<BR>" + msg + "<BR>" + errMsg, false);
+          return;
+        }
+
+        
+        // verify that zip is a 5-digit number
+        //
+        trimVal = trimAndRemoveSpaces( zip.value );
+
+        if (trimVal.length != 5) {
+            let errMsg = "Zip code must be 5 digits";
+            printError("Zip Code length", errMsg );
+            
+            errorModal("Cannot search for Leedz<BR>" + errMsg, false);
+            return;
+        }
+
+        if (! isNumOnly( trimVal )) {
+
+            let msg = "Invalid Zip code: " + trimVal;
+            let errMsg = "Zip code must be all digits";
+            printError(msg, errMsg );
+            
+            errorModal("Cannot search for Leedz<BR>" + msg + "<BR>" + errMsg, false);
+            return;
+        }
+
+        const theZip = new Number(trimVal);
+        
+        // these values are inserted into the current user profile
+        //
+        const current_user = getCurrentUser(false);
+        current_user.zr = theMiles.valueOf();
+        current_user.zh = theZip.valueOf();
+        
+
+        // this is an async call
+        // will return immediately - data shows up later
+        loadDBLeedz();
+
+
+        // this is an async call
+        // will return immediately - data shows up later        
+        saveCurrentUser();
+
+      }
+      window.findLeedz = findLeedz;
+
+
+
+
+
+
+/**
+ * returns true if the str represents a number
+ *  
+ */
+ function isNumOnly( str ) {
+
+  // Defining the regular expression
+  const strRegex = new RegExp(/^[0-9]+$/i);
+       
+  // match the regex with the string
+  let result = strRegex.test( str );
+  return result;
+}
+
+
+
+
+function trimAndRemoveSpaces(inputString) {
+  // Trim leading/trailing white spaces and remove spaces in between
+  let trimmedString = inputString.trim().replace(/\s+/g, " ");
+  // Replace all single spaces with ""
+  let resultString = trimmedString.replace(/ /g, "");
+
+  return resultString;
+}
+
+
+
+
+
       //
       // open GUEST welcome modal
       // some features not available to guest accounts
@@ -1005,7 +1120,7 @@
 
 
       // BADGES
-      } else if (current_user.badges.length != 0) {
+      } else if (current_user.bg.length != 0) {
           
           // clone a new node
           //
@@ -1016,11 +1131,11 @@
           //  
           const theList = document.querySelector("#up_center_column");
           const theTemplate = document.querySelector("#template_badge");
-          for (var i = 0; i < current_user.badges.length; i++) {
+          for (var i = 0; i < current_user.bg.length; i++) {
             var newNode = theTemplate.content.cloneNode(true).querySelector(".each_badge");
             var theImg = newNode.querySelector(".badge_img");
             var theHref = newNode.querySelector(".badge_href");
-              switch( current_user.badges[i]) {
+              switch( current_user.bg[i]) {
                   case "1":
                   theImg.src = "./img/badge_1.png";
                   theHref.setAttribute("href", "./leedz_about.html#badges");   // FIXME explain badge in About section #
@@ -1042,7 +1157,7 @@
                   theHref.setAttribute("href", "./leedz_about.html#badges");   // FIXME explain badge in About section #
                   break;
                   default:
-                  printError("initUserPanel", "unknown user badge: " + current_user.badges[i]);
+                  printError("initUserPanel", "unknown user badge: " + current_user.bg[i]);
                   // do not fail, just ignore
                   theImg = null;
                   break;
@@ -1162,6 +1277,27 @@
             errorModal( msg , true );
           }
           
+    
+
+
+          // INIT DISTANCE CHOOSER
+          // using current_user preferences if set
+          //
+          try {
+      
+            let miles = document.getElementById("distance_miles");
+            let zip = document.getElementById("distance_from");
+
+            if (current_user.zr != null) miles.value = current_user.zr;
+            if (current_user.zh != null) zip.value = current_user.zh;
+
+          } catch (error) {
+            var msg = "Cannot initialize distance chooser.<BR>Please refresh page."
+            msg = error.message + "<BR>" + msg;
+            
+            printError("Distance Chooser", error);
+            errorModal( msg , true );
+          }
 
 
 
@@ -1171,7 +1307,7 @@
            *
            * LOAD ALL trades and turn ON the ones subscribed to
            * when we turn ON a trade this will ALSO load the leedz
-           * for each trade in current_user.subs[]
+           * for each trade in current_user.sb[]
            */
           let trades = [];
           try {
@@ -1185,6 +1321,7 @@
               throw new Error("server returned empty (0) trades.");
             }
 
+            
             // got ALL trades from DB
             initTradesColumn( trades );
 

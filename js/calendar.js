@@ -181,9 +181,12 @@ export function loadDBLeedz() {
 
     CURRENT_SELECTION = null;
 
-    const current_user = getCurrentUser();
+    const current_user = getCurrentUser(false);
     if (current_user.un == null)
         throwError("LoadDBLeedz", "Current user is not initialized");
+
+    console.log("IN LOAD DB LEEDZ CURRENT_USER");
+    console.log( current_user );
 
 
     // API request --> DB 

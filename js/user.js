@@ -79,6 +79,8 @@ export function getCurrentUser( useCache ) {
   if (CURRENT_USER == null)
     throwError("getCurrentUser", "CURRENT_USER should never be null");
 
+  if (isGuestUser()) return GUEST_USER;
+
   // search the cache
   if (useCache) {
     // is there a cache user?
@@ -188,6 +190,22 @@ export async function initUser( login ) {
 
 /**
  * create an empty JSON-compatible user object
+ * 
+ * 
+ * 
+ *  "cr": "dave.reyes",
+    "sb": [ "airbrush", "caricatures", "martial arts"],
+    "zh": "93551",
+    "zr": "50", 
+    "ab": "I am a caricature artist in LA",
+    "ws": "http://doctorreyes.com",
+    "id": "0",
+    "lp": ["2005", "1005", "3001"],
+    "bg":["1", "2", "4"],
+    "em": "wizzardblitz@netzero.net", 
+    "tn": "user#dave.reyes"
+    }
+ *
  */
 export function blankUserObject() {
   
@@ -195,7 +213,7 @@ export function blankUserObject() {
   
   BLANK_USER.un = null;
   BLANK_USER.em = null;
-  BLANK_USER.wb = null;
+  BLANK_USER.ws = null;
   BLANK_USER.ab = null
 
   BLANK_USER.zh = null;
@@ -220,7 +238,8 @@ export async function saveCurrentUser() {
   if (CURRENT_USER == null)
     throwError("saveCurrentUser", "No CURRENT_USER initialized");
 
-  
+  if (isGuestUser()) return;
+
   // save changes to CACHE
   saveCacheUser( CURRENT_USER );
   

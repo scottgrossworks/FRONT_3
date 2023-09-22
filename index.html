@@ -63,7 +63,7 @@
     <div class="row" id="user_panel">
 
       <div class="column _05" style="max-width:45px;"><button id="up_dot"></button></div>
-      <div class="column _15" id="up_left_column"><label><a id="user_href" href=""></a></label></div>
+      <div class="column _15" id="up_left_column"><label><a id="user_href" href="#"></a></label></div>
       
       
       <div class="column _65" id="up_center_column">
@@ -382,17 +382,22 @@
       <center><img id="guest_logo" src="img/logo_2.png"></center> 
       <h1>
           <center>
-          <table style="width:70vw">
+          <table>
             <TR><TD>
               Some features are not available to Guest users.
-              <P>
-              To edit your user profile, buy, post, edit, or report a leed, <a href="http://scottgross.works">sign-up</a> for a FREE account.
+              <BR>
+              <BR>
+              To edit your user profile, buy, post, edit, or report a leed,
+              <BR>
+              <a href="http://scottgross.works">sign-up</a> for a <a href="http://scottgross.works">FREE</a> account.
             </TD></TR>
           </table>
           </center> 
-
-      </h1>
+     
+          <BR>
       <a id="guest_modal_close" href="javascript:modalClose();" href="">X</a>
+      <BR>
+    </h1>
     </div>
 
 
@@ -403,8 +408,11 @@
     -->
   <div class="row" id="error_modal">
     <center><img id="error_logo" src="img/logo_2.png"></center> 
-    <h1></h1>
+    <h1>
+    <BR>
     <a id="error_modal_close" href="javascript:modalClose();" href="">X</a>
+    <BR>
+      </h1>
   </div>
 
 
@@ -1095,13 +1103,18 @@ function trimAndRemoveSpaces(inputString) {
     */
     function initUserPanel(current_user) {
 
-      
       // whatever the current user identity -- continue ....
       // UPDATE the UI with the current user info
       // user clicks on username --> user edit account page
+
+      let dot = document.getElementById("up_dot");
+      dot.addEventListener( "click", (event) => {    
+        openUserEdit();
+      });
+      
       let user_href = document.getElementById("user_href");
       user_href.innerHTML = current_user.un;
-      user_href.setAttribute("href", "#");
+      // user_href.setAttribute("href", "#");
       user_href.addEventListener( "click", (event) => {    
           openUserEdit();
       });

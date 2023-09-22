@@ -8,7 +8,7 @@ import { daysInMonth, getShortDateString, getShortWeekday, getMonth,
 import { showLeedAction } from "./action.js";
 import { setCurrentLeed, loadLeedzFromDB, loadLeedzFromCache } from "./leed.js";
 import { getColorForTrade } from "./trades.js";
-import { getSubscriptions, getCurrentUser } from "./user.js";
+import { getCurrentUser } from "./user.js";
 import { printError, errorModal, throwError } from "./error.js";
 
 
@@ -194,7 +194,7 @@ export function loadDBLeedz() {
     // returns immediately -- provide callback for DB results when they come in
     try {
 
-            loadLeedzFromDB(getSubscriptions(), firstDayShowing(), lastDayShowing(), current_user.zh, current_user.zr, refreshCalendar );
+            loadLeedzFromDB(current_user.sb, firstDayShowing(), lastDayShowing(), current_user.zh, current_user.zr, refreshCalendar );
             
     } catch (error) {
         printError("Loading leedz from DB", error);
@@ -340,7 +340,9 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     newLeed.setAttribute("id", leed_fromDB.id); // unique ID
 
 
+    // IS THIS OUR LEED?
     // is this leed created by the current user?
+    //
     if (leed_fromDB.cr == getCurrentUser(false).un) {
         newLeed.classList.add("user_leed");
     } else {

@@ -14,13 +14,12 @@
   z-index:900;
 
   position: fixed;
-  
-  left:0 !important;
-  top:0 !important;
 
- 
-  width:100vw !important;
-  height:100% !important;
+
+  left:5vw;
+
+  width:80% !important;
+  height:60% !important;
 
   background-color: white;
 }
@@ -31,9 +30,9 @@
 
 .modal h1 {
 
-  margin: 0;
+  margin: 5vh auto;
 
-  width:max-content;
+  width:90%;
   background-color: var(--LEEDZ_GRAY);
   padding: 20px;
   border-radius:10px;
@@ -44,6 +43,12 @@
 
 .modal h1 a {
   color:green;
+}
+
+
+
+.modal h1 table {
+  width:100%;
 }
 
 
@@ -72,19 +77,19 @@
 
   display: none;
   
-  margin-left:10vw;
-  margin-top: 15vh;
+  margin: 15vh auto;
+
+  width:500px;
+  height:70vh;
 
   text-decoration: none;
 
   background-color: white;
   color:black;
 
+  
   padding:20px;
 
-  width:75vw;
-  height:70vh;
-  
   border: 4px solid var(--LEEDZ_GREEN);
   border-radius: 20px;
 }

@@ -208,8 +208,32 @@ export function setDateShowing( theDate ) {
 
 
 
+/**
+ * is DATE_SHOWING the current month?
+ */
+export function isCurrentMonth() {
+
+    const date_showing = getDateShowing();
+    const date_today = new Date();
+
+    // SAME MONTH
+    let month_showing = date_showing.getUTCMonth();
+    let month_today = date_today.getUTCMonth();
+
+    if (month_showing != month_today)
+        return false;
 
 
+    // SAME YEAR
+    let year_showing = date_showing.getUTCFullYear();
+    let year_today = date_today.getUTCFullYear();
+
+    if (year_showing != year_today)
+        return false;
+
+
+    return true;
+}
 
 
 
@@ -224,20 +248,38 @@ export function getDateShowing() {
 
     // if not set
     // check session storage for a previously-viewed calendar
+    // NEVER RETURN A DATE PRIOR TO current month
     const sessionDate = window.sessionStorage.getItem( DATE_KEY );
+    const today = getTodayUTC();
     if (sessionDate != null) {
-
-        let shortDate = getShortDateString(sessionDate);
-        DATE_SHOWING = new Date(shortDate);
         
+        // cache contains a date
+        // BUT just to be sure
+        // never show a calendar from a previous month -- no reason when all leedz have expired
+        var shortDate = getShortDateString(sessionDate);
+        const cacheDate = new Date(shortDate);
+       
+  
+        if (cacheDate.getTime() < today.getTime()) {
+            // return today's date
+            DATE_SHOWING = today;
+
+        } else {
+
+            DATE_SHOWING = cacheDate;
+        }
+   
+   
     } else {
+        // no cache date --- show current month / year
         // show today's date
-        DATE_SHOWING = getTodayUTC();
-        // save in case of browser close / refresh
-        let shortDate = getShortDate( DATE_SHOWING );
-        window.sessionStorage.setItem( DATE_KEY, shortDate ); 
+        DATE_SHOWING = today;
     }
     
+    // save in case of browser close / refresh
+    var shortDate = getShortDate( DATE_SHOWING );
+    window.sessionStorage.setItem( DATE_KEY, shortDate ); 
+
     return DATE_SHOWING;
 
 }

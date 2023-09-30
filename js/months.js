@@ -1,4 +1,4 @@
-import { setDateShowing, getMonth, getYear, getMonthname, getNewDate } from "./dates.js";
+import { setDateShowing, getMonth, getYear, getMonthname, getNewDate, isCurrentMonth } from "./dates.js";
 import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./calendar.js";
 
 
@@ -10,70 +10,156 @@ import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./calendar.js";
  */
 export function initMonthChooser() {
 
-    let theMonth = getMonth();
-    let theYear = getYear();
 
-    let months = document.querySelector(".month_chooser");
-    let theLabel = months.querySelector("#month_label");
-
-    theLabel.textContent = getMonthname(theMonth) + ", " + theYear;
-
+    const months = document.querySelector(".month_chooser");
+    
+    const theLabel = document.querySelector("#month_label");
+    theLabel.textContent = getMonthname( getMonth() ) + ", " + getYear();
 
 
     /*
      * PREV MONTH
      */
-    let leftArrow = months.children[0];
-    leftArrow.addEventListener("click", function( event ) {
-    
-        let prevMonth = getPrevMonth();
+    const leftArrow = months.children[0];
 
-        let theMonth = prevMonth.getUTCMonth() + 1;
+    if (isCurrentMonth()) {
+        hideBackArrow(leftArrow, showPrevMonth);
     
-        let theYear = prevMonth.getFullYear();
+    } else {
+        showBackArrow(leftArrow, showPrevMonth);
+    }
 
-        theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
         
-        setDateShowing( prevMonth );
-
-        buildCalendar();
-
-        loadCacheLeedz();
-
-        // this is an async call
-        // will return immediately - data shows up later
-        loadDBLeedz();
-
-    });
-
-
-
+        
     /*
      * NEXT MONTH
      */
-    let rightArrow = months.children[2];
-    rightArrow.addEventListener("click", function( event ) {
-  
+    const rightArrow = months.children[2];
+    rightArrow.addEventListener("click", function(event) {
+    
         let nextMonth = getNextMonth();
-
         let theMonth = nextMonth.getUTCMonth() + 1;
         let theYear = nextMonth.getFullYear();
-
-       theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
-
-       setDateShowing( nextMonth );
-
-       buildCalendar();
-
-       loadCacheLeedz();
-
+    
+        theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
+    
+        setDateShowing( nextMonth );
+    
+        buildCalendar();
+    
+        loadCacheLeedz();
+    
         // this is an async call
         // will return immediately - data shows up later
-       loadDBLeedz();
+        loadDBLeedz();
+    
+        showBackArrow(leftArrow, showPrevMonth);
 
     });
 
+
+
+
 }
+
+
+
+/**
+ * 
+ * 
+ */
+function showPrevMonth() {
+    
+    let prevMonth = getPrevMonth();
+
+    let theMonth = prevMonth.getUTCMonth() + 1;
+
+    let theYear = prevMonth.getFullYear();
+
+    let theLabel = document.querySelector("#month_label");
+    theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
+    
+    setDateShowing( prevMonth );
+
+    buildCalendar();
+
+    loadCacheLeedz();
+
+    // this is an async call
+    // will return immediately - data shows up later
+    loadDBLeedz();
+
+    
+    const leftArrow = document.querySelector(".month_chooser").children[0];
+    if (isCurrentMonth()) {
+        hideBackArrow(leftArrow, showPrevMonth);
+    
+    } else {
+        showBackArrow(leftArrow, showPrevMonth);
+    }
+}
+
+
+/**
+ * 
+ */
+function showNextMonth(leftArrow, theLabel) {
+
+    console.log("HELLO!");
+    
+    let nextMonth = getNextMonth();
+
+
+    let theMonth = nextMonth.getUTCMonth() + 1;
+    let theYear = nextMonth.getFullYear();
+
+    theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
+
+    setDateShowing( nextMonth );
+
+    buildCalendar();
+
+    loadCacheLeedz();
+
+    // this is an async call
+    // will return immediately - data shows up later
+    loadDBLeedz();
+
+   
+   if (isCurrentMonth())
+        hideBackArrow( leftArrow, showPrevMonth);
+    else
+       showBackArrow(leftArrow, showPrevMonth);
+
+}
+
+
+
+/**
+ * 
+ */
+function showBackArrow( leftArrow, handler ) {
+
+    leftArrow.style.opacity = 1;
+
+    leftArrow.addEventListener("click", handler);
+}
+
+
+
+
+/**
+ * 
+ */
+function hideBackArrow( leftArrow, handler ) {
+
+    leftArrow.style.opacity = 0.25;
+
+
+    leftArrow.removeEventListener("click", handler);
+}
+
+
 
 
 

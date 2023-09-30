@@ -266,6 +266,9 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
     }
     
 
+    // SUBS
+    // trades subscriptions will be a comma,delimited,string
+    //
     let subs_string = "";
     for (const trade_name of subs) {
         subs_string += trade_name + ",";

@@ -104,7 +104,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     //
     if (gotoDB) {
 
-        await db_getDeetz( leed_preview.id )
+        await db_getDeetz( leed_preview.tn, leed_preview.id )
             .then(data => {
 
             if (data == null) throw new Error("null response from GET");

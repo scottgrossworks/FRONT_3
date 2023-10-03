@@ -21,6 +21,7 @@ export const END_DATE_URL_PARAM = "de";
 export const ZIP_HOME_URL_PARAM = "zh";
 export const ZIP_RADIUS_URL_PARAM = "zr";
 
+export const TRADE_NAME_URL_PARAM = "tn";
 export const LEED_ID_URL_PARAM = "id";
 
 
@@ -215,10 +216,13 @@ export async function db_getUser( username ) {
 
 
 /**
+ * GET DEETZ
  * Get the full leed details for this leed
  * 
+ * FIXME FIXME FIXME
+ * MUST PASS trade_name to lambda because its primary key for DDB
  */
-export async function db_getDeetz( leed_id ) {
+export async function db_getDeetz( trade_name, leed_id ) {
     
     // GET JSON from http server
 
@@ -227,6 +231,7 @@ export async function db_getDeetz( leed_id ) {
     
         const theURL = new URL(API_GATEWAY + "getDeetz");
         let searchParams = new URLSearchParams();
+        searchParams.append( TRADE_NAME_URL_PARAM, trade_name );
         searchParams.append( LEED_ID_URL_PARAM, leed_id );
         theURL.search = searchParams.toString();
 

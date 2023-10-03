@@ -65,7 +65,7 @@
                 <BR>
                 <b>Sending:</b>
                 <BR>
-                    Request URL: /getDeetz?id=3001
+                    Request URL: /getDeetz?tn='caricatures'&id=3001
                     <BR>
                     127.0.0.1 - - "GET /getDeetz?id=3001 HTTP/1.1" 200 -
                 <BR>
@@ -132,14 +132,14 @@
             // load full leed details for leed_preview.id
             //
 
-            await db_getDeetz( 3001 )
+            await db_getDeetz( 'caricatures', 3001 )
                 .then(data => {
 
                 if (data == null) throw new Error("null response from GET");
                 leed_details = data[0];
                 
                 // query returns empty result set
-                if (leed_details == null) throw new Error("No leed details for id: " + leed_preview.id);
+                if (leed_details == null) throw new Error("No leed details for 'caricatures', id: " + leed_preview.id);
                     
                 })
             .catch(error => {

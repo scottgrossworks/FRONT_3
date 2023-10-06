@@ -53,6 +53,7 @@
    html, body {
       
     overflow-x: hidden;
+    overflow-y: hidden;
     color:black;
     background-color: white;
     } 
@@ -87,7 +88,6 @@
 
   flex: 1 0 auto;
   top:0;
-  padding-bottom:25px;
 }
 
 
@@ -139,7 +139,7 @@
 /* The sidepanel menu */
 .trades_side {
 
-  height: 91vh;
+  height: 100%;
 
   width: max-content; /* 0 width - change this with JavaScript */
   position: fixed; /* Stay in place */
@@ -192,13 +192,17 @@
 
 
 #calendar_main {
+
   position: relative;
-  left:0;
-  padding-left:0;
+
+  align-self: flex-start;
+
+  top:0 !important;
+  left:0 !important;
+  width:100%;
+  
   text-align:left;
 
-  margin-left:auto;
-  margin-right:auto;
 }
 
 

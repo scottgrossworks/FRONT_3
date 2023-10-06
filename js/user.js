@@ -154,6 +154,7 @@ export async function initUser( login ) {
         // some are optional and may be null
         // if statements are in case cache version is more recent
         // 
+        // NOTE that .cr (creator) becomes .un (username)
         CURRENT_USER.un = resObj.cr;
         CURRENT_USER.em = resObj.em;
 
@@ -397,7 +398,7 @@ export function isSubscribed( trade_name ) {
 
     const equalsTrade = (element) => (element == trade_name);
     var index = CURRENT_USER.sb.findIndex( equalsTrade );
-    
+
     return (index > -1); // true if index is 0,1,2....
     
   }

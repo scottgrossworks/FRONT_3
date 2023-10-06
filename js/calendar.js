@@ -117,7 +117,7 @@ export function removeLeedzShowing() {
 export function removeLeedzForTrade( trade_name ) {
 
 
-    const theDays = document.getElementsByClassName(".each_day");
+    const theDays = document.getElementsByClassName("each_day");
     // get all the days of the current month showing
     for (var i = 0; i < theDays.length; i++) {
 
@@ -126,12 +126,12 @@ export function removeLeedzForTrade( trade_name ) {
         
         // iterate over all children looking leedz with matching trade_name
         // skip the first and last child
-        const lastChild = each_day.children.length - 1;
-        for ( var c = 1; c < lastChild; c++) {
+        for ( var c = 1; c < each_day.children.length; c++) {
            
             var theChild = each_day.children[c];
             var test_trade = theChild.getAttribute("tn");
                 
+            // console.log("TESTING " + test_trade + " against " + trade_name);
             if (test_trade == trade_name) {
                 // remove leed from calendar
                 each_day.removeChild( theChild );
@@ -148,21 +148,40 @@ export function removeLeedzForTrade( trade_name ) {
 /**
  * Load leedz from cache (month showing) and return immediately
  * 
+ * if an argument is provided -- filter by that trade_name
  */
-export function loadCacheLeedz() {
+export function loadCacheLeedz( trade_name ) {
 
     CURRENT_SELECTION = null;
 
-    let results = null;
+
+    let results = [];
     try {
-            results = loadLeedzFromCache(getMonth(), getYear());
-        
+            let leedz = loadLeedzFromCache(getMonth(), getYear());
+            // being called with no arg -- load all leedz from cache
+            if (trade_name === undefined) {
+                results = leedz;
+
+            } else {
+                // called with arg
+                // filter out any results not matching tn == trade_name
+                for (let i = 0; i < leedz.length; i++) {
+                    
+                    if (leedz[i].tn == trade_name) {
+                        results.push(leedz[i]);
+                    }
+                }
+            }
+
+
+
     } catch (error) {
         printError("Loading leedz from DB", error);
         errorModal(error.message, false);
         return;
     }
     
+
     // update calendar
     addLeedzToCalendar( results );
 }
@@ -181,7 +200,7 @@ export function loadDBLeedz() {
 
     CURRENT_SELECTION = null;
 
-    const current_user = getCurrentUser(false);
+    const current_user = getCurrentUser(false);  
     if (current_user.un == null)
         throwError("LoadDBLeedz", "Current user is not initialized");
 

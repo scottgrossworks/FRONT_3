@@ -4,18 +4,20 @@
  * 
  */
 
-import { loadCacheLeedz, loadDBLeedz, removeLeedzShowing } from "./calendar.js";
-import { isSubscribed, saveSubscription, removeSubscription } from "./user.js";
+import { loadCacheLeedz, removeLeedzForTrade } from "./calendar.js";
+import { getCurrentUser, isGuestUser } from "./user.js";
 import { db_getTrades } from "./dbTools.js";
 import { printError, errorModal, throwError } from "./error.js";
 import { hideActionWindow } from "./action.js";
 
+import { MAX_USER_SUBS } from "./user.js";
+
 
 const TRADES_LIST_KEY = "TL";
 
-
-
-const COLORS = new Map();
+// TRADES
+// { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
+const TRADES = new Map();  
 
 
 
@@ -47,9 +49,60 @@ export function isValidTrade( tradeName ) {
 
 
 /**
+ * 
+ * 
+ */
+export async function initTrades() {
+
+
+  let trades = [];
+
+  try {
+    await getAllTrades().then((response) => trades = response ); 
+
+      if (trades == null) {
+        throw new Error("server returned null trades.");
+      }
+
+      if (trades.length == undefined || trades.length == 0) {
+        throw new Error("server returned empty (0) trades.");
+      }
+
+
+      if ( isGuestUser() ) { 
+        let guest_user = getCurrentUser();
+        // the trades should be sorted by num_leedz
+        // the guest user's subs are the top n leedz
+        for (let i = 0; i < MAX_USER_SUBS; i++) {
+          guest_user.sb.push( trades[i].tn ) 
+        }
+      }
+
+      // init TRADES struct
+      // initialize the spectrum of colors
+      seedColors( trades );  
+      
+      initTradesColumn();
+
+
+    } catch (error) {
+      
+      // DO NOT FAIL -- show error modal dialog and print error to console
+      var msg = "Cannot load trades.<BR>Please refresh page."
+      msg = error.message + "<BR>" + msg;
+      
+      printError("Init Trades Column", error);
+      errorModal( msg , true );
+  }
+
+}
+
+
+
+/**
  * populates TRADES_LIST
  */
-export async function getAllTrades() {
+async function getAllTrades() {
 
   let retJSON = null;
 
@@ -59,6 +112,8 @@ export async function getAllTrades() {
 
       // if it stays null or there's any problem, report it but do not fail
       if (retJSON == null) throw new Error("NO trades received from server");
+
+      // SHOULD be sorted by num_leedz 
 
       // store trades for checking against future new leedz posts
       window.sessionStorage.setItem( TRADES_LIST_KEY, JSON.stringify( retJSON ));
@@ -79,23 +134,32 @@ export async function getAllTrades() {
   }
 
 
+
+
+
+
 /**
  * 
  * @param String name of trade
  * @returns String color corresponding to it in the trades column
  */
 export function getColorForTrade(trade_name) {
-
-  let theColor = COLORS.get(trade_name);
+  
+  // TRADES
+  // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
+  let theColor = TRADES.get(trade_name)[0];
 
   if (theColor == null) {
       // check the cache 
       // is there a color assigned to this trade_name in cache?
       theColor = window.sessionStorage.getItem( trade_name );
-      COLORS.set(trade_name, theColor);
+      
+      let num_leedz = TRADES.get(trade_name)[1];
+      let isShowing = TRADES.get(trade_name)[2];
+
+      TRADES.set(trade_name, [ theColor, num_leedz, isShowing ]);
   }
 
-  // console.log(COLORS);
   // console.log("%cin getColorForTrade() GOT " + trade_name + ": " + theColor, "color:" + theColor + ";");
 
   if (theColor != null) {
@@ -111,10 +175,12 @@ export function getColorForTrade(trade_name) {
 
 
 
+
 /**
  *
  * all_trades is the array 
  * 
+ * ONLY display the trades to which the user is subscribed
  * [
  * {
    tn: "caricatures",
@@ -122,59 +188,50 @@ export function getColorForTrade(trade_name) {
  * }, .... 
  * ]
 */
-export function initTradesColumn( all_trades ) {
+function initTradesColumn() {
 
-  if ((all_trades == null) || (all_trades.length == 0)) return;
 
-  // initialize the spectrum of colors
-  seedColors( all_trades );
+  const current_user = getCurrentUser(false);
+  if (current_user == null || current_user.sb == null)
+      throwError("InitTrades", "Current User not initialized");
 
+  // current_user may be guest user
 
   // import DOM elements from html
   const theList = document.querySelector("#trades_list");
-  const subs = [];
   const theTemplate = document.querySelector("#template_each_trade");
 
-
-  // for JSON each trade object that comes from the DB
-  all_trades.forEach(( trade ) => {     
-
+  // for each subscription
+  current_user.sb.forEach(( sub ) => {
+  
     // clone a new node
     const newNode = theTemplate.content.cloneNode(true).querySelector(".each_trade");
   
     // set the label
     let theLabel = newNode.querySelector("label");
-    theLabel.textContent = trade.tn;
+    theLabel.textContent = sub;
+
+    // TRADES
+    // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
+    let num_leedz = TRADES.get( sub )[1];
 
     // set the leed count as a superscript
-    // if there is an error we are using default leedz without numbers
-    if (trade.nl != undefined)
-      newNode.querySelector("sup").textContent = trade.nl;
+    newNode.querySelector("sup").textContent = num_leedz;
 
-
+    
     let checkBox = newNode.querySelector(".trade_checkbox");
     let radioButton = newNode.querySelector(".trade_radio");
- 
+
+
   
-
-    // check SUBSCRIPTIONS
-    // is the user subscribed to this trade?
-    var is_sub = false;
-    if ( isSubscribed( trade.tn ) ) {
-      turnTrade_On(checkBox, radioButton, theLabel, trade.tn);
-      is_sub = true;
-    }
-    
-
     //
     // CHECKBOX CLICK LISTENER
     //
     checkBox.addEventListener("click", function( event ) {
   
-      tradeListener( trade, checkBox, radioButton, theLabel );
+      tradeListener( sub, checkBox, radioButton, theLabel );
       
     });
-
 
 
     //
@@ -182,10 +239,9 @@ export function initTradesColumn( all_trades ) {
     //
     radioButton.addEventListener("click", function( event ) {
   
-      tradeListener( trade, checkBox, radioButton, theLabel );
+      tradeListener( sub, checkBox, radioButton, theLabel );
 
     });
-
 
 
     //
@@ -193,26 +249,17 @@ export function initTradesColumn( all_trades ) {
     //
     theLabel.addEventListener("click", function( event ) {
 
-      tradeListener( trade, checkBox, radioButton, theLabel );
+      tradeListener( sub, checkBox, radioButton, theLabel );
       
     });
-  
 
     
-    if (is_sub) {
-      subs.push( newNode ); 
-    } else {
-      theList.appendChild( newNode );
-    }
-    
+    turnTrade_On(checkBox, radioButton, theLabel, sub);
+
+    // add it to the UI
+    theList.appendChild( newNode );
   });
 
-
-
-    // this allows for a sorted list of subscriptions
-    for (var i = subs.length - 1; i >= 0; i--) {
-      theList.prepend(subs[i]);
-    }
 
 
 }
@@ -227,45 +274,29 @@ export function initTradesColumn( all_trades ) {
  */
 function tradeListener(trade, checkBox, radioButton, theLabel) {
 
+
   try {
 
-      if ( isSubscribed( trade.tn)  ) { // TRADE is ON
+       // clear the action window
+       hideActionWindow();
 
-        removeSubscription( trade.tn );
-        turnTrade_Off(checkBox, radioButton, theLabel);
+      // TRADES
+      // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
 
+      if ( TRADES.get( trade )[2]  ) { // TRADE is ON
+
+        turnTrade_Off(checkBox, radioButton, theLabel, trade );
+
+        removeLeedzForTrade( trade );
 
       } else { // TRADE is OFF
 
-        saveSubscription( trade.tn )
-        
-        .then( response => { 
-          
-          turnTrade_On(checkBox, radioButton, theLabel, trade.tn);
-
-        }).catch(error => {
-          // Handle error
-          printError("tradeListener", error.message);
-          // Display modal error dialog to the user
-          errorModal(error.message, false);
-          
-          return false;
-        });
+        turnTrade_On(checkBox, radioButton, theLabel, trade );
+       
+        loadCacheLeedz( trade );
       }
 
-      // clear the action window
-      hideActionWindow();
       
-      removeLeedzShowing();
-
-      // reload current month leedz from cache
-      loadCacheLeedz();
-
-      // ASYNC
-      // go back to DB for fresh view -- will return immediately
-      // update calendar later
-      loadDBLeedz();
-
   } catch (error) {
     errorModal(error, false);
     return false;
@@ -308,7 +339,7 @@ function createColor(numOfSteps, step) {
 
 
 /*
- * Seed the COLORS
+ * Seed the colors in TRADES
  * number of colors == number of trades
  * 
  * using sessionCache so that
@@ -330,23 +361,28 @@ function seedColors( all_trades ) {
     // for each trade....
     for (let i = 0; i < num_trades; i++ ) {
       
+      var trade_name = all_trades[i].tn;
+      var num_leedz = all_trades[i].nl;
+
+      // TRADES
+      // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
       // is there ALREADY a color assigned to this trade_name in cache?
-      var theColor = window.sessionStorage.getItem( all_trades[i].tn );
+      var theColor = window.sessionStorage.getItem( trade_name );
       if (theColor != null) {
-        COLORS.set( all_trades[i].tn,  theColor ); 
-      
+        TRADES.set( trade_name,  [ theColor, num_leedz, false ]); 
       
       } else {
         // create a new color and assign it to trade_name
         theColor = createColor( num_trades, i );
-        COLORS.set( all_trades[i].tn,  theColor );
+        TRADES.set( trade_name,  [ theColor, num_leedz, false ]); 
 
         // cache this in case of browser refresh
-        window.sessionStorage.setItem( all_trades[i].tn, theColor );
+        window.sessionStorage.setItem( trade_name, theColor );
       }
 
     
     }
+
   }
 
 
@@ -358,8 +394,8 @@ function seedColors( all_trades ) {
  */
 export function printColors() {
   
-  for (let trade_name of COLORS.keys() ) {
-    var theColor = COLORS.get(trade_name);
+  for (let trade_name of TRADES.keys() ) {
+    var theColor = TRADES.get(trade_name)[0];
     console.log("%c" + trade_name + ": " + theColor, "color:" + theColor + ";");
   }
 }
@@ -374,22 +410,27 @@ export function printColors() {
  */
 function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
 
-  // turn on the check box and the radio button
-  checkBox.checked = true;
-  radioButton.checked = true;
 
-  // get the color assigned to this trade
-  var theColor = COLORS.get(trade_name);
+  // TRADES
+  // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
+  // mark the trade as SHOWING
+  var the_color = TRADES.get(trade_name)[0];
+  var num_leedz = TRADES.get(trade_name)[1];
+  TRADES.set(trade_name, [ the_color, num_leedz, true ] );
 
 
   // DEBUG
   // var theString = "TURN ON=" + trade_name;
-  // console.log("%c" + theString, "color: " + theColor + ";"); 
+  // console.log("%c" + theString, "color: " + the_color + ";"); 
+
+  // turn on the check box and the radio button
+  checkBox.checked = true;
+  radioButton.checked = true;
 
   // FIXME 2/2023 
   // should all be done in css but the initial setting doesn't persist
   // color the radio button
-  radioButton.style.backgroundColor = theColor;
+  radioButton.style.backgroundColor = the_color;
   radioButton.classList.add("trade_active");
 
   // recolor the label
@@ -402,8 +443,17 @@ function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
 /*
  *
  */
-function turnTrade_Off( checkBox, radioButton, theLabel ) {
+function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
   
+
+  // TRADES
+  // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
+  // mark the trade as NOT SHOWING
+  var the_color = TRADES.get(trade_name)[0];
+  var num_leedz = TRADES.get(trade_name)[1];
+  TRADES.set(trade_name, [ the_color, num_leedz, false ] );
+
+
   // turn on the check box and the radio button
   checkBox.checked = false;
   radioButton.checked = false;

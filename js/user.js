@@ -5,7 +5,7 @@ import { db_getUser, db_updateUser, ADD_SUB, REM_SUB, DEL_USER, CHG_USER, DB_FAI
 import { printError, throwError } from "./error.js";
 
 export const CACHE_USER_KEY = "U";
-export const MAX_USER_SUBS = 5;
+export const MAX_USER_SUBS = 6;
 
 const GUEST_USER = blankUserObject();
 GUEST_USER.un = "guest.user";
@@ -322,7 +322,7 @@ export async function saveUserChanges( userObj ) {
  */
 function loadCacheUser() {
   
-    let userJSON = window.sessionStorage.getItem( CACHE_USER_KEY );
+    let userJSON = window.localStorage.getItem( CACHE_USER_KEY );
     let userObj = null;
     if (userJSON == undefined || userJSON == null) {
       // NOT an error -- will happen any time app started with fresh cache and new user
@@ -357,12 +357,12 @@ function saveCacheUser( userObj ) {
 
     try {
       let userJSON = JSON.stringify (userObj);
-      window.sessionStorage.setItem( CACHE_USER_KEY , userJSON);
+      window.localStorage.setItem( CACHE_USER_KEY , userJSON);
 
 
     } catch (error) {
       printError("saveCacheUser()", error.message);
-      window.sessionStorage.setItem( CACHE_USER_KEY , null);
+      window.localStorage.setItem( CACHE_USER_KEY , null);
     }
 }
 

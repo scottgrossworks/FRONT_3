@@ -13,38 +13,17 @@ import { hideActionWindow } from "./action.js";
 import { MAX_USER_SUBS } from "./user.js";
 
 
-const TRADES_LIST_KEY = "TL";
 
-// TRADES
 // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
-const TRADES = new Map();  
+ 
 
-
-
-
-/**
- * is this a valid trade name?
- *  
- */
-export function isValidTrade( tradeName ) {
-
-
-  let fromCache = window.sessionStorage.getItem( TRADES_LIST_KEY );
-  if (fromCache == null)
-    throwError("isValidTrade", "No Trades Loaded");
-
-  const TRADES_LIST = JSON.parse( fromCache );
-
-  if (TRADES_LIST.length == 0) return false;
-
-  for (var i = 0; i < TRADES_LIST.length; i++) {
-    
-    if ( TRADES_LIST[i].tn == tradeName ) {
-     return true;
-    }
-  }
-  return false;
+Storage.prototype.setObj = function(key, obj) {
+  return this.setItem(key, JSON.stringify(obj))
 }
+Storage.prototype.getObj = function(key) {
+  return JSON.parse(this.getItem(key))
+}
+
 
 
 
@@ -53,7 +32,6 @@ export function isValidTrade( tradeName ) {
  * 
  */
 export async function initTrades() {
-
 
   let trades = [];
 
@@ -81,8 +59,11 @@ export async function initTrades() {
       // init TRADES struct
       // initialize the spectrum of colors
       seedColors( trades );  
+
       
-      initTradesColumn();
+  		printColors();
+      
+      initTradesColumn( tradeListener );
 
 
     } catch (error) {
@@ -102,7 +83,7 @@ export async function initTrades() {
 /**
  * populates TRADES_LIST
  */
-async function getAllTrades() {
+export async function getAllTrades() {
 
   let retJSON = null;
 
@@ -115,16 +96,12 @@ async function getAllTrades() {
 
       // SHOULD be sorted by num_leedz 
 
-      // store trades for checking against future new leedz posts
-      window.sessionStorage.setItem( TRADES_LIST_KEY, JSON.stringify( retJSON ));
-
-
     } catch (error) {
 
       printError("db_getTrades()", error );
       printError("getAllTrades()", "Using EMPTY trades list");
       retJSON = [];
-      window.sessionStorage.setItem( TRADES_LIST_KEY, JSON.stringify( retJSON ));
+
       // show error modal dialog
       errorModal("Error getting trades: " + error.message, false);
       
@@ -137,7 +114,6 @@ async function getAllTrades() {
 
 
 
-
 /**
  * 
  * @param String name of trade
@@ -145,30 +121,23 @@ async function getAllTrades() {
  */
 export function getColorForTrade(trade_name) {
   
-  // TRADES
-  // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
-  let theColor = TRADES.get(trade_name)[0];
-
-  if (theColor == null) {
-      // check the cache 
-      // is there a color assigned to this trade_name in cache?
-      theColor = window.sessionStorage.getItem( trade_name );
-      
-      let num_leedz = TRADES.get(trade_name)[1];
-      let isShowing = TRADES.get(trade_name)[2];
-
-      TRADES.set(trade_name, [ theColor, num_leedz, isShowing ]);
-  }
-
-  // console.log("%cin getColorForTrade() GOT " + trade_name + ": " + theColor, "color:" + theColor + ";");
-
-  if (theColor != null) {
-
-    return theColor;
+  // is there a color in cache for this name?
+  let the_trade = window.localStorage.getObj( trade_name );
+  
+  if (the_trade != null) {
+     
+    return the_trade[0];
   
   } else {
 
-    return "var(--LEEDZ_GRAY)";
+    // create new color using random index into create_color algo
+    let num_keys = window.localStorage.length;
+    the_color = createColor( num_keys, Math.floor(Math.random() * num_keys));
+
+    // create new entry in session cache
+    window.localStorage.setObj(trade_name, [ the_color, 0, false ]);
+    
+    return the_color;
   }
   
 }
@@ -188,8 +157,7 @@ export function getColorForTrade(trade_name) {
  * }, .... 
  * ]
 */
-function initTradesColumn() {
-
+function initTradesColumn( tradeListener ) {
 
   const current_user = getCurrentUser(false);
   if (current_user == null || current_user.sb == null)
@@ -213,7 +181,8 @@ function initTradesColumn() {
 
     // TRADES
     // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
-    let num_leedz = TRADES.get( sub )[1];
+    let num_leedz = window.localStorage.getObj(sub)[1];
+
 
     // set the leed count as a superscript
     newNode.querySelector("sup").textContent = num_leedz;
@@ -222,16 +191,18 @@ function initTradesColumn() {
     let checkBox = newNode.querySelector(".trade_checkbox");
     let radioButton = newNode.querySelector(".trade_radio");
 
-
+    
   
     //
     // CHECKBOX CLICK LISTENER
     //
+
     checkBox.addEventListener("click", function( event ) {
   
       tradeListener( sub, checkBox, radioButton, theLabel );
       
     });
+
 
 
     //
@@ -267,6 +238,7 @@ function initTradesColumn() {
 
 
 
+
 /**
  * Helper function
  * 
@@ -283,7 +255,7 @@ function tradeListener(trade, checkBox, radioButton, theLabel) {
       // TRADES
       // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
 
-      if ( TRADES.get( trade )[2]  ) { // TRADE is ON
+      if ( window.localStorage.getObj(trade)[2]  ) { // TRADE is ON
 
         turnTrade_Off(checkBox, radioButton, theLabel, trade );
 
@@ -303,6 +275,7 @@ function tradeListener(trade, checkBox, radioButton, theLabel) {
   }
 
 }
+window.tradeListener = tradeListener;
 
 
 
@@ -354,7 +327,7 @@ function createColor(numOfSteps, step) {
  * ]
  * 
  */
-function seedColors( all_trades ) {
+export function seedColors( all_trades ) {
 
     var num_trades = all_trades.length;
     
@@ -367,24 +340,25 @@ function seedColors( all_trades ) {
       // TRADES
       // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
       // is there ALREADY a color assigned to this trade_name in cache?
-      var theColor = window.sessionStorage.getItem( trade_name );
-      if (theColor != null) {
-        TRADES.set( trade_name,  [ theColor, num_leedz, false ]); 
+      var cache_trade = theColor = window.localStorage.getObj( trade_name );
+      if (cache_trade == null) {
+         // create a new color and assign it to trade_name
+        var theColor = createColor( num_trades, i );
+        window.localStorage.setObj(trade_name, [ theColor, num_leedz, false ]); 
+      
       
       } else {
-        // create a new color and assign it to trade_name
-        theColor = createColor( num_trades, i );
-        TRADES.set( trade_name,  [ theColor, num_leedz, false ]); 
-
-        // cache this in case of browser refresh
-        window.sessionStorage.setItem( trade_name, theColor );
-      }
-
-    
+        var theColor = cache_trade[0];
+        // if there is a color assigned -- leave it alone
+          if (theColor != null && theColor.startsWith('#') && theColor.length == 7) { 
+              continue;
+          } else {
+              theColor = createColor( num_trades, i );
+              window.localStorage.setObj(trade_name, [ theColor, num_leedz, false ]); 
+          }
+       }
     }
-
   }
-
 
 
 
@@ -394,9 +368,15 @@ function seedColors( all_trades ) {
  */
 export function printColors() {
   
-  for (let trade_name of TRADES.keys() ) {
-    var theColor = TRADES.get(trade_name)[0];
-    console.log("%c" + trade_name + ": " + theColor, "color:" + theColor + ";");
+  for (let trade of Object.keys(localStorage) ) {
+    
+    let theKey = window.localStorage.getObj(trade);
+    console.log("theKey=" + theKey);
+
+    if (theKey[0] != undefined) {
+      var theColor = theKey[0];
+      console.log("%c" + trade + ": " + theColor, "color:" + theColor + ";");
+    } 
   }
 }
 
@@ -408,23 +388,23 @@ export function printColors() {
 /*
  *
  */
-function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
-
+export function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
 
   // TRADES
   // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
   // mark the trade as SHOWING
-  var the_color = TRADES.get(trade_name)[0];
-  var num_leedz = TRADES.get(trade_name)[1];
-  TRADES.set(trade_name, [ the_color, num_leedz, true ] );
+  var the_color = window.localStorage.getObj(trade_name)[0];
+  var num_leedz = window.localStorage.getObj(trade_name)[1];
+  window.localStorage.setObj(trade_name, [ the_color, num_leedz, true ] );
 
 
   // DEBUG
-  // var theString = "TURN ON=" + trade_name;
-  // console.log("%c" + theString, "color: " + the_color + ";"); 
+  var theString = "* TURN ON=" + trade_name + "color=" + the_color;
+  console.log("%c" + theString, "color: " + the_color + ";"); 
+
 
   // turn on the check box and the radio button
-  checkBox.checked = true;
+  if (checkBox != null) checkBox.checked = true;
   radioButton.checked = true;
 
   // FIXME 2/2023 
@@ -443,19 +423,20 @@ function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
 /*
  *
  */
-function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
+export function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
   
+
 
   // TRADES
   // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
-  // mark the trade as NOT SHOWING
-  var the_color = TRADES.get(trade_name)[0];
-  var num_leedz = TRADES.get(trade_name)[1];
-  TRADES.set(trade_name, [ the_color, num_leedz, false ] );
+  // mark the trade as SHOWING
+  var the_color = window.localStorage.getObj(trade_name)[0];
+  var num_leedz = window.localStorage.getObj(trade_name)[1];
+  window.localStorage.setObj(trade_name, [ the_color, num_leedz, true ] );
 
 
   // turn on the check box and the radio button
-  checkBox.checked = false;
+  if (checkBox != null) checkBox.checked = false;
   radioButton.checked = false;
   
   // color the radio button
@@ -469,5 +450,23 @@ function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
 
   radioButton.classList.remove("trade_active");
 
+}
+
+
+
+
+
+
+
+/**
+ * is this a valid trade name?
+ *  
+ */
+export function isValidTrade( trade_name ) {
+
+
+  let fromCache = window.localStorage.getObj( trade_name );
+
+  return (fromCache != null);
 }
 

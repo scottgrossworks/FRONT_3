@@ -17,11 +17,16 @@
 		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
 		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
  
-		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
 		 <link rel="stylesheet" href="./css/user_edit.css" tyep="text/css"/>
-         <link rel="stylesheet" href="css/modal.css" type="text/css" />
+
+		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+		 <link rel="stylesheet" href="./css/trades.css" type="text/css" />
+         <link rel="stylesheet" href="./css/modal.css" type="text/css" />
 
 		 <script src="./js/inline-edit.js" type="module" defer></script> 
+		 <script src="./js/trades.js" type="module" defer></script>
+		 <script src="./js/error.js" type="module" defer></script>
+		 <script src="./js/dbTools.js" type="module" defer></script>
 	</head>
 
 
@@ -62,7 +67,7 @@
 
 
 			
-<div class="row" style="width:100vw" id="form_container">
+<div class="row" id="form_container">
 
 				<table cellspacing="5vw">
 					
@@ -192,9 +197,40 @@
 						<input type="button" value="Edit" onclick="inlineEdit('row_radius', sampleOptions)"/>
 					</td>
 				</tr>
+
+
+
+
+				<tr>
+					
+					
+					<TD  class="labelTD" style="border:none;vertical-align:top">Trades: </TD>
+					
+					<td id="trades_table">
+
+						<BR>
+
+						<b style="color:green">&nbsp;&nbsp;* Maximum <a id="maxTrades"></a> Trade Subscriptions Allowed</b>
+						
+						<P style="height:12px">
+
+						<template id="template_each_trade">
+							<span class="each_trade" style="display:inline-block;padding-right:4px">
+								<button class="trade_radio" 
+								style="transform:translate(2px, 3px);"></button>
+								<label></label><sup></sup>
+								
+							</span>
+						</template>       
+					
+					</td>		
+
+					<td style="width:20%;border:none"></td>
+				</tr>
 			</table>	
 
 
+			<BR>
 </div>
 
 
@@ -245,10 +281,12 @@
 		import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
 		import { inlineEdit } from "./js/inline-edit.js";
 		import { clearCurrentLeed } from "./js/leed.js";
-		import { blankUserObject, saveUserChanges, getCurrentUser, deleteCurrentUser } from "./js/user.js";
-		import { printError, throwError } from "./js/error.js";
-		
+		import { isSubscribed, saveUserChanges, getCurrentUser, deleteCurrentUser } from "./js/user.js";
+		import { printError, errorModal, throwError } from "./js/error.js";
 		import { USERNAME_URL_PARAM } from "./js/dbTools.js";
+		import { turnTrade_On, turnTrade_Off, getAllTrades, seedColors } from "./js/trades.js";
+
+		import { MAX_USER_SUBS } from "./js/user.js";
 
 		const URL_USER_DELETED = "./user_deleted.html";
 
@@ -262,7 +300,13 @@
 			throwError("User Edit", "Not logged in");
 		}	
 
-		
+
+		const USER_CHANGES = CURRENT_USER;
+
+
+
+		// INITIALIZE UI
+		//
 		var element = document.getElementById("td_username");
 		element.innerHTML = CURRENT_USER.un;
 
@@ -294,6 +338,205 @@
 		}
 
 
+		element = document.getElementById("maxTrades");		
+		element.innerHTML = MAX_USER_SUBS;
+		// INIT TRADES
+		initTrades( tradeListener );
+
+
+
+
+
+
+
+		
+/**
+ * 
+ * 
+ */
+async function initTrades( listener ) {
+
+
+	if (listener === undefined)
+	  listener = this.tradeListener;
+  
+	let trades = [];
+  
+	try {
+	  await getAllTrades().then((response) => trades = response ); 
+  
+		if (trades == null) {
+		  throw new Error("server returned null trades.");
+		}
+  
+		if (trades.length == undefined || trades.length == 0) {
+		  throw new Error("server returned empty (0) trades.");
+		}
+
+
+	
+		// init TRADES struct
+		// initialize the spectrum of colors
+		seedColors( trades );  
+		
+
+
+		initTradesTable( trades, listener );
+  
+	  } catch (error) {
+		
+		// DO NOT FAIL -- show error modal dialog and print error to console
+		var msg = "Cannot load trades.<BR>Please refresh page."
+		msg = error.message + "<BR>" + msg;
+		
+		printError("Init Trades Column", error);
+		errorModal( msg , true );
+	}
+  
+
+  }
+
+
+	
+
+
+
+
+  
+
+
+/**
+ *
+ * all_trades is the array 
+ * 
+ * ONLY display the trades to which the user is subscribed
+ * [
+ * {
+   tn: "caricatures",
+   nl: 5
+ * }, .... 
+ * ]
+*/
+function initTradesTable( all_trades, tradeListener ) {
+
+	if ((all_trades == null) || (all_trades.length == 0)) return;
+  
+  
+	// import DOM elements from html
+	const theList = document.querySelector("#trades_table");
+	const subs = [];
+	const theTemplate = document.querySelector("#template_each_trade");
+
+
+	all_trades.forEach((trade) => {
+
+	  // clone a new node
+	  const newNode = theTemplate.content.cloneNode(true).querySelector(".each_trade");
+	
+	  // set the label
+	  let theLabel = newNode.querySelector("label");
+	  theLabel.textContent = trade.tn;
+
+	  // set the leed count as a superscript
+	  // if there is an error we are using default leedz without numbers
+	  if (trade.nl != undefined)
+		newNode.querySelector("sup").textContent = trade.nl;
+  
+	  let radioButton = newNode.querySelector(".trade_radio");
+   
+	  // check SUBSCRIPTIONS
+	  // is the user subscribed to this trade?
+	
+
+	  if ( isSubscribed( trade.tn ) ) {
+		turnTrade_On(null, radioButton, theLabel, trade.tn);
+	  }
+
+	  
+	  //
+	  // RADIO BUTTON CLICK LISTENER
+	  //
+	  radioButton.addEventListener("click", function( event ) {
+	
+		tradeListener( trade.tn, radioButton, theLabel );
+  
+	  });
+  
+
+  
+	  //
+	  // LABEL CLICK LISTENER
+	  //
+	  theLabel.addEventListener("click", function( event ) {
+  
+		tradeListener( trade.tn, radioButton, theLabel );
+		
+	  });
+  
+
+	  theList.appendChild( newNode );
+	});
+
+}
+
+  
+
+
+  
+
+
+			
+
+	
+  
+
+
+
+
+
+	/**
+	* Helper function
+	* 
+	* 
+	*/
+	function tradeListener(trade, radioButton, theLabel) {
+		
+
+		try {
+
+		   if ( isSubscribed(trade)  ) { // TRADE is ON
+			
+				turnTrade_Off(null, radioButton, theLabel, trade);
+				USER_CHANGES.sb = USER_CHANGES.sb.filter(function (sub) {
+					return sub != trade;
+				});
+				
+				beginEditing();
+				
+		   } else { // TRADE is OFF
+
+				if (USER_CHANGES.sb.length >= MAX_USER_SUBS) {
+					
+					printError("Trades Table", "Maximum " + MAX_USER_SUBS + " trade subscriptions allowed");
+					return;
+				}
+				turnTrade_On(null, radioButton, theLabel, trade );
+				USER_CHANGES.sb.push(trade);
+				
+				beginEditing();
+		   }
+	 
+		   
+	   } catch (error) {
+		 errorModal(error, false);
+		 return false;
+	   }
+		
+
+	}
+	window.tradeListener = tradeListener;
+	
+
 
 
 
@@ -313,8 +556,6 @@
 
 
 
-
-		const USER_CHANGES = CURRENT_USER;
 
 		function defaultCallback(rowData, rowName) {
 

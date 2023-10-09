@@ -60,8 +60,7 @@ export async function initTrades() {
       // initialize the spectrum of colors
       seedColors( trades );  
 
-      
-  		printColors();
+  		// printColors();
       
       initTradesColumn( tradeListener );
 
@@ -371,7 +370,6 @@ export function printColors() {
   for (let trade of Object.keys(localStorage) ) {
     
     let theKey = window.localStorage.getObj(trade);
-    console.log("theKey=" + theKey);
 
     if (theKey[0] != undefined) {
       var theColor = theKey[0];
@@ -399,8 +397,8 @@ export function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
 
 
   // DEBUG
-  var theString = "* TURN ON=" + trade_name + "color=" + the_color;
-  console.log("%c" + theString, "color: " + the_color + ";"); 
+  // var theString = "* TURN ON=" + trade_name + "color=" + the_color;
+  // console.log("%c" + theString, "color: " + the_color + ";"); 
 
 
   // turn on the check box and the radio button

@@ -80,15 +80,14 @@ export function formatDTforInput(dateTimeString) {
 
 
 /**
- * reverse of prettyFormatDT
+ * Saturday Oct 14, 2023 at 0:00AM
  * input prettyFormatDT and output DT
  * 
  * Tuesday Apr 2, 2023 at 6:11PM --> 1680444660000
  */
 export function DTfromPretty( prettyStr ) {
 
-
-    // MONTH
+     // MONTH
     var space = prettyStr.indexOf(' ');
     var monthStr = prettyStr.substring( space + 1, space + 4);
     const the_month = getMonthIndex( monthStr ); // WRONGbvvb
@@ -101,13 +100,15 @@ export function DTfromPretty( prettyStr ) {
     // console.log("THE DAY=" + the_day);
 
     // YEAR
-    var at = prettyStr.indexOf('at');
+    // 'at ' including space -- so we don't catch Saturday
+    var at = prettyStr.indexOf('at ');
     const the_year = prettyStr.substring(comma + 1, at).trim();
     // console.log("THE YEAR=" + the_year);
 
     // HOURS
     var colon = prettyStr.indexOf(':');
     var the_hour = parseInt( prettyStr.substring(at + 2, colon).trim() );
+    // console.log("colon=" + colon + " hour=" + the_hour);
     // AM / PM
     let amPm = prettyStr.substring( prettyStr.length - 2 );
     if (amPm == "PM") {
@@ -119,9 +120,6 @@ export function DTfromPretty( prettyStr ) {
     // MINUTES
     const the_min = prettyStr.substring(colon + 1, colon + 3);
     // console.log("THE MIN=" + the_min);
-
-
-    
 
 
     const the_date = new Date( Date.UTC( the_year,

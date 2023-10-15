@@ -6,7 +6,7 @@
 import { printError, throwError } from "./error.js";
 import { getCurrentLeed } from "./leed.js";
 import { isValidTrade } from "./trades.js";
-import { prettyFormatDT, formatDTforInput, getTodayUTC } from "./dates.js";
+import { prettyFormatDT, formatDTforInput, DTfromPretty, getTodayUTC } from "./dates.js";
 
 
 
@@ -134,6 +134,9 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             }
             cellContent += "/>";
             break;
+
+
+
         case "text":
 
 
@@ -149,7 +152,9 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
 
 
-            case "date":
+
+
+        case "date":
 
 
 
@@ -171,7 +176,7 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
 
             cellContent += `<input type='datetime-local' value='${theVal}' form='${rowName}Form'`;
-            for (key in cell.dataset    ) {
+            for ( key in cell.dataset ) {
                 if (cell.dataset.hasOwnProperty(key) && key.substr(0, 6) == "inline" && attributesFilter.indexOf(key) == -1) {
                     cellContent += ` ${key.substr(6)}='${cell.dataset[key]}'`;
                 }
@@ -194,6 +199,8 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             }
             cellContent += "/>";
             break;
+
+
         case "email":
             cellContent += `<input type='email' value='${inlineEditRowContents[rowName][i]}' form='${rowName}Form'`;
             for (key in cell.dataset) {
@@ -522,16 +529,31 @@ function inlineDefaultFinish(rowName, options) {
 
 
 
-
+            //
+            // Validate date
+            //
             case "date":
 
                 var theVal = cell.children[getFromChildren].value;
-
+                var today = getTodayUTC();
+                var str = prettyFormatDT( theVal );
+                var dt = DTfromPretty(str);
+                
+                // theVal = 2023-10-04T00:00
+                // check that the date is not before today's date
+                if (dt <= today) {
+                    const errMsg =  rowName.substring(4) + " date cannot be in the past";
+                    printError("inlineDefaultFinish()", errMsg );
+                    alert(errMsg);
+                    return;
+                }
+                
+                
                 var trimVal = prettyFormatDT( theVal.trim() );
 
                 rowData[cell.dataset.inlinename] = trimVal;
                 inlineEditRowContents[rowName][i] = trimVal;
-        
+
 
             break;
 

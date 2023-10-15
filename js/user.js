@@ -160,7 +160,7 @@ export async function initUser( login ) {
 
         CURRENT_USER.ws = (resObj.ws != null) ? resObj.ws : null;
         CURRENT_USER.ab = (resObj.ab != null) ? resObj.ab : null;
-        CURRENT_USER.zh = (resObj.zh != null) ? resObj.zh : null;
+        CURRENT_USER.zp = (resObj.zp != null) ? resObj.zp : null;
         CURRENT_USER.zr = (resObj.zr != null) ? resObj.zr : null;
 
         CURRENT_USER.sb = (resObj.sb != null) ? resObj.sb : [];
@@ -196,7 +196,7 @@ export async function initUser( login ) {
  * 
  *  "cr": "dave.reyes",
     "sb": [ "airbrush", "caricatures", "martial arts"],
-    "zh": "93551",
+    "zp": "93551",
     "zr": "50", 
     "ab": "I am a caricature artist in LA",
     "ws": "http://doctorreyes.com",
@@ -217,7 +217,7 @@ export function blankUserObject() {
   BLANK_USER.ws = null;
   BLANK_USER.ab = null
 
-  BLANK_USER.zh = null;
+  BLANK_USER.zp = null;
   BLANK_USER.zr = null;
 
   BLANK_USER.sb = [];
@@ -285,8 +285,8 @@ export async function saveUserChanges( userObj ) {
     if (userObj.ws != null)
     CURRENT_USER.ws = userObj.ws;
 
-  if (userObj.zh != null)
-    CURRENT_USER.zh = userObj.zh;
+  if (userObj.zp != null)
+    CURRENT_USER.zp = userObj.zp;
 
   if (userObj.zr != null)
     CURRENT_USER.zr = userObj.zr;

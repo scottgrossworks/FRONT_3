@@ -3,7 +3,7 @@
 import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname, getShortDateString } from "./dates.js";
 import { getColorForTrade } from "./trades.js";
 import { db_getDeetz, USERNAME_URL_PARAM } from "./dbTools.js";
-import { printError, throwError } from "./error.js";
+import { errorModal, printError, throwError } from "./error.js";
 import { getCurrentUser } from "./user.js";
 import { getCurrentLeed, cacheCurrentLeed, LEED_KEYS, OPTS_HIDDEN } from "./leed.js";
 
@@ -117,6 +117,9 @@ export async function showLeedAction( leed_preview , gotoDB ) {
         .catch(error => {
 
             printError( "getDeetz()", error.message );
+           
+            errorModal("Cannot get leed details for [" + leed_preview.tn + "] " + leed_preview.id, true);
+            
             // EXIT FUNCTION HERE
             throwError( "showLeedAction()", error); 
         });

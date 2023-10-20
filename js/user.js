@@ -132,14 +132,16 @@ export async function initUser( login ) {
       // GET the user JSON data from the server
       // UPDATE CURRENT_USER with new values from DB
       //
-      let resObj = [];   
+      let resObj = null;
+
       try {
         // get the user object
         await db_getUser( login )
         .then(data => {
   
-          if (data == null) throw new Error("null response from GET");
-          resObj = data[0];
+          if (data == null) throw new Error("Server Error: Cannot Get User");
+
+          resObj = data;
   
         })
         .catch(error => {
@@ -148,14 +150,18 @@ export async function initUser( login ) {
           throwError('Init User', error);
         });
 
+        
+
+
+        // THIS MUST MATCH DYNAMO DB SCHEMA
+        //
         // copy the new values into CURRENT_USER
 
         // some fields are mandatory and will always contain values
         // some are optional and may be null
-        // if statements are in case cache version is more recent
+        // if statements are in case cache v  ersion is more recent
         // 
-        // NOTE that .cr (creator) becomes .un (username)
-        CURRENT_USER.un = resObj.cr;
+        CURRENT_USER.un = resObj.sk;
         CURRENT_USER.em = resObj.em;
 
         CURRENT_USER.ws = (resObj.ws != null) ? resObj.ws : null;
@@ -163,11 +169,12 @@ export async function initUser( login ) {
         CURRENT_USER.zp = (resObj.zp != null) ? resObj.zp : null;
         CURRENT_USER.zr = (resObj.zr != null) ? resObj.zr : null;
 
-        CURRENT_USER.sb = (resObj.sb != null) ? resObj.sb : [];
-
+        // TRADES SUBSCRIPTIONS
+        CURRENT_USER.sb =  (resObj.sb == undefined || resObj.sb == null || resObj.sb == "") ? [] : resObj.sb.split(',').map(element=>element.trim());
 
         // USER BADGES
-        CURRENT_USER.bg = (resObj.bg != null) ? resObj.bg : [];
+        CURRENT_USER.bg =  (resObj.bg == undefined || resObj.bg == null || resObj.bg == "") ? [] : resObj.bg.split(',').map(element=>element.trim());
+
         
 
       } catch (error) {

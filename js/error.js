@@ -77,6 +77,9 @@ export function errorModalClose() {
  */
 export function errorModal( error, no_close ) {
 
+  // Change back to normal cursor
+  document.body.style.cursor = 'default';
+
   let modal = document.getElementById("error_modal");
   modal.setAttribute("no_close", (no_close) ? 1 : 0 );
 

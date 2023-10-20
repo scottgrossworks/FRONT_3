@@ -284,7 +284,7 @@
 		import { isSubscribed, saveUserChanges, getCurrentUser, deleteCurrentUser } from "./js/user.js";
 		import { printError, errorModal, throwError } from "./js/error.js";
 		import { USERNAME_URL_PARAM } from "./js/dbTools.js";
-		import { turnTrade_On, turnTrade_Off, getAllTrades, seedColors } from "./js/trades.js";
+		import { turnTrade_On, turnTrade_Off, getAllTrades, createTradesAndColors } from "./js/trades.js";
 
 		import { MAX_USER_SUBS } from "./js/user.js";
 
@@ -327,9 +327,9 @@
 			element.innerHTML = CURRENT_USER.ab;
 		}
 
-		if (CURRENT_USER.zh != null) {
+		if (CURRENT_USER.zp != null) {
 			element = document.getElementById("td_zip");
-			element.innerHTML = CURRENT_USER.zh;
+			element.innerHTML = CURRENT_USER.zp;
 		}
 
 		if (CURRENT_USER.zr != null) {
@@ -377,7 +377,7 @@ async function initTrades( listener ) {
 	
 		// init TRADES struct
 		// initialize the spectrum of colors
-		seedColors( trades );  
+		createTradesAndColors( trades );  
 		
 
 
@@ -435,7 +435,7 @@ function initTradesTable( all_trades, tradeListener ) {
 	
 	  // set the label
 	  let theLabel = newNode.querySelector("label");
-	  theLabel.textContent = trade.tn;
+	  theLabel.textContent = trade.sk;
 
 	  // set the leed count as a superscript
 	  // if there is an error we are using default leedz without numbers
@@ -448,8 +448,8 @@ function initTradesTable( all_trades, tradeListener ) {
 	  // is the user subscribed to this trade?
 	
 
-	  if ( isSubscribed( trade.tn ) ) {
-		turnTrade_On(null, radioButton, theLabel, trade.tn);
+	  if ( isSubscribed( trade.sk ) ) {
+		turnTrade_On(null, radioButton, theLabel, trade.sk);
 	  }
 
 	  
@@ -458,7 +458,7 @@ function initTradesTable( all_trades, tradeListener ) {
 	  //
 	  radioButton.addEventListener("click", function( event ) {
 	
-		tradeListener( trade.tn, radioButton, theLabel );
+		tradeListener( trade.sk, radioButton, theLabel );
   
 	  });
   
@@ -469,7 +469,7 @@ function initTradesTable( all_trades, tradeListener ) {
 	  //
 	  theLabel.addEventListener("click", function( event ) {
   
-		tradeListener( trade.tn, radioButton, theLabel );
+		tradeListener( trade.sk, radioButton, theLabel );
 		
 	  });
   
@@ -568,7 +568,7 @@ function initTradesTable( all_trades, tradeListener ) {
 					break;
 
 				case "row_zip":
-					USER_CHANGES.zh = rowData["zip"];
+					USER_CHANGES.zp = rowData["zip"];
 					break;
 
 				case "row_about":

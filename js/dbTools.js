@@ -11,14 +11,14 @@ import { printError, throwError } from "./error.js";
 
 
 
-export const API_GATEWAY = "http://localhost:3000/"
+export const API_GATEWAY = "https://jjz8op6uy4.execute-api.us-west-2.amazonaws.com/Leedz_Stage_1/";
 
 export const USERNAME_URL_PARAM = "un";
 
 export const SUBS_URL_PARAM = "sb";
-export const START_DATE_URL_PARAM = "ds";
-export const END_DATE_URL_PARAM = "de";
-export const ZIP_HOME_URL_PARAM = "zh";
+export const START_DATE_URL_PARAM = "st";
+export const END_DATE_URL_PARAM = "et";
+export const ZIP_HOME_URL_PARAM = "zp";
 export const ZIP_RADIUS_URL_PARAM = "zr";
 
 export const TRADE_NAME_URL_PARAM = "tn";
@@ -138,6 +138,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 /**
  * returns JSON list [ { key = "value" }, { key = "value" }, ... ] object
  * 
+ * 
  */
 export async function db_getTrades() {
 
@@ -159,7 +160,8 @@ export async function db_getTrades() {
           throwError('doGet()', 'There was a problem with the fetch operation:' + error.message);
         });
 
-        
+
+
         return json_obj;
 
     } catch (error) {
@@ -173,8 +175,13 @@ export async function db_getTrades() {
 }
 
 
+
+
+
 /**
  * returns JSON user object
+ * 
+ * 
  */
 export async function db_getUser( username ) {
     
@@ -221,6 +228,7 @@ export async function db_getUser( username ) {
  * 
  * FIXME FIXME FIXME
  * MUST PASS trade_name to lambda because its primary key for DDB
+ * 
  */
 export async function db_getDeetz( trade_name, leed_id ) {
     
@@ -286,13 +294,17 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
 
         const theURL = new URL(API_GATEWAY + "getLeedz");
         let searchParams = new URLSearchParams();
-        searchParams.append( SUBS_URL_PARAM, subs_string );
         searchParams.append( START_DATE_URL_PARAM, start_date );
         searchParams.append( END_DATE_URL_PARAM, end_date );
         searchParams.append( ZIP_HOME_URL_PARAM, zip_home );
         searchParams.append( ZIP_RADIUS_URL_PARAM, zip_radius );
+        searchParams.append( SUBS_URL_PARAM, subs_string );
 
         theURL.search = searchParams.toString();
+
+
+        console.log(theURL.search)
+
 
         await doGet( theURL )
         .then(data => {
@@ -310,6 +322,12 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
         printError("response.json()", error);
         throwError("db_getLeedz()", error.message);
     }
+
+
+    
+    console.log("GOT JSON!!!");
+    console.log(json_obj);
+
 
     return json_obj;  // SHOULD NOT BE NULL
 }
@@ -340,13 +358,14 @@ async function doGet( theURL ) {
             'Content-Type': 'application/json',
             'Connection':'close'
             },
-        timeout:"4000"
+        timeout:"8000"
         }
     ).then(response => {
-    
+
         if (! response.ok) {
            throw new Error('Network response was not ok');
         }
+
         return response.json();
     })
 

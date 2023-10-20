@@ -398,11 +398,12 @@
             </TD></TR>
           </table>
           </center> 
-     
+        </h1>
+
           <BR>
       <a id="guest_modal_close" href="javascript:modalClose();" href="">X</a>
       <BR>
-    </h1>
+   
     </div>
 
 
@@ -414,10 +415,12 @@
   <div class="row" id="error_modal">
     <center><img id="error_logo" src="img/logo_2.png"></center> 
     <h1>
+      <BR>
+    </h1>
+    <BR>
     <BR>
     <a id="error_modal_close" href="javascript:modalClose();" href="">X</a>
-    <BR>
-      </h1>
+    
   </div>
 
 
@@ -631,7 +634,7 @@
         //
         const current_user = getCurrentUser(false);
         current_user.zr = theMiles.valueOf();
-        current_user.zh = theZip.valueOf();
+        current_user.zp = theZip.valueOf();
         
 
         // this is an async call
@@ -1307,7 +1310,7 @@ function trimAndRemoveSpaces(inputString) {
             let zip = document.getElementById("distance_from");
 
             if (current_user.zr != null) miles.value = current_user.zr;
-            if (current_user.zh != null) zip.value = current_user.zh;
+            if (current_user.zp != null) zip.value = current_user.zp;
 
           } catch (error) {
             var msg = "Cannot initialize distance chooser.<BR>Please refresh page."

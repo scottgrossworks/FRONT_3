@@ -142,13 +142,11 @@ export async function loadLeedzFromDB( subs, firstDay, lastDay, zip_home, zip_ra
       // CLEAR the CACHE for this date
       var cache_key = LEEDZ_CAL_KEY + getMonth() + getYear();
       window.sessionStorage.setItem( cache_key, "");
-      return;
 
+    } else { 
+      saveLeedzToCache( results, getMonth(), getYear() );
+    
     }
-
-    // save to cache
-    // this will overwrite the current month / year in the cache
-    saveLeedzToCache( results, getMonth(), getYear() );
 
     // the callback function will populate the calendar and update the cache
     theCallback( results );

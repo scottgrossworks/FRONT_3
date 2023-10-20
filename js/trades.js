@@ -58,7 +58,7 @@ export async function initTrades() {
 
       // init TRADES struct
       // initialize the spectrum of colors
-      seedColors( trades );  
+      createTradesAndColors( trades );  
 
   		// printColors();
       
@@ -68,10 +68,8 @@ export async function initTrades() {
     } catch (error) {
       
       // DO NOT FAIL -- show error modal dialog and print error to console
-      var msg = "Cannot load trades.<BR>Please refresh page."
-      msg = error.message + "<BR>" + msg;
-      
-      printError("Init Trades Column", error);
+      var msg = error.message + ".  Cannot load trades, please refresh page. "
+      printError("Init Trades Column", msg);
       errorModal( msg , true );
   }
 
@@ -131,7 +129,7 @@ export function getColorForTrade(trade_name) {
 
     // create new color using random index into create_color algo
     let num_keys = window.localStorage.length;
-    the_color = createColor( num_keys, Math.floor(Math.random() * num_keys));
+    const the_color = createColor( num_keys, Math.floor(Math.random() * num_keys));
 
     // create new entry in session cache
     window.localStorage.setObj(trade_name, [ the_color, 0, false ]);
@@ -167,6 +165,7 @@ function initTradesColumn( tradeListener ) {
   // import DOM elements from html
   const theList = document.querySelector("#trades_list");
   const theTemplate = document.querySelector("#template_each_trade");
+
 
   // for each subscription
   current_user.sb.forEach(( sub ) => {
@@ -326,35 +325,45 @@ function createColor(numOfSteps, step) {
  * ]
  * 
  */
-export function seedColors( all_trades ) {
+export function createTradesAndColors( all_trades ) {
 
     var num_trades = all_trades.length;
     
     // for each trade....
     for (let i = 0; i < num_trades; i++ ) {
-      
-      var trade_name = all_trades[i].tn;
-      var num_leedz = all_trades[i].nl;
+ 
 
+      //  THIS MUST MATCH DYNAMODB SCHEMA
+      // ARRAY
+      // sk: trade_name
+      // nl: num_leedz
+      /**
+       * [     
+          0:{sk: 'airbrush', pk: 'trade', nl: '28'}
+          1:{sk: 'ballerina', pk: 'trade', nl: '11'}
+          2:{sk: 'boxer', pk: 'trade', nl: '33'}
+          3:{sk: 'caricatures', pk: 'trade', nl: '17'}
+          ]
+        */
+
+      //
+      var trade_name = all_trades[i].sk;
+      var num_leedz = all_trades[i].nl;
+     
       // TRADES
       // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
       // is there ALREADY a color assigned to this trade_name in cache?
-      var cache_trade = theColor = window.localStorage.getObj( trade_name );
+      var cache_trade = window.localStorage.getObj( trade_name );
       if (cache_trade == null) {
          // create a new color and assign it to trade_name
         var theColor = createColor( num_trades, i );
         window.localStorage.setObj(trade_name, [ theColor, num_leedz, false ]); 
-      
+        
       
       } else {
         var theColor = cache_trade[0];
-        // if there is a color assigned -- leave it alone
-          if (theColor != null && theColor.startsWith('#') && theColor.length == 7) { 
-              continue;
-          } else {
-              theColor = createColor( num_trades, i );
-              window.localStorage.setObj(trade_name, [ theColor, num_leedz, false ]); 
-          }
+        // if there is a color assigned -- update values
+        window.localStorage.setObj(trade_name, [theColor, num_leedz, false ]); 
        }
     }
   }
@@ -373,7 +382,8 @@ export function printColors() {
 
     if (theKey[0] != undefined) {
       var theColor = theKey[0];
-      console.log("%c" + trade + ": " + theColor, "color:" + theColor + ";");
+      var numLeedz = theKey[1];
+      console.log("%c" + trade + ": " + theColor  + " numLeedz: " + numLeedz, "color:" + theColor + ";");
     } 
   }
 }
@@ -391,8 +401,8 @@ export function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
   // TRADES
   // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
   // mark the trade as SHOWING
-  var the_color = window.localStorage.getObj(trade_name)[0];
-  var num_leedz = window.localStorage.getObj(trade_name)[1];
+  const the_color = window.localStorage.getObj(trade_name)[0];
+  const num_leedz = window.localStorage.getObj(trade_name)[1];
   window.localStorage.setObj(trade_name, [ the_color, num_leedz, true ] );
 
 
@@ -428,8 +438,8 @@ export function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
   // TRADES
   // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
   // mark the trade as SHOWING
-  var the_color = window.localStorage.getObj(trade_name)[0];
-  var num_leedz = window.localStorage.getObj(trade_name)[1];
+  const the_color = window.localStorage.getObj(trade_name)[0];
+  const num_leedz = window.localStorage.getObj(trade_name)[1];
   window.localStorage.setObj(trade_name, [ the_color, num_leedz, true ] );
 
 

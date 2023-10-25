@@ -29,7 +29,7 @@ Storage.prototype.getObj = function(key) {
 
 /**
  * 
- * 
+ * trades come from DB SORTED by num_leedz + --> -
  */
 export async function initTrades() {
 
@@ -47,21 +47,20 @@ export async function initTrades() {
       }
 
 
-      if ( isGuestUser() ) { 
+      // init TRADES struct
+      // initialize the spectrum of colors
+      createTradesAndColors( trades );  
+	    // printColors();
+
+      if ( isGuestUser( true ) ) { 
         let guest_user = getCurrentUser();
         // the trades should be sorted by num_leedz
         // the guest user's subs are the top n leedz
         for (let i = 0; i < MAX_USER_SUBS; i++) {
-          guest_user.sb.push( trades[i].tn ) 
+          guest_user.sb.push( trades[i].sk ) 
         }
       }
-
-      // init TRADES struct
-      // initialize the spectrum of colors
-      createTradesAndColors( trades );  
-
-  		// printColors();
-      
+  	
       initTradesColumn( tradeListener );
 
 
@@ -103,6 +102,7 @@ export async function getAllTrades() {
       errorModal("Error getting trades: " + error.message, false);
       
     }
+
 
     return retJSON;
   }
@@ -181,6 +181,8 @@ function initTradesColumn( tradeListener ) {
     // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
     let num_leedz = window.localStorage.getObj(sub)[1];
 
+    // add num_leedz as an attribute
+    newNode.setAttribute("nl", num_leedz);
 
     // set the leed count as a superscript
     newNode.querySelector("sup").textContent = num_leedz;
@@ -225,8 +227,10 @@ function initTradesColumn( tradeListener ) {
     
     turnTrade_On(checkBox, radioButton, theLabel, sub);
 
-    // add it to the UI
-    theList.appendChild( newNode );
+
+    // add trade to the UI
+    // in a position sorted by num_leedz
+    addTradeSorted( theList, newNode );
   });
 
 
@@ -234,6 +238,33 @@ function initTradesColumn( tradeListener ) {
 }
 
 
+
+/**
+ * Keep the trades column sorted by num_leedz
+ * 
+ */
+function addTradeSorted( list, node ) {
+
+    const node_nl = node.getAttribute('nl');
+    
+    if (list.children.length === 0) {
+      list.push(node);
+
+    } else if (node_nl >= list.children[0].getAttribute('nl')) {
+      list.insertBefore( node, list.children[0] );
+
+    } else {
+      let index = 1;
+      while (node_nl < list.children[index].getAttribute('nl')) {
+        index++;
+      }
+      if (index >= list.length)
+        list.append(node);
+      else
+        list.insertBefore(node, list.children[index]);
+
+    }
+}
 
 
 
@@ -350,6 +381,7 @@ export function createTradesAndColors( all_trades ) {
       var trade_name = all_trades[i].sk;
       var num_leedz = all_trades[i].nl;
      
+
       // TRADES
       // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
       // is there ALREADY a color assigned to this trade_name in cache?

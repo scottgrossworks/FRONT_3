@@ -24,7 +24,7 @@ export async function deleteCurrentUser() {
     throwError("deleteCurrentUser", "CURRENT_USER should never be null");
 
 
-  if (isGuestUser())
+  if (isGuestUser( true ))
     throwError("deleteCurrentUser", "Cannot delete Guest User");
 
 
@@ -79,7 +79,7 @@ export function getCurrentUser( useCache ) {
   if (CURRENT_USER == null)
     throwError("getCurrentUser", "CURRENT_USER should never be null");
 
-  if (isGuestUser()) return GUEST_USER;
+  if (isGuestUser( true )) return GUEST_USER;
 
   // search the cache
   if (useCache) {
@@ -100,8 +100,12 @@ export function getCurrentUser( useCache ) {
  * 
  * @returns true if we are using the GUEST account
  */
-export function isGuestUser() {
-  return CURRENT_USER === GUEST_USER;
+export function isGuestUser( guest_user ) {
+
+  if ( guest_user )
+    return CURRENT_USER === GUEST_USER;
+  else 
+    return CURRENT_USER !== GUEST_USER;
 }
 
 
@@ -123,7 +127,8 @@ export async function initUser( login ) {
     const cacheUser = getCurrentUser(true);
     if (cacheUser.un == login) {
       // this is the same user from another browser window -- do NOT go back to server
-      // CURRENT_USER == cacheUser;
+      CURRENT_USER == cacheUser;
+
 
     } else {
 
@@ -145,9 +150,17 @@ export async function initUser( login ) {
   
         })
         .catch(error => {
-          let msg =  "Error initializing user [ " + login + " ]: " + error.message;
-          printError("db_getUser", msg);
-          throwError('Init User', error);
+
+          if (error.status == 204) {
+            var msg = "User " + login + " not found.";
+            throwError("Get User", msg);
+
+          } else {
+            var msg =  "Error initializing user [ " + login + " ]: " + error.message;
+            printError("db_getUser", msg);
+            throwError('Init User', error);
+          }
+
         });
 
         
@@ -187,8 +200,8 @@ export async function initUser( login ) {
       saveCacheUser( CURRENT_USER );
     }
     
-    // console.log("%cuser.initUser(): " + CURRENT_USER.un, "color:darkorange");
-    // console.log(CURRENT_USER);
+    console.log("%cuser.initUser(): " + CURRENT_USER.un, "color:darkorange");
+    console.log(CURRENT_USER);
 
   }
 
@@ -246,7 +259,7 @@ export async function saveCurrentUser() {
   if (CURRENT_USER == null)
     throwError("saveCurrentUser", "No CURRENT_USER initialized");
 
-  if (isGuestUser()) return;
+  if (isGuestUser( true )) return;
 
   // save changes to CACHE
   saveCacheUser( CURRENT_USER );
@@ -431,7 +444,7 @@ export async function saveSubscription( trade_name ) {
 
     // GUEST_USER can save / remove subscriptions from the current session cache user but
     // no subscription added to DB
-    if ( isGuestUser() ) return;
+    if ( isGuestUser( true ) ) return;
 
     // if not guest user
     // Trade Subscribe to DB
@@ -492,7 +505,7 @@ export async function saveSubscription( trade_name ) {
 
     // GUEST_USER can save / remove subscriptions from the current session cache user but
     // no subscription added to DB
-    if ( isGuestUser() ) return;
+    if ( isGuestUser( true ) ) return;
 
     // if not guest user
     // remove subscription from DB

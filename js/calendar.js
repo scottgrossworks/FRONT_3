@@ -206,9 +206,6 @@ export function loadDBLeedz() {
 
 
     waitCursor();
-    
-    console.log("IN LOAD DB LEEDZ CURRENT_USER");
-    console.log( current_user );
 
 
     // ASYNC CALL
@@ -243,9 +240,7 @@ export function loadDBLeedz() {
 function refreshCalendar( results ) {
 
     normalCursor();
-    
-    if (results.length == 0) return;
-   
+
     try {
 
         // START with empty calendar
@@ -253,7 +248,8 @@ function refreshCalendar( results ) {
         removeLeedzShowing();
 
         // add new leedz fresh
-        addLeedzToCalendar( results );
+        if (results.length != 0) 
+            addLeedzToCalendar( results );
 
 
     } catch (error) {
@@ -292,6 +288,8 @@ function normalCursor() {
  */
 function addLeedzToCalendar( results ) {
 
+    console.log("ADD LEEDZ RESULTS=" + results);
+
     // the UI contains all the each_date days
     const theList = document.querySelector("#calendar_list");
 
@@ -299,7 +297,7 @@ function addLeedzToCalendar( results ) {
     for (const the_Leed of results) {
 
         // remove DDB-specific tag
-        // leed#caricatures --> caricatures
+        // leed#caricatures --> caricatures        
         const trade_name = the_Leed.pk.substr(5);        
 
         // what color are all leedz of this trade?
@@ -327,8 +325,8 @@ function addLeedzToCalendar( results ) {
 
             if (theDate == null) {
             // this should NEVER be null
-                printError("loadCalLeedz", "LEEDZ_DATE attribute not being set for each day");
-                printError("loadCalLeedz", "Unable to load " + the_Leed.pk);
+                printError("addLeedzToCal", "LEEDZ_DATE attribute not being set for each day");
+                printError("addLeedzToCal", "Unable to load " + the_Leed.pk);
                 return;  
             }
 
@@ -354,12 +352,12 @@ function addLeedzToCalendar( results ) {
 /** 
  *
     {
-        "id": 1004, 
+        "pk": "leed#airbrush",
+        "sk": 12345678, 
         "cr": "scott.gross", 
         "zp": "90056", 
         "st": 1680469860000, 
         "et": 1680477060000, 
-        "tn": "airbrush",
         "ti": "staff appreciation party"
     }
 ]
@@ -379,12 +377,18 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     // pk = trade#caricatures
     const trade_name = leed_fromDB.pk.substr(5);
     newLeed.setAttribute("tn", trade_name);
-    newLeed.setAttribute("id", leed_fromDB.id); // unique ID
+    newLeed.setAttribute("id", leed_fromDB.sk); // unique ID
+
+    leed_fromDB.tn = trade_name;
+    leed_fromDB.id = leed_fromDB.sk;
+
+
 
 
     // IS THIS OUR LEED?
     // is this leed created by the current user?
     //
+    console.log("CREATOR=" + leed_fromDB.cr);
     if (leed_fromDB.cr == getCurrentUser(false).un) {
         newLeed.classList.add("user_leed");
     } else {

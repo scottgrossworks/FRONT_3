@@ -13,19 +13,19 @@ import { getMonth,getYear } from "./dates.js";
 
 LEED PREVIEW
         {
-            "id": 1001, 
+            "sk": 12345678, 
             "ti": "This is Leed ID 1001 fun times",
             "cr": "dave.reyes", 
             "zp": "90034", 
             "st": 1680635460000, 
             "et": 1680639060000, 
-            "tn": "caricatures"
+            "pk ": "leed#caricatures"
         },
 
 LEED DETAILS
     {
-        "id": 1004,
-        "tn": "airbrush", 
+        "sk": 12345678,
+        "pk": "leed#airbrush", 
         "lc": "1001 Airbrush Lane, Los Angeles, CA 90056",  
         "dt": "1004 staff app1 These are the potentially-longwinded leed details for staff appreciation party, leed id: 1004",
         "rq": "1004 staff app2 These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
@@ -221,13 +221,15 @@ export function setCurrentLeed( jsonObj ) {
         throwError("setCurrentLeed", "leed JSON is null");
   
 
-    CURRENT_LEED.id = jsonObj.id;
+    CURRENT_LEED.id = jsonObj.sk;
 
     
     if (jsonObj.ti != null) CURRENT_LEED.ti = jsonObj.ti;
     if (jsonObj.cr != null) CURRENT_LEED.cr = jsonObj.cr;
 
-    if (jsonObj.tn != null) CURRENT_LEED.tn = jsonObj.tn;
+    // user#scott.gross
+    CURRENT_LEED.tn = jsonObj.pk.substr(5);
+
     if (jsonObj.zp != null) CURRENT_LEED.zp = jsonObj.zp;
     if (jsonObj.lc != null) CURRENT_LEED.lc = jsonObj.lc;
     

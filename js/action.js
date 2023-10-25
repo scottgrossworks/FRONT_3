@@ -55,20 +55,20 @@ function setActionHeight( window_height ) {
 leed_preview already contains 
 
 {   
-        "id": 1004, 
-        "cr": "scott.gross", 
+        "sk": 12345678, 
+        "cr": "scottgross.works",
         "zp": "90056", 
         "st": 1682452800000, 
         "et": 1682460000000, 
         "tn": "airbrush",
-        "nt": "staff appreciation party"
+        "ti": "staff appreciation party"
     }
 
 leed_details contains
 
 [
     {
-        "id": 1004,
+        "sk": 12345678,
         "lc": "1001 Airbrush Lane, Los Angeles, CA 90056",  
         "dt": "These are the potentially-longwinded leed details for staff appreciation party, leed id: 1004",
         "rq": "These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
@@ -108,7 +108,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
             .then(data => {
 
             if (data == null) throw new Error("null response from GET");
-            leed_details = data[0];
+            leed_details = data;
             
             // query returns empty result set
             if (leed_details == null) throw new Error("No leed details for id: " + leed_preview.id);
@@ -129,7 +129,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     //
     // START DATE
     //
-    let startDate = new Date(leed_preview.st);
+    let startDate = new Date( parseInt(leed_preview.st) );
     let isoStart = startDate.toISOString();
     const leed_weekday = getWeekday( getShortDateString( isoStart ) );
 
@@ -156,7 +156,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     //
     // END DATE
     //
-    let endDate = new Date(leed_preview.et);
+    let endDate = new Date( parseInt(leed_preview.et) );
     let isoEnd = endDate.toISOString();
     let hours_end = getHours(isoEnd);
 
@@ -326,13 +326,13 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     if (current_user.un == leed_preview.cr) {
 
         // this leed is posted by the current user
-
         theDiv.innerHTML = "<a href='./user_edit.html'>" + leed_preview.cr + "</a>";
 
     } else {
     
-        var theURL = "./user_show.html?" + USERNAME_URL_PARAM + "=" + leed_preview.cr;
-        var theHTML = "<a href=" + theURL + ">" + leed_preview.cr + "</a>";
+        var creator = (leed_details.cr == null) ? "" : leed_details.cr;
+        var theURL = "./user_show.html?" + USERNAME_URL_PARAM + "=" + creator;
+        var theHTML = "<a href=" + theURL + ">" + creator + "</a>";
         theDiv.innerHTML = theHTML;
     }
 
@@ -343,7 +343,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // *** PRICE ***
     // from leed_details
     theDiv = document.querySelector("#pr_value");
-    theDiv.innerHTML = "$" + leed_details.pr;
+    theDiv.innerHTML = "$" + (leed_details.pr == null) ? "" : leed_details.pr;
     CURRENT_LEED.pr = leed_details.pr;
 
 

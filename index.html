@@ -491,7 +491,7 @@
          toggle between hiding and showing the dropdown content */
          export function dropdownMenu() {
 
-          if (isGuestUser()) {  
+          if (isGuestUser( true )) {  
 
             // ACCOUNT DROPDOWN
             //
@@ -709,7 +709,7 @@ function trimAndRemoveSpaces(inputString) {
       function openCreateLeed() {
 
 
-        if (isGuestUser()) {
+        if (isGuestUser( true )) {
           printError("openCreateLeed", "Guest user cannot create leedz");
           openGuestWelcome();
 
@@ -730,7 +730,7 @@ function trimAndRemoveSpaces(inputString) {
       //
       function openUserEdit() {
 
-        if (isGuestUser()) {
+        if (isGuestUser( true )) {
           printError("openUserEdit", "Cannot edit Guest user account");
           openGuestWelcome();
 
@@ -755,7 +755,7 @@ function trimAndRemoveSpaces(inputString) {
       function openLeedEdit() {
 
         // should NEVER happen
-        if (isGuestUser()) {
+        if (isGuestUser( true )) {
           printError("openLeedEdit", "Guest User cannot edit leeds");
           openGuestWelcome();
 
@@ -776,7 +776,7 @@ function trimAndRemoveSpaces(inputString) {
       //
       async function reportLeed() {
 
-        if (isGuestUser()) {
+        if (isGuestUser( true )) {
           printError("reportLeed", "Guest User cannot report leeds");
           openGuestWelcome();
           return;
@@ -824,7 +824,7 @@ function trimAndRemoveSpaces(inputString) {
       //
       async function buyLeed() {
         
-        if (isGuestUser()) {
+        if (isGuestUser( true )) {
           printError("buyLeed", "Guest User cannot buy leeds");
           openGuestWelcome();
           return;
@@ -873,7 +873,7 @@ function trimAndRemoveSpaces(inputString) {
       async function deleteLeed() {
 
 
-        if (isGuestUser()) {
+        if (isGuestUser( true )) {
           printError("deleteLeed", "Guest User cannot delete leeds");
           openGuestWelcome();
           return;
@@ -1128,17 +1128,15 @@ function trimAndRemoveSpaces(inputString) {
       });
 
 
-      if (isGuestUser()) {
-      user_href.style.color = "darkorange";
+      if (isGuestUser( true )) {
 
-      let dot = document.getElementById("up_dot");
-      dot.style.backgroundColor = "darkorange";
-      // do nothing on click
-      user_href.setAttribute("href", "#");
-      // user_href.addEventListener( "click", (event) => { });
-      
-
-
+        user_href.style.color = "darkorange";
+        let dot = document.getElementById("up_dot");
+        dot.style.backgroundColor = "darkorange";
+        // do nothing on click
+        user_href.setAttribute("href", "#");
+        // user_href.addEventListener( "click", (event) => { });
+        
 
       // BADGES
       } else if (current_user.bg.length != 0) {
@@ -1254,6 +1252,7 @@ function trimAndRemoveSpaces(inputString) {
 
             current_user = guestUser();
 
+
       
           } else {
 
@@ -1263,16 +1262,12 @@ function trimAndRemoveSpaces(inputString) {
               // return newly-loaded user
               current_user = getCurrentUser( false );
 
+
             } catch (error) {
   
-              // for the console
-              printError("initUser", error);
-  
-              // for the UI
               var msg = "Cannot load user data.<BR>Using guest account.";
               msg = error + "<BR>" + msg;
-              printError("User Init", msg);
-              errorModal( msg , true );
+              errorModal( msg , false );
   
               // DO NOT FAIL
               // ! USE GUEST USER
@@ -1408,17 +1403,23 @@ function trimAndRemoveSpaces(inputString) {
            * Load Leedz from DB -- will return immediately
             * delegate to callback internally when data arrives
            */
-           try {
+           if (current_user.sb == null || current_user.sb.length == 0) {
+              var button_href="<button class='button welcomeButton'>Subscribe</button>";
+              errorModal("Subscribe to one more more trades to see the available leedz.<BR>" + button_href);
+           } else {
 
-            loadDBLeedz();
+            try {
 
-          } catch (error) {
+              loadDBLeedz();
 
-            var msg = "Cannot load leedz from DB.  <BR>Please refresh page."
-            msg = error.message + "<BR>" + msg;
-            
-            printError("Loading DB Leedz", error);
-            errorModal( msg , true );
+            } catch (error) {
+
+              var msg = "Cannot load leedz from DB.  <BR>Please refresh page."
+              msg = error.message + "<BR>" + msg;
+              
+              printError("Loading DB Leedz", error);
+              errorModal( msg , true );
+            }
           }
 
 

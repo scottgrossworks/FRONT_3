@@ -203,18 +203,20 @@ export async function db_getUser( username ) {
 
         })
         .catch(error => {
-          printError("doGet()", error);
-          throwError('doGet()', 'There was a problem with the fetch operation:' + error.message);
+
+          printError("Get User", error);
+          throwError(error.src, "User not found: " + username);
         });
 
 
 
     } catch (error) {
-        throwError("db_getUser()", error);
+        throwError(error.src, error.message);
     }
 
-
-    return json_obj;  // SHOULD NOT BE NULL
+    // SHOULD NOT BE NULL
+    // or would have thrown error above
+    return json_obj;
 }    
 
 
@@ -233,6 +235,8 @@ export async function db_getUser( username ) {
 export async function db_getDeetz( trade_name, leed_id ) {
     
     // GET JSON from http server
+
+    console.log("GET DEETZ: " + trade_name + " ID=" + leed_id);
 
     let json_obj = null;
     try {
@@ -257,8 +261,16 @@ export async function db_getDeetz( trade_name, leed_id ) {
 
     
     } catch (error) {
+        printError("db_getDeetz()", error);
         throwError("db_getDeetz()", error);
     }
+
+
+    
+    
+    console.log("GOT --- DETAILS --- JSON!!!");
+    console.log(json_obj);
+
 
     return json_obj;  // SHOULD NOT BE NULL
 
@@ -303,7 +315,7 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
         theURL.search = searchParams.toString();
 
 
-        console.log(theURL.search)
+        // console.log(theURL.search)
 
 
         await doGet( theURL )
@@ -325,7 +337,7 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
 
 
     
-    console.log("GOT JSON!!!");
+    console.log("GOT --- PREVIEW --- JSON!!!");
     console.log(json_obj);
 
 
@@ -340,6 +352,14 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
 
 
 
+
+
+
+
+/**
+ * 
+ *
+ */
 
 
 
@@ -377,7 +397,61 @@ async function doGet( theURL ) {
 }
       
 
+    /** 
 
+async function doGet( theURL ) {
+
+    return fetch(theURL,
+    {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Connection':'close'
+            },
+        timeout:"8000"
+        }
+    ).then(response => {
+
+        if (! response.ok) { 
+            throw new Error('Network response was not OK: [' + response.status + "] :" + response.message);
+        }
+
+        return response.json();
+
+    
+        if (response.status == 200) {
+
+            console.log(response.body);
+            const the_json = response.json();
+            console.log("WE GOT JSON");
+            console.log(the_json);
+
+            return the_json;
+
+
+        } else if (response.status == 204) {
+            
+               throw new Error(new String(response.status));
+
+              
+    
+
+            var the_code = "Error code received from server: " + response.status;
+            var the_msg = "<BR>Error message: " + response.message;
+            throw new Error( the_code + the_msg );
+
+        })
+        
+
+    }).catch(error => {
+        printError( "http GET", error.message );
+        throwError( error.status, error.message );
+    });
+
+}
+      
+
+ */
 
 
 

@@ -14,9 +14,10 @@ class LeedzError extends Error {
 
   constructor(message) {
       super(message);
-      this.name = "LeedzError"; 
+      this.name = "LeedzError";
+      this.src = null;
     }
-  }
+}
 
 
 /**
@@ -43,14 +44,15 @@ export function throwError(src, error) {
 
     let errMsg = null;
     if (error instanceof Error) {
-      errMsg = error.message;
+        errMsg = error.message;
      }  else {
         errMsg = error;
-    }
-    errMsg = src + "=>" + errMsg;
-    // console.error("Throwing Error: " + errMsg);        
+    }      
 
-    throw new LeedzError(errMsg);
+    const the_error = new LeedzError(errMsg);
+    the_error.src = src;
+
+    throw the_error;
 }
 
 

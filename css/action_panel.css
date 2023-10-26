@@ -237,6 +237,8 @@
 
 #pr_label {
 
+    font-size: x-large;
+    font-weight:600;
     color:darkgreen;
 }
 
@@ -247,7 +249,7 @@
     background-color: var(--LEEDZ_GREEN);
 
     font-family: var(--FONT_1);
-    font-size: larger;
+    font-size: x-large;
     font-weight:600;
 
     border-left: 2px solid var(--LEEDZ_DARKGRAY);

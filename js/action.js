@@ -93,8 +93,6 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // var action_height = Math.floor( window.innerHeight * 0.7 );
     action.style.height = "100%";
 
-
-
     const CURRENT_LEED = getCurrentLeed();
     let leed_details = CURRENT_LEED;
 
@@ -125,7 +123,10 @@ export async function showLeedAction( leed_preview , gotoDB ) {
         });
     }
 
-        
+    
+    console.log("GOT LEED DETAILS");
+    console.log(leed_details);
+
     //
     // START DATE
     //
@@ -342,10 +343,13 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     
     // *** PRICE ***
     // from leed_details
+
     theDiv = document.querySelector("#pr_value");
-    theDiv.innerHTML = "$" + (leed_details.pr == null) ? "" : leed_details.pr;
+    theDiv.innerHTML = "$" + leed_details.pr;
     CURRENT_LEED.pr = leed_details.pr;
 
+    
+    console.log("PRICE!=" +leed_details.pr);
 
 
 

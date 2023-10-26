@@ -1127,13 +1127,16 @@ function trimAndRemoveSpaces(inputString) {
           openUserEdit();
       });
 
-
+      // force style the dot color in case of multiple login/refreshes
+      dot.style.backgroundColor = "var(--LEEDZ_GREEN)";
+      
       if (isGuestUser( true )) {
-
         user_href.style.color = "darkorange";
-        let dot = document.getElementById("up_dot");
         dot.style.backgroundColor = "darkorange";
-        // do nothing on click
+        //
+        // FIXME FIXME FIXME
+        // send guest.user to info/intro/sign-up page
+        //
         user_href.setAttribute("href", "#");
         // user_href.addEventListener( "click", (event) => { });
         

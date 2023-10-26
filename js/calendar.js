@@ -288,7 +288,7 @@ function normalCursor() {
  */
 function addLeedzToCalendar( results ) {
 
-    console.log("ADD LEEDZ RESULTS=" + results);
+    // console.log("ADD LEEDZ RESULTS=" + results);
 
     // the UI contains all the each_date days
     const theList = document.querySelector("#calendar_list");
@@ -388,7 +388,6 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     // IS THIS OUR LEED?
     // is this leed created by the current user?
     //
-    console.log("CREATOR=" + leed_fromDB.cr);
     if (leed_fromDB.cr == getCurrentUser(false).un) {
         newLeed.classList.add("user_leed");
     } else {

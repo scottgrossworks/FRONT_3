@@ -371,35 +371,6 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
  */
 async function doGet( theURL ) {
 
-    return fetch(theURL,
-    {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Connection':'close'
-            },
-        timeout:"8000"
-        }
-    ).then(response => {
-
-        if (! response.ok) {
-           throw new Error('Network response was not ok');
-        }
-
-        return response.json();
-    })
-
-    .catch(error => {
-        printError("fetch", error);
-        throwError("fetch", error);
-    });
-
-}
-      
-
-    /** 
-
-async function doGet( theURL ) {
 
     return fetch(theURL,
     {
@@ -416,42 +387,35 @@ async function doGet( theURL ) {
             throw new Error('Network response was not OK: [' + response.status + "] :" + response.message);
         }
 
-        return response.json();
 
-    
         if (response.status == 200) {
 
-            console.log(response.body);
             const the_json = response.json();
-            console.log("WE GOT JSON");
-            console.log(the_json);
+
+            // console.log("WE GOT JSON");
+            // console.log(the_json);
 
             return the_json;
 
 
         } else if (response.status == 204) {
-            
-               throw new Error(new String(response.status));
 
-              
-    
+            throw new Error(new String(response.status));
+
+        } else {
 
             var the_code = "Error code received from server: " + response.status;
             var the_msg = "<BR>Error message: " + response.message;
             throw new Error( the_code + the_msg );
-
-        })
-        
-
-    }).catch(error => {
+        }
+    }
+    ).catch(error => {
         printError( "http GET", error.message );
         throwError( error.status, error.message );
     });
 
 }
       
-
- */
 
 
 

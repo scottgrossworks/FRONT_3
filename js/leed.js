@@ -431,35 +431,12 @@ function JSON_to_Array(jsonString) {
 export function saveLeedzToCache( new_leedz, the_month, the_year ) {
 
 
-  var cache_key = LEEDZ_CAL_KEY + the_month + the_year;
-  let cache_string = window.localStorage.getItem( cache_key );  
-  let cache_leedz = JSON_to_Array(cache_string);
-
+  let cache_leedz = [];
   for (var i = 0;i < new_leedz.length; i++) {
     var new_leed = new_leedz[i];
     // console.log( "LEED ID==" + i + "==" + new_leed.id );
-
-    // look for a matching leed id already in the cache 
-    console.log(cache_leedz);
-    for (var y = 0; y < cache_leedz.length; y++) {
-      // console.log("CACHE=" + y + "==" + cache_leedz[y].id);
-
-      if (new_leed.id == cache_leedz[y].id) {
-        cache_leedz[y] = new_leed;
-        new_leed = null;
-        break;
-      }
-    }
-
-    if (new_leed != null) {
-      // new_leed was not spliced into from_cache 
-      // append it to the end
-      cache_leedz.push( new_leed );
-    }
+    cache_leedz.push( new_leed );
   }
-
-  // console.log("IN SAVE LEEDZ");
-  // console.log(cache_leedz);
 
   // RESTORE CACHE
   // serialize array using CACHE_DELIM
@@ -470,10 +447,9 @@ export function saveLeedzToCache( new_leedz, the_month, the_year ) {
 
 
   // rewrite to session storage
-  // key = monthyear
+  // 
+  var cache_key = LEEDZ_CAL_KEY + the_month + the_year;
   window.localStorage.setItem( cache_key, JSON_leedz);
-
-  console.log("SET CACHE=" + cache_key + "==" + JSON_leedz);
 
 }
 
@@ -489,7 +465,9 @@ export function loadLeedzFromCache( the_month, the_year ) {
     // GET CACHE 
     // lists of JSON leedz are cached by month 
     var cache_key = LEEDZ_CAL_KEY + the_month + the_year;
+
     let JSON_leedz = window.localStorage.getItem( cache_key );
+
     if (JSON_leedz == null || JSON_leedz == "" || JSON_leedz == CACHE_DELIM) {
       // there may be nothing in the cache -- this is not an eror 
       return [];
@@ -500,6 +478,7 @@ export function loadLeedzFromCache( the_month, the_year ) {
     const cacheLeedz = JSON_leedz.split( CACHE_DELIM );
     let retLeedz = [];
 
+
     // for each JSON leed loaded from CACHE
     for (var i = 0; i < cacheLeedz.length; i++) {
   
@@ -509,10 +488,10 @@ export function loadLeedzFromCache( the_month, the_year ) {
         // (re)create leed node using cache data
         var theLeed = JSON.parse( theJSON );
    
-
-
         // is the user stil subscribed to leedz of this trade?
-        if ( isSubscribed( theLeed.tn ) ) {
+        // pk = "leed#caricatures"
+        let trade_name = theLeed.pk.substr(5);
+        if ( isSubscribed( trade_name ) ) {
             // if user has unsubscribed since last cache save
             // do NOT return it or re-add it to the cache
             retLeedz.push( theLeed );       

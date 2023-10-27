@@ -15,7 +15,7 @@ import { printError, errorModal, throwError } from "./error.js";
 
 let CURRENT_SELECTION = null;
 
-
+const CACHE_DELIM = '|';
  
 
 
@@ -157,22 +157,22 @@ export function loadCacheLeedz( trade_name ) {
 
     let results = [];
     try {
-            let leedz = loadLeedzFromCache(getMonth(), getYear());
-            // being called with no arg -- load all leedz from cache
-            if (trade_name === undefined) {
-                results = leedz;
+        const leedz = loadLeedzFromCache(getMonth(), getYear());
 
-            } else {
-                // called with arg
-                // filter out any results not matching tn == trade_name
-                for (let i = 0; i < leedz.length; i++) {
-                    
-                    if (leedz[i].tn == trade_name) {
-                        results.push(leedz[i]);
-                    }
+        // being called with no arg -- load all leedz from cache
+        if (trade_name === undefined) {
+            results = leedz;
+
+        } else {
+            // called with arg
+            // filter out any results not matching tn == trade_name
+            for (let i = 0; i < leedz.length; i++) {
+                
+                if (leedz[i].tn == trade_name) {
+                    results.push(leedz[i]);
                 }
             }
-
+        }
 
 
     } catch (error) {

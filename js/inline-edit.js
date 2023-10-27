@@ -325,13 +325,12 @@ function isNumOnly( str ) {
 
 
 
-function trimAndRemoveSpaces(inputString) {
-    // Trim leading/trailing white spaces and remove spaces in between
-    let trimmedString = inputString.trim().replace(/\s+/g, " ");
-    // Replace all single spaces with ""
-    let resultString = trimmedString.replace(/ /g, "");
+function trimAndRemoveSpaces(s) {
 
-    return resultString;
+     // Remove any whitespace , dashes, and dots from the string
+
+    const trimStr = s.replace(/[.-\s]/g, '');
+    return trimStr;
 }
 
 
@@ -392,30 +391,13 @@ function inlineDefaultFinish(rowName, options) {
                 var theVal = cell.children[getFromChildren].value;
                 var trimVal = trimAndRemoveSpaces( theVal );
 
-                if (trimVal.length < 10) {
-                    let errMsg = "Invalid phone number: " + theVal;
-                    printError("inlineDefaultFinish", errMsg );
-                    alert(errMsg);
-                    return;
-                }
-
-
-                if (trimVal.length != 10) {
-                    let errMsg = "Phone number must be 10 digits";
-                    printError("inlineDefaultFinish", errMsg );
-                    alert(errMsg);
-                    return;
-                }
-
-
-
+     
                 if (! checkPhone( trimVal )) {
                     let errMsg = "Invalid phone number: " + theVal;
                     printError("inlineDefaultFinish", errMsg);
                     alert(errMsg);
                     return;
                 }
-
 
 
                 rowData[cell.dataset.inlinename] = trimVal;
@@ -675,11 +657,12 @@ function checkForZip(s) {
  * @returns true if phone number only contains digits, . and - otherwise return false
  */
   function checkPhone(s) {
-    // Remove any whitespace from the string
-    s = s.replace(/\s/g, '');
-    
+   
+    if (s.length != 10) return false;
+
     // Check if the string only contains valid phone number characters
-    return /^[0-9.\-]+$/.test(s);
+    return /^[0-9]+$/.test(s);
+
   }
 
 

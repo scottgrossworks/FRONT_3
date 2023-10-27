@@ -156,7 +156,8 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
             if (leed_obj.em) params.append( EMAIL_URL_PARAM, leed_obj.em );
 
-            params.append( CREATOR_URL_PARAM, leed_obj.cr );
+            // from user obj
+            params.append( CREATOR_URL_PARAM, user_obj.un );
             
             params.append( PRICE_URL_PARAM, leed_obj.pr );
         

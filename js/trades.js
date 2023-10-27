@@ -481,7 +481,6 @@ export function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
   radioButton.checked = false;
   
   // color the radio button
-  // FIXME 2/2023 FIXME 
   // should all be done in css but the initial setting doesn't persist
   radioButton.style.backgroundColor = "white";
   radioButton.style.border = "1.5px solid var(--LEEDZ_DARKGRAY)";

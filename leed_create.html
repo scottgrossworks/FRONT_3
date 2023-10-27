@@ -63,6 +63,13 @@
 		
 			</div>
 			
+            
+			<div id="alert_success" class="alert" style="display:none">
+				<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+				Leed Posted.&nbsp;
+			</div>
+
+
 
 <section>
     
@@ -254,7 +261,7 @@
             <!-- LEED PRICE -->
             <tr id="row_pr">
                         
-                <TD class="labelTD">Price: </TD>
+                <TD class="labelTD">Price $: </TD>
                 
                 <td id="td_pr" data-inlineType="text" data-inlineName="pr" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
@@ -451,11 +458,6 @@
 					break;
 
 			}
-
-			
-            console.log("SHOWING LEED CHANGES");
-            console.log(LEED_CHANGES);
-
 		}
 
 
@@ -582,7 +584,7 @@ async function postLeed() {
     //   client <---> API Gateway <===> DB
     //
     //
-    let resObj = [];
+    let results = null;
 
     try {
         // get the result object
@@ -590,7 +592,8 @@ async function postLeed() {
             .then(data => {
         
                 if (data == null) throw new Error("null response from GET");
-                resObj = data[0];
+                
+                results = data;
         
             })
             .catch(error => {
@@ -600,32 +603,27 @@ async function postLeed() {
             });
 
         
-
-            // look for the error code
-            if (resObj.res == DB_FAIL) {
-
-                let msg = "Error code received from server: " + resObj.msg;
-                printError("db_updateLeed", msg);
-                throwError("From DB", msg) 
-            }
-
-        
     } catch (error) {
 
         printError( "db_updateLeed", error.message );
-        throwError( "Post Leed", error); 
+        throwError( "Error Posting Leed", error); 
         return;
     }
 
-    // FIXME FIXME FIXME
-    // result was SUCCESS
-    // GOTO landing page
-    if (resObj.res == DB_SUCCESS) {
-        // take user to success landing page
-        // let landing_url = LEED_POSTED_LANDING_URL + "?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
-       let landing_URL = LEED_POSTED_LANDING_URL;
-        window.open( landing_url, "_self");
-    }
+
+        // SUCCESS!
+        let theAlert = document.getElementById("alert_success");
+        const success = results.split('|');
+        let tn = success[0];
+        let ti = success[1];
+        let pr = success[2];
+        msg = "Trade: " + tn + " " + ti + " Price: " + pr;
+        theAlert.innerText += msg;
+        theAlert.style.display = "block";
+
+
+        // START OVER
+        cancelCreate();
 
     }
     window.postLeed = postLeed;

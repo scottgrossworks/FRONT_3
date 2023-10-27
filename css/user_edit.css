@@ -94,7 +94,7 @@ input,
 textarea,
 select {
 
-	width:100%;
+	width:96%;
 	
 	border: none;
 	background-color: var(--LEEDZ_GRAY);

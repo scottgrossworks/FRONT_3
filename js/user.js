@@ -1,7 +1,7 @@
 /**
  * 
  */
-import { db_getUser, db_updateUser, ADD_SUB, REM_SUB, DEL_USER, CHG_USER, DB_FAIL } from "./dbTools.js";
+import { db_getUser, db_updateUser, DEL_USER, CHG_USER, DB_FAIL } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 
 export const CACHE_USER_KEY = "U";
@@ -266,7 +266,7 @@ export async function saveCurrentUser() {
   
   // send user updates --> DB
   try {
-    db_updateUser( CHG_USER, CURRENT_USER );		
+      db_updateUser( CHG_USER, CURRENT_USER );		
 
   } catch ( error ) {
 
@@ -275,7 +275,7 @@ export async function saveCurrentUser() {
   }
 
   console.log("user.saveCurrentUser()  ******** SUCCESS! ******* ");
-  // console.log(CURRENT_USER);
+  console.log(CURRENT_USER);
 
 }
 
@@ -454,7 +454,7 @@ export async function saveSubscription( trade_name ) {
     let resObj = [];   
     try {
       
-        await db_updateUser( ADD_SUB, CURRENT_USER )
+        await db_updateUser( CHG_USER, CURRENT_USER )
         .then(data => {
 
         if (data == null) throw new Error("null response from GET");

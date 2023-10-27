@@ -141,9 +141,10 @@ export async function loadLeedzFromDB( subs, firstDay, lastDay, zip_home, zip_ra
 
       // CLEAR the CACHE for this date
       var cache_key = LEEDZ_CAL_KEY + getMonth() + getYear();
-      window.sessionStorage.setItem( cache_key, "");
+      window.localStorage.setItem( cache_key, "");
 
     } else { 
+
       saveLeedzToCache( results, getMonth(), getYear() );
     
     }
@@ -325,7 +326,7 @@ export function cacheCurrentLeed( theLeed ) {
     }
    
 
-    window.sessionStorage.setItem( CURRENT_LEED_KEY, leedJSON );
+    window.localStorage.setItem( CURRENT_LEED_KEY, leedJSON );
 }
 
 
@@ -339,7 +340,7 @@ export function cacheCurrentLeed( theLeed ) {
  */
  function loadCacheLeed() {
 
-    const leedJSON = window.sessionStorage.getItem( CURRENT_LEED_KEY );
+    const leedJSON = window.localStorage.getItem( CURRENT_LEED_KEY );
     if (leedJSON == null) {
       // this is not an error -- will happen any time program starts with empty cache  
       // printError("loadCacheLeed", "No value in cache for key: " + CURRENT_LEED_KEY);
@@ -431,15 +432,18 @@ export function saveLeedzToCache( new_leedz, the_month, the_year ) {
 
 
   var cache_key = LEEDZ_CAL_KEY + the_month + the_year;
-  let cache_string = window.sessionStorage.getItem( cache_key );  
+  let cache_string = window.localStorage.getItem( cache_key );  
   let cache_leedz = JSON_to_Array(cache_string);
 
-
-  for (let i = 0; i < new_leedz.length; i++) {
+  for (var i = 0;i < new_leedz.length; i++) {
     var new_leed = new_leedz[i];
+    // console.log( "LEED ID==" + i + "==" + new_leed.id );
 
     // look for a matching leed id already in the cache 
-    for (let y = 0; y < cache_leedz.length; y++) {
+    console.log(cache_leedz);
+    for (var y = 0; y < cache_leedz.length; y++) {
+      // console.log("CACHE=" + y + "==" + cache_leedz[y].id);
+
       if (new_leed.id == cache_leedz[y].id) {
         cache_leedz[y] = new_leed;
         new_leed = null;
@@ -464,10 +468,12 @@ export function saveLeedzToCache( new_leedz, the_month, the_year ) {
       JSON_leedz = JSON_leedz + JSON.stringify(leed) + CACHE_DELIM;  
   });
 
-  
-    // rewrite to session storage
-    // key = monthyear
-    window.sessionStorage.setItem( cache_key, JSON_leedz);
+
+  // rewrite to session storage
+  // key = monthyear
+  window.localStorage.setItem( cache_key, JSON_leedz);
+
+  console.log("SET CACHE=" + cache_key + "==" + JSON_leedz);
 
 }
 
@@ -483,7 +489,7 @@ export function loadLeedzFromCache( the_month, the_year ) {
     // GET CACHE 
     // lists of JSON leedz are cached by month 
     var cache_key = LEEDZ_CAL_KEY + the_month + the_year;
-    let JSON_leedz = window.sessionStorage.getItem( cache_key );
+    let JSON_leedz = window.localStorage.getItem( cache_key );
     if (JSON_leedz == null || JSON_leedz == "" || JSON_leedz == CACHE_DELIM) {
       // there may be nothing in the cache -- this is not an eror 
       return [];
@@ -525,7 +531,8 @@ export function loadLeedzFromCache( the_month, the_year ) {
     }
 
     // put JSON back where it came from
-    window.sessionStorage.setItem( cache_key, JSON_leedz);
+    window.localStorage.setItem( cache_key, JSON_leedz);
+
 
     // return the list of (still subscribed) leedz from cache
     return retLeedz;

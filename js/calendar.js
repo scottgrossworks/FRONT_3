@@ -181,6 +181,8 @@ export function loadCacheLeedz( trade_name ) {
         return;
     }
     
+    console.log("UPDATING CALENDAR FROM CACHE");
+    console.log(results);
 
     // update calendar
     addLeedzToCalendar( results );

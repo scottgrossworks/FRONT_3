@@ -349,6 +349,25 @@
 
 
 
+
+/**
+ * Change to a wait cursor
+ */
+ function waitCursor() {
+    document.body.style.cursor = 'wait';
+}
+
+/**
+ * Change back to normal cursor
+ */
+function normalCursor() {
+    document.body.style.cursor = 'default';
+}
+
+
+
+
+
 		
 /**
  * 
@@ -362,6 +381,8 @@ async function initTrades( listener ) {
   
 	let trades = [];
   
+	waitCursor();
+
 	try {
 	  await getAllTrades().then((response) => trades = response ); 
   
@@ -374,7 +395,7 @@ async function initTrades( listener ) {
 		}
 
 
-	
+
 		// init TRADES struct
 		// initialize the spectrum of colors
 		createTradesAndColors( trades );  
@@ -391,9 +412,10 @@ async function initTrades( listener ) {
 		
 		printError("Init Trades Column", error);
 		errorModal( msg , true );
+	
+	} finally {
+		normalCursor();
 	}
-  
-
   }
 
 
@@ -660,8 +682,6 @@ function initTradesTable( all_trades, tradeListener ) {
 			try {
 				saveUserChanges( USER_CHANGES );		
 		
-				// reload page with new guest account
-				backButton();
 
 			} catch ( error ) {
 
@@ -670,6 +690,10 @@ function initTradesTable( all_trades, tradeListener ) {
 
 			} finally {
 				endEditing();
+				
+				// FIXME FIXME FIXME
+				// reload page with new guest account
+				// backButton();
 			}	
 		
 		}

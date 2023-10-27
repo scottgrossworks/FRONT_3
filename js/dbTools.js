@@ -15,9 +15,14 @@ export const API_GATEWAY = "https://jjz8op6uy4.execute-api.us-west-2.amazonaws.c
 
 export const USERNAME_URL_PARAM = "un";
 
+export const ABOUT_URL_PARAM = "ab";
+export const EMAIL_URL_PARAM = "em";
+export const WEBSITE_URL_PARAM = "ws";
 export const SUBS_URL_PARAM = "sb";
+
 export const START_DATE_URL_PARAM = "st";
 export const END_DATE_URL_PARAM = "et";
+
 export const ZIP_HOME_URL_PARAM = "zp";
 export const ZIP_RADIUS_URL_PARAM = "zr";
 
@@ -30,9 +35,6 @@ export const DB_SUCCESS = 1;
 // 2
 export const DEL_USER = 3;
 export const CHG_USER = 4;
-
-export const ADD_SUB  = 5;
-export const REM_SUB  = 6;
 
 export const POST_LEED = 7;
 export const BUY_LEED = 8;
@@ -49,10 +51,9 @@ export const REP_LEED = 11;
  * 
  * 
  */
-// FIXME FIXME FIXME
-// yet to implement
 export async function db_updateUser( code, user_obj ) { 
     
+    let json_obj = null;
 
     switch (code) {
 
@@ -62,14 +63,36 @@ export async function db_updateUser( code, user_obj ) {
         
         case CHG_USER:
             console.log("dbTools.db_updateUser() CHG_USER"); 
-            break
-
-        case ADD_SUB:
-            console.log("dbTools.db_updateUser() ADD SUB"); 
-            break
         
-        case REM_SUB:
-            console.log("dbTools.db_updateUser() REM SUB"); 
+            
+            let theURL = new URL(API_GATEWAY + "changeUser");
+            let params = new URLSearchParams();
+            params.append( USERNAME_URL_PARAM, user_obj.un );
+            params.append( EMAIL_URL_PARAM, user_obj.em );
+            params.append( WEBSITE_URL_PARAM, user_obj.ws );
+            params.append( ABOUT_URL_PARAM, user_obj.ab );
+            params.append( ZIP_HOME_URL_PARAM, user_obj.zp );
+            params.append( ZIP_RADIUS_URL_PARAM, user_obj.zr );
+            params.append( SUBS_URL_PARAM, user_obj.sb );
+
+            theURL.search = params.toString();
+            
+            await doGet( theURL )
+            .then(data => {
+    
+              json_obj = data;
+    
+            })
+            .catch(error => {
+    
+              printError("Get User", error);
+              throwError(error.src, "User not found: " + user_obj.un);
+            });
+    
+
+            //console.log("CHANGE USER DONE");
+            //console.log(json_obj);
+
             break
 
         default:
@@ -77,7 +100,6 @@ export async function db_updateUser( code, user_obj ) {
     }
 
 
-    let json_obj = '{ "un": ' + user_obj.un + ', "cd": code, "res":1 }';
 
     return json_obj;
 }

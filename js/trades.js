@@ -199,7 +199,7 @@ function initTradesColumn( tradeListener ) {
 
     checkBox.addEventListener("click", function( event ) {
   
-      tradeListener( sub, checkBox, radioButton, theLabel );
+      tradeListener( sub, this, radioButton, theLabel );
       
     });
 
@@ -210,7 +210,7 @@ function initTradesColumn( tradeListener ) {
     //
     radioButton.addEventListener("click", function( event ) {
   
-      tradeListener( sub, checkBox, radioButton, theLabel );
+      tradeListener( sub, checkBox, this, theLabel );
 
     });
 
@@ -220,7 +220,7 @@ function initTradesColumn( tradeListener ) {
     //
     theLabel.addEventListener("click", function( event ) {
 
-      tradeListener( sub, checkBox, radioButton, theLabel );
+      tradeListener( sub, checkBox, radioButton, this );
       
     });
 
@@ -276,6 +276,7 @@ function addTradeSorted( list, node ) {
 function tradeListener(trade, checkBox, radioButton, theLabel) {
 
 
+    console.log("TRADE=" + trade);
   try {
 
        // clear the action window
@@ -472,7 +473,7 @@ export function turnTrade_Off( checkBox, radioButton, theLabel, trade_name ) {
   // mark the trade as SHOWING
   const the_color = window.localStorage.getObj(trade_name)[0];
   const num_leedz = window.localStorage.getObj(trade_name)[1];
-  window.localStorage.setObj(trade_name, [ the_color, num_leedz, true ] );
+  window.localStorage.setObj(trade_name, [ the_color, num_leedz, false ] );
 
 
   // turn on the check box and the radio button

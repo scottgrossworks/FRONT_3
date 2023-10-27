@@ -20,13 +20,22 @@ export const EMAIL_URL_PARAM = "em";
 export const WEBSITE_URL_PARAM = "ws";
 export const SUBS_URL_PARAM = "sb";
 
-export const START_DATE_URL_PARAM = "st";
-export const END_DATE_URL_PARAM = "et";
+export const START_TIME_URL_PARAM = "st";
+export const END_TIME_URL_PARAM = "et";
 
 export const ZIP_HOME_URL_PARAM = "zp";
 export const ZIP_RADIUS_URL_PARAM = "zr";
 
 export const TRADE_NAME_URL_PARAM = "tn";
+export const TITLE_URL_PARAM = "ti";
+export const LOCATION_URL_PARAM = "lc";
+export const DETAILS_URL_PARAM = "dt";
+export const REQS_URL_PARAM = "rq";
+export const PHONE_URL_PARAM = "ph";
+
+export const CREATOR_URL_PARAM = "cr";
+export const PRICE_URL_PARAM = "pr";
+export const OPTIONS_URL_PARAM = "op";
 export const LEED_ID_URL_PARAM = "id";
 
 
@@ -36,7 +45,7 @@ export const DB_SUCCESS = 1;
 export const DEL_USER = 3;
 export const CHG_USER = 4;
 
-export const POST_LEED = 7;
+export const ADD_LEED = 7;
 export const BUY_LEED = 8;
 export const DEL_LEED = 9;
 export const CHG_LEED = 10;
@@ -114,15 +123,61 @@ export async function db_updateUser( code, user_obj ) {
  * 
  * 
  */
-// FIXME FIXME FIXME
-// yet to implement
+
+
 export async function db_updateLeed( code, user_obj, leed_obj ) { 
     
     switch (code) {
 
-        case POST_LEED:
-            console.log("dbTools.db_updateLeed() POST_LEED"); 
-            break
+        case ADD_LEED:
+            console.log("dbTools.db_updateLeed() ADD_LEED"); 
+
+
+            let theURL = new URL(API_GATEWAY + "addLeed");
+            let params = new URLSearchParams();
+
+            params.append( TRADE_NAME_URL_PARAM, leed_obj.tn );
+
+            params.append( TITLE_URL_PARAM, leed_obj.ti );
+
+            params.append( LOCATION_URL_PARAM, leed_obj.lc );
+
+            params.append( ZIP_HOME_URL_PARAM, leed_obj.zp );
+
+            params.append( START_TIME_URL_PARAM, leed_obj.st );
+
+            if (leed_obj.et) params.append( END_TIME_URL_PARAM, leed_obj.et );
+            
+            if (leed_obj.dt) params.append( DETAILS_URL_PARAM, leed_obj.dt );
+
+            if (leed_obj.rq) params.append( REQS_URL_PARAM, leed_obj.rq );
+
+            if (leed_obj.ph) params.append( PHONE_URL_PARAM, leed_obj.ph );
+
+            if (leed_obj.em) params.append( EMAIL_URL_PARAM, leed_obj.em );
+
+            params.append( CREATOR_URL_PARAM, leed_obj.cr );
+            
+            params.append( PRICE_URL_PARAM, leed_obj.pr );
+        
+            params.append( OPTIONS_URL_PARAM, leed_obj.op );
+
+            theURL.search = params.toString();
+
+            await doGet( theURL )
+            .then(data => {
+
+                json_obj = data;
+
+            })
+            .catch(error => {
+
+                printError("Get User", error);
+                throwError(error.src, "User not found: " + user_obj.un);
+            });
+
+
+
 
         case BUY_LEED:
             console.log("dbTools.db_updateLeed() BUY LEED"); 
@@ -147,7 +202,9 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
     // FIXME FIXMFIXME
     // 
-    let json_obj = '{ "id": ' + leed_obj.id + ' "cd": code, "res":1 }';
+    // let json_obj = '{ "id": ' + leed_obj.id + ' "cd": code, "res":1 }';
+
+    console.log(json_obj);
 
     return json_obj;
 }
@@ -328,8 +385,8 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
 
         const theURL = new URL(API_GATEWAY + "getLeedz");
         let searchParams = new URLSearchParams();
-        searchParams.append( START_DATE_URL_PARAM, start_date );
-        searchParams.append( END_DATE_URL_PARAM, end_date );
+        searchParams.append( START_TIME_URL_PARAM, start_date );
+        searchParams.append( END_TIME_URL_PARAM, end_date );
         searchParams.append( ZIP_HOME_URL_PARAM, zip_home );
         searchParams.append( ZIP_RADIUS_URL_PARAM, zip_radius );
         searchParams.append( SUBS_URL_PARAM, subs_string );
@@ -376,12 +433,6 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
 
 
 
-
-
-/**
- * 
- *
- */
 
 
 

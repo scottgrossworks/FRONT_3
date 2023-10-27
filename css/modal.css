@@ -144,17 +144,6 @@
 
 
 
-/*
- * FIXME FIXME FIXME
-
-
-
-separate modal from errorModal so that rules governing actionPanel modal are not the same as errorModal
-
-
-
- *
- */
  #error_modal {
 
   display: none;
@@ -176,7 +165,7 @@ separate modal from errorModal so that rules governing actionPanel modal are not
   width:60vw;
   height:70vh;
   
-  border: 4px solid red;
+  border: 4px solid #f44336;
   border-radius: 20px;
 }
 
@@ -260,6 +249,43 @@ text-decoration: none;
 text-align: center;
 }
 
+
+
+/* The alert message box */
+.alert {
+  padding: 20px;
+
+  margin:2vh 0px;
+
+  background-color: var(--LEEDZ_DARKGREEN);
+  color: white;
+
+  width:99%;
+
+  font-family: var(--FONT_1);
+
+  font-size: 26px;
+  font-weight: 600;
+
+}
+
+/* The close button */
+.closebtn {
+
+  margin: auto 2vw;
+  color: white;
+  font-weight: bold;
+  float: right;
+
+  transform: translateY(-5px);
+
+font-family: var(--FONT_1);
+
+font-size: 30px;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
 
 
 

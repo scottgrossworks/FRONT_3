@@ -59,6 +59,11 @@
 			</div>
 
 
+			<div id="alert_success" class="alert" style="display:none">
+				<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+				Account changes saved.
+			</div>
+
 			
 <section>
 
@@ -105,7 +110,7 @@
 
 					<tr id="row_payment">
 					
-						<TD class="labelTD">Payment Information: </TD>
+						<TD class="labelTD">Payment Info: </TD>
 						<td data-inlineType="text" data-inlineName="payment"></td>
 						
 
@@ -682,6 +687,8 @@ function initTradesTable( all_trades, tradeListener ) {
 			try {
 				saveUserChanges( USER_CHANGES );		
 		
+				let theAlert = document.getElementById("alert_success");
+				theAlert.style.display = "block";
 
 			} catch ( error ) {
 
@@ -691,9 +698,6 @@ function initTradesTable( all_trades, tradeListener ) {
 			} finally {
 				endEditing();
 				
-				// FIXME FIXME FIXME
-				// reload page with new guest account
-				// backButton();
 			}	
 		
 		}

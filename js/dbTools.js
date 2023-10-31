@@ -296,6 +296,7 @@ export async function db_getUser( username ) {
 
     // SHOULD NOT BE NULL
     // or would have thrown error above
+
     return json_obj;
 }    
 

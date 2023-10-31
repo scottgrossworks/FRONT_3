@@ -602,11 +602,12 @@ function initTradesTable( all_trades, tradeListener ) {
 					break;
 
 				case "row_website":
-					USER_CHANGES.ws = rowData["ws"];
+					USER_CHANGES.ws = rowData["website"];
 					break; 
 					
 				case "row_email":
-					USER_CHANGES.em = rowData["em"];
+					console.log("ROW EMAIL===>>" + rowData["email"]);
+					USER_CHANGES.em = rowData["email"];
 					break; 
 
 

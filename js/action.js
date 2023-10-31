@@ -348,10 +348,6 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     theDiv.innerHTML = "$" + leed_details.pr;
     CURRENT_LEED.pr = leed_details.pr;
 
-    
-    console.log("PRICE!=" +leed_details.pr);
-
-
 
     // Now that the new data is copied into CURRENT_LEED
     // cache the leed

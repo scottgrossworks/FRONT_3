@@ -175,6 +175,9 @@ export async function initUser( login ) {
         // if statements are in case cache v  ersion is more recent
         // 
         CURRENT_USER.un = resObj.sk;
+        if (! resObj.em)
+          throwError("No email set for username: " + resObj.sk);
+
         CURRENT_USER.em = resObj.em;
 
         CURRENT_USER.ws = (resObj.ws != null) ? resObj.ws : null;
@@ -295,6 +298,9 @@ export async function saveUserChanges( userObj ) {
   if (CURRENT_USER == null)
     throwError("saveUserChanges", "No CURRENT_USER initialized");
 
+
+  console.log("SAVING USER CHANGES!!");
+  console.log(userObj);
 
   if (userObj.un != null)
     CURRENT_USER.un = userObj.un;

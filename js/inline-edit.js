@@ -202,13 +202,23 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
 
         case "email":
-            cellContent += `<input type='email' value='${inlineEditRowContents[rowName][i]}' form='${rowName}Form'`;
+
+            var the_email = extractEmailAddress( inlineEditRowContents[rowName][i] );
+
+            console.log("THE EMAIL==>" + the_email);
+
+
+            cellContent += `<input type='email' value='${the_email}' form='${rowName}Form'`;
             for (key in cell.dataset) {
                 if (cell.dataset.hasOwnProperty(key) && key.substr(0, 6) == "inline" && attributesFilter.indexOf(key) == -1) {
                     cellContent += ` ${key.substr(6)}='${cell.dataset[key]}'`;
                 }
             }
             cellContent += "/>";
+
+            console.log("NEW  CELL CONTENT==" + cellContent);
+
+
             break;
         case "select":
             cellContent += "<select";
@@ -277,6 +287,21 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
 
 
+/**
+ * mailto:scottgrossworks@gmailcom">scottgrossworks@gmailcom</a>  ---> scottgrossworks@gmail.com
+ */
+function extractEmailAddress( str ) {
+
+    const firstIndex = str.indexOf('>');
+    const secondIndex = str.indexOf('<', firstIndex);
+  
+    // Extract the substring between the '>' and '<' characters
+    const substring = str.substring(firstIndex + 1, secondIndex);
+  
+    return substring;
+
+
+}
 
 
 
@@ -284,6 +309,8 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
  * replace HTML tags
  */
 function replaceHTMLTags( str ) {
+
+    console.log("IN REPLACE=" + str);
     if (str == null) return "";
 
     var trimVal = str.trim();
@@ -292,8 +319,10 @@ function replaceHTMLTags( str ) {
 
     trimVal = str.replace(/[&<>]/g, replaceTag);
 
-    return trimVal;
 
+    console.log("RETUNRNING=" + trimVal);
+
+    return trimVal;
 }
 
 
@@ -476,10 +505,15 @@ function inlineDefaultFinish(rowName, options) {
 
                     if (safeVal.indexOf('@') == -1) {
                         let errMsg = "Invalid email address"
-                        printError("inlineDefaultFinish", errMsg );
+                        printError("Email Address Validation", errMsg );
                         alert(errMsg);
                        return;
                     }
+
+
+             
+
+
 
 
                 // Validate price
@@ -696,6 +730,8 @@ export function inlineURLFinishCell(cell, i, rowName) {
 export function inlineEmailFinishCell(cell, i, rowName) {
 
     var content = inlineEditRowContents[rowName][i];
+    console.log("CONTENT=" + content);
+
     if (i == 1) {
         cell.innerHTML = "<a href='mailto:" + content + "'>" + content + "</a>";
     } else {

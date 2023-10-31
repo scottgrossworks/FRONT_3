@@ -34,13 +34,12 @@ export function inlineEdit(rowName, options) {
         inlineEditRowContents[rowName] = {};
         for (var i = 0; i < tableRow.childElementCount; i++) {
             var cell = tableRow.children[i];
-
             inlineEditRowContents[rowName][i] = cell.innerHTML.trim();
             inlineDefaultUpdateCell(cell, i, rowName, options);   
         }
     } catch (error) {
-        console.log("INLINE EDIT ERROR!");
-        throwError("inlineEdit", error);
+        console.error("Inline Edit Error -- Row: " + rowName);
+        throwError("Inline Edit Error", error);
     }
 }
 
@@ -204,8 +203,7 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
         case "email":
 
             var the_email = extractEmailAddress( inlineEditRowContents[rowName][i] );
-
-            console.log("THE EMAIL==>" + the_email);
+            // console.log("THE EMAIL==>" + the_email);
 
 
             cellContent += `<input type='email' value='${the_email}' form='${rowName}Form'`;
@@ -215,8 +213,6 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
                 }
             }
             cellContent += "/>";
-
-            console.log("NEW  CELL CONTENT==" + cellContent);
 
 
             break;
@@ -310,7 +306,6 @@ function extractEmailAddress( str ) {
  */
 function replaceHTMLTags( str ) {
 
-    console.log("IN REPLACE=" + str);
     if (str == null) return "";
 
     var trimVal = str.trim();
@@ -319,11 +314,8 @@ function replaceHTMLTags( str ) {
 
     trimVal = str.replace(/[&<>]/g, replaceTag);
 
-
-    console.log("RETUNRNING=" + trimVal);
-
     return trimVal;
-}
+}   
 
 
 
@@ -356,9 +348,9 @@ function isNumOnly( str ) {
 
 function trimAndRemoveSpaces(s) {
 
-     // Remove any whitespace , dashes, and dots from the string
+     // Remove any whitespace and dashes from the string
 
-    const trimStr = s.replace(/[.-\s]/g, '');
+    const trimStr = s.replace(/[-\s]/g, '');
     return trimStr;
 }
 
@@ -479,9 +471,14 @@ function inlineDefaultFinish(rowName, options) {
 
 
 
+
+
+
             case "text":
 
                 var theVal = cell.children[getFromChildren].value;
+                
+                safeVal = theVal;
                 var trimVal = theVal.trim();
                 var safeVal = replaceHTMLTags( trimVal );
 
@@ -502,6 +499,7 @@ function inlineDefaultFinish(rowName, options) {
                 // Validate email
                 //
                 } else if (cell.dataset.inlinename == "em") {
+
 
                     if (safeVal.indexOf('@') == -1) {
                         let errMsg = "Invalid email address"
@@ -579,6 +577,7 @@ function inlineDefaultFinish(rowName, options) {
 
                 var theVal = cell.children[getFromChildren].value;
                 var trimVal = trimAndRemoveSpaces( theVal );
+
 
                 //
                 // is this a valid email?  If not -- show error and force re-enter
@@ -730,7 +729,6 @@ export function inlineURLFinishCell(cell, i, rowName) {
 export function inlineEmailFinishCell(cell, i, rowName) {
 
     var content = inlineEditRowContents[rowName][i];
-    console.log("CONTENT=" + content);
 
     if (i == 1) {
         cell.innerHTML = "<a href='mailto:" + content + "'>" + content + "</a>";

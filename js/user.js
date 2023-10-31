@@ -164,7 +164,8 @@ export async function initUser( login ) {
         });
 
         
-
+        console.log("GOT USER DATA");
+        console.log(resObj);
 
         // THIS MUST MATCH DYNAMO DB SCHEMA
         //

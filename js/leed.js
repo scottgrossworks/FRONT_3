@@ -344,6 +344,7 @@ export function cacheCurrentLeed( theLeed ) {
     if (leedJSON == null) {
       // this is not an error -- will happen any time program starts with empty cache  
       // printError("loadCacheLeed", "No value in cache for key: " + CURRENT_LEED_KEY);
+        CURRENT_LEED = blankLeedObject();
         return;
     }
 
@@ -359,7 +360,7 @@ export function cacheCurrentLeed( theLeed ) {
 
     CURRENT_LEED.id = cacheObj.id;
     
-    CURRENT_LEED.tn =cacheObj.tn;
+    CURRENT_LEED.tn = cacheObj.tn;
     
     CURRENT_LEED.cr = cacheObj.cr;
 

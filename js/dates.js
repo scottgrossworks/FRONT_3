@@ -212,11 +212,13 @@ export function setDateShowing( theDate ) {
 export function isCurrentMonth() {
 
     const date_showing = getDateShowing();
+
     const date_today = new Date();
 
     // SAME MONTH
     let month_showing = date_showing.getUTCMonth();
     let month_today = date_today.getUTCMonth();
+
 
     if (month_showing != month_today)
         return false;
@@ -241,6 +243,8 @@ export function isCurrentMonth() {
 export function getDateShowing() {
 
     if (isDateSet()) {
+        console.log("DATE IS SET SHOWING=" + DATE_SHOWING);
+
         return DATE_SHOWING;
     } 
 
@@ -248,7 +252,15 @@ export function getDateShowing() {
     // check session storage for a previously-viewed calendar
     // NEVER RETURN A DATE PRIOR TO current month
     const sessionDate = window.sessionStorage.getItem( DATE_KEY );
-    const today = getTodayUTC();
+   
+   
+    // const today = getTodayUTC();
+    // 10/31 FIXME
+    // trying to solve the end-of-month problem
+    //
+    const today = new Date();
+    
+
     if (sessionDate != null) {
         
         // cache contains a date
@@ -256,8 +268,7 @@ export function getDateShowing() {
         // never show a calendar from a previous month -- no reason when all leedz have expired
         var shortDate = getShortDateString(sessionDate);
         const cacheDate = new Date(shortDate);
-       
-  
+
         if (cacheDate.getTime() < today.getTime()) {
             // return today's date
             DATE_SHOWING = today;
@@ -304,8 +315,15 @@ export function getDay() {
  */
 export function getMonth() {
 
-    if (DATE_SHOWING == null) getDateShowing();        
-    let month = DATE_SHOWING.getUTCMonth() + 1;
+    if (DATE_SHOWING == null) getDateShowing();   
+    
+    
+    // FIXME 
+    // 10/31
+    // trying to solve the 'last day of month' problem
+
+    // let month = DATE_SHOWING.getUTCMonth() + 1;
+    let month = DATE_SHOWING.getMonth() + 1;
     return month;
 }
 

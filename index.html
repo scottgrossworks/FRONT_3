@@ -1426,8 +1426,6 @@ function trimAndRemoveSpaces(inputString) {
           }
 
 
-          
-
 
           /**
           * 
@@ -1435,14 +1433,7 @@ function trimAndRemoveSpaces(inputString) {
 
           cssScreenSize();
 
-          /**
-          * RESIZE
-          * called on window resize -- but AFTER css applied -- can read values from 
-          * different media_query css files depending on sizefvs
-          */
-          window.onresize = (event) => {
-            cssScreenSize();
-          };
+
 
 
           // set the trades sidebar      
@@ -1453,7 +1444,14 @@ function trimAndRemoveSpaces(inputString) {
           }
 
 
-
+          /**
+          * RESIZE
+          * called on window resize -- but AFTER css applied -- can read values from 
+          * different media_query css files depending on sizefvs
+          */
+          window.onresize = (event) => {
+            cssScreenSize();
+          };
 
 
      </script>

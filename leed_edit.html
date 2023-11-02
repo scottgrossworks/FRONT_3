@@ -85,14 +85,13 @@
 
 
             <tr id="row_trade">
+                <!-- 11/1/23 cannot change trade name at this time -->
                             
                 <TD class="labelTD">Trade Name: </TD>
                 
-                <td id="td_trade" data-inlineType="trade_name" data-inlineName="trade" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+                <td id="td_trade"></td>
 
-                <td data-inlineType="doneButton" class="buttonTD">
-                    <input type="button" value="Edit" onclick="inlineEdit('row_trade', editOptions)"/>
-                </td>
+                <td></td>
 
                 <TD class="eyeballTD"><img src="./img/eye_show.png"  id="3_eye" class="lock"></TD>
             </tr>
@@ -356,9 +355,11 @@
 
 
         // TRADE
+        // 11/1/23 -- cannot change trade once leed is created
         //
         element = document.getElementById("td_trade");
         element.innerHTML = CURRENT_LEED.tn;
+        LEED_CHANGES.tn = CURRENT_LEED.tn;
 
 
         // TITLE
@@ -492,6 +493,9 @@
 		window.backButton = backButton;
 
 
+
+
+
         //
         //
         //
@@ -503,9 +507,9 @@
 
 			switch(rowName) {
 
-                case "row_trade":
-                    LEED_CHANGES.tn = rowData["trade"];
-                    break;
+                // case "row_trade":
+                   // LEED_CHANGES.tn = rowData["trade"];
+                   // break;
 
 				case "row_title":
 					LEED_CHANGES.ti = rowData["title"];

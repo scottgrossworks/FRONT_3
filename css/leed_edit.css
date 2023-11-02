@@ -184,8 +184,8 @@ table tbody td {
 
 .lock {
 	cursor:not-allowed;
-	opacity:75%;
-	filter: saturate(10%);
+	filter: opacity(.8) brightness(.5) saturate(.7);
+
 }
 
 

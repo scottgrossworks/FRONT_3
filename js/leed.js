@@ -103,7 +103,7 @@ export function changeLeedOpts( theLeed, index, newVal ) {
 
   // can't do a direct op[index] = newVal
   // must do a substring + insert + concatenate
-  theLeed.opts = theLeed.op.substring(0, index) + newVal + theLeed.op.substring( index + 1 );
+  theLeed.op = theLeed.op.substring(0, index) + newVal + theLeed.op.substring( index + 1 );
   
 }
 
@@ -539,10 +539,10 @@ export async function saveLeedChanges( leedObj ) {
 
   /*
    * cannot be changed
-   *
-    CURRENT_LEED.id = leedObj.id;
-    CURRENT_LEED.cr = leedObj.cr;
    */
+  CURRENT_LEED.id = leedObj.id;
+  CURRENT_LEED.cr = leedObj.cr;
+
 
   
   if (leedObj.ti != null)

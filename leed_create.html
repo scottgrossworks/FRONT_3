@@ -723,6 +723,8 @@ async function postLeed() {
 
             let element = document.getElementById("td_creator");
             element.innerHTML = "<B>" + CURRENT_USER.un + "</B>";
+            // leed creator is fixed to current user
+            LEED_CHANGES.un = CURRENT_USER.un 
 
             inlineEdit('row_trade', createOptions);            
             inlineEdit('row_title', createOptions);

@@ -192,7 +192,6 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
 
         case CHG_LEED:
-            console.log("dbTools.db_updateLeed() CHG LEED"); 
 
             var theURL = new URL(API_GATEWAY + "changeLeed");
             var params = new URLSearchParams();
@@ -229,7 +228,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
             theURL.search = params.toString();
 
             console.log("THEURL=" + theURL);
-            
+
             await doGet( theURL )
             .then(data => {
 
@@ -254,12 +253,6 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
             throwError("db_updateUser", "Uknown code received: " + code);
     }
 
-
-    // FIXME FIXMFIXME
-    // 
-    // let json_obj = '{ "id": ' + leed_obj.id + ' "cd": code, "res":1 }';
-    console.log("GOT JSON!!!");
-    console.log(json_obj);
 
     return json_obj;
 }

@@ -101,10 +101,12 @@ export function changeLeedOpts( theLeed, index, newVal ) {
     throwError("changeLeedOpts", "null Leed object");
   }
 
+  console.log("OP " + index + " BEFORE=" + theLeed.op);
   // can't do a direct op[index] = newVal
   // must do a substring + insert + concatenate
   theLeed.op = theLeed.op.substring(0, index) + newVal + theLeed.op.substring( index + 1 );
   
+  console.log("OP AFTER=" + theLeed.op);
 }
 
 /**
@@ -635,12 +637,12 @@ export async function saveLeedChanges( leedObj ) {
         // EXIT FUNCTION HERE
         // throwError( "Update Leed", error); 
         errorModal("Cannot update leed: " + error.message, false);
-        return;
+        return results;
 
     }
 
-    console.log("BACK FROM DB SAVE RESULTS=" + results);
-    return;
+
+    return results;
 }
 
 

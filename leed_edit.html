@@ -57,6 +57,14 @@
 		
 			</div>
 
+
+            <div id="alert_success" class="alert" style="display:none">
+				<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+				Leed Changed.&nbsp;
+			</div>
+
+
+
 <section>
 			
     <BR>
@@ -412,6 +420,9 @@
         element.innerHTML = fullStartDate + " at " + start_time;
 
 
+        console.log("CURRENT LEED");
+        console.log(CURRENT_LEED);
+        
         // END TIME CAN BE HIDDEN OR SHOWN
         //
         element = document.getElementById("td_end");
@@ -659,13 +670,17 @@
     *
     *
     */
-    function saveChanges() {
+    async function saveChanges() {
 
         if (! EDITING) return;
 
-        try {
 
-            saveLeedChanges( LEED_CHANGES );
+        //   client <---> API Gateway <===> DB
+        //
+        //
+        let from_DB = null;
+        try {
+            await saveLeedChanges(LEED_CHANGES).then((response) => from_DB = response ); 
 
         } catch ( error ) {
             errorModal("Error saving changes: " + error.message, false);
@@ -673,6 +688,23 @@
         } finally {
             endEditing();
         }
+
+        console.log("GOT RESULTS!!!");
+        console.log(from_DB)
+
+        // FOOBAR
+        // ON FAILURE?
+        // SUCCESS!
+        if (from_DB.result) {
+            let theAlert = document.getElementById("alert_success");
+            var msg = "id: " + from_DB.id + " result: " + (from_DB.result) ? "Success" : "Failure";
+            var orig = theAlert.innerText;
+            theAlert.innerText = msg + orig;
+            theAlert.style.display = "block";
+        }
+
+
+
     }
     window.saveChanges = saveChanges;
 

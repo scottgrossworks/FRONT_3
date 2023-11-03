@@ -87,6 +87,8 @@ leed_details contains
 */
 export async function showLeedAction( leed_preview , gotoDB ) {
 
+
+
     // SET THE WINDOW SIZE
     // will show everything at the very end
     let action = document.getElementById("action_panel");
@@ -120,12 +122,23 @@ export async function showLeedAction( leed_preview , gotoDB ) {
             
             // EXIT FUNCTION HERE
             throwError( "showLeedAction()", error); 
-        });
+        
+        
+        }).finally (
+            document.body.style.cursor = 'default'
+        );
+       
     }
 
-    
     console.log("GOT LEED DETAILS");
     console.log(leed_details);
+    
+
+    // OPTIONS
+    // SAVE THE OPTIONS 
+    // what to show / hide
+    CURRENT_LEED.op = leed_details.op;
+
 
     //
     // START DATE
@@ -153,6 +166,8 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     
     let hours_start = getHours(isoStart);
     
+    // SHOULD BE SET
+    // CURRENT_LEED.st = leed_preview.st;
 
     //
     // END DATE
@@ -164,8 +179,10 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     const start_time = hours_start[0] + ":" + getMinutes(isoStart) + hours_start[1];
     const end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
 
+    // SHOULD BE SET
+    // CURRENT_LEED.et = leed_preview.et;
 
-    
+
 
     // LEED TITLE
     //
@@ -181,12 +198,16 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     let theDate = document.querySelector("#lic_date");
     theDate.innerHTML = leed_weekday + " " + leed_monthname + " " + leed_date + ", " + leed_year; 
 
+    // SHOULD BE SET
+    // CURRENT_LEED.ti = leed_preview.ti;
 
 
     // TITLE
     //
     let theDiv = document.querySelector("#title_value");
     theDiv.innerHTML = leed_preview.ti;
+
+
 
 
     // START TIME - END TIME
@@ -200,6 +221,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // LOCATION
     // loc == full address
     theDiv = document.querySelector("#loc_value");
+
     if (CURRENT_LEED.op[ LEED_KEYS.LOC ] == OPTS_HIDDEN ) {
         theDiv.classList.add("buy2show");
         theDiv.innerHTML = "Buy to show";
@@ -218,8 +240,8 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     CURRENT_LEED.zp = leed_preview.zp;
     
     
-        
 
+     
 
     // EMAIL
     // (OPTIONAL)
@@ -236,10 +258,9 @@ export async function showLeedAction( leed_preview , gotoDB ) {
             theDiv.classList.remove("buy2show");
             theDiv.innerHTML = leed_details.em;
         }
-   
+        CURRENT_LEED.em = leed_details.em;
         theDiv.style.display = "flex";
     }
-    CURRENT_LEED.em = leed_details.em;
 
 
 
@@ -258,10 +279,10 @@ export async function showLeedAction( leed_preview , gotoDB ) {
             theDiv.classList.remove("buy2show");
             theDiv.innerHTML = leed_details.ph;
         }
-       
+        CURRENT_LEED.ph = leed_details.ph;
         theDiv.style.display = "flex";
     }
-    CURRENT_LEED.ph = leed_details.ph;
+
 
 
 
@@ -285,9 +306,10 @@ export async function showLeedAction( leed_preview , gotoDB ) {
             theDiv.classList.remove("buy2show");
             theDiv.innerHTML = leed_details.dt;
         }
+        CURRENT_LEED.dt = leed_details.dt;
         theDiv.style.display = "flex";
     }
-    CURRENT_LEED.dt = leed_details.dt;
+
 
 
 
@@ -308,10 +330,10 @@ export async function showLeedAction( leed_preview , gotoDB ) {
         } else {
             theDiv.classList.remove("buy2show");
             theDiv.innerHTML = leed_details.rq;
-        }
+        }    
+        CURRENT_LEED.rq = leed_details.rq;
         theDiv.style.display = "flex";
     }
-    CURRENT_LEED.rq = leed_details.rq;
 
 
 
@@ -336,14 +358,15 @@ export async function showLeedAction( leed_preview , gotoDB ) {
         var theHTML = "<a href=" + theURL + ">" + creator + "</a>";
         theDiv.innerHTML = theHTML;
     }
-
+    CURRENT_LEED.cr = leed_details.current_user;
     
+
 
 
     
     // *** PRICE ***
     // from leed_details
-
+    //
     theDiv = document.querySelector("#pr_value");
     theDiv.innerHTML = "$" + leed_details.pr;
     CURRENT_LEED.pr = leed_details.pr;

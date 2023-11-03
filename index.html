@@ -999,8 +999,11 @@ function trimAndRemoveSpaces(inputString) {
             SIDE_OPEN = true;
             openNav();
             
-  
+            // 11/1
+            // start with welcome screen always
+            // to keep things consistent
             // Is there a current leed in cache
+            /**
             let current_leed = getCurrentLeed();
             if (( current_leed.id != null ) && (isSubscribed( current_leed.tn ))) {
                     
@@ -1017,7 +1020,13 @@ function trimAndRemoveSpaces(inputString) {
             } else {
               clearCurrentLeed();
               welcomeColumn();
-            }      
+            }  
+            */
+            
+            clearCurrentLeed();
+            welcomeColumn();
+            
+            
 
             break;
 

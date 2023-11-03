@@ -452,6 +452,8 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     //
     newLeed.addEventListener("click", function( event ) {
     
+        document.body.style.cursor = 'wait !important';
+
         // turn off the thumbnail
         thumbnail.style.opacity = 0;
 

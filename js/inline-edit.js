@@ -549,14 +549,18 @@ function inlineDefaultFinish(rowName, options) {
             case "date":
 
                 var theVal = cell.children[getFromChildren].value;
-                var today = getTodayUTC();
+
+                // 11/2023
+                // using local date/time here
+                var today = new Date().getTime();
+
                 var str = prettyFormatDT( theVal );
                 var dt = DTfromPretty(str);
                 
                 // theVal = 2023-10-04T00:00
                 // check that the date is not before today's date
                 if (dt <= today) {
-                    const errMsg =  rowName.substring(4) + " date cannot be in the past";
+                    const errMsg =  rowName.substring(4) + " date must be in the future";
                     printError("inlineDefaultFinish()", errMsg );
                     alert(errMsg);
                     return;

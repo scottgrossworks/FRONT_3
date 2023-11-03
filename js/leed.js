@@ -622,9 +622,15 @@ export async function saveLeedChanges( leedObj ) {
           throwError("Update Leed", "Null response received from server");
         }
 
+        /**
+         * 
+         *    result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
+         *    {'id': 1259743,'ti':This is the title,'pr':44,'cd': 1}
+         * 1 == SUCCESS
+         */
         // received error code
-        if (results.res == DB_FAIL) {
-          throwError("Update Leed", results.msg);
+        if (results.cd == DB_FAIL) {
+          throwError("Update Leed", results.er);
         }
 
 
@@ -678,7 +684,7 @@ export async function buyCurrentLeed() {
         }
 
         // received error code
-        if (results.res == DB_FAIL) {
+        if (results.cd == DB_FAIL) {
           throwError("Buy Leed", results.msg);
         }
 
@@ -733,7 +739,7 @@ export async function deleteCurrentLeed() {
         }
 
         // received error code
-        if (results.res == DB_FAIL) {
+        if (results.cd == DB_FAIL) {
           throwError("Delete Leed", results.msg);
         }
 
@@ -784,7 +790,7 @@ export async function reportCurrentLeed() {
         }
 
         // received error code
-        if (results.res == DB_FAIL) {
+        if (results.cd == DB_FAIL) {
           throwError("Report Leed", results.msg);
         }
 

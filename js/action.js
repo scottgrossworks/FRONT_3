@@ -349,16 +349,15 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     if (current_user.un == leed_preview.cr) {
 
         // this leed is posted by the current user
-        theDiv.innerHTML = "<a href='./user_edit.html'>" + leed_preview.cr + "</a>";
+        theDiv.innerHTML = "<a href='./user_edit.html'><b>" + leed_preview.cr + "</b></a>";
 
     } else {
     
-        var creator = (leed_details.cr == null) ? "" : leed_details.cr;
-        var theURL = "./user_show.html?" + USERNAME_URL_PARAM + "=" + creator;
-        var theHTML = "<a href=" + theURL + ">" + creator + "</a>";
+        var theURL = "./user_show.html?" + USERNAME_URL_PARAM + "=" + leed_preview.cr;
+        var theHTML = "<a href=" + theURL + "><b>" + leed_preview.cr + "</b></a>";
         theDiv.innerHTML = theHTML;
     }
-    CURRENT_LEED.cr = leed_details.current_user;
+    CURRENT_LEED.cr = leed_preview.cr;
     
 
 

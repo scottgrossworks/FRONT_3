@@ -42,7 +42,7 @@
 
 			<div class="column _1">
 
-				<button class="back_button" style="margin:35px 20px; width:50px"><a onclick="backButton()">&#10140;</a></button>
+				<a onclick="backButton()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
 				</div>
 
 				<div class="column" style="margin:auto 0;transform:translateY(6px)">
@@ -338,7 +338,7 @@
        
         const URL_LEED_DELETED = "./leed_delete.html";
 
-
+        const CURRENT_USER = getCurrentUser(true);
 
 		var EDITING = false;
 
@@ -359,7 +359,12 @@
         // CREATOR
         //
         element = document.getElementById("td_creator");
-        element.innerHTML = CURRENT_LEED.cr;
+        element.innerHTML = CURRENT_USER.un;
+
+        // FIXME
+        console.log("CHECKING USER")
+        console.log(CURRENT_LEED);
+        
 
 
         // TRADE
@@ -420,9 +425,7 @@
         element.innerHTML = fullStartDate + " at " + start_time;
 
 
-        console.log("CURRENT LEED");
-        console.log(CURRENT_LEED);
-        
+
         // END TIME CAN BE HIDDEN OR SHOWN
         //
         element = document.getElementById("td_end");
@@ -692,16 +695,17 @@
         console.log("GOT RESULTS!!!");
         console.log(from_DB)
 
-        // FOOBAR
-        // ON FAILURE?
-        // SUCCESS!
-        if (from_DB.result) {
-            let theAlert = document.getElementById("alert_success");
-            var msg = "id: " + from_DB.id + " result: " + (from_DB.result) ? "Success" : "Failure";
-            var orig = theAlert.innerText;
-            theAlert.innerText = msg + orig;
-            theAlert.style.display = "block";
-        }
+
+        /**
+         * SHOW THE SUCCESS ALERT
+         *
+         *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
+         *            {'id': 1259743,'ti':This is the title,'pr':44,'cd': 1}
+         */
+        let theAlert = document.getElementById("alert_success");
+        var msg = "Success adding leed: " + from_DB.ti + "  Price: $" + fromDB.pr;
+        theAlert.innerText = msg + theAlert.innerText;
+        theAlert.style.display = "block";
 
 
 

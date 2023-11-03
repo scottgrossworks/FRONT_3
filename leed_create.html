@@ -82,6 +82,8 @@
 
     <table>
 
+
+            <!-- 2 -- CREATOR -->
             <tr id="row_creator">
                             
                 <TD class="labelTD">Creator: </TD>
@@ -98,7 +100,7 @@
 
 
 
-            <!-- TRADE NAME -->
+            <!-- 3 -- TRADE NAME -->
             <tr id="row_trade">
                             
                 <TD class="labelTD">Trade Name: </TD>
@@ -114,7 +116,7 @@
 
 
 
-            <!-- TITLE -->
+            <!-- 1 -- TITLE -->
             <tr id="row_title">
                         
                 <TD class="labelTD">Title: </TD>
@@ -130,7 +132,7 @@
 
 
 
-            <!-- START TIME -->
+            <!-- 6 -- START TIME -->
             <tr id="row_start">
                         
                 <TD class="labelTD">Start Time: </TD>
@@ -146,7 +148,7 @@
 
 
                     
-            <!-- END TIME -->
+            <!-- 7 -- END TIME -->
             <tr id="row_end">
                         
                 <TD class="labelTD">End Time: </TD>
@@ -164,9 +166,8 @@
 
 
             <!-- 
-                ADDRESS 
-            
-
+                5  -- LOCATION 
+                FULL ADDRESS 
             -->
             <tr id="row_loc">
                         
@@ -179,7 +180,7 @@
                 </td>
 
                 
-               <TD class="eyeballTD"><img src="./img/eye_hide.png" id="5_eye" eyeball="hide" onclick="toggleEyeball( 5 )"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_hide.png" id="5_eye" data-eyeball="hide" onclick="toggleEyeball( 5 )"></TD>
             </tr>
 
 
@@ -188,7 +189,7 @@
             
 
 
-            <!-- EMAIL  -->
+            <!-- 8 -- EMAIL  -->
             <tr id="row_em">
                             
                 <TD class="labelTD">Client Email: </TD>
@@ -199,13 +200,13 @@
                     <input type="button" value="Edit" onclick="editField('row_em', createOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_hide.png" id="8_eye" eyeball="hide" onclick="toggleEyeball( 8 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_hide.png" id="8_eye" data-eyeball="hide" onclick="toggleEyeball( 8 )"></TD>
             </tr>
 
 
 
 
-            <!-- PHONE -->
+            <!-- 9 -- PHONE -->
             <tr id="row_ph">
                             
                 <TD class="labelTD">Client Phone: </TD>
@@ -217,14 +218,14 @@
                 </td>
 
                 
-                <TD class="eyeballTD"><img src="./img/eye_hide.png" id="9_eye" eyeball="hide" onclick="toggleEyeball( 9 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_hide.png" id="9_eye" data-eyeball="hide" onclick="toggleEyeball( 9 )"></TD>
             </tr>
 
 
 
 
 
-            <!-- LEED DETAILS -->
+            <!-- 10 -- LEED DETAILS -->
             <tr id="row_det">
                         
                 <TD class="labelTD">Details: </TD>
@@ -235,14 +236,14 @@
                     <input type="button" value="Edit" onclick="editField('row_det', createOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="10_eye" eyeball="show" onclick="toggleEyeball( 10 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="10_eye" data-eyeball="show" onclick="toggleEyeball( 10 )"></TD>
             </tr>
 
 
 
             
        
-            <!-- LEED REQUIREMENTS -->
+            <!-- 11 -- LEED REQUIREMENTS -->
             <tr id="row_reqs">
                         
                 <TD class="labelTD">Requirements: </TD>
@@ -253,12 +254,14 @@
                     <input type="button" value="Edit" onclick="editField('row_reqs', createOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="11_eye" eyeball="show" onclick="toggleEyeball( 11 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="11_eye" data-eyeball="show" onclick="toggleEyeball( 11 )"></TD>
             </tr>
 
 
+
+
             
-            <!-- LEED PRICE -->
+            <!-- 12 -- LEED PRICE -->
             <tr id="row_pr">
                         
                 <TD class="labelTD">Price $: </TD>
@@ -637,28 +640,22 @@ async function postLeed() {
         //
         function toggleEyeball( fieldName ) {
             
+            
             beginEditing();
 
-
             let theImg = document.getElementById(fieldName + "_eye");
-      
 
-            if (theImg.eyeball == "hide") {
+            if (theImg.dataset.eyeball == "hide") {
 
                 theImg.src = "./img/eye_show.png";
-                theImg.eyeball = "show";
-                theImg.style.opacity = 1;
-
+                theImg.dataset.eyeball = "show";
 
                 changeLeedOpts( LEED_CHANGES, fieldName, OPTS_SHOWING );
 
             } else {
-                
                 theImg.src = "./img/eye_hide.png";
-                theImg.eyeball = "hide";
-                theImg.style.opacity = 0.8;
-                
-            
+                theImg.dataset.eyeball = "hide";
+
                 changeLeedOpts( LEED_CHANGES, fieldName, OPTS_HIDDEN );
             }
 

@@ -226,25 +226,25 @@ export function setCurrentLeed( jsonObj ) {
     CURRENT_LEED.id = jsonObj.sk;
 
     
-    if (jsonObj.ti != null) CURRENT_LEED.ti = jsonObj.ti;
-    if (jsonObj.cr != null) CURRENT_LEED.cr = jsonObj.cr;
+    CURRENT_LEED.ti = jsonObj.ti;
+    CURRENT_LEED.cr = jsonObj.cr;
 
     // user#scott.gross
     CURRENT_LEED.tn = jsonObj.pk.substr(5);
 
-    if (jsonObj.zp != null) CURRENT_LEED.zp = jsonObj.zp;
-    if (jsonObj.lc != null) CURRENT_LEED.lc = jsonObj.lc;
+    CURRENT_LEED.zp = jsonObj.zp;
+    CURRENT_LEED.lc = jsonObj.lc;
     
-    if (jsonObj.st != null) CURRENT_LEED.st = jsonObj.st;
-    if (jsonObj.et != null) CURRENT_LEED.et = jsonObj.et;
+    CURRENT_LEED.st = jsonObj.st;
+    CURRENT_LEED.et = jsonObj.et;
 
-    if (jsonObj.em != null) CURRENT_LEED.em = jsonObj.em;
-    if (jsonObj.ph != null) CURRENT_LEED.ph = jsonObj.ph;
+    CURRENT_LEED.em = jsonObj.em;
+    CURRENT_LEED.ph = jsonObj.ph;
 
-    if (jsonObj.dt != null) CURRENT_LEED.dt = jsonObj.dt;
-    if (jsonObj.rq != null) CURRENT_LEED.rq = jsonObj.rq;
+    CURRENT_LEED.dt = jsonObj.dt;
+    CURRENT_LEED.rq = jsonObj.rq;
 
-    if (jsonObj.pr != null) CURRENT_LEED.pr = jsonObj.pr;
+    CURRENT_LEED.pr = jsonObj.pr;
 
     if ((jsonObj.op == null) || (jsonObj.op.length == 0)) {
         CURRENT_LEED.op = START_OPTS;
@@ -540,52 +540,31 @@ export async function saveLeedChanges( leedObj ) {
 
   /*
    * cannot be changed
-   */
-  CURRENT_LEED.id = leedObj.id;
-  CURRENT_LEED.cr = leedObj.cr;
+    */
+    CURRENT_LEED.id = leedObj.id;
 
+    CURRENT_LEED.cr = leedObj.cr;
 
-  
-  if (leedObj.ti != null)
     CURRENT_LEED.ti = leedObj.ti;
 
-
-  if (leedObj.tn != null)
     CURRENT_LEED.tn = leedObj.tn;
 
-
-  if (leedObj.zp != null)
     CURRENT_LEED.zp = leedObj.zp;
 
-    
-  if (leedObj.lc != null)
     CURRENT_LEED.lc = leedObj.lc;
 
-
-  if (leedObj.st != null)
     CURRENT_LEED.st = leedObj.st;
 
-
-  if (leedObj.et != null)
     CURRENT_LEED.et = leedObj.et;
 
-
-  if (leedObj.em != null)
     CURRENT_LEED.em = leedObj.em;
 
-    
-  if (leedObj.ph != null)
     CURRENT_LEED.ph = leedObj.ph;
 
-    
-  if (leedObj.dt != null)
     CURRENT_LEED.dt = leedObj.dt;
 
-  if (leedObj.rq != null)
     CURRENT_LEED.rq = leedObj.rq;
 
-
-  if (leedObj.pr != null)
     CURRENT_LEED.pr = leedObj.pr;
 
   if ((leedObj.op != null) && (leedObj.op.length != 0))

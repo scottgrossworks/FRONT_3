@@ -408,6 +408,39 @@
 
 
 
+    
+
+  <!-- 
+    -- NEW USER WELCOME MODAL 
+    -- 
+    -->
+    <div class="row modal" id="newUser_modal">
+
+      <center><img id="newUser_logo" src="img/logo_2.png"></center> 
+      <h1>
+          <center>
+          <table>
+            <TR><TD>
+             To get the most out of the Leedz......
+              <BR>
+              <BR>
+               Subscribe, set search radius....
+               Contact Us
+               Report a Leed
+               <BR>
+                 </TD></TR>
+          </table>
+          </center> 
+        </h1>
+
+          <BR>
+      <a id="newUser_modal_close" href="javascript:modalClose();" href="">X</a>
+      <BR>
+   
+    </div>
+
+
+
   <!-- 
     -- ERROR MODAL 
     -- 
@@ -694,6 +727,19 @@ function trimAndRemoveSpaces(inputString) {
         guest.style.display = "block";
       }
       window.openGuestWelcome = openGuestWelcome;
+
+
+
+
+      //
+      // open NEW USER welcome modal
+      // new account -- no subs / search
+      //
+      function openNewUserWelcome() {
+        let newU = document.getElementById("newUser_modal");
+        newU.style.display = "block";
+      }
+      window.openNewUserWelcome = openNewUserWelcome;
 
 
 
@@ -1101,8 +1147,9 @@ function trimAndRemoveSpaces(inputString) {
         // let closeBut = document.getElementById("buy_modal_close");
         // closeBut.style.display = "none";
 
-        let guest = document.getElementById("guest_modal");
-        guest.style.display = "none";
+        // close the guest modal
+        // let modal = document.getElementById("guest_modal");
+        // modal.style.display = "none";
 
         errorModalClose();
 
@@ -1307,7 +1354,7 @@ function trimAndRemoveSpaces(inputString) {
           
     
 
-
+          
           // INIT DISTANCE CHOOSER
           // using current_user preferences if set
           //
@@ -1326,10 +1373,23 @@ function trimAndRemoveSpaces(inputString) {
             printError("Distance Chooser", error);
             errorModal( msg , true );
           }
-
-
-
-
+          
+          
+          var trade_subs = true;
+          //
+          // USER HAS NO TRADE SUBSCRIPTIONS!
+          // no need to continue
+          // open new user welcome with instructions
+          if (current_user.sb.length == 0) {
+              openNewUserWelcome();
+              trade_subs = false;
+          }
+          
+          
+          
+          // Do not load full UI if user has no trade subs
+          //
+        
           /**
            * TRADES
            *
@@ -1337,19 +1397,22 @@ function trimAndRemoveSpaces(inputString) {
            * when we turn ON a trade this will ALSO load the leedz
            * for each trade in current_user.sb[]
            */
-          try {
-           
-            await initTrades();
+          
+          if (trade_subs) {
+            try {
+            
+              await initTrades();
 
 
-          } catch (error) {
-            
-            // DO NOT FAIL -- show error modal dialog and print error to console
-            var msg = "Cannot load trades.<BR>Please refresh page."
-            msg = error.message + "<BR>" + msg;
-            
-            printError("Init Trades Column", error);
-            errorModal( msg , true );
+            } catch (error) {
+              
+              // DO NOT FAIL -- show error modal dialog and print error to console
+              var msg = "Cannot load trades.<BR>Please refresh page."
+              msg = error.message + "<BR>" + msg;
+              
+              printError("Init Trades Column", error);
+              errorModal( msg , true );
+            }
           }
 
 
@@ -1393,32 +1456,26 @@ function trimAndRemoveSpaces(inputString) {
 
 
           /**
-           * Load CACHE leedz
+           * If there are subs Load CACHE leedz
            */
-          try {
+          if (trade_subs) {
+            try {
 
-            loadCacheLeedz();
+              loadCacheLeedz();
 
-          } catch (error) {
+            } catch (error) {
 
-            var msg = "Cannot load leedz from cache.<BR>Please refresh page."
-            msg = error.message + "<BR>" + msg;
-            
-            printError("Loading Cache Leedz", error);
-            errorModal( msg , true );
-          }
-
-
-          
-
-          /**
-           * Load Leedz from DB -- will return immediately
-            * delegate to callback internally when data arrives
-           */
-           if (current_user.sb == null || current_user.sb.length == 0) {
-              var button_href="<button class='button welcomeButton'>Subscribe</button>";
-              errorModal("Subscribe to one more more trades to see the available leedz.<BR>" + button_href);
-           } else {
+              var msg = "Cannot load leedz from cache.<BR>Please refresh page."
+              msg = error.message + "<BR>" + msg;
+              
+              printError("Loading Cache Leedz", error);
+              errorModal( msg , true );
+            }
+       
+            /**
+              * Load Leedz from DB -- will return immediately
+              * delegate to callback internally when data arrives
+            */
 
             try {
 
@@ -1435,14 +1492,11 @@ function trimAndRemoveSpaces(inputString) {
           }
 
 
-
           /**
           * 
           */
 
           cssScreenSize();
-
-
 
 
           // set the trades sidebar      

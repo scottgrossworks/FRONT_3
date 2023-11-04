@@ -514,30 +514,37 @@ async function doGet( theURL ) {
             throw new Error('Network response was not OK: [' + response.status + "] :" + response.message);
         }
 
+        let the_json = null;
+        
+        // DECODE THE JSON
+        try {   
+            the_json = response.json();
+        
+        } catch (err) {
+            throwError("JSON", err.message);
+        }
+
 
         if (response.status == 200) {
 
-            const the_json = response.json();
-
-            // console.log("WE GOT JSON");
+            // SUCCESS!
             // console.log(the_json);
-
             return the_json;
 
 
         } else if (response.status == 204) {
 
-            throw new Error(new String(response.status));
+            throw new Error( the_json.er );
 
         } else {
 
             var the_code = "Error code received from server: " + response.status;
-            var the_msg = "<BR>Error message: " + response.message;
+            var the_msg = "<BR>Error message: " + the_json.er;
             throw new Error( the_code + the_msg );
         }
     }
     ).catch(error => {
-        printError( "http GET", error.message );
+        printError( "HTTP GET", error.message );
         throwError( error.status, error.message );
     });
 

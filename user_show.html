@@ -29,8 +29,8 @@
 
 			<div class="column _1">
 
-				<button class="back_button" style="margin:35px 20px; width:50px"><a onclick="backButton()">&#10140;</a></button>
-				</div>
+                <a onclick="backButton()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+			</div>
 
 				<div class="column" style="margin:auto 0;transform:translateY(6px)">
 					<h1 class="user_title">Leedz User</h1>
@@ -319,7 +319,9 @@ function showUserBadges( element, badges ) {
         .then(data => {
     
             if (data == null) throw new Error("null response from GET");
-            resObj = data[0];
+            
+            resObj = data;
+            
     
         })
         .catch(error => {
@@ -329,24 +331,25 @@ function showUserBadges( element, badges ) {
             return false;
         });
 
+
+
         // copy the new values into SHOW_USER
 
         // some fields are mandatory and will always contain values
         // some are optional and may be null
         // if statements are in case cache version is more recent
         // 
-        SHOW_USER.un = resObj.cr;
-        SHOW_USER.em = (resObj.em != null) ? resObj.em : null;
+        SHOW_USER.un = resObj.sk;
+        SHOW_USER.em = resObj.em;
 
-        SHOW_USER.ws = (resObj.ws != null) ? resObj.ws : null;
-        SHOW_USER.ab = (resObj.ab != null) ? resObj.ab : null;
+        SHOW_USER.ws = resObj.ws;
+        SHOW_USER.ab = resObj.ab;
 
         // TRADES
-        SHOW_USER.sb = (resObj.sb != null) ? resObj.sb : [];
+        SHOW_USER.sb =  (! resObj) ? [] : resObj.sb.split(',').map(element=>element.trim());
 
-       
         // USER BADGES
-        SHOW_USER.bg = (resObj.bg != null) ? resObj.bg : [];
+        SHOW_USER.bg = (! resObj) ? [] : resObj.bg.split(',').map(element=>element.trim());
            
     
     } catch (error) {

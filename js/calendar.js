@@ -451,8 +451,8 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     // open ACTION WINDOW
     //
     newLeed.addEventListener("click", function( event ) {
-    
-        document.body.style.cursor = 'wait !important';
+        
+        waitCursor();
 
         // turn off the thumbnail
         thumbnail.style.opacity = 0;
@@ -481,9 +481,6 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     eachDay.appendChild( newLeed );
     // console.log("CREATING CALENDAR LEED=" + trade_name + "==" + leed_fromDB.st);
 }
-
-
-
 
 
 

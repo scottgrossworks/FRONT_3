@@ -124,10 +124,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
             throwError( "showLeedAction()", error); 
         
         
-        }).finally (
-            document.body.style.cursor = 'default'
-        );
-       
+        })
     }
 
     console.log("GOT LEED DETAILS");
@@ -436,7 +433,21 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // let closeBut = document.getElementById("buy_modal_close");
     // closeBut.style.display = "flex";
 
+    normalCursor();
+
 }
+
+
+
+
+/**
+ * Change back to normal cursor
+ */
+function normalCursor() {
+    document.body.style.cursor = 'default';
+}
+
+
 
 
 

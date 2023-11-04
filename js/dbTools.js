@@ -364,7 +364,7 @@ export async function db_getDeetz( trade_name, leed_id ) {
     
     // GET JSON from http server
 
-    console.log("GET DEETZ: " + trade_name + " ID=" + leed_id);
+    // console.log("GET DEETZ: " + trade_name + " ID=" + leed_id);
 
     let json_obj = null;
     try {

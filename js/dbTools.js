@@ -132,6 +132,11 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
     switch (code) {
 
+
+            //
+            //
+            //
+            //
         case ADD_LEED:
        
             var theURL = new URL(API_GATEWAY + "addLeed");
@@ -181,16 +186,59 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
 
 
+
+            //
+            //
+            //
+            //
         case BUY_LEED:
             console.log("dbTools.db_updateLeed() BUY LEED"); 
             break
         
+
+
+
+
+            //
+            //
+            //
+            //
         case DEL_LEED:
-            console.log("dbTools.db_updateLeed() DELETE LEED"); 
+
+            var theURL = new URL(API_GATEWAY + "delLeed");
+            var params = new URLSearchParams();
+
+            params.append( TRADE_NAME_URL_PARAM, leed_obj.tn);
+            params.append( ID_URL_PARAM, leed_obj.id );
+
+            
+            theURL.search = params.toString();
+
+            console.log("THEURL=" + theURL);
+
+            await doGet( theURL )
+            .then(data => {
+
+                json_obj = data;
+
+            })
+            .catch(error => {
+
+                printError("Change Leed", error);
+                throwError("Change Leed", error);
+            });
+
             break
+        
 
 
 
+
+
+            //
+            //
+            //
+            //
         case CHG_LEED:
 
             var theURL = new URL(API_GATEWAY + "changeLeed");

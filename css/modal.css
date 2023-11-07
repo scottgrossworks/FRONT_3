@@ -224,7 +224,7 @@
   z-index:900;
 
   position: fixed;
-
+  top:0;
   margin-left:10vw;
   margin-top: 15vh;
 
@@ -237,6 +237,10 @@
 
   width:60vw;
   height:70vh;
+  
+  max-width: 500px;
+  max-height:800px;
+
   
   border: 4px solid #f44336;
   border-radius: 20px;

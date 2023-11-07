@@ -34,7 +34,14 @@ export function inlineEdit(rowName, options) {
         inlineEditRowContents[rowName] = {};
         for (var i = 0; i < tableRow.childElementCount; i++) {
             var cell = tableRow.children[i];
-            inlineEditRowContents[rowName][i] = cell.innerHTML.trim();
+
+            //console.log("i=" + i + " cell=" + cell.innerHTML);
+
+            if ((i == 1) && (options.origin == "cancel"))
+                inlineEditRowContents[rowName][i] = "";
+            else
+                inlineEditRowContents[rowName][i] = cell.innerHTML.trim();
+            
             inlineDefaultUpdateCell(cell, i, rowName, options);   
         }
     } catch (error) {

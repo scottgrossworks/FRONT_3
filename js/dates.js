@@ -243,8 +243,7 @@ export function isCurrentMonth() {
 export function getDateShowing() {
 
     if (isDateSet()) {
-        console.log("DATE IS SET SHOWING=" + DATE_SHOWING);
-
+        // console.log("DATE IS SET SHOWING=" + DATE_SHOWING);
         return DATE_SHOWING;
     } 
 

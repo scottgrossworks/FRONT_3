@@ -697,8 +697,6 @@ export async function deleteCurrentLeed() {
     throwError("deleteCurrentLeed", "CURRENT_LEED is null");
 
 
-    console.log("----------> ******** DELETING CURRENT LEED TO SERVER ******* ");
-
     const current_user = getCurrentUser(false);
 
  
@@ -713,7 +711,7 @@ export async function deleteCurrentLeed() {
         results = await db_updateLeed( DEL_LEED, current_user, CURRENT_LEED );
         
         // should never happen
-        if (results == null) {
+        if (! results) {
           throwError("Delete Leed", "Null response received from server");
         }
 
@@ -729,7 +727,7 @@ export async function deleteCurrentLeed() {
         
         // EXIT FUNCTION HERE
         // throwError("Delete Leed", error);
-        errorModal("Cannot delete leed: " + error.message, false); 
+        // errorModal("Cannot delete leed: " + error.message, true); 
         return results;
     }
 

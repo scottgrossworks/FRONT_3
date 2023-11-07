@@ -60,14 +60,14 @@
 
             <div id="alert_success" class="alert" style="display:none">
 				<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-				Leed Changed.&nbsp;
 			</div>
+
+    
 
 
 
 <section>
 			
-    <BR>
 	<BR>	
 
 
@@ -328,13 +328,14 @@
 		import { inlineEdit } from "./js/inline-edit.js";
         import { getCurrentUser } from "./js/user.js";
         import { clearCurrentLeed, getCurrentLeed, blankLeedObject, saveLeedChanges, deleteCurrentLeed } from "./js/leed.js";
-		import { printError, throwError, errorModal } from "./js/error.js";
+		import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
 		
         import { LEED_KEYS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
         import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 
 
 		window.inlineEdit = inlineEdit;
+        window.errorModalClose = errorModalClose;
        
         const URL_LEED_DELETED = "./leed_delete.html";
 
@@ -359,10 +360,12 @@
         // CREATOR
         //
         element = document.getElementById("td_creator");
-        element.innerHTML = CURRENT_USER.un;
+        element.innerHTML = '<B>' + CURRENT_USER.un + '</B>';
 
+
+        
         // FIXME
-        console.log("CHECKING USER")
+        console.log("CURRENT LEED")
         console.log(CURRENT_LEED);
         
 
@@ -677,6 +680,7 @@
 
         if (! EDITING) return;
 
+        waitCursor();
 
         //   client <---> API Gateway <===> DB
         //
@@ -690,22 +694,35 @@
 
         } finally {
             endEditing();
+            normalCursor();
         }
 
         console.log("GOT RESULTS!!!");
         console.log(from_DB)
 
+            /**
+             * SHOW THE ERROR ALERT
+             */
+        if (from_DB['er']) {
+            var msg = "Error adding leed: " + LEED_CHANGES.ti + " : " + from_DB['er'];
+            printError("Save Leed Changes", msg);
+            errorModal(msg, true);
 
-        /**
-         * SHOW THE SUCCESS ALERT
-         *
-         *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
-         *            {'id': 1259743,'ti':This is the title,'pr':44,'cd': 1}
-         */
-        let theAlert = document.getElementById("alert_success");
-        var msg = "Success adding leed: " + from_DB.ti + "  Price: $" + fromDB.pr;
-        theAlert.innerText = msg + theAlert.innerText;
-        theAlert.style.display = "block";
+        } else {
+           /**
+            * SHOW THE SUCCESS ALERT
+            *
+            *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
+            *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
+            */
+            var theAlert = document.getElementById("alert_success");
+            var msg = 'Leed Updated: ' + from_DB['ti'] + '  ($ ' + from_DB['pr'] +' )';
+            var newChild = document.createElement("span");
+            newChild.textContent = msg;
+            theAlert.appendChild(newChild);
+            theAlert.style.display = "block";
+        }   
+
 
 
 
@@ -719,25 +736,49 @@
     *
     *
     */
-    function deleteLeed() {
+    async function deleteLeed() {
 
+        waitCursor();
 
+        let from_DB = null;
         try {
 
             // GO BACK to server and delete leed
             // compliment of add leed
 
-            deleteCurrentLeed();
-
-            // GOTO delete leed landing page
-            window.open(  URL_LEED_DELETED, "_self" );
-            
+            from_DB = await deleteCurrentLeed();
 
         } catch ( error ) {
             printError("Delete Leed", error.message);
             errorModal("Error deleting leed: " + error.message, false);
 
         } 
+
+        console.log("GOT RESULTS!!!");
+        console.log(from_DB)
+
+        /**
+        * SHOW THE ERROR ALERT
+        */
+        if (from_DB.er) {
+            var msg = "Error deleting leed: " + from_DB.er;
+            printError("Delete Leed", msg);
+            errorModal(msg, false);
+
+        } else {
+           /**
+            * SHOW THE SUCCESS ALERT
+            *
+            *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
+            *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
+            */
+            var theAlert = document.getElementById("alert_success");
+            var msg = 'Leed Deleted: ' + from_DB['ti'] + '  ($ ' + from_DB['pr'] +' )';
+            var newChild = document.createElement("span");
+            newChild.textContent = msg;
+            theAlert.appendChild(newChild);
+            theAlert.style.display = "block";
+        }   
 
 
     }
@@ -757,6 +798,25 @@
 
 
 	
+
+
+
+        /**
+        * Change to a wait cursor
+        */
+        function waitCursor() {
+            document.body.style.cursor = 'wait';
+        }
+        window.waitCursor = waitCursor;
+
+        /**
+        * Change back to normal cursor
+        */
+        function normalCursor() {
+            document.body.style.cursor = 'default';
+        }
+        window.normalCursor = normalCursor;
+
 	
 	</script>
 

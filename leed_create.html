@@ -64,16 +64,13 @@
 			</div>
 			
             
-			<div id="alert_success" class="alert" style="display:none">
+            <div id="alert_success" class="alert" style="display:none">
 				<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-				Leed Posted.&nbsp;
 			</div>
-
 
 
 <section>
     
-    <BR>
 	<BR>	
 
 
@@ -432,12 +429,12 @@
                     break;
 
 
-                    /**
+                /**
                     // set later on submit
-                case "row_zip":
+                    case "row_zip":
                     LEED_CHANGES.zp = rowData["zip"];
                     break;
-                    */
+                */
 
 				case "row_loc":
 					LEED_CHANGES.lc = rowData["loc"];
@@ -477,6 +474,9 @@
 			element.style.backgroundColor = "var(--LEEDZ_GREEN)";
 			element.style.opacity = 1;
 
+            element = document.getElementById("cancelButton");
+            element.style.backgroundColor = "dodgerblue";
+
 			EDITING = true;
 		}
 
@@ -489,6 +489,9 @@
 			element.innerHTML = "Saved!";
 			element.style.backgroundColor = "darkorange";
 			element.style.opacity = 0.5;
+ 
+            element = document.getElementById("cancelButton");
+            element.style.backgroundColor = "cornflowerblue";
 
 			EDITING = false;
 		}
@@ -587,7 +590,7 @@ async function postLeed() {
     //   client <---> API Gateway <===> DB
     //
     //
-    let results = null;
+    let from_DB = null;
 
     try {
         // get the result object
@@ -596,7 +599,7 @@ async function postLeed() {
         
                 if (data == null) throw new Error("null response from GET");
                 
-                results = data;
+                from_DB = data;
         
             })
             .catch(error => {
@@ -608,28 +611,44 @@ async function postLeed() {
         
     } catch (error) {
 
-        printError( "db_updateLeed", error.message );
-        throwError( "Error Posting Leed", error); 
+        printError( "Create Leed", error.message );
+        throwError( "Error Creating Leed", error); 
         return;
     }
 
 
-        // SUCCESS!
-        let theAlert = document.getElementById("alert_success");
-        const success = results.split('|');
-        let tn = success[0];
-        let ti = success[1];
-        let pr = success[2];
-        msg = "Trade: " + tn + " " + ti + " Price: " + pr;
-        theAlert.innerText += msg;
+    console.log("GOT RESULTS!!!");
+    console.log(from_DB)
+
+        /**
+         * SHOW THE ERROR ALERT
+         */
+    if (from_DB['er']) {
+        var msg = "Error creating leed: " + LEED_CHANGES.ti + " : " + from_DB['er'];
+        printError("Create Leed", msg);
+        errorModal(msg, true);
+
+    } else {
+        /**
+        * SHOW THE SUCCESS ALERT
+        *
+        *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
+        *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
+        */
+        var theAlert = document.getElementById("alert_success");
+        var msg = 'Success adding leed: ' + from_DB['ti'] + '  ($ ' + from_DB['pr'] +' )';
+        var newChild = document.createElement("span");
+        newChild.textContent = msg;
+        theAlert.appendChild(newChild);
         theAlert.style.display = "block";
 
-
-        // START OVER
-        cancelCreate();
-
     }
-    window.postLeed = postLeed;
+
+    cancelCreate();
+}
+
+
+window.postLeed = postLeed;
 
 
 
@@ -673,16 +692,20 @@ async function postLeed() {
          *
          */
 		function cancelCreate() {
-
-            var elements = ["td_trade", "td_",
-                            "td_start", "td_end", "td_loc", "td_em", 
-                            "td_ph", "td_det", "td_reqs", "td_pr" ];
-
-            for (let i = 0; i < elements.length; i++) {
-                let theDiv = elements[ i ];
-                theDiv.innerHTML = "";
-            }       
+           
+            createOptions.origin = "cancel";
+            inlineEdit('row_trade', createOptions);            
+            inlineEdit('row_title', createOptions);
+            inlineEdit('row_start', createOptions);
+            inlineEdit('row_end', createOptions);
+            inlineEdit('row_loc', createOptions);
+            inlineEdit('row_em', createOptions);
+            inlineEdit('row_ph', createOptions);
+            inlineEdit('row_det', createOptions);
+            inlineEdit('row_reqs', createOptions);
+            inlineEdit('row_pr', createOptions);
 		}
+
 		window.cancelCreate = cancelCreate;
 
 

@@ -35,7 +35,7 @@ export function inlineEdit(rowName, options) {
         for (var i = 0; i < tableRow.childElementCount; i++) {
             var cell = tableRow.children[i];
 
-            console.log("inlineEdit i=" + i + " cell=" + cell.innerHTML);
+            // console.log("inlineEdit i=" + i + " cell=" + cell.innerHTML + " origin=" + options.origin);
 
             if ((i == 1) && (options.origin == "cancel"))
                 inlineEditRowContents[rowName][i] = "";
@@ -168,20 +168,30 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             // loading the initial value
             //
             
-            // var theVal = inlineEditRowContents[rowName][i];
+            var theVal = inlineEditRowContents[rowName][i];
+            var formatted = null;
             var dateTime = null;
-            if (options.origin = "create") {   // coming from create page                
-                dateTime = getTodayUTC().getTime();
+            if (options.origin = "create") {  // coming from create page 
+                
+                // is the field blank (use Today), or are we 
+                // editing field with existing value?
+                if (theVal) {
+                    formatted = formatDTforInput( DTfromPretty( theVal ) );
+
+                } else {
+                    dateTime = getTodayUTC().getTime();
+                    formatted = formatDTforInput( dateTime );
+                }
 
             } else {   // coming from edit page
                 var current_leed = getCurrentLeed();
                 dateTime = (rowName == "row_start") ? current_leed.st : current_leed.et;
+                formatted = formatDTforInput( dateTime );
             }
 
-            var theVal = formatDTforInput( dateTime );
+            
 
-
-            cellContent += `<input type='datetime-local' value='${theVal}' form='${rowName}Form'`;
+            cellContent += `<input type='datetime-local' value='${formatted}' form='${rowName}Form'`;
             for ( key in cell.dataset ) {
                 if (cell.dataset.hasOwnProperty(key) && key.substr(0, 6) == "inline" && attributesFilter.indexOf(key) == -1) {
                     cellContent += ` ${key.substr(6)}='${cell.dataset[key]}'`;

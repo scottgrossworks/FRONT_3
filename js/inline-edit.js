@@ -35,7 +35,7 @@ export function inlineEdit(rowName, options) {
         for (var i = 0; i < tableRow.childElementCount; i++) {
             var cell = tableRow.children[i];
 
-            //console.log("i=" + i + " cell=" + cell.innerHTML);
+            console.log("inlineEdit i=" + i + " cell=" + cell.innerHTML);
 
             if ((i == 1) && (options.origin == "cancel"))
                 inlineEditRowContents[rowName][i] = "";
@@ -566,12 +566,15 @@ function inlineDefaultFinish(rowName, options) {
                 
                 // theVal = 2023-10-04T00:00
                 // check that the date is not before today's date
+                // FIXME -- not working 11/7
+                /**
                 if (dt <= today) {
                     const errMsg =  rowName.substring(4) + " date must be in the future";
                     printError("inlineDefaultFinish()", errMsg );
                     alert(errMsg);
                     return;
                 }
+                */
                 
                 
                 var trimVal = prettyFormatDT( theVal.trim() );

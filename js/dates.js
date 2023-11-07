@@ -55,7 +55,7 @@ export function formatDTforInput(dateTimeString) {
    * 2023-08-12T18:31 --> Saturday Aug 12, 2023 at 6:31PM
    */
   export function prettyFormatDT( isoString ) {
-
+    
         const the_weekday = getWeekday( getShortDateString( isoString ) );
         const the_monthname = getShortMonthname( isoString.substring(5, 7) ); 
  
@@ -65,6 +65,7 @@ export function formatDTforInput(dateTimeString) {
 
         const the_year = isoString.substring(0, 4);
         const the_hours = getHours(isoString);
+
 
         const fullStartDate = the_weekday + " " + the_monthname + " " + the_date + ", " + the_year; 
         const the_time = the_hours[0] + ":" + getMinutes(isoString) + the_hours[1];
@@ -510,14 +511,23 @@ export function getHours( isoString ) {
 
      // convert the input string to a number
     var theHour = Number( totalHours );
-
-      // check if the hour is before 12, return "AM" if true, "PM" otherwise
-    if (theHour < 12) {
-        return [ String(theHour), "AM" ];
-    } else {
-        return [ String(theHour % 12), "PM" ];
-    }
+    var am_pm = "AM";
     
+
+    if (theHour == 12) {
+        am_pm = "PM"
+
+    } else if (theHour > 12) {
+        am_pm = "PM";
+        theHour = theHour % 12;
+
+    } else if (theHour == 0) {
+        theHour = 12;
+    }
+
+
+    return [ String(theHour), am_pm ];
+
 }
 
 

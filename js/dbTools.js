@@ -172,7 +172,6 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
             theURL.search = params.toString();
 
-            console.log("THEURL=" + theURL);
             
             await doGet( theURL )
             .then(data => {

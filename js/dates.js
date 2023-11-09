@@ -117,13 +117,11 @@ export function formatDTforInput(dateTimeString) {
  */
 export function DTfromPretty( prettyStr ) {
 
-    console.log("PRETTY=" + prettyStr);
-
      // MONTH
     var space = prettyStr.indexOf(' ');
     var monthStr = prettyStr.substring( space + 1, space + 4);
     const the_month = getMonthIndex( monthStr ); // WRONGbvvb
-    console.log("THE MONTH=" + the_month);
+
 
     // DAY
     var space2 = prettyStr.indexOf(' ', space + 1);
@@ -181,10 +179,7 @@ export function DTfromPretty( prettyStr ) {
 
     const the_DT = the_date.getTime();
 
-    // FOOBAR
-    //
-    console.log("THE DATE=" + the_date.toLocaleString('en-US', { timeZone: 'UTC' }));
-    console.log("DT=" + the_DT);
+    // console.log("THE DATE=" + the_date.toLocaleString('en-US', { timeZone: 'UTC' }));
 
     return the_DT;
 

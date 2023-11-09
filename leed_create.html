@@ -354,7 +354,7 @@
         import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
 		import { inlineEdit } from "./js/inline-edit.js";
         import { getCurrentUser } from "./js/user.js";
-        import { blankLeedObject, clearCurrentLeed  } from "./js/leed.js";
+        import { blankLeedObject, clearCurrentLeed, createDBLeed  } from "./js/leed.js";
         import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
 		
         import { LEED_KEYS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
@@ -459,13 +459,11 @@
 
 				case "row_start":
                     var dateTime = DTfromPretty( rowData["start"] );
-                    console.log("DATA=" + rowData['start'] + " START=" + dateTime);
 					LEED_CHANGES.st = dateTime;
 					break;
 
                 case "row_end":
                     var dateTime = DTfromPretty( rowData["end"] );
-                    console.log("DATA=" + rowData['end'] + " END=" + dateTime);
                     LEED_CHANGES.et = dateTime;
                     break;
 
@@ -675,14 +673,14 @@ async function postLeed() {
         *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
         */
         var theAlert = document.getElementById("alert_success");
-        var msg = 'Success adding leed:  ' + from_DB['ti'] + '  ($ ' + from_DB['pr'] +' )';
+        var msg = 'Added leed:  ' + from_DB['ti'] + '  ($ ' + from_DB['pr'] +' )';
         var newChild = document.createElement("span");
         newChild.textContent = msg;
 
         if (theAlert.children.length <= 1) {
             theAlert.appendChild(newChild);
         } else {
-            theAlert.replaceChild(theAlert.children[1], newChild);
+            theAlert.replaceChild(newChild, theAlert.children[1]);
         }
 
         theAlert.style.display = "block";

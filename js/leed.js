@@ -3,7 +3,7 @@
  */
 import { getCurrentUser, isSubscribed } from "./user.js";
 import { errorModal, printError, throwError } from "./error.js";
-import { db_getLeedz, db_updateLeed, CHG_LEED, DEL_LEED, BUY_LEED, REP_LEED, DB_FAIL } from "./dbTools.js";
+import { db_getLeedz, db_updateLeed, CHG_LEED, DEL_LEED, BUY_LEED, ADD_LEED, REP_LEED, DB_FAIL } from "./dbTools.js";
 
 import { getMonth,getYear } from "./dates.js";
 

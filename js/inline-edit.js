@@ -200,14 +200,6 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             }
 
 
-            //
-            //
-            //
-            console.log("FORMATTED!! " + formatted);
-            //
-            //
-            //
-
 
             cellContent += `<input type='datetime-local' value='${formatted}' form='${rowName}Form'`;
             for ( key in cell.dataset ) {

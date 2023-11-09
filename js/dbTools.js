@@ -401,11 +401,9 @@ export async function db_getUser( username ) {
  * GET DEETZ
  * Get the full leed details for this leed
  * 
- * FIXME FIXME FIXME
- * MUST PASS trade_name to lambda because its primary key for DDB
  * 
  */
-export async function db_getDeetz( trade_name, leed_id ) {
+export async function db_getDeetz( trade_name, leed_id, leed_op ) {
     
     // GET JSON from http server
 
@@ -418,6 +416,8 @@ export async function db_getDeetz( trade_name, leed_id ) {
         let searchParams = new URLSearchParams();
         searchParams.append( TRADE_NAME_URL_PARAM, trade_name );
         searchParams.append( LEED_ID_URL_PARAM, leed_id );
+        searchParams.append( OPTIONS_URL_PARAM, leed_op );
+        
         theURL.search = searchParams.toString();
 
 

@@ -19,7 +19,8 @@ LEED PREVIEW
             "zp": "90034", 
             "st": 1680635460000, 
             "et": 1680639060000, 
-            "pk ": "leed#caricatures"
+            "pk": "leed#caricatures"
+            "op": "0000021122110"
         },
 
 LEED DETAILS
@@ -30,9 +31,9 @@ LEED DETAILS
         "dt": "1004 staff app1 These are the potentially-longwinded leed details for staff appreciation party, leed id: 1004",
         "rq": "1004 staff app2 These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
         "em": "scottgrossworks@gmail.com",
-        "ph": "123456789",
+        "ph": "1234567890",
         "pr": "40",
-        "op"":"0000021122110"
+        
     }
 
 */
@@ -77,6 +78,7 @@ export const LEED_KEYS = {
 // 9 phone
 //
 //
+export const SHOW_ALL_OPTS = "0000011111110";
 export const START_OPTS = "0000021122110";
 export const OPTS_LOCKED  = 0;
 export const OPTS_SHOWING = 1;

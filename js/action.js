@@ -5,7 +5,7 @@ import { getColorForTrade } from "./trades.js";
 import { db_getDeetz, USERNAME_URL_PARAM } from "./dbTools.js";
 import { errorModal, printError, throwError } from "./error.js";
 import { getCurrentUser } from "./user.js";
-import { getCurrentLeed, cacheCurrentLeed, LEED_KEYS, OPTS_HIDDEN } from "./leed.js";
+import { getCurrentLeed, cacheCurrentLeed, LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS } from "./leed.js";
 
 
 
@@ -62,6 +62,7 @@ leed_preview already contains
         "et": 1682460000000, 
         "tn": "airbrush",
         "ti": "staff appreciation party"
+        "op": "0000021122110"
     }
 
 leed_details contains
@@ -73,9 +74,9 @@ leed_details contains
         "dt": "These are the potentially-longwinded leed details for staff appreciation party, leed id: 1004",
         "rq": "These are the requirements for the gig.  This may include things like insurance, call-time, NDAs and attire.",
         "em": "scottgrossworks@gmail.com",
-        "ph": "123456789",
+        "ph": "1234567890",
         "pr": "40",
-        "op":"0001000010000"
+
     }
 ]
 *
@@ -98,13 +99,23 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     const CURRENT_LEED = getCurrentLeed();
     let leed_details = CURRENT_LEED;
 
+    const CURRENT_USER = getCurrentUser(false);
+
+    // which fields do we want to see in the action window?
+    var view_options = leed_preview.op;
+
+    if (CURRENT_USER.un == leed_preview.cr) {   
+        // this leed was created by the current user
+        // request ALL fields in details
+        view_options = SHOW_ALL_OPTS;
+    }
 
     // API request --> DB   
     // load full leed details for leed_preview.id
     //
     if (gotoDB) {
 
-        await db_getDeetz( leed_preview.tn, leed_preview.id )
+        await db_getDeetz( leed_preview.tn, leed_preview.id, view_options )
             .then(data => {
 
             if (data == null) throw new Error("null response from GET");
@@ -131,10 +142,6 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     console.log(leed_details);
     
 
-    // OPTIONS
-    // SAVE THE OPTIONS 
-    // what to show / hide
-    CURRENT_LEED.op = leed_details.op;
 
 
     //
@@ -341,9 +348,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     //
     theDiv = document.querySelector("#creator_value");    
     
-    const current_user = getCurrentUser(false);
-
-    if (current_user.un == leed_preview.cr) {
+    if (CURRENT_USER.un == leed_preview.cr) {
 
         // this leed is posted by the current user
         theDiv.innerHTML = "<a href='./user_edit.html'><b>" + leed_preview.cr + "</b></a>";
@@ -389,7 +394,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // the action buttons at the bottom depend on whether the
     // current user posted the leed being examined
     // 
-    if (current_user.un == leed_preview.cr) {
+    if (CURRENT_USER.un == leed_preview.cr) {
 
         // the current user POSTED this leed
         // show the EDIT/DEL buttons

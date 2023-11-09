@@ -632,6 +632,78 @@ export async function saveLeedChanges( leedObj ) {
 
 
 
+
+
+
+
+/**
+ * 
+ */
+export async function createDBLeed( current_user, leedObj ) {
+
+  if (leedObj == null)
+    throwError("saveLeedChanges", "null leed object");
+
+
+
+    console.log("----------> ******** POSTING NEW LEED TO SERVER ******* ");
+    console.log(leedObj);
+ 
+
+    // API request --> DB 
+    // save leed to DB
+    //
+    let results = null;
+    try {
+        // 
+        //  client <---> API Gateway <===> DB
+        //
+        results = await db_updateLeed( ADD_LEED, current_user, leedObj );
+
+        // should never happen
+        if (results == null) {
+          throwError("Add Leed", "Null response received from server");
+        }
+
+        /**
+         * 
+         *    result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
+         *    {'id': 1259743,'ti':This is the title,'pr':44,'cd': 1}
+         * 1 == SUCCESS
+         */
+        // received error code
+        if (results.cd == DB_FAIL) {
+          printError("db_updateLeed", results.er);
+          throwError("Create Leed", results.er);
+        }
+
+
+    } catch (error) {   
+        printError( "Add Leed", error.message );
+        printError( "Received JSON", results);
+        
+        // EXIT FUNCTION HERE
+        throwError( "Cannot Add Leed", error); 
+        // return results;
+
+    } 
+
+
+    return results;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 /** 
  *
  * BUY the Leed
@@ -682,6 +754,26 @@ export async function buyCurrentLeed() {
 
     return results;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

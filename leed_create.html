@@ -528,6 +528,8 @@
             element.style.backgroundColor = "dodgerblue";
 
 			EDITING = true;
+
+
 		}
 
 
@@ -558,80 +560,80 @@
         */
 async function postLeed() {
 
-        if (! EDITING) return;
+    if (! EDITING) return;
 
-        // console.log("POSTING NEW LEED:");
-        // console.log(LEED_CHANGES);
+    // console.log("POSTING NEW LEED:");
+    // console.log(LEED_CHANGES);
 
-        waitCursor();
+    waitCursor();
 
-        // LEED verification
-        //            
-        if (LEED_CHANGES.tn == null) {
-            printError("Post Leed", "Trade must be set");
-            errorModal("Error Posting Leed: Trade must be set.", true);
-            return;
-        }
-
-        
-        if (LEED_CHANGES.ti == null) {
-            printError("Post Leed", "Title must be set");
-            errorModal("Error Posting Leed: Title must be set.", true);
-            return;
-        }
-
-
-        if (LEED_CHANGES.st == null) {
-            printError("Post Leed", "Start must be set");
-            errorModal("Error Posting Leed: Start must be set.", true);
-            return;
-        }
-
-        if (LEED_CHANGES.st > LEED_CHANGES.et) {
-            printError("Post Leed", "Start date must precede end date");
-            errorModal("Error Posting Leed: Start date must precede end date.", true);
-            return;
-        }
-
-        if (LEED_CHANGES.lc == null) {
-            printError("Post Leed", "Location must be set");
-            errorModal("Error Posting Leed: Location must be set.", true);
-            return;
-
-
-        } else {
-
-            // SET THE LEED_CHANGES ZIP HERE
-            let the_zip = LEED_CHANGES.lc.slice(-5);
-
-
-            // NOT A 5-DIGIT NUMBER
-            if (! new Number( the_zip ).valueOf()) {
-
-                printError("Post Leed", "zip code not found");
-                errorModal("Error Posting Leed: Location must end in 5-digit zip.", true);
-                return;
-
-            }   
-            LEED_CHANGES.zp = the_zip;
-        }
+    // LEED verification
+    //            
+    if (LEED_CHANGES.tn == null) {
+        printError("Post Leed", "Trade must be set");
+        errorModal("Error Posting Leed: Trade must be set.", true);
+        return;
+    }
 
     
-        if (LEED_CHANGES.dt == null) {
-            printError("Post Leed", "Details must be set");
-            errorModal("Error Posting Leed: Some details must be set.", true);
+    if (LEED_CHANGES.ti == null) {
+        printError("Post Leed", "Title must be set");
+        errorModal("Error Posting Leed: Title must be set.", true);
+        return;
+    }
+
+
+    if (LEED_CHANGES.st == null) {
+        printError("Post Leed", "Start must be set");
+        errorModal("Error Posting Leed: Start must be set.", true);
+        return;
+    }
+
+    if (LEED_CHANGES.st > LEED_CHANGES.et) {
+        printError("Post Leed", "Start date must precede end date");
+        errorModal("Error Posting Leed: Start date must precede end date.", true);
+        return;
+    }
+
+    if (LEED_CHANGES.lc == null) {
+        printError("Post Leed", "Location must be set");
+        errorModal("Error Posting Leed: Location must be set.", true);
+        return;
+
+
+    } else {
+
+        // SET THE LEED_CHANGES ZIP HERE
+        let the_zip = LEED_CHANGES.lc.slice(-5);
+
+
+        // NOT A 5-DIGIT NUMBER
+        if (! new Number( the_zip ).valueOf()) {
+
+            printError("Post Leed", "zip code not found");
+            errorModal("Error Posting Leed: Location must end in 5-digit zip.", true);
             return;
-        }
 
-        if (LEED_CHANGES.pr == null) {
-            printError("Post Leed", "Price must be set");
-            errorModal("Error Posting Leed: Price must be set.", true);
-            return;
-        }
+        }   
+        LEED_CHANGES.zp = the_zip;
+    }
 
 
-        
-        endEditing();
+    if (LEED_CHANGES.dt == null) {
+        printError("Post Leed", "Details must be set");
+        errorModal("Error Posting Leed: Some details must be set.", true);
+        return;
+    }
+
+    if (LEED_CHANGES.pr == null) {
+        printError("Post Leed", "Price must be set");
+        errorModal("Error Posting Leed: Price must be set.", true);
+        return;
+    }
+
+
+    
+    endEditing();
 
 
 
@@ -640,33 +642,13 @@ async function postLeed() {
     //
     //
     let from_DB = null;
-
     try {
-        // get the result object
-            await db_updateLeed( ADD_LEED, CURRENT_USER, LEED_CHANGES )
-            .then(data => {
-        
-                if (data == null) throw new Error("null response from GET");
-                
-                from_DB = data;
-        
-            })
-            .catch(error => {
-                printError("db_updateLeed", error.message);
-                throwError('DB Error', error);
-                return;
-            });
+        await createDBLeed( CURRENT_USER, LEED_CHANGES ).then((response) => from_DB = response );
 
-        
     } catch (error) {
-
-        printError( "Create Leed", error.message );
-        throwError( "Error Creating Leed", error); 
-        
+        errorModal("Error adding leed: " + error.message, false);
     
     } finally {
-
-        endEditing();
         normalCursor();
     }
 
@@ -677,9 +659,9 @@ async function postLeed() {
     console.log("GOT RESULTS!!!");
     console.log(from_DB)
 
-        /**
-         * SHOW THE ERROR ALERT
-         */
+    /**
+    * SHOW THE ERROR ALERT
+    */
     if (from_DB['er']) {
         var msg = "Error creating leed: " + LEED_CHANGES.ti + " : " + from_DB['er'];
         printError("Create Leed", msg);
@@ -696,7 +678,13 @@ async function postLeed() {
         var msg = 'Success adding leed:  ' + from_DB['ti'] + '  ($ ' + from_DB['pr'] +' )';
         var newChild = document.createElement("span");
         newChild.textContent = msg;
-        theAlert.appendChild(newChild);
+
+        if (theAlert.children.length <= 1) {
+            theAlert.appendChild(newChild);
+        } else {
+            theAlert.replaceChild(theAlert.children[1], newChild);
+        }
+
         theAlert.style.display = "block";
 
     }

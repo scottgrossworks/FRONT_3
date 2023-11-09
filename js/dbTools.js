@@ -544,6 +544,8 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
  */
 async function doGet( theURL ) {
 
+    console.log("---------> DOGET URL=" + theURL);
+
 
     return fetch(theURL,
     {

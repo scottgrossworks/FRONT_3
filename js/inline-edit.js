@@ -118,12 +118,10 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
 
 
-
-
-
-
-
-            
+        //
+        // FINISH BUTTON
+        //
+        //  
         case "doneButton":
             cellContent += `<input type='submit' id="finish_button" value='Finish' form='${rowName}Form'/>`;
             break;
@@ -143,6 +141,11 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
 
 
+
+            //
+            // TEXT FIELDS
+            //
+            //
         case "text":
 
 
@@ -160,13 +163,13 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
 
 
-        case "date":
-
-            
+            //
             //
             // START / END DATES
             // loading the initial value
             //
+            //
+        case "date":
             
             var theVal = inlineEditRowContents[rowName][i];
             var formatted = null;
@@ -196,7 +199,15 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
                 formatted = formatDTforInput( dateTime );
             }
 
-            
+
+            //
+            //
+            //
+            console.log("FORMATTED!! " + formatted);
+            //
+            //
+            //
+
 
             cellContent += `<input type='datetime-local' value='${formatted}' form='${rowName}Form'`;
             for ( key in cell.dataset ) {
@@ -210,7 +221,7 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
 
 
-
+            //
             // TEL
             //
         case "tel":
@@ -224,11 +235,12 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             break;
 
 
+            //
+            // EMAIL
+            //
         case "email":
 
             var the_email = extractEmailAddress( inlineEditRowContents[rowName][i] );
-            // console.log("THE EMAIL==>" + the_email);
-
 
             cellContent += `<input type='email' value='${the_email}' form='${rowName}Form'`;
             for (key in cell.dataset) {

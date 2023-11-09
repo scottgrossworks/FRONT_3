@@ -117,11 +117,13 @@ export function formatDTforInput(dateTimeString) {
  */
 export function DTfromPretty( prettyStr ) {
 
+    console.log("PRETTY=" + prettyStr);
+
      // MONTH
     var space = prettyStr.indexOf(' ');
     var monthStr = prettyStr.substring( space + 1, space + 4);
     const the_month = getMonthIndex( monthStr ); // WRONGbvvb
-    // console.log("THE MONTH=" + the_month);
+    console.log("THE MONTH=" + the_month);
 
     // DAY
     var space2 = prettyStr.indexOf(' ', space + 1);
@@ -386,47 +388,47 @@ export function getMonth() {
  */
 export function getMonthIndex( monthname ) {
 
-        let shortMonth = monthname.substring(0, 3).toLowerCase();
+        let shortMonth = monthname.substring(1, 3);
 
         switch (shortMonth) {
-            case "jan":
-                return 0;
-            
-            case "feb":
+            case "an":
                 return 1;
-
-            case "mar":
+            
+            case "eb":
                 return 2;
-            
-            case "apr":
-                return 3;
 
-            case "may":
+            case "ar":
+                return 3
+            
+            case "pr":
                 return 4;
-            
-            case "jun":
+
+            case "ay":
                 return 5;
-
-            case "jul":
+            
+            case "un":
                 return 6;
-            
-            case "aug":
+
+            case "ul":
                 return 7;
-
-            case "sep":
-                return 8;
             
-            case "oct":
-                return 9;
-                
-            case "nov":
-                return 10;
+            case "ug":
+                return 8;
 
-            case "dec":
+            case "ep":
+                return 9;
+            
+            case "ct":
+                return 10;
+                
+            case "ov":
                 return 11;
 
+            case "ec":
+                return 12;
+
             default:
-                return 0;
+                return 1;
         }
 
 }
@@ -564,7 +566,6 @@ export function getHours( isoString ) {
     var theHour = Number( totalHours );
     var am_pm = "AM";
     
-
     if (theHour == 12) {
         am_pm = "PM"
 
@@ -575,7 +576,6 @@ export function getHours( isoString ) {
     } else if (theHour == 0) {
         theHour = 12;
     }
-
 
     return [ String(theHour), am_pm ];
 

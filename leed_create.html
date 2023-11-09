@@ -332,12 +332,13 @@
     -- ERROR MODAL 
     -- 
     -->
+    <center>
   <div class="row modal" id="error_modal">
     <center><img id="error_logo" src="img/logo_2.png"></center> 
     <h1></h1>
     <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
   </div>
-
+  </center>
 
 
   
@@ -635,7 +636,6 @@ async function postLeed() {
 
 
 
-
     //   client <---> API Gateway <===> DB
     //
     //
@@ -670,7 +670,7 @@ async function postLeed() {
         normalCursor();
     }
 
-    
+
 
     // FOOBAR
     // success or failure
@@ -693,7 +693,7 @@ async function postLeed() {
         *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
         */
         var theAlert = document.getElementById("alert_success");
-        var msg = 'Success adding leed: ' + from_DB['ti'] + '  ($ ' + from_DB['pr'] +' )';
+        var msg = 'Success adding leed:  ' + from_DB['ti'] + '  ($ ' + from_DB['pr'] +' )';
         var newChild = document.createElement("span");
         newChild.textContent = msg;
         theAlert.appendChild(newChild);
@@ -801,7 +801,7 @@ window.postLeed = postLeed;
         window.onload = (event) => {
 
             let element = document.getElementById("td_creator");
-            element.innerHTML = "<B>" + CURRENT_USER.un + "</B>";
+            element.innerHTML = "<B style='font-size:larger'>" + CURRENT_USER.un + "</B>";
             // leed creator is fixed to current user
             LEED_CHANGES.un = CURRENT_USER.un 
 

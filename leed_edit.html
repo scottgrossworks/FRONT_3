@@ -738,6 +738,8 @@
     */
     async function deleteLeed() {
 
+        endEditing();
+
         waitCursor();
 
         let from_DB = null;
@@ -753,15 +755,24 @@
             errorModal("Error deleting leed: " + error.message, false);
 
         } finally {
-            endEditing();
+            
             normalCursor();
+            clearFields();
         }
 
+        
+        // FOOBAR
+        // success or failure
         console.log("GOT RESULTS!!!");
         console.log(from_DB)
+        if (! fromDB) return;
+
 
         /**
         * SHOW THE ERROR ALERT
+        * will not get here if create throws exception above
+        * This is a catch-all for null responses and
+        * HTTP 200 codes that contain error messages 
         */
         if (from_DB.er) {
             var msg = "Error deleting leed: " + from_DB.er;
@@ -770,35 +781,56 @@
 
         } else {
 
-            //
-            // FIXME FIXME FIXME
-            // what to do here
-            // confirmation dialog?
-            //
-
-           /**
+          /**
             * SHOW THE SUCCESS ALERT
             *
             *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
             *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
             */
             var theAlert = document.getElementById("alert_success");
-            var msg = 'Leed Deleted: ' + from_DB['ti'] + '  ($ ' + from_DB['pr'] +' )';
+            var msg = 'Deleted leed:  ' + from_DB.ti + '  ($ ' + from_DB.pr +' )';
             var newChild = document.createElement("span");
             newChild.textContent = msg;
-            theAlert.appendChild(newChild);
+
+            if (theAlert.children.length <= 1) {
+                theAlert.appendChild(newChild);
+            } else {
+                theAlert.replaceChild(newChild, theAlert.children[1]);
+            }
+
             theAlert.style.display = "block";
 
-            // backButton();
-
-
         }   
-
 
     }
     window.deleteLeed = deleteLeed;
 
 
+
+
+        /**
+         * Clear all fields and start over
+         *
+         */
+         function clearFields() {
+           
+            inlineEdit('row_trade', cancelOptions);            
+            inlineEdit('row_title', cancelOptions);
+            inlineEdit('row_start', cancelOptions);
+            inlineEdit('row_end', cancelOptions);
+            inlineEdit('row_loc', cancelOptions);
+            inlineEdit('row_em', cancelOptions);
+            inlineEdit('row_ph', cancelOptions);
+            inlineEdit('row_det', cancelOptions);
+            inlineEdit('row_reqs', cancelOptions);
+            inlineEdit('row_pr', cancelOptions);
+		}
+		window.clearFields = clearFields;
+
+
+		var cancelOptions = {   "origin": "cancel",
+                                "finishCallback": defaultCallback };
+		window.cancelOptions = cancelOptions;
 
 
         /**

@@ -752,7 +752,10 @@
             printError("Delete Leed", error.message);
             errorModal("Error deleting leed: " + error.message, false);
 
-        } 
+        } finally {
+            endEditing();
+            normalCursor();
+        }
 
         console.log("GOT RESULTS!!!");
         console.log(from_DB)
@@ -766,6 +769,13 @@
             errorModal(msg, false);
 
         } else {
+
+            //
+            // FIXME FIXME FIXME
+            // what to do here
+            // confirmation dialog?
+            //
+
            /**
             * SHOW THE SUCCESS ALERT
             *
@@ -778,6 +788,10 @@
             newChild.textContent = msg;
             theAlert.appendChild(newChild);
             theAlert.style.display = "block";
+
+            // backButton();
+
+
         }   
 
 

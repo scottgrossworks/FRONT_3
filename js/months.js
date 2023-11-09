@@ -19,6 +19,7 @@ export function initMonthChooser() {
 
     /*
      * PREV MONTH
+     *
      */
     const leftArrow = months.children[0];
 
@@ -33,35 +34,47 @@ export function initMonthChooser() {
         
     /*
      * NEXT MONTH
+     *
      */
     const rightArrow = months.children[2];
     rightArrow.addEventListener("click", function(event) {
     
-        let nextMonth = getNextMonth();
-        let theMonth = nextMonth.getUTCMonth() + 1;
-        let theYear = nextMonth.getFullYear();
-    
-        theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
-    
-        setDateShowing( nextMonth );
-    
-        buildCalendar();
-    
-        loadCacheLeedz();
-    
-        // this is an async call
-        // will return immediately - data shows up later
-        loadDBLeedz();
+        showNextMonth();
     
         showBackArrow(leftArrow, showPrevMonth);
 
     });
 
 
-
-
 }
 
+
+
+
+
+/**
+ * 
+ */
+function showBackArrow( leftArrow, handler ) {
+
+    if (leftArrow.style.opacity != 1) {
+        leftArrow.style.opacity = 1;
+        leftArrow.addEventListener("click", handler);
+    }
+}
+
+
+
+
+/**
+ * 
+ */
+function hideBackArrow( leftArrow, handler ) {
+
+    leftArrow.style.opacity = 0.25;
+
+    leftArrow.removeEventListener("click", handler);
+}
 
 
 /**
@@ -98,14 +111,14 @@ function showPrevMonth() {
         showBackArrow(leftArrow, showPrevMonth);
     }
 }
+window.showPrevMonth = showPrevMonth;
 
 
 /**
  * 
  */
-function showNextMonth(leftArrow, theLabel) {
+function showNextMonth() {
 
-    console.log("HELLO!");
     
     let nextMonth = getNextMonth();
 
@@ -113,7 +126,11 @@ function showNextMonth(leftArrow, theLabel) {
     let theMonth = nextMonth.getUTCMonth() + 1;
     let theYear = nextMonth.getFullYear();
 
+    let theLabel = document.querySelector("#month_label");
     theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
+
+
+    console.log("NEXT MONTH=" + nextMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
 
     setDateShowing( nextMonth );
 
@@ -126,38 +143,17 @@ function showNextMonth(leftArrow, theLabel) {
     loadDBLeedz();
 
    
+   const leftArrow = document.querySelector(".month_chooser").children[0];
    if (isCurrentMonth())
         hideBackArrow( leftArrow, showPrevMonth);
     else
        showBackArrow(leftArrow, showPrevMonth);
 
 }
+window.showNextMonth = showNextMonth;
 
 
 
-/**
- * 
- */
-function showBackArrow( leftArrow, handler ) {
-
-    leftArrow.style.opacity = 1;
-
-    leftArrow.addEventListener("click", handler);
-}
-
-
-
-
-/**
- * 
- */
-function hideBackArrow( leftArrow, handler ) {
-
-    leftArrow.style.opacity = 0.25;
-
-
-    leftArrow.removeEventListener("click", handler);
-}
 
 
 
@@ -184,14 +180,12 @@ function getPrevMonth() {
         theMonth--;
     }
 
-    // console.log("getPrevMonth=" + theMonth + "=" + theYear);
+    console.log("getPrevMonth=" + theMonth + "=" + theYear);
 
-    const theDay = 1;
-
-    return getNewDate( theYear, theMonth, theDay );
+    return getNewDate( theYear, theMonth, 1 , 0, 0, 1);
 }
 
- 
+
 /*
  *
  */
@@ -201,8 +195,6 @@ function getNextMonth() {
     let theYear = getYear();
 
     
-    // console.log("getNextMonth START=" + theMonth + "=" + theYear)
-
     if (theMonth == 12) {
         theYear++;
         theMonth = 1;
@@ -211,12 +203,9 @@ function getNextMonth() {
         theMonth++;
     }
 
-    
+    const newDate = getNewDate( theYear, theMonth, 1 , 0, 0, 1);
 
-    // console.log("getNextMonth END=" + theMonth + "=" + theYear);
-
-    const theDay = 1;
-
-    return getNewDate( theYear, theMonth, theDay );
+    console.log("          GNM=" + newDate.toLocaleString('en-US', { timeZone: 'UTC' }));
+    return newDate;
 }
 

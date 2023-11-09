@@ -225,8 +225,7 @@
 
   position: fixed;
   top:0;
-  margin-left:10vw;
-  margin-top: 15vh;
+  margin: 5vw auto 5vw auto;
 
   text-decoration: none;
 
@@ -239,7 +238,7 @@
   height:70vh;
   
   max-width: 500px;
-  max-height:800px;
+  max-height:700px;
 
   
   border: 4px solid #f44336;
@@ -349,19 +348,19 @@ text-align: center;
 /* The close button */
 .closebtn {
 
-  margin: auto 2vw;
-  color: white;
-  font-weight: bold;
-  float: right;
+margin: auto 2vw;
+color: white;
+font-weight: bold;
+float: right;
 
-  transform: translateY(-5px);
+transform: translateY(-10px);
 
 font-family: var(--FONT_1);
 
 font-size: 30px;
 
-  cursor: pointer;
-  transition: 0.3s;
+cursor: pointer;
+transition: 0.3s;
 }
 
 

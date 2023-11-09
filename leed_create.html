@@ -27,7 +27,7 @@
 		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
 		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
  
- 
+         <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
 		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
 		 <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
 
@@ -46,39 +46,49 @@
 			
         <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
 
-			<div class="column _1">
 
+
+			<div class="column _1">
                 <a onclick="backButton()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
             </div>
 
-				<div class="column" style="margin:auto 0;transform:translateY(6px)">
-					<h1 class="user_title">Create Leed</h1>
-				</div>
-				
-				<div class="column _3" style="padding:6px;text-align:center">
-				<img src="./img/logo_2.png" style="width:120px">
-				</div>
-			
-			
-		
-			</div>
-			
-            
-            <div id="alert_success" class="alert" style="display:none">
-				<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-			</div>
 
+
+            <div class="column _8" style="margin:auto 0;transform:translateY(6px)">
+                <h1 class="user_title">Create Leed</h1>
+            </div>
+            
+            
+      
+            <div class="column _2 dropdown" style="margin:auto 0;">
+            
+                <span><a href="javascript:dropdownMenu();"><img src="./img/logo_wide.png" style="height:80px"></a></span>
+                <div id="dropdown_menu" class="dropdown-content">
+
+                    <a href="./leedz_how-to.html" id="dd_howto">How To</a>
+                    
+                    <a href="./leedz_about.html">About</a>
+
+                    <a href="./leedz_contact.html">Contact</a>
+
+                </div>
+
+            </div>
+			
 
 <section>
     
-	<BR>	
+    </div>
 
+    
+    <div id="alert_success" class="alert" style="display:none">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    </div>
 
 
 <div class="row" id="form_container">
 
     <table>
-
 
             <!-- 2 -- CREATOR -->
             <tr id="row_creator">
@@ -389,6 +399,43 @@
 
 
 
+        /**
+        * DROP DOWN MENU
+        */
+         let DROP_DOWN = false;
+
+         /* When the user clicks on the button,
+         toggle between hiding and showing the dropdown content */
+         export function dropdownMenu() {
+           
+            const menu = document.getElementById("dropdown_menu");
+            menu.classList.toggle("show");
+
+           DROP_DOWN ^= 1; // flip flag
+         }
+         window.dropdownMenu = dropdownMenu;
+
+          //
+          // ANY window click registers here
+          //
+          window.addEventListener( "click", (event) => {
+
+             if (! (event.target.matches('img'))) {
+              
+              // click -- not on a link and not on the dropdown image
+              // Close the dropdown menu if the user clicks outside of it
+        
+              var dropdown = document.getElementById("dropdown_menu");
+              dropdown.classList.remove("show");
+
+            }
+           
+
+          }, true);
+
+
+
+
 
 
 
@@ -411,11 +458,13 @@
 
 				case "row_start":
                     var dateTime = DTfromPretty( rowData["start"] );
+                    console.log("DATA=" + rowData['start'] + " START=" + dateTime);
 					LEED_CHANGES.st = dateTime;
 					break;
 
                 case "row_end":
                     var dateTime = DTfromPretty( rowData["end"] );
+                    console.log("DATA=" + rowData['end'] + " END=" + dateTime);
                     LEED_CHANGES.et = dateTime;
                     break;
 
@@ -497,7 +546,6 @@
 		}
 
 
-
        
 
 
@@ -514,6 +562,7 @@ async function postLeed() {
         // console.log("POSTING NEW LEED:");
         // console.log(LEED_CHANGES);
 
+        waitCursor();
 
         // LEED verification
         //            
@@ -613,10 +662,18 @@ async function postLeed() {
 
         printError( "Create Leed", error.message );
         throwError( "Error Creating Leed", error); 
-        return;
+        
+    
+    } finally {
+
+        endEditing();
+        normalCursor();
     }
 
+    
 
+    // FOOBAR
+    // success or failure
     console.log("GOT RESULTS!!!");
     console.log(from_DB)
 
@@ -693,21 +750,23 @@ window.postLeed = postLeed;
          */
 		function cancelCreate() {
            
-            createOptions.origin = "cancel";
-            inlineEdit('row_trade', createOptions);            
-            inlineEdit('row_title', createOptions);
-            inlineEdit('row_start', createOptions);
-            inlineEdit('row_end', createOptions);
-            inlineEdit('row_loc', createOptions);
-            inlineEdit('row_em', createOptions);
-            inlineEdit('row_ph', createOptions);
-            inlineEdit('row_det', createOptions);
-            inlineEdit('row_reqs', createOptions);
-            inlineEdit('row_pr', createOptions);
+            inlineEdit('row_trade', cancelOptions);            
+            inlineEdit('row_title', cancelOptions);
+            inlineEdit('row_start', cancelOptions);
+            inlineEdit('row_end', cancelOptions);
+            inlineEdit('row_loc', cancelOptions);
+            inlineEdit('row_em', cancelOptions);
+            inlineEdit('row_ph', cancelOptions);
+            inlineEdit('row_det', cancelOptions);
+            inlineEdit('row_reqs', cancelOptions);
+            inlineEdit('row_pr', cancelOptions);
 		}
-
 		window.cancelCreate = cancelCreate;
 
+
+		var cancelOptions = {   "origin": "cancel",
+                                "finishCallback": defaultCallback };
+		window.cancelOptions = cancelOptions;
 
 
 		var createOptions = {   "origin": "create",
@@ -759,6 +818,30 @@ window.postLeed = postLeed;
         };
 
           
+
+
+
+
+        
+
+
+        /**
+        * Change to a wait cursor
+        */
+        function waitCursor() {
+            document.body.style.cursor = 'wait';
+        }
+        window.waitCursor = waitCursor;
+
+        /**
+        * Change back to normal cursor
+        */
+        function normalCursor() {
+            document.body.style.cursor = 'default';
+        }
+        window.normalCursor = normalCursor;
+
+
 	</script>
 
 	

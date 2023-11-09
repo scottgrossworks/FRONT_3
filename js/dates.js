@@ -3,7 +3,10 @@
  * The system imagines everyone lives in the same timezone
  * dates.js brokers all date requests from the UI for consistent display no matter the client timezone
  * 
- */ 
+ */
+import { throwError } from "./error.js";
+
+ 
 
 
 const DATE_KEY = "DS";
@@ -14,14 +17,40 @@ let DATE_SHOWING = null;
 
 /**
  *
+ * Key to the system -- convert ALL dates to GMT -- as if time zones did not exist
+ * everyone lives at GMT in the leedz
+ * 
+ * the seller posts a leed in the local time zone 6PM
+ * 
+ * the system dates it as 6PM GMT
+ * 
+ * the buyer sees the leed posted as 6PM -- no time zone is given
+ * -- and assumes that is 6PM in the local time zone
+ * and carries on as usual
+ *
+ * the system ignores time zones by making GMT the global time zone
+ * 
+ * Any year, month, day input to the function should result in a date object in GMT
  * 
  */
-export function getNewDate( theYear, theMonth, theDay) {
+export function getNewDate(year, month, day, hour, min, sec) {
 
-    const theDate = new Date( Date.UTC(theYear, theMonth - 1, theDay) );
-    return theDate;
-}
+    // Convert the input values to UTC by subtracting 1 from the month
+    // since JavaScript months are zero-based (January is 0, February is 1, etc.)
+    const utcDate = new Date(Date.UTC(year, month - 1, day));
+    
+    // Get the individual date components from the UTC date
+    const utcYear = utcDate.getUTCFullYear();
+    const utcMonth = utcDate.getUTCMonth() + 1; // Add 1 to get the correct month
+    const utcDay = utcDate.getUTCDate();
+    
+    // Create a new date object using the GMT components
+    const gmtDate = new Date(Date.UTC(utcYear, utcMonth - 1, utcDay, hour, min, sec));
 
+    return gmtDate;
+  }
+
+  
 
 
 
@@ -55,7 +84,7 @@ export function formatDTforInput(dateTimeString) {
    * 2023-08-12T18:31 --> Saturday Aug 12, 2023 at 6:31PM
    */
   export function prettyFormatDT( isoString ) {
-    
+
         const the_weekday = getWeekday( getShortDateString( isoString ) );
         const the_monthname = getShortMonthname( isoString.substring(5, 7) ); 
  
@@ -110,30 +139,50 @@ export function DTfromPretty( prettyStr ) {
     var colon = prettyStr.indexOf(':');
     var the_hour = parseInt( prettyStr.substring(at + 2, colon).trim() );
     // console.log("colon=" + colon + " hour=" + the_hour);
+
+
     // AM / PM
     let amPm = prettyStr.substring( prettyStr.length - 2 );
-    if (amPm == "PM") {
-        the_hour += 12;
+
+    //
+    // convert from 12-hr --> 24-hr time
+    //
+    if (amPm== "AM") {
+        // AM
+        if (the_hour == 12) { 
+            the_hour = 0; 
+        }
+
+    } else {
+        // PM
+        if (the_hour != 12) { 
+            the_hour += 12; 
+        }
     }
-    // console.log("THE HOUR=" + the_hour);
 
 
     // MINUTES
+    //
     const the_min = prettyStr.substring(colon + 1, colon + 3);
     // console.log("THE MIN=" + the_min);
 
 
-    const the_date = new Date( Date.UTC( the_year,
-                                      the_month,
-                                      the_day,
-                                      the_hour,
-                                      the_min,
-                                      0 ) );
+    // CREATE A GMT DATE
+    //
+    const the_date = getNewDate( the_year, 
+                                the_month, 
+                                the_day,
+                                the_hour,
+                                the_min,
+                                1);
 
 
     const the_DT = the_date.getTime();
 
-    // console.log("%cTHE DATE=" + the_date, "color:darkgreen");
+    // FOOBAR
+    //
+    console.log("THE DATE=" + the_date.toLocaleString('en-US', { timeZone: 'UTC' }));
+    console.log("DT=" + the_DT);
 
     return the_DT;
 
@@ -201,11 +250,12 @@ export function isDateSet() {
 export function setDateShowing( theDate ) {
 
     DATE_SHOWING = theDate;
-    window.sessionStorage.setItem(DATE_KEY, getShortDateString(DATE_SHOWING.toISOString()));
+    // FORMAT -->  toUTCString()
+    // "Wed, 14 Jun 2017 07:00:00 GMT"
+    let utc_string = theDate.toUTCString();
+    window.sessionStorage.setItem(DATE_KEY, utc_string);
 
 }
-
-
 
 /**
  * is DATE_SHOWING the current month?
@@ -244,50 +294,30 @@ export function isCurrentMonth() {
 export function getDateShowing() {
 
     if (isDateSet()) {
-        // console.log("DATE IS SET SHOWING=" + DATE_SHOWING);
         return DATE_SHOWING;
     } 
 
     // if not set
     // check session storage for a previously-viewed calendar
     // NEVER RETURN A DATE PRIOR TO current month
-    const sessionDate = window.sessionStorage.getItem( DATE_KEY );
+    const cacheDate = window.sessionStorage.getItem( DATE_KEY );
+    // FORMAT -->  toUTCString()
+    // "Wed, 14 Jun 2017 07:00:00 GMT"
    
-   
-    // const today = getTodayUTC();
-    // 10/31 FIXME
-    // trying to solve the end-of-month problem
-    //
-    const today = new Date();
     
-
-    if (sessionDate != null) {
+    if (cacheDate != null) {
         
-        // cache contains a date
-        // BUT just to be sure
-        // never show a calendar from a previous month -- no reason when all leedz have expired
-        var shortDate = getShortDateString(sessionDate);
-        const cacheDate = new Date(shortDate);
+        DATE_SHOWING = utcToDate( cacheDate );
 
-        if (cacheDate.getTime() < today.getTime()) {
-            // return today's date
-            DATE_SHOWING = today;
-
-        } else {
-
-            DATE_SHOWING = cacheDate;
-        }
-   
-   
     } else {
         // no cache date --- show current month / year
         // show today's date
-        DATE_SHOWING = today;
+        DATE_SHOWING = getTodayUTC();  
+        
+        // save in case of browser close / refresh
+        window.sessionStorage.setItem( DATE_KEY, DATE_SHOWING.toUTCString() ); 
     }
     
-    // save in case of browser close / refresh
-    var shortDate = getShortDate( DATE_SHOWING );
-    window.sessionStorage.setItem( DATE_KEY, shortDate ); 
 
     return DATE_SHOWING;
 
@@ -296,11 +326,33 @@ export function getDateShowing() {
 
 /**
  * 
+ * FORMAT -->  toUTCString()
+ * "Wed, 14 Jun 2017 07:00:00 GMT" --->  Date object
+ */
+
+function utcToDate(utcString) {
+    const utcDate = new Date(utcString); // Create a Date object from the UTC string
+    const year = utcDate.getUTCFullYear();
+    const month = utcDate.getUTCMonth();
+    const day = utcDate.getUTCDate();
+    const hours = utcDate.getUTCHours();
+    const minutes = utcDate.getUTCMinutes();
+    const seconds = utcDate.getUTCSeconds();
+  
+    return new Date(Date.UTC(year, month, day, hours, minutes, seconds));
+  }
+
+
+
+
+
+/**
+ * 
  */
 export function getDay() {
 
     if (DATE_SHOWING == null) getDateShowing();        
-    let day = DATE_SHOWING.getDay();
+    let day = DATE_SHOWING.getUTCDate();
 
     return day;
 }
@@ -321,9 +373,8 @@ export function getMonth() {
     // FIXME 
     // 10/31
     // trying to solve the 'last day of month' problem
-
-    // let month = DATE_SHOWING.getUTCMonth() + 1;
-    let month = DATE_SHOWING.getMonth() + 1;
+    let month = DATE_SHOWING.getUTCMonth() + 1;
+    // let month = DATE_SHOWING.getMonth() + 1;
     return month;
 }
 
@@ -389,7 +440,7 @@ export function getMonthIndex( monthname ) {
 export function getYear() {
 
     if (DATE_SHOWING == null) getDateShowing();
-    return DATE_SHOWING.getFullYear();
+    return DATE_SHOWING.getUTCFullYear();
 }
 
 
@@ -403,9 +454,9 @@ export function firstDayShowing() {
     let year = getYear();
     let day = 1;
     
-    let firstDay = getNewDate(year, month, day);
+    let firstDay = getNewDate(year, month, day, 0, 0, 1);
 
-    return firstDay.getTime(); // long
+    return firstDay.getTime(); 
 }
 
 
@@ -419,9 +470,9 @@ export function lastDayShowing() {
     let year = getYear();
     let day = daysInMonth(month, year);
     
-    let lastDay = getNewDate(year, month, day);
+    let lastDay = getNewDate(year, month, day, 23, 59, 59);
 
-    return lastDay.getTime(); // long
+    return lastDay.getTime(); 
 }
 
 
@@ -574,34 +625,36 @@ export function getShortWeekday( shortDate ) {
  */
 export function getWeekday( dateString ) {
 
+
     let shortDay = getShortWeekday( dateString );
-
-    switch (shortDay[0]) {
-
-        case 'M':
-            return "Monday";
-
-        case 'W': 
-            return "Wednesday";
-        
-        case 'F':
-            return "Friday";
-    }
 
     switch (shortDay[1]) {
 
         case 'u':
-            return "Tuesday";
+            if (shortDay[0] == 'T')
+                return "Tuesday";
+            else
+                return 'Sunday';
+
+        case 'a':
+            return "Saturday";
+
+        case 'o':
+            return "Monday";
+
+        case 'e': 
+            return "Wednesday";
         
+        case 'r':
+            return "Friday";
+
         case 'h':
             return "Thursday";
         
-        case 'a':
-            return "Saturday";
+        default:
+            throwError("getWeekday() not found for: " + dateString);
     }
-
-    console.error("getWeekday() not found for: " + dateString);
-    return "Day Not Found";
+    throwError("getWeekday() not found for: " + dateString);
 }
 
 

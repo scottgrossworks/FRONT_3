@@ -162,8 +162,8 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
         case "date":
 
-
-
+            
+            //
             // START / END DATES
             // loading the initial value
             //
@@ -171,17 +171,24 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             var theVal = inlineEditRowContents[rowName][i];
             var formatted = null;
             var dateTime = null;
-            if (options.origin = "create") {  // coming from create page 
+            if (options.origin == "create") {  // coming from create page 
                 
                 // is the field blank (use Today), or are we 
                 // editing field with existing value?
                 if (theVal) {
-                    formatted = formatDTforInput( DTfromPretty( theVal ) );
+                    formatted = formatDTforInput( DTfromPretty( theVal )  );
 
                 } else {
                     dateTime = getTodayUTC().getTime();
                     formatted = formatDTforInput( dateTime );
                 }
+
+
+            } else if (options.origin == "cancel") { // restart and clear the page
+
+                dateTime = getTodayUTC().getTime();
+                formatted = formatDTforInput( dateTime );
+
 
             } else {   // coming from edit page
                 var current_leed = getCurrentLeed();
@@ -569,10 +576,10 @@ function inlineDefaultFinish(rowName, options) {
 
                 // 11/2023
                 // using local date/time here
-                var today = new Date().getTime();
+                // var today = new Date().getTime();
 
-                var str = prettyFormatDT( theVal );
-                var dt = DTfromPretty(str);
+                // var str = prettyFormatDT( theVal );
+                // var dt = DTfromPretty(str);
                 
                 // theVal = 2023-10-04T00:00
                 // check that the date is not before today's date

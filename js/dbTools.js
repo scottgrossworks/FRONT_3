@@ -142,6 +142,10 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
             var theURL = new URL(API_GATEWAY + "addLeed");
             var params = new URLSearchParams();
 
+            // from user obj
+            params.append( CREATOR_URL_PARAM, user_obj.un );
+
+            // leed_obj
             params.append( TRADE_NAME_URL_PARAM, leed_obj.tn );
 
             params.append( TITLE_URL_PARAM, leed_obj.ti );
@@ -161,9 +165,6 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
             if (leed_obj.ph) params.append( PHONE_URL_PARAM, leed_obj.ph );
 
             if (leed_obj.em) params.append( EMAIL_URL_PARAM, leed_obj.em );
-
-            // from user obj
-            params.append( CREATOR_URL_PARAM, user_obj.un );
             
             params.append( PRICE_URL_PARAM, leed_obj.pr );
         
@@ -171,6 +172,8 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
             theURL.search = params.toString();
 
+            console.log("THEURL=" + theURL);
+            
             await doGet( theURL )
             .then(data => {
 
@@ -178,12 +181,11 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
             })
             .catch(error => {
-
                 printError("Add Leed", error);
                 throwError("Add Leed", error);
             });
 
-
+            break;
 
 
 
@@ -211,10 +213,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
             params.append( TRADE_NAME_URL_PARAM, leed_obj.tn);
             params.append( ID_URL_PARAM, leed_obj.id );
 
-            
             theURL.search = params.toString();
-
-            console.log("THEURL=" + theURL);
 
             await doGet( theURL )
             .then(data => {
@@ -223,9 +222,8 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
             })
             .catch(error => {
-
-                printError("Change Leed", error);
-                throwError("Change Leed", error);
+                printError("Delete Leed", error);
+                throwError("Delete Leed", error);
             });
 
             break
@@ -559,6 +557,7 @@ async function doGet( theURL ) {
     ).then(response => {
 
         if (! response.ok) { 
+            console.log(response);
             throw new Error('Network response was not OK: [' + response.status + "] :" + response.message);
         }
 

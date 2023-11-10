@@ -43,7 +43,7 @@
 
 			<div class="column _1">
 
-				<button class="back_button" style="margin:35px 20px; width:50px"><a onclick="backButton()">&#10140;</a></button>
+				<a onclick="backButton()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
 				</div>
 
 				<div class="column" style="margin:auto 0;transform:translateY(6px)">
@@ -215,7 +215,7 @@
 
 						<BR>
 
-						<b style="color:green">&nbsp;&nbsp;* Maximum <a id="maxTrades"></a> Trade Subscriptions Allowed</b>
+						<b id='trades_warning' style="color:green">&nbsp;&nbsp;* Maximum <a id="maxTrades"></a> Trade Subscriptions Allowed</b>
 						
 						<P style="height:12px">
 
@@ -545,6 +545,8 @@ function initTradesTable( all_trades, tradeListener ) {
 				if (USER_CHANGES.sb.length >= MAX_USER_SUBS) {
 					
 					printError("Trades Table", "Maximum " + MAX_USER_SUBS + " trade subscriptions allowed");
+					var warning = document.getElementById('trades_warning');
+					warning.style.color = 'red';
 					return;
 				}
 				turnTrade_On(null, radioButton, theLabel, trade );
@@ -672,6 +674,10 @@ function initTradesTable( all_trades, tradeListener ) {
 			element.style.backgroundColor = "darkorange";
 			element.style.opacity = 0.5;
 
+
+			var warning = document.getElementById('trades_warning');
+			warning.style.color = 'green';
+
 			EDITING = false;
 		}
 
@@ -713,8 +719,10 @@ function initTradesTable( all_trades, tradeListener ) {
 
 			try {
 				// will throw error if guest user
-				deleteCurrentUser();			
-		
+				// deleteCurrentUser();			
+				// GOTO how-to page -- get reasons why send me an email
+				// FIXME FIXME FIXME
+				console.log("DELETE ACCOUNT FIXME");
 
 			} catch ( error ) {
 

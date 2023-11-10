@@ -437,8 +437,6 @@
             hideEyeball( LEED_KEYS.END );
 
 
-
-
         // LOCATION
         // 
         element = document.getElementById("td_loc");
@@ -450,7 +448,7 @@
         // EMAIL
         // 
         element = document.getElementById("td_em");
-        element.innerHTML = CURRENT_LEED.em;
+        if (CURRENT_LEED.em) element.innerHTML = CURRENT_LEED.em;
         if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.EM );
 
@@ -458,7 +456,7 @@
         // PHONE
         // 
         element = document.getElementById("td_ph");
-        element.innerHTML = CURRENT_LEED.ph
+        if (CURRENT_LEED.ph != 0) element.innerHTML = CURRENT_LEED.ph
         if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.PH );
 
@@ -466,7 +464,7 @@
         // DETAILS
         // 
         element = document.getElementById("td_det");
-        element.innerHTML = CURRENT_LEED.dt;
+        if (CURRENT_LEED.dt) element.innerHTML = CURRENT_LEED.dt;
         if (CURRENT_LEED.op[ LEED_KEYS.DET ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.DET );
 
@@ -474,7 +472,7 @@
         // REQS
         // 
         element = document.getElementById("td_reqs");
-        element.innerHTML = CURRENT_LEED.rq;
+        if (CURRENT_LEED.rq) element.innerHTML = CURRENT_LEED.rq;
         if (CURRENT_LEED.op[ LEED_KEYS.REQS ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.REQS );
 
@@ -703,8 +701,8 @@
             /**
              * SHOW THE ERROR ALERT
              */
-        if (from_DB['er']) {
-            var msg = "Error adding leed: " + LEED_CHANGES.ti + " : " + from_DB['er'];
+        if (from_DB.er) {
+            var msg = "Error adding leed: " + LEED_CHANGES.ti + " : " + from_DB.er;
             printError("Save Leed Changes", msg);
             errorModal(msg, true);
 
@@ -716,7 +714,7 @@
             *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
             */
             var theAlert = document.getElementById("alert_success");
-            var msg = 'Leed Updated: ' + from_DB['ti'] + '  ($ ' + from_DB['pr'] +' )';
+            var msg = 'Leed Updated: ' + from_DB.ti + '  ($ ' + from_DB.pr +' )';
             var newChild = document.createElement("span");
             newChild.textContent = msg;
             theAlert.appendChild(newChild);
@@ -765,7 +763,7 @@
         // success or failure
         console.log("GOT RESULTS!!!");
         console.log(from_DB)
-        if (! fromDB) return;
+        if (! from_DB) return;
 
 
         /**

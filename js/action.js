@@ -249,6 +249,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 
     // EMAIL
     // (OPTIONAL)
+    //
     if (leed_details.em == null || leed_details.em == "") {
         theDiv = document.querySelector("#em");
         theDiv.style.display = "none";
@@ -260,7 +261,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
             theDiv.innerHTML = "Buy to show";
         } else {
             theDiv.classList.remove("buy2show");
-            theDiv.innerHTML = leed_details.em;
+            if (leed_details.em) theDiv.innerHTML = leed_details.em;
         }
         CURRENT_LEED.em = leed_details.em;
         theDiv.style.display = "flex";
@@ -270,6 +271,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 
     // PHONE
     // (OPTIONAL)
+    //
     if (leed_details.ph == null || leed_details.ph == "") {
         theDiv = document.querySelector("#ph");
         theDiv.style.display = "none";
@@ -281,7 +283,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
             theDiv.innerHTML = "Buy to show";
         } else {
             theDiv.classList.remove("buy2show");
-            theDiv.innerHTML = leed_details.ph;
+            if (leed_details.ph != 0) theDiv.innerHTML = leed_details.ph;
         }
         CURRENT_LEED.ph = leed_details.ph;
         theDiv.style.display = "flex";
@@ -308,7 +310,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
             theDiv.innerHTML = "Buy to show";
         } else {
             theDiv.classList.remove("buy2show");
-            theDiv.innerHTML = leed_details.dt;
+            if (leed_details.dt) theDiv.innerHTML = leed_details.dt;
         }
         CURRENT_LEED.dt = leed_details.dt;
         theDiv.style.display = "flex";
@@ -333,7 +335,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
             theDiv.innerHTML = "Buy to show";
         } else {
             theDiv.classList.remove("buy2show");
-            theDiv.innerHTML = leed_details.rq;
+            if (leed_details.rq) theDiv.innerHTML = leed_details.rq;
         }    
         CURRENT_LEED.rq = leed_details.rq;
         theDiv.style.display = "flex";

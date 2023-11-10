@@ -240,11 +240,11 @@ export function setCurrentLeed( jsonObj ) {
     CURRENT_LEED.st = jsonObj.st;
     CURRENT_LEED.et = jsonObj.et;
 
-    CURRENT_LEED.em = jsonObj.em;
-    CURRENT_LEED.ph = jsonObj.ph;
+    CURRENT_LEED.em = (jsonObj.em) ? jsonObj.em : null;
+    CURRENT_LEED.ph = (jsonObj.ph) ? jsonObj.ph : null;
 
-    CURRENT_LEED.dt = jsonObj.dt;
-    CURRENT_LEED.rq = jsonObj.rq;
+    CURRENT_LEED.dt = (jsonObj.dt) ? jsonObj.dr : null;
+    CURRENT_LEED.rq = (jsonObj.rq) ? jsonObj.rq : null;
 
     CURRENT_LEED.pr = jsonObj.pr;
 

@@ -121,16 +121,13 @@ function showNextMonth() {
 
     
     let nextMonth = getNextMonth();
+    // console.log("SNM=" + nextMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
 
-
-    let theMonth = nextMonth.getUTCMonth() + 1;
-    let theYear = nextMonth.getFullYear();
+    let theMonth = nextMonth.getUTCMonth() + 1; 
+    let theYear = nextMonth.getUTCFullYear();
 
     let theLabel = document.querySelector("#month_label");
     theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
-
-
-    console.log("NEXT MONTH=" + nextMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
 
     setDateShowing( nextMonth );
 
@@ -180,8 +177,6 @@ function getPrevMonth() {
         theMonth--;
     }
 
-    console.log("getPrevMonth=" + theMonth + "=" + theYear);
-
     return getNewDate( theYear, theMonth, 1 , 0, 0, 1);
 }
 
@@ -205,7 +200,7 @@ function getNextMonth() {
 
     const newDate = getNewDate( theYear, theMonth, 1 , 0, 0, 1);
 
-    console.log("          GNM=" + newDate.toLocaleString('en-US', { timeZone: 'UTC' }));
+    // console.log("          GNM=" + newDate.toLocaleString('en-US', { timeZone: 'UTC' }));
     return newDate;
 }
 

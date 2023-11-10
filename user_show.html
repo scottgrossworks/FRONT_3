@@ -1,5 +1,9 @@
 
-   
+<!--
+--
+-- SHOW the user profile of another user
+--    
+-->   
 <!DOCTYPE html>
 <html lang="en">
 	
@@ -7,30 +11,40 @@
 		 <meta charset="UTF-8">
 		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	 
-		 <TITLE>LEEDZ User Info</TITLE>
+		 <TITLE>LEEDZ Show User</TITLE>
 	 
 	 	<!-- Favicon -->
 		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
 		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
  
-		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
 		 <link rel="stylesheet" href="./css/user_edit.css" tyep="text/css"/>
-         <link rel="stylesheet" href="css/modal.css" type="text/css" />
 
+		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+		 <link rel="stylesheet" href="./css/trades.css" type="text/css" />
+         <link rel="stylesheet" href="./css/modal.css" type="text/css" />
+
+		 <script src="./js/inline-edit.js" type="module" defer></script> 
+		 <script src="./js/trades.js" type="module" defer></script>
+		 <script src="./js/error.js" type="module" defer></script>
+		 <script src="./js/dbTools.js" type="module" defer></script>
 	</head>
 
 
-	<body style="border:none">
+		 
+	<center>
+
+
+	<body>
 	
 
 
 			
-			<div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+        <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
 
 			<div class="column _1">
 
-                <a onclick="backButton()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
-			</div>
+				<a onclick="backButton()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+				</div>
 
 				<div class="column" style="margin:auto 0;transform:translateY(6px)">
 					<h1 class="user_title">Leedz User</h1>
@@ -46,13 +60,15 @@
 
 
 
-	<BR>	
+<section>
+
+    <BR>	
 
 
-			
-<div class="row" style="width:100vw;background-color:white;" id="form_container">
+            
+<div class="row" id="form_container">
 
-				<table style="background-color:white">
+            <table cellspacing="5vw">
 					
 				
                 <tr id="row_username">
@@ -73,7 +89,17 @@
 
 					<TD class="labelTD">Trades: </TD>
 					
-					<td colspan=2 id="td_subs" data-inlineType="textarea" data-inlineName="subs">Subscribers:</td>
+					<td colspan=2 id="td_subs" data-inlineType="textarea" data-inlineName="subs">
+                        
+						<template id="template_each_trade">
+							<span class="each_trade" style="display:inline-block;padding-right:4px">
+								<button class="trade_radio" 
+								style="transform:translate(2px, 3px);"></button>
+								<label></label><sup></sup>
+								
+							</span>
+						</template>
+                    </td>
 					
                 </tr>
 
@@ -85,7 +111,7 @@
 
 					<TD class="labelTD">Badges: </TD>
 					
-					<td colspan=2 id="td_badges" data-inlineType="textarea" data-inlineName="badges">Badges:</td>
+					<td colspan=2 id="td_badges" data-inlineType="textarea" data-inlineName="badges"></td>
 					
                 </tr>
 
@@ -93,7 +119,7 @@
 
 				<tr id="row_about">
 
-					<TD class="labelTD">About Me: </TD>
+					<TD class="labelTD">About: </TD>
 					
 		
 					<td colspan=2 id="td_about" data-inlineType="textarea" data-inlineName="about">Help sell the leedz you post</td>
@@ -124,15 +150,12 @@
 
 
 			</table>	
-
-
         </div>
 
-			<BR>
-			<BR>
-				
+        <BR>
+    </div>			
 
-
+</section>
 
 
 
@@ -145,6 +168,7 @@
     <h1></h1>
     <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
   </div>
+
 
 
   
@@ -160,7 +184,7 @@
 
 		import { blankUserObject, getCurrentUser } from "./js/user.js";
 		import { printError, throwError } from "./js/error.js";
-		
+		import { getTradeInfo } from "./js/trades.js";
 		import { db_getUser, USERNAME_URL_PARAM } from "./js/dbTools.js";
 
 
@@ -181,7 +205,7 @@
         let success = null;
         try {
 
-            await initShowUser( url_username ).then((response) => success = response);
+            await showUser( url_username ).then((response) => success = response);
 
         } catch (error) {
             const msg = "Cannot show user profile for:<BR>" + url_username + "<BR>" + error.message;
@@ -218,12 +242,7 @@
             //
             if (SHOW_USER.sb != null) {
                 element = document.getElementById("td_subs");
-                var the_subs = "";
-                for (let i = 0; i < SHOW_USER.sb.length; i++) {
-                    the_subs = the_subs + SHOW_USER.sb[ i ] + ",";
-                }
-                
-                element.innerHTML = the_subs.slice(0, -1);
+                showUserTrades(element, SHOW_USER.sb);
             }
 
 
@@ -240,7 +259,39 @@
             
         }
 
+/**
+ *
+ *
+ */
+ function showUserTrades( element, subs ) {
 
+	const theTemplate = document.querySelector("#template_each_trade");
+
+    for (let i = 0; i < subs.length; i++) {
+        // the_subs = the_subs + subs[ i ] + ",";
+
+        // clone a new node
+        var newNode = theTemplate.content.cloneNode(true).querySelector(".each_trade");
+        
+        // set the label
+        var theLabel = newNode.querySelector("label");
+        theLabel.textContent = subs[i];
+
+        // get the color and num_leedz
+        var trade_info = getTradeInfo( subs[i] );
+
+        // set the leed count as a superscript
+        // if there is an error we are using default leedz without numbers
+        newNode.querySelector("sup").textContent = trade_info[1];
+    
+        var radioButton = newNode.querySelector(".trade_radio");
+        radioButton.style.backgroundColor = trade_info[0];
+        radioButton.style.cursor = "default";
+ 
+        element.appendChild(newNode);
+    }
+    
+ }
 
 
 
@@ -268,19 +319,19 @@ function showUserBadges( element, badges ) {
                 break;
             
             case "2":
-            the_html += "<td class='badge_icon'><img src='" + badge_2.url + "'></td><td><B>" + badge_2.tit + "</B><BR>" + badge_2.cap + "</td>";
+                the_html += "<td class='badge_icon'><img src='" + badge_2.url + "'></td><td><B>" + badge_2.tit + "</B><BR>" + badge_2.cap + "</td>";
                 break
 
             case "3":
-            the_html += "<td class='badge_icon'><img src='" + badge_3.url + "'></td><td><B>" + badge_3.tit + "</B><BR>" + badge_3.cap + "</td>";
+                the_html += "<td class='badge_icon'><img src='" + badge_3.url + "'></td><td><B>" + badge_3.tit + "</B><BR>" + badge_3.cap + "</td>";
                 break
 
             case "4":
-            the_html += "<td class='badge_icon'><img src='" + badge_4.url + "'></td><td><B>" + badge_4.tit + "</B><BR>" + badge_4.cap + "</td>";
+                the_html += "<td class='badge_icon'><img src='" + badge_4.url + "'></td><td><B>" + badge_4.tit + "</B><BR>" + badge_4.cap + "</td>";
                 break
 
             case "5":
-            the_html += "<td class='badge_icon'><img src='" + badge_5.url + "'></td><td><B>" + badge_5.tit + "</B><BR>" + badge_5.cap + "</td>";
+                the_html += "<td class='badge_icon'><img src='" + badge_5.url + "'></td><td><B>" + badge_5.tit + "</B><BR>" + badge_5.cap + "</td>";
                 break
 
             default:
@@ -305,7 +356,7 @@ function showUserBadges( element, badges ) {
  *
  *
  */
- async function initShowUser( username ) {
+ async function showUser( username ) {
 
     //   client <---> API Gateway <===> DB
     //
@@ -332,6 +383,9 @@ function showUserBadges( element, badges ) {
         });
 
 
+        console.log("GOT USER DATA!");
+        console.log( resObj );
+
 
         // copy the new values into SHOW_USER
 
@@ -346,10 +400,10 @@ function showUserBadges( element, badges ) {
         SHOW_USER.ab = resObj.ab;
 
         // TRADES
-        SHOW_USER.sb =  (! resObj) ? [] : resObj.sb.split(',').map(element=>element.trim());
+        SHOW_USER.sb =  (resObj) ? resObj.sb.split(',').map(element=>element.trim()) : [];
 
         // USER BADGES
-        SHOW_USER.bg = (! resObj) ? [] : resObj.bg.split(',').map(element=>element.trim());
+        SHOW_USER.bg = (resObj) ? resObj.bg.split(',').map(element=>element.trim()) : [];
            
     
     } catch (error) {

@@ -140,6 +140,18 @@ export function getColorForTrade(trade_name) {
 }
 
 
+/**
+ * return the [ color, numLeedz, sub ] triple
+ */
+export function getTradeInfo(trade_name) {
+  
+  // is there a color in cache for this name?
+  let info_triple = window.localStorage.getObj( trade_name );
+  
+  return info_triple;
+
+}
+
 
 
 /**

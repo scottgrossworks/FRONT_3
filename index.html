@@ -476,11 +476,13 @@
     import { initMonthChooser } from "./js/months.js";
     import { getCurrentLeed, clearCurrentLeed, buyCurrentLeed, deleteCurrentLeed, reportCurrentLeed  }  from "./js/leed.js";
     import { showLeedAction } from "./js/action.js";
+    import { ALL_BADGES } from "./js/badges.js";
     import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
 
     import { USERNAME_URL_PARAM, DB_FAIL, DB_SUCCESS } from "./js/dbTools.js";
 
 
+    window.ALL_BADGES = ALL_BADGES;
 
     const BUG_EMAIL = "<a href='mailto:scottgrossworks@gmail.com'>Report Error</a>"
     window.printError = printError;
@@ -1232,36 +1234,15 @@ function trimAndRemoveSpaces(inputString) {
           const theTemplate = document.querySelector("#template_badge");
           for (var i = 0; i < current_user.bg.length; i++) {
             var newNode = theTemplate.content.cloneNode(true).querySelector(".each_badge");
+
             var theImg = newNode.querySelector(".badge_img");
+            theImg.src = "./img/badge_" + i + ".png";
+
             var theHref = newNode.querySelector(".badge_href");
-              switch( current_user.bg[i]) {
-                  case "1":
-                  theImg.src = "./img/badge_1.png";
-                  theHref.setAttribute("href", "./leedz_about.html#badges");   // FIXME explain badge in About section #
-                  break;
-                  case "2":
-                  theImg.src = "./img/badge_2.png";
-                  theHref.setAttribute("href", "./leedz_about.html#badges");   // FIXME explain badge in About section #
-                  break;
-                  case "3":
-                  theImg.src = "./img/badge_3.png";
-                  theHref.setAttribute("href", "./leedz_about.html#badges");   // FIXME explain badge in About section #
-                  break;
-                  case "4":
-                  theImg.src = "./img/badge_4.png";
-                  theHref.setAttribute("href", "./leedz_about.html#badges");   // FIXME explain badge in About section #
-                  break;
-                  case "5":
-                  theImg.src = "./img/badge_5.png";
-                  theHref.setAttribute("href", "./leedz_about.html#badges");   // FIXME explain badge in About section #
-                  break;
-                  default:
-                  printError("initUserPanel", "unknown user badge: " + current_user.bg[i]);
-                  // do not fail, just ignore
-                  theImg = null;
-                  break;
-              }
-            if (theImg != null) theList.appendChild(newNode);
+            theHref.setAttribute("href", "./leedz_about.html#badges");   // FIXME explain badge in About section #
+            theHref.setAttribute("title", ALL_BADGES[i].tit);
+
+            theList.appendChild(newNode);
           } // for  
 
       }

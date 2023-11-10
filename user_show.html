@@ -186,7 +186,12 @@
 		import { printError, throwError } from "./js/error.js";
 		import { getTradeInfo } from "./js/trades.js";
 		import { db_getUser, USERNAME_URL_PARAM } from "./js/dbTools.js";
+        import { ALL_BADGES } from "./js/badges.js";
 
+
+
+        
+        window.ALL_BADGES = ALL_BADGES;
 
         const urlParams = new URLSearchParams(window.location.search);
         const url_username = urlParams.get( USERNAME_URL_PARAM );
@@ -308,37 +313,10 @@ function showUserBadges( element, badges ) {
         
     let the_html = "<table id='badges_list'>";
 
-
     for (let i = 0; i < badges.length; i++) {
 
-        the_html += "<TR>";
-        switch( badges[ i ] ) {
-
-            case "1":
-                the_html += "<td class='badge_icon'><img src='" + badge_1.url + "'></td><td><B>" + badge_1.tit + "</B><BR>" + badge_1.cap + "</td>";
-                break;
+        the_html += "<TR><td class='badge_icon'><img src='" + ALL_BADGES[i].url + "'></td><td><B>" + ALL_BADGES[i].tit + "</B><BR>" + ALL_BADGES[i].cap + "</td></TR>";
             
-            case "2":
-                the_html += "<td class='badge_icon'><img src='" + badge_2.url + "'></td><td><B>" + badge_2.tit + "</B><BR>" + badge_2.cap + "</td>";
-                break
-
-            case "3":
-                the_html += "<td class='badge_icon'><img src='" + badge_3.url + "'></td><td><B>" + badge_3.tit + "</B><BR>" + badge_3.cap + "</td>";
-                break
-
-            case "4":
-                the_html += "<td class='badge_icon'><img src='" + badge_4.url + "'></td><td><B>" + badge_4.tit + "</B><BR>" + badge_4.cap + "</td>";
-                break
-
-            case "5":
-                the_html += "<td class='badge_icon'><img src='" + badge_5.url + "'></td><td><B>" + badge_5.tit + "</B><BR>" + badge_5.cap + "</td>";
-                break
-
-            default:
-                break;
-
-        }
-        the_html += "</TR>";
     }
     
     

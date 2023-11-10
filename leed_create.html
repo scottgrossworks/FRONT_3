@@ -644,8 +644,7 @@ async function postLeed() {
     } catch (error) {
         printError("createDBLeed", error.message)
         errorModal("Error adding leed: " + error.message, false);
-        return;
-
+   
     } finally {
         
         normalCursor();
@@ -657,9 +656,9 @@ async function postLeed() {
     // success or failure
     console.log("GOT RESULTS!!!");
     console.log(from_DB)
-    if (! fromDB) return;
+    if (! from_DB) return;
 
-    
+
     /**
     * SHOW THE ERROR ALERT
     * will not get here if create throws exception above

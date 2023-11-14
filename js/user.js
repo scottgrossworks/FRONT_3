@@ -190,7 +190,7 @@ export async function initUser( login ) {
         CURRENT_USER.sb =  (resObj.sb == undefined || resObj.sb == null || resObj.sb == "") ? [] : resObj.sb.split(',').map(element=>element.trim());
 
         // USER BADGES
-        CURRENT_USER.bg =  (resObj.bg == undefined || resObj.bg == null || resObj.bg == "") ? [] : resObj.bg.split(',').map(element=>element.trim());
+        CURRENT_USER.bg =  (resObj.bg == undefined || resObj.bg == null || resObj.bg == "") ? [] : resObj.bg.split(',').map(element=>parseInt(element.trim()));
 
         
 

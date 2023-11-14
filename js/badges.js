@@ -1,5 +1,6 @@
 /**
- * 
+ * USER badges give rewards for achievements
+ * MUST coordinate with lambda functions -- i.e addLeed()
  * 
  */
 
@@ -15,8 +16,8 @@ const badge_0 = {
 
 const badge_1 = {
 
-    'tit': 'OG Founder',
-    'cap': 'Helped build the Leedz',
+    'tit': 'OG Member',
+    'cap': 'Founding member who helped build the Leedz',
     'url': '../img/badge_1.png'
 
 };

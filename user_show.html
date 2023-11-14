@@ -307,7 +307,6 @@
 function showUserBadges( element, badges ) {
        
     
-
     if (badges.length == 0) return;
     
         
@@ -315,7 +314,8 @@ function showUserBadges( element, badges ) {
 
     for (let i = 0; i < badges.length; i++) {
 
-        the_html += "<TR><td class='badge_icon'><img src='" + ALL_BADGES[i].url + "'></td><td><B>" + ALL_BADGES[i].tit + "</B><BR>" + ALL_BADGES[i].cap + "</td></TR>";
+        var the_badge = badges[i];
+        the_html += "<TR><td class='badge_icon'><img src='" + ALL_BADGES[ the_badge ].url + "'></td><td><B>" + ALL_BADGES[i].tit + "</B><BR>" + ALL_BADGES[i].cap + "</td></TR>";
             
     }
     

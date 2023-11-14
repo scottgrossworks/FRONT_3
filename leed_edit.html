@@ -623,7 +623,11 @@
                 theImg.src = "./img/eye_hide.png";
                 theImg.eyeball = "hide";
                 // theImg.style.opacity = 1;
-                        
+                
+                // 11/2023
+                // just nuts -- highlight the text
+                theImg.parentElement.parentElement.children[1].style.color = "green";
+                
                 changeLeedOpts( LEED_CHANGES, fieldName, OPTS_HIDDEN );
        
 
@@ -651,17 +655,14 @@
                 theImg.eyeball = "show";
                 // theImg.style.opacity = 1;
 
+                theImg.parentElement.parentElement.children[1].style.color = "black";
+
 
                 changeLeedOpts( LEED_CHANGES, fieldName, OPTS_SHOWING );
 
             } else {
                 
-                theImg.src = "./img/eye_hide.png";
-                theImg.eyeball = "hide";
-                // theImg.style.opacity = 1;
-                
-            
-                changeLeedOpts( LEED_CHANGES, fieldName, OPTS_HIDDEN );
+                hideEyeball(fieldName);
             }
 
         }
@@ -759,7 +760,6 @@
         }
 
         
-        // FOOBAR
         // success or failure
         console.log("GOT RESULTS!!!");
         console.log(from_DB)

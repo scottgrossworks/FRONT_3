@@ -475,6 +475,7 @@
     import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
     import { getCurrentLeed, clearCurrentLeed, buyCurrentLeed, deleteCurrentLeed, reportCurrentLeed  }  from "./js/leed.js";
+    import { CURRENT_LEED_KEY } from "./js/leed.js";
     import { showLeedAction } from "./js/action.js";
     import { ALL_BADGES } from "./js/badges.js";
     import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
@@ -904,11 +905,17 @@ function trimAndRemoveSpaces(inputString) {
             errorModal( msg , true );
           }
 
+          if (response.cd == 0) {
+            var msg = "Error received from server: " + response.er;
+            printError("Buy Leed", msg);
+            errorModal(msg, true);
+          }
 
+          sessionStorage.setItem( CURRENT_LEED_KEY, response );
 
-        // GOTO BUY leed landing page
-        // with link to get back to main page
-        window.open( URL_LEED_BOUGHT , "_self");
+          // GOTO BUY leed landing page
+          // with link to get back to main page
+          window.open( URL_LEED_BOUGHT , "_self");
 
 
       }
@@ -1232,15 +1239,19 @@ function trimAndRemoveSpaces(inputString) {
           //  
           const theList = document.querySelector("#up_center_column");
           const theTemplate = document.querySelector("#template_badge");
+          
           for (var i = 0; i < current_user.bg.length; i++) {
+
+            var the_badge = current_user.bg[i];
+
             var newNode = theTemplate.content.cloneNode(true).querySelector(".each_badge");
 
             var theImg = newNode.querySelector(".badge_img");
-            theImg.src = "./img/badge_" + i + ".png";
+            theImg.src = "./img/badge_" + the_badge + ".png";
 
             var theHref = newNode.querySelector(".badge_href");
             theHref.setAttribute("href", "./leedz_about.html#badges");   // FIXME explain badge in About section #
-            theHref.setAttribute("title", ALL_BADGES[i].tit);
+            theHref.setAttribute("title", ALL_BADGES[ the_badge ].tit);
 
             theList.appendChild(newNode);
           } // for  

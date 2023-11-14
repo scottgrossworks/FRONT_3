@@ -85,8 +85,8 @@ export const OPTS_SHOWING = 1;
 export const OPTS_HIDDEN  = 2;
 
 
-const CURRENT_LEED_KEY ="CL";
-const LEEDZ_CAL_KEY = "LC";
+export const CURRENT_LEED_KEY ="CL";
+export const LEEDZ_CAL_KEY = "LC";
 
 
 const CACHE_DELIM = "|";

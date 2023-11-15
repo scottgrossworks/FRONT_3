@@ -154,6 +154,7 @@ export function loadCacheLeedz( trade_name ) {
 
     CURRENT_SELECTION = null;
 
+    console.log("LOADING FRON CACHE!");
 
     let results = [];
     try {
@@ -166,23 +167,25 @@ export function loadCacheLeedz( trade_name ) {
         } else {
             // called with arg
             // filter out any results not matching tn == trade_name
+            var tn = null;
             for (let i = 0; i < leedz.length; i++) {
-                
-                if (leedz[i].tn == trade_name) {
+                tn = leedz[i].pk.substring(5);
+                if (tn == trade_name) {
                     results.push(leedz[i]);
                 }
             }
         }
 
 
+        
     } catch (error) {
         printError("Loading leedz from DB", error);
         errorModal(error.message, false);
         return;
     }
     
-    // console.log("UPDATING CALENDAR FROM CACHE");
-    // console.log(results);
+    console.log("UPDATING CALENDAR FROM CACHE");
+    console.log(results);
 
     // update calendar
     addLeedzToCalendar( results );

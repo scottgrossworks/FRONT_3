@@ -384,7 +384,7 @@
         element.innerHTML = CURRENT_LEED.ti;
 
 
-        // START DATE
+    // START DATE
         // 
         const startDate = new Date( CURRENT_LEED.st );
         const isoStart = startDate.toISOString();
@@ -396,12 +396,21 @@
         let start_date = isoStart.substring(8, 10);
         if (start_date.startsWith('0')) { start_date = start_date.substring(1) };
 
+        const leed_year = isoStart.substring(0, 4);
+        const hours_start = getHours(isoStart);
+        const fullStartDate = start_weekday + " " + start_monthname + " " + start_date + ", " + leed_year; 
+        const start_time = hours_start[0] + ":" + getMinutes(isoStart) + hours_start[1];
+        element = document.getElementById("td_start");
+        element.innerHTML = fullStartDate + " at " + start_time;
 
-        // END DATE
-        // 
+
+        
+        // END DATE/TIME 
+        //
+       
         const endDate = new Date( CURRENT_LEED.et );
         const isoEnd = endDate.toISOString();
-       
+    
         const end_weekday = getWeekday( getShortDateString( isoEnd ) );
         const end_monthname = getShortMonthname( isoEnd.substring(5, 7) ); 
         
@@ -409,25 +418,13 @@
         let end_date = isoStart.substring(8, 10);
         if (end_date.startsWith('0')) { end_date = end_date.substring(1) };
         
-        const leed_year = isoStart.substring(0, 4);
-        const hours_start = getHours(isoStart);
         const hours_end = getHours(isoEnd);
-    
-
-        const fullStartDate = start_weekday + " " + start_monthname + " " + start_date + ", " + leed_year; 
 
         const fullEndDate = end_weekday + " " + end_monthname + " " + end_date + ", " + leed_year; 
 
-
-        const start_time = hours_start[0] + ":" + getMinutes(isoStart) + hours_start[1];
         const end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
 
-
-
-        element = document.getElementById("td_start");
-        element.innerHTML = fullStartDate + " at " + start_time;
-
-
+      
 
         // END TIME CAN BE HIDDEN OR SHOWN
         //
@@ -456,7 +453,7 @@
         // PHONE
         // 
         element = document.getElementById("td_ph");
-        if (CURRENT_LEED.ph != 0) element.innerHTML = CURRENT_LEED.ph
+        if (CURRENT_LEED.ph != 0) element.innerHTML = CURRENT_LEED.ph;
         if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.PH );
 

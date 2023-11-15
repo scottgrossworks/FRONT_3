@@ -146,7 +146,7 @@
  *
  *
  */
- #newUser_modal {
+#waiting_modal, #newUser_modal {
 
   display: none;
   
@@ -169,7 +169,7 @@
 
 
 
-#newUser_modal a {
+#waiting_modal a, #newUser_modal a {
 
 
   font-weight: 600;
@@ -178,7 +178,7 @@
 
 
 
-#newUser_logo {
+#waiting_logo, #newUser_logo {
 
   padding: 10px 10px 30px 10px;
 
@@ -188,7 +188,7 @@
 
 
 
-#newUser_modal_close {
+#waiting_modal_close, #newUser_modal_close {
 
     display:block;
     position:relative;

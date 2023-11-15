@@ -838,30 +838,9 @@ function trimAndRemoveSpaces(inputString) {
         }
 
 
-        let response = null;
-        try {
-            await reportCurrentLeed().then(( fromDB ) => response = fromDB );
-
-            if (response == null) {
-              throw new Error("Error reporting current leed: null server response");
-            }
-
-
-          } catch (error) {
-            
-            // DO NOT FAIL -- show error modal dialog and print error to console
-            var msg = "Cannot report current leed.<BR>Please refresh page."
-            msg = error.message + "<BR>" + msg;
-            
-            printError("Report Leed", error);
-            errorModal( msg , true );
-            return;
-          }
-
-
-        // GOTO report leed landing page
+        // GOTO report leed confirmation
         // with link to get back to main page
-        window.open( URL_LEED_REPORTED , "_self");
+        window.open( URL_REPORT_LEED , "_self");
 
 
       }
@@ -1000,7 +979,7 @@ function trimAndRemoveSpaces(inputString) {
 
       
       const URL_BUY_LEED = "./leed_buy.html";
-      const URL_REPORT_LEED = "./leed_reported.html";
+      const URL_REPORT_LEED = "./leed_report.html";
 
         
       const col = document.getElementById("trades_column");      
@@ -1120,7 +1099,7 @@ function trimAndRemoveSpaces(inputString) {
 
       
 /**
- * Right-hand WELCOM column
+ * Right-hand WELCOME column
  */
       function welcomeColumn() {
 
@@ -1128,6 +1107,7 @@ function trimAndRemoveSpaces(inputString) {
         action.style.display = "none";
 
         let welcome = document.getElementById("welcome_panel");
+
         welcome.classList.replace("modal", "column");
         welcome.style.display = "flex";
         

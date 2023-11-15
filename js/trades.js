@@ -288,7 +288,6 @@ function addTradeSorted( list, node ) {
 function tradeListener(trade, checkBox, radioButton, theLabel) {
 
 
-    console.log("TRADE=" + trade);
   try {
 
        // clear the action window
@@ -455,14 +454,17 @@ export function turnTrade_On( checkBox, radioButton, theLabel, trade_name ) {
   // var theString = "* TURN ON=" + trade_name + "color=" + the_color;
   // console.log("%c" + theString, "color: " + the_color + ";"); 
 
-
-  // turn on the check box and the radio button
-  if (checkBox != null) checkBox.checked = true;
-  radioButton.checked = true;
-
   // FIXME 2/2023 
   // should all be done in css but the initial setting doesn't persist
   // color the radio button
+  // turn on the check box and the radio button
+
+  if (checkBox != null) {
+    checkBox.checked = true;
+    checkBox.classList.add("trade_active");
+  }
+  
+  radioButton.checked = true;
   radioButton.style.backgroundColor = the_color;
   radioButton.classList.add("trade_active");
 

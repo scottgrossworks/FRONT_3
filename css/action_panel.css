@@ -265,6 +265,7 @@
 
     display:flex;
     
+    cursor: pointer;
     position:relative;
 
     background-color: var(--LEEDZ_GREEN);
@@ -312,6 +313,7 @@ img#shopping_cart {
 
     display:flex;
     
+    cursor: pointer;
     position:relative;
 
     background-color: var(--LEEDZ_DARKGREEN);
@@ -361,6 +363,7 @@ img#edit_icon {
     
     display:flex;
     
+    cursor: pointer;
     position:relative;
 
     background-color: coral;
@@ -402,6 +405,7 @@ img#edit_icon {
     
     display:flex;
     
+    cursor: pointer;
     position:relative;
 
     background-color: #0071CE;

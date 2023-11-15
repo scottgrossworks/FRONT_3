@@ -133,10 +133,12 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
     switch (code) {
 
 
-            //
-            //
-            //
-            //
+
+    
+        /**
+         * ADD LEED
+         * 
+         */
         case ADD_LEED:
        
             var theURL = new URL(API_GATEWAY + "addLeed");
@@ -188,22 +190,22 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
 
 
-            //
-            //
-            //
-            //
+        /**
+         * BUY LEED
+         * 
+         */
         case BUY_LEED:
             console.log("dbTools.db_updateLeed() BUY LEED"); 
-            break
+            break;
         
 
 
 
 
-            //
-            //
-            //
-            //
+        /**
+         * DELETE LEED
+         * 
+         */
         case DEL_LEED:
 
             var theURL = new URL(API_GATEWAY + "delLeed");
@@ -225,17 +227,17 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
                 throwError("Delete Leed", error);
             });
 
-            break
+            break;
         
 
 
 
 
 
-            //
-            //
-            //
-            //
+        /**
+         * CHANGE LEED
+         * 
+         */
         case CHG_LEED:
 
             var theURL = new URL(API_GATEWAY + "changeLeed");
@@ -286,13 +288,46 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
                 throwError("Change Leed", error);
             });
 
-            break
+            break;
         
 
 
+            
+
+        /**
+         * REPORT LEED
+         * 
+         */
         case REP_LEED:
             console.log("dbTools.db_updateLeed() REPORT LEED"); 
-            break
+            
+            var theURL = new URL(API_GATEWAY + "changeLeed");
+            var params = new URLSearchParams();
+
+            params.append( TRADE_NAME_URL_PARAM, leed_obj.tn );
+            params.append( ID_URL_PARAM, leed_obj.id );
+            params.append( USERNAME_URL_PARAM, user_obj.un );
+
+            theURL.search = params.toString();
+
+            console.log("THEURL=" + theURL);
+
+            await doGet( theURL )
+            .then(data => {
+
+                json_obj = data;
+
+            })
+            .catch(error => {
+
+                printError("Change Leed", error);
+                throwError("Change Leed", error);
+            });
+
+            break;
+
+
+
 
         default:
             throwError("db_updateUser", "Uknown code received: " + code);

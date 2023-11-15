@@ -483,6 +483,7 @@ export function loadLeedzFromCache( the_month, the_year ) {
     let retLeedz = [];
 
 
+
     // for each JSON leed loaded from CACHE
     for (var i = 0; i < cacheLeedz.length; i++) {
   
@@ -512,6 +513,7 @@ export function loadLeedzFromCache( the_month, the_year ) {
           JSON_leedz = JSON_leedz + JSON.stringify(leed) + CACHE_DELIM;
       });
     }
+
 
     // put JSON back where it came from
     window.localStorage.setItem( cache_key, JSON_leedz);

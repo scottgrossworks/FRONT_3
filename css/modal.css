@@ -11,7 +11,6 @@
 .modal {
   
   display:block;
-  z-index:900;
 
   position: fixed;
 
@@ -67,7 +66,14 @@
 
 
 
+#newUser_modal {
+  z-index: 700;
+}
 
+
+#guest_modal {
+  z-index: 600;
+}
 
 
 /*
@@ -78,6 +84,8 @@
 
   display: none;
   
+  z-index:500;
+
   margin: 5vh auto;
 
   width:60vw !important;

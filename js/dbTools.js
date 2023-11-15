@@ -292,7 +292,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
         
 
 
-            
+
 
         /**
          * REPORT LEED
@@ -301,7 +301,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
         case REP_LEED:
             console.log("dbTools.db_updateLeed() REPORT LEED"); 
             
-            var theURL = new URL(API_GATEWAY + "changeLeed");
+            var theURL = new URL(API_GATEWAY + "reportLeed");
             var params = new URLSearchParams();
 
             params.append( TRADE_NAME_URL_PARAM, leed_obj.tn );

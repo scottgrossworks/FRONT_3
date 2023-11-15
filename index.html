@@ -101,9 +101,12 @@
     </div>
 
 
+    <!-- SUCCESS ALERT -->
     <div id="alert_success" class="alert" style="display:none">
       <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
     </div>
+
+
 
 
 <!--
@@ -386,72 +389,10 @@
 
 
   <!-- 
-    -- GUEST WELCOME MODAL 
-    -- 
-    -->
-    <div class="row modal" id="guest_modal">
-      <center><img id="guest_logo" src="img/logo_2.png"></center> 
-      <h1>
-          <center>
-          <table>
-            <TR><TD>
-              Some features are not available to Guest users.
-              <BR>
-              <BR>
-              To edit your user profile, buy, post, edit, or report a leed,
-              <BR>
-              <a href="http://scottgross.works">sign-up</a> for a <a href="http://scottgross.works">FREE</a> account.
-            </TD></TR>
-          </table>
-          </center> 
-        </h1>
-
-          <BR>
-      <a id="guest_modal_close" href="javascript:modalClose();" href="">X</a>
-      <BR>
-   
-    </div>
-
-
-
-    
-
-  <!-- 
-    -- NEW USER WELCOME MODAL 
-    -- 
-    -->
-    <div class="row modal" id="newUser_modal">
-
-      <center><img id="newUser_logo" src="img/logo_2.png"></center> 
-      <h1>
-          <center>
-          <table>
-            <TR><TD>
-             To get the most out of the Leedz......
-              <BR>
-              <BR>
-               Subscribe, set search radius....
-               Contact Us
-               Report a Leed
-               <BR>
-                 </TD></TR>
-          </table>
-          </center> 
-        </h1>
-
-          <BR>
-      <a id="newUser_modal_close" href="javascript:modalClose();" href="">X</a>
-      <BR>
-   
-    </div>
-
-
-
-  <!-- 
     -- ERROR MODAL 
     -- 
     -->
-  <div class="row" id="error_modal">
+  <div class="row" id="error_modal" style="display:none">
     <center><img id="error_logo" src="img/logo_2.png"></center> 
     <h1>
       <BR>
@@ -463,6 +404,92 @@
   </div>
 
 
+
+    <!-- 
+      -- WAITING MODAL
+      -- 
+      -->
+      <div class="modal info_modal" id="waiting_modal" style="display:block">
+
+        <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
+            <table width="100%">
+                <TR><TD style="border:none;">
+                  <h1 id="waiting_label" style="width:fit-content"></h1>
+                </TD></TR>
+                <TR><TD style="border:none;"><center>
+                        <img src="./img/wait_spinner.gif" style="height:10vh;">
+                        </center>
+                    </TD>
+                </TR>
+            </table>
+  
+  
+      </div>
+  
+  
+  
+      
+  
+    <!-- 
+      -- GUEST WELCOME MODAL 
+      -- 
+      -->
+      <div class="row modal info_modal" id="guest_modal" style="display:none">
+        <center><img class="info_logo" src="img/logo_2.png"></center> 
+        <h1>
+            <center>
+            <table>
+              <TR><TD>
+                Guest User Modal -- Some features are not available to Guest users.
+                <BR>
+                <BR>
+                To edit your user profile, buy, post, edit, or report a leed,
+                <BR>
+                <a href="http://scottgross.works">sign-up</a> for a <a href="http://scottgross.works">FREE</a> account.
+              </TD></TR>
+            </table>
+            </center> 
+          </h1>
+  
+            <BR>
+        <a class="info_modal_close" href="javascript:modalClose();" href="">X</a>
+        <BR>
+     
+      </div>
+  
+  
+  
+      
+  
+    <!-- 
+      -- NEW USER WELCOME MODAL 
+      -- 
+      -->
+      <div class="row modal info_modal" id="newUser_modal" style="display:none">
+  
+        <center><img class="info_logo" src="img/logo_2.png"></center> 
+        <h1>
+            <center>
+            <table>
+              <TR><TD>
+               New User Welcome -- To get the most out of the Leedz......
+                <BR>
+                <BR>
+                 Subscribe, set search radius....
+                 Contact Us
+                 Report a Leed
+                 <BR>
+                   </TD></TR>
+            </table>
+            </center> 
+          </h1>
+  
+            <BR>
+        <a class="info_modal_close" href="javascript:modalClose();" href="">X</a>
+        <BR>
+     
+      </div>
+  
 
 
   </body>
@@ -722,6 +749,22 @@ function trimAndRemoveSpaces(inputString) {
   return resultString;
 }
 
+
+
+
+      //
+      // WAITING -- Loading the Leedz....
+      // MODAL
+      //
+      function showWaitingModal(msg) {
+
+        let wait_msg = document.getElementById("waiting_label");
+        wait_msg.innerText = msg;
+
+        let waiting = document.getElementById("waiting_modal");
+        waiting.style.display = "block !important";
+      }
+      window.showWaitingModal = showWaitingModal;
 
 
 
@@ -1122,21 +1165,21 @@ function trimAndRemoveSpaces(inputString) {
 /**
  * Right-hand ACTTION column
  */
-      function actionModal() {
-        let welcome = document.getElementById("welcome_panel");
-        welcome.style.display = "none";
+    function actionModal() {
+      let welcome = document.getElementById("welcome_panel");
+      welcome.style.display = "none";
 
-        var closeColumn = document.getElementById("lic_close");
-        closeColumn.style.display = "flex";
+      var closeColumn = document.getElementById("lic_close");
+      closeColumn.style.display = "flex";
 
-        // let closeBut = document.getElementById("buy_modal_close");
-        // closeBut.style.display = "flex";
+      // let closeBut = document.getElementById("buy_modal_close");
+      // closeBut.style.display = "flex";
 
-        let action = document.getElementById("action_panel");
-        action.className = "modal";
-  
-      }
-      window.actionModal = actionModal;
+      let action = document.getElementById("action_panel");
+      action.className = "modal";
+
+    }
+    window.actionModal = actionModal;
 
 
 
@@ -1145,26 +1188,28 @@ function trimAndRemoveSpaces(inputString) {
 /**
  * CLOSE (ANY) MODAL DIALOG
  */
-      function modalClose() {
+    function modalClose() {
+
+      let action = document.getElementById("action_panel");
+      action.classList.remove("modal");
+      action.classList.add("column");
+      action.classList.add("_35");
+      action.style.display = "none";
 
 
-        let action = document.getElementById("action_panel");
-        action.classList.remove("modal");
-        action.classList.add("column");
-        action.classList.add("_35");
-        action.style.display = "none";
-
-        // let closeBut = document.getElementById("buy_modal_close");
-        // closeBut.style.display = "none";
-
-        // close the guest modal
-        // let modal = document.getElementById("guest_modal");
-        // modal.style.display = "none";
-
-        errorModalClose();
-
+      // close all modal dialogs
+      var modals = document.getElementsByClassName("info_modal");
+      for (var i = 0; i < modals.length; i++) {
+        var no_close = modals[i].style.getPropertyValue("no_close");
+        if (! no_close) {
+          modals[i].style.display = "none";
+        }
       }
-      window.modalClose = modalClose;
+
+      errorModalClose();
+
+    }
+    window.modalClose = modalClose;
     
 
 
@@ -1328,7 +1373,15 @@ function trimAndRemoveSpaces(inputString) {
             }
 
           }
+        
+
           
+          //
+          // SHOW THE LOADING... MODAL
+          //
+          showWaitingModal("Loading the Leedz . . .");
+
+
 
 
           // INIT USER PANEL
@@ -1427,7 +1480,6 @@ function trimAndRemoveSpaces(inputString) {
             }
 
 
-
           
           /**
            * BUILD central calendar column 
@@ -1452,6 +1504,7 @@ function trimAndRemoveSpaces(inputString) {
            * If there are subs Load CACHE leedz
            */
           if (trade_subs) {
+
             try {
 
               loadCacheLeedz();
@@ -1468,7 +1521,7 @@ function trimAndRemoveSpaces(inputString) {
             /**
               * Load Leedz from DB -- will return immediately
               * delegate to callback internally when data arrives
-            */
+              */
 
             try {
 
@@ -1481,6 +1534,7 @@ function trimAndRemoveSpaces(inputString) {
               
               printError("Loading DB Leedz", error);
               errorModal( msg , true );
+            
             }
           }
 

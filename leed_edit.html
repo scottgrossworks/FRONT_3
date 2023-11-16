@@ -430,16 +430,16 @@
         //
         element = document.getElementById("td_end");
         element.innerHTML = fullEndDate + " at " + end_time;
-        if (CURRENT_LEED.op[ LEED_KEYS.END ] == OPTS_HIDDEN )
-            hideEyeball( LEED_KEYS.END );
+        if (CURRENT_LEED.op[ LEED_KEYS.ET ] == OPTS_HIDDEN )
+            hideEyeball( LEED_KEYS.ET );
 
 
         // LOCATION
         // 
         element = document.getElementById("td_loc");
         element.innerHTML = CURRENT_LEED.lc;
-        if (CURRENT_LEED.op[ LEED_KEYS.LOC ] == OPTS_HIDDEN )
-            hideEyeball( LEED_KEYS.LOC );
+        if (CURRENT_LEED.op[ LEED_KEYS.LC ] == OPTS_HIDDEN )
+            hideEyeball( LEED_KEYS.LC );
             
 
         // EMAIL
@@ -462,16 +462,16 @@
         // 
         element = document.getElementById("td_det");
         if (CURRENT_LEED.dt) element.innerHTML = CURRENT_LEED.dt;
-        if (CURRENT_LEED.op[ LEED_KEYS.DET ] == OPTS_HIDDEN )
-            hideEyeball( LEED_KEYS.DET );
+        if (CURRENT_LEED.op[ LEED_KEYS.DT ] == OPTS_HIDDEN )
+            hideEyeball( LEED_KEYS.DT );
 
 
         // REQS
         // 
         element = document.getElementById("td_reqs");
         if (CURRENT_LEED.rq) element.innerHTML = CURRENT_LEED.rq;
-        if (CURRENT_LEED.op[ LEED_KEYS.REQS ] == OPTS_HIDDEN )
-            hideEyeball( LEED_KEYS.REQS );
+        if (CURRENT_LEED.op[ LEED_KEYS.RQ ] == OPTS_HIDDEN )
+            hideEyeball( LEED_KEYS.RQ );
 
 
         // PRICE

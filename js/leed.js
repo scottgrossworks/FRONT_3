@@ -44,18 +44,18 @@ LEED DETAILS
 export const LEED_KEYS = {
   
   ID: 0,
-  TITLE: 1,
-  CREATOR: 2,
-  TRADE: 3,
-  ZIP: 4,
+  TI: 1,
+  CR: 2,
+  TN: 3,
+  ZP: 4,
 
-  LOC: 5,
-  START: 6,
-  END: 7,
+  LC: 5,
+  ST: 6,
+  ET: 7,
   EM: 8,
   PH: 9,
-  DET: 10,
-  REQS: 11,
+  DT: 10,
+  RQ: 11,
   
   PR: 12,
 };
@@ -225,36 +225,34 @@ export function setCurrentLeed( jsonObj ) {
         throwError("setCurrentLeed", "leed JSON is null");
   
 
-    CURRENT_LEED.id = jsonObj.sk;
-
+    if (jsonObj.sk) CURRENT_LEED.id = jsonObj.sk;
+   
+    if (jsonObj.ti) CURRENT_LEED.ti = jsonObj.ti;
     
-    CURRENT_LEED.ti = jsonObj.ti;
-    CURRENT_LEED.cr = jsonObj.cr;
+    if (jsonObj.cr) CURRENT_LEED.cr = jsonObj.cr;
 
     // user#scott.gross
-    CURRENT_LEED.tn = jsonObj.pk.substr(5);
+    if (jsonObj.pk) CURRENT_LEED.tn = jsonObj.pk.substr(5);
 
-    CURRENT_LEED.zp = jsonObj.zp;
-    CURRENT_LEED.lc = jsonObj.lc;
+    if (jsonObj.zp) CURRENT_LEED.zp = jsonObj.zp;
+    if (jsonObj.lc) CURRENT_LEED.lc = jsonObj.lc;
     
-    CURRENT_LEED.st = jsonObj.st;
-    CURRENT_LEED.et = jsonObj.et;
+    if (jsonObj.st) CURRENT_LEED.st = jsonObj.st;
+    if (jsonObj.et) CURRENT_LEED.et = jsonObj.et;
 
-    CURRENT_LEED.em = (jsonObj.em) ? jsonObj.em : null;
-    CURRENT_LEED.ph = (jsonObj.ph) ? jsonObj.ph : null;
+    if (jsonObj.em) CURRENT_LEED.em = jsonObj.em;
+    if (jsonObj.ph) CURRENT_LEED.ph = jsonObj.ph;
+    if (jsonObj.dt) CURRENT_LEED.dt = jsonObj.dt;
+    if (jsonObj.rq) CURRENT_LEED.rq = jsonObj.rq;
 
-    CURRENT_LEED.dt = (jsonObj.dt) ? jsonObj.dr : null;
-    CURRENT_LEED.rq = (jsonObj.rq) ? jsonObj.rq : null;
+    if (jsonObj.pr) CURRENT_LEED.pr = jsonObj.pr;
 
-    CURRENT_LEED.pr = jsonObj.pr;
+    if ( jsonObj.op ) CURRENT_LEED.op = jsonObj.op;
 
-    if ((jsonObj.op == null) || (jsonObj.op.length == 0)) {
-        CURRENT_LEED.op = START_OPTS;
-    } else {
-        CURRENT_LEED.op = jsonObj.op;
-    }
 
     cacheCurrentLeed( CURRENT_LEED );
+
+    return CURRENT_LEED;
 }
 
 

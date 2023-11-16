@@ -14,8 +14,7 @@ import { prettyFormatDT, formatDTforInput, DTfromPretty, getTodayUTC } from "./d
 
 
 
-
-
+const MAX_TEXT_CHARS = 300;
 
 var inlineEditRowContents = {};
 
@@ -505,13 +504,23 @@ function inlineDefaultFinish(rowName, options) {
             case "text":
 
                 var theVal = cell.children[getFromChildren].value;
-                
-                safeVal = theVal;
                 var trimVal = theVal.trim();
+
+                             
+                // DISALLOW anything over MAX chars
+                //
+                if (trimVal.length > MAX_TEXT_CHARS) {
+                    let errMsg = "Text too long.  Max " + MAX_TEXT_CHARS + " chars allowed."
+                    printError("inlineDefaultFinish", errMsg );
+                    alert(errMsg);
+                    return;
+                }
+
+
+
                 var safeVal = replaceHTMLTags( trimVal );
 
 
-       
                 // Validate loc
                 //
                 if (cell.dataset.inlinename == "loc") {
@@ -535,10 +544,6 @@ function inlineDefaultFinish(rowName, options) {
                         alert(errMsg);
                        return;
                     }
-
-
-             
-
 
 
 

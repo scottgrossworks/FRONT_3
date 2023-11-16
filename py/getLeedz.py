@@ -1,18 +1,60 @@
 #
+# GET LEEDZ
+#
 #
 #
 
 import boto3
 from botocore.exceptions import ClientError
 
+import json
+import json.encoder
 
 import logging
 import math
+
+from decimal import Decimal
+
+
+
 
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+
+
+
+ 
+#
+# Use this to JSON encode the DYNAMODB output
+#
+#
+
+
+def encode_fakestr(func):
+    def wrap(s):
+        if isinstance(s, fakestr):
+            return repr(s)
+        return func(s)
+    return wrap
+
+
+json.encoder.encode_basestring = encode_fakestr(json.encoder.encode_basestring)
+json.encoder.encode_basestring_ascii = encode_fakestr(json.encoder.encode_basestring_ascii)
+
+class fakestr(str):
+    def __init__(self, value):
+        self._value = value
+    def __repr__(self):
+        return str(self._value)
+
+
+class DecimalJsonEncoder(json.encoder.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, Decimal):
+            return fakestr(o)
+        return super().default(o)
 
 
 
@@ -51,13 +93,6 @@ def haversine(lat1, lon1, lat2, lon2):
 
  
 
-
-
-#
-# flatten a list to a comma-delimited string
-#
-def listToString(lst):
-    return ', '.join(str(x) for x in lst)
     
     
 
@@ -80,7 +115,6 @@ def get_xy_from_loc( loc ):
             raise ValueError("No position coordinates found for location: " + loc)
         
         data = response['Results']
-        print(data)
 
         if (len(data) == 0):
              raise ValueError("No position coordinates found for location: " + loc)
@@ -104,11 +138,14 @@ def get_xy_from_loc( loc ):
 #
 #
 #
-def handle_error(error):
+def handle_error( msg ):
        
-    msg = str(error)   
     logger.error(msg)
-    return msg
+
+    ret_obj = { "cd" : 0,
+                "er" : msg }
+
+    return ret_obj
     
     
     
@@ -152,33 +189,32 @@ def searchForLeedz(sb, st, et, zp, zr):
     start_time = int(st)
     end_time = int(et)
 
-    zip_home = int(zp)
-    zip_radius = int(zr)
-    
-    if zp: 
-        home_xy = get_xy_from_loc(zp)
-
+    trades = sb.split(',')
     
     results = []
 
     # FOR EACH TRADE SUBSCRIPTION
-    for sub in sb:
-
+    for sub in trades:
+        
         pk = "leed#" + sub
         
-        print("PK=" + pk)
-
         # query for all the leedz matching that trade
         # whose start time is between st and et
+        # AND date bought == 0
         fromDB = table.query(
-                KeyConditionExpression='pk=:pk',
-                FilterExpression='st between :st and :et',
-                ExpressionAttributeValues={
-                    ':pk': pk,
-                    ':st': start_time,
-                    ':et': end_time,
+                    ProjectionExpression='pk,sk,st,et,lc,zp,ti,cr,op,db', 
+                    KeyConditionExpression='pk=:pk',
+                    FilterExpression='(st between :st and :et) AND (db = :zero)',
+                    ExpressionAttributeValues={
+                        ':pk': pk,
+                        ':st': start_time,
+                        ':et': end_time,
+                        ':zero': 0
                 }
          )
+
+        # logger.info("GOT RAW ITEMS!!!!")
+        # logger.info(fromDB['Items'])
         
      
         if ('Items' not in fromDB):
@@ -186,31 +222,33 @@ def searchForLeedz(sb, st, et, zp, zr):
      
         for each_leed in fromDB['Items']:
             
-            
             # preselect all the leedz whose zip matches zip_home
-            if (zip_home) :
+            if (zp) :
                 
+                zip_home = int(zp)
                 if (each_leed['zp'] == zip_home) :
                     results.append( each_leed )
-            
+                
                 else :
+                
+                    # get lon/lat coordinates for zip home
+                    home_xy = get_xy_from_loc(zp)
+                    
                     # get the xy coords from the leed location
                     leed_loc = get_xy_from_loc( each_leed['lc'] )
                     
                     # run leed through Haversine to see if it falls within zip radius of zp
                     # careful -- haversine expects lat, long 
                     miles_from = haversine(home_xy[1], home_xy[0], leed_loc[1], leed_loc[0])
-                      
-                    print("LEED ZIP=" + str(each_leed['zp']))  
-                    print("MILES FROM=" + str(miles_from))
                     
-                    
+                    zip_radius = int(zr)
+                    # does the leed fall within the search circle
                     if (miles_from <= zip_radius):
                         results.append(each_leed)
-            
+
             
             else:
-                # no search radius set -- return all results matching trade
+                # no zip_home / search radius set -- return all results matching trade
                 results.append(each_leed)
                 
 
@@ -238,7 +276,6 @@ def searchForLeedz(sb, st, et, zp, zr):
         
 def lambda_handler(event, context):
 
-
     result = ""
     try:
         
@@ -251,9 +288,10 @@ def lambda_handler(event, context):
         #
         sb = validateParam(event, 'sb', true)
         
+        
         # START TIME - REQUIRED
         st = validateParam(event, 'st', true)
-        
+         
         # END TIME - REQUIRED
         et = validateParam(event, 'et', true)
         
@@ -263,33 +301,42 @@ def lambda_handler(event, context):
         # 
         zp = validateParam(event, 'zp', false)
         zr = validateParam(event, 'zr', false)
-        
+
 
         result = searchForLeedz(sb, st, et, zp, zr)
-
-    
-    
-    except ValueError as e:
-        result = handle_error(e)
+                  
+        # logger.info(result)
+        
+        
+    except ValueError as ve:
+        
+        result = handle_error( str(ve) )
         
 
-    except ClientError as e:
+    except ClientError as ce:
 
-        result = handle_error(e)
+        result = handle_error( str(ce) )
      
     
-    except BaseException as e:
+    except BaseException as be:
         
-        result = handle_error(e)
-
- 
-    return createHttpResponse( result )
+        result = handle_error( str(be) )
 
 
+    except Exception as e:
+        
+        result = handle_error( str(e) )
+        
+        
+    finally:    
+        
+        the_json = json.dumps(result, cls=DecimalJsonEncoder)
+        return createHttpResponse( the_json )
 
- 
- 
- 
+
+
+
+    
 #
 # Create the HTTP response object
 #
@@ -298,13 +345,18 @@ def createHttpResponse( result ):
    
     response = {
         'statusCode': 200,
-        'body': result,
         'headers': {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-            },
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*',
+        },
+        'body': result,
     }
 
+
+    # logger.info("GET LEEDZ")
+    # logger.info(response)
+    
+    
     return response
 

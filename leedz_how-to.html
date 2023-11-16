@@ -1,36 +1,34 @@
 <!--
 --
--- ABOUT THE LEEDZ
+-- HOW-TO LEEDZ
 --    
 -->
 
 <!DOCTYPE html>
 <html lang="en">
 	
-
-
 <head>
-
     
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+        <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+
         <link rel="stylesheet" href="css/globals.css" type="text/css" />
         <link rel="stylesheet" href="css/modal.css" type="text/css" />
 
+        <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="./css/trades.css" type="text/css" />
+        <link rel="stylesheet" href="./css/modal.css" type="text/css" />
 
-   
-		 <meta charset="UTF-8">
-		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	 
-		 <TITLE>How-To</TITLE>
-	 
-	 	<!-- Favicon -->
-		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
-		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
- 
- 
-		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
-		 <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
 
-		 <script src="./js/inline-edit.js" type="module" defer></script> 
+        <link rel="stylesheet" href="./css/user_edit.css" tyep="text/css"/>
+	 
+		 <TITLE>Leedz How-To</TITLE>
+	 
+
 	</head>
 
 
@@ -112,8 +110,6 @@
 
 
 
-        const CURRENT_USER = getCurrentUser(true);
-    
 
 
 
@@ -123,7 +119,7 @@
          *
          */
          function backButton() {
-
+            const CURRENT_USER = getCurrentUser(true);
             if (CURRENT_USER.un == null) {
                 window.open("./index.html", "_self");	
                 

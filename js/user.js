@@ -163,9 +163,6 @@ export async function initUser( login ) {
 
         });
 
-        
-        console.log("GOT USER DATA");
-        console.log(resObj);
 
         // THIS MUST MATCH DYNAMO DB SCHEMA
         //
@@ -204,7 +201,7 @@ export async function initUser( login ) {
       saveCacheUser( CURRENT_USER );
     }
     
-    console.log("%cuser.initUser(): " + CURRENT_USER.un, "color:darkorange");
+    // console.log("%cuser.initUser(): " + CURRENT_USER.un, "color:darkorange");
     console.log(CURRENT_USER);
 
   }

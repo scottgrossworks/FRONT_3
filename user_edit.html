@@ -1,4 +1,3 @@
-
 <!--
 --
 -- EDIT the current user profile logged in
@@ -11,7 +10,7 @@
 		 <meta charset="UTF-8">
 		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	 
-		 <TITLE>LEEDZ User Info</TITLE>
+		 <TITLE>LEEDZ User Edit</TITLE>
 	 
 	 	<!-- Favicon -->
 		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
@@ -233,7 +232,6 @@
 					<td style="width:20%;border:none"></td>
 				</tr>
 			</table>	
-
 
 			<BR>
 </div>
@@ -708,6 +706,7 @@ function initTradesTable( all_trades, tradeListener ) {
 			}	
 		
 		}
+		window.saveChanges = saveChanges;
 
 
 
@@ -718,11 +717,7 @@ function initTradesTable( all_trades, tradeListener ) {
 		function deleteAccount() {
 
 			try {
-				// will throw error if guest user
-				// deleteCurrentUser();			
-				// GOTO how-to page -- get reasons why send me an email
-				// FIXME FIXME FIXME
-				console.log("DELETE ACCOUNT FIXME");
+				window.open( "./leedz_how-to.html" , "_self");
 
 			} catch ( error ) {
 
@@ -732,15 +727,8 @@ function initTradesTable( all_trades, tradeListener ) {
 			} finally {
 				endEditing();
 			}	
-		
-			
-				
-				//
-				// GOTO landing page
-				//
-				window.open( URL_USER_DELETED , "_self");
-
 		}
+		window.deleteAccount = deleteAccount;
 
 
 

@@ -1092,7 +1092,6 @@ function trimAndRemoveSpaces(inputString) {
        */
       function cssScreenSize() {
 
-        // errorModalClose();
 
         var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
         var action = document.getElementById("action_panel");
@@ -1123,13 +1122,9 @@ function trimAndRemoveSpaces(inputString) {
             SIDE_OPEN = true;
             openNav();
 
-            showWelcomeColumn();
             
-            // 11/1
-            // start with welcome screen always
-            // to keep things consistent
             // Is there a current leed in cache
-            
+            //
             let current_leed = getCurrentLeed();
             if (( current_leed.id) && (isSubscribed( current_leed.tn ))) {
                         
@@ -1144,6 +1139,8 @@ function trimAndRemoveSpaces(inputString) {
                 }
 
             } else {
+
+              showWelcomeColumn();
               clearCurrentLeed();
             }  
             
@@ -1190,21 +1187,21 @@ function trimAndRemoveSpaces(inputString) {
  * SHOW Right-hand ACTION modal
  *
  */
-    function actionModal() {
-      let welcome = document.getElementById("welcome_panel");
-      welcome.style.display = "none";
+  function actionModal() {
+    let welcome = document.getElementById("welcome_panel");
+    welcome.style.display = "none";
 
-      var closeColumn = document.getElementById("lic_close");
-      closeColumn.style.display = "flex";
+    var closeColumn = document.getElementById("lic_close");
+    closeColumn.style.display = "flex";
 
-      // let closeBut = document.getElementById("buy_modal_close");
-      // closeBut.style.display = "flex";
+    // let closeBut = document.getElementById("buy_modal_close");
+    // closeBut.style.display = "flex";
 
-      let action = document.getElementById("action_panel");
-      action.className = "modal";
+    let action = document.getElementById("action_panel");
+    action.className = "modal";
 
-    }
-    window.actionModal = actionModal;
+  }
+  window.actionModal = actionModal;
 
 
 
@@ -1213,29 +1210,32 @@ function trimAndRemoveSpaces(inputString) {
 /**
  * CLOSE (ANY) MODAL DIALOG
  */
-    function modalClose() {
+  function modalClose() {
 
-      let action = document.getElementById("action_panel");
+    errorModalClose();
+
+    // close all modal dialogs
+    var modals = document.getElementsByClassName("info_modal");
+    for (var i = 0; i < modals.length; i++) {
+      var no_close = modals[i].style.getPropertyValue("no_close");
+      if (! no_close) {
+        modals[i].style.display = "none";
+      }
+    }
+
+    // close action window if it is modal
+    let action = document.getElementById("action_panel");
+    var screen = action.getAttribute("screen");
+    if (screen == 0) {
       action.classList.remove("modal");
       action.classList.add("column");
       action.classList.add("_35");
       action.style.display = "none";
-
-
-      // close all modal dialogs
-      var modals = document.getElementsByClassName("info_modal");
-      for (var i = 0; i < modals.length; i++) {
-        var no_close = modals[i].style.getPropertyValue("no_close");
-        if (! no_close) {
-          modals[i].style.display = "none";
-        }
-      }
-
-      errorModalClose();
-
     }
-    window.modalClose = modalClose;
-    
+
+  }
+  window.modalClose = modalClose;
+
 
 
       

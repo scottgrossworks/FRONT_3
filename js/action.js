@@ -5,7 +5,7 @@ import { getColorForTrade } from "./trades.js";
 import { db_getDeetz, USERNAME_URL_PARAM } from "./dbTools.js";
 import { errorModal, printError, throwError } from "./error.js";
 import { getCurrentUser } from "./user.js";
-import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed } from "./leed.js";
+import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed, getCurrentLeed } from "./leed.js";
 
 
 const NO_VAL = "<i style='font-weight:600;color:green'>None Provided</i>";
@@ -126,7 +126,9 @@ export async function showLeedAction( leed_preview , gotoDB ) {
             
             // query returns empty result set
             if (leed_details == null) throw new Error("No leed details for id: " + leed_preview.id);
-                
+            
+            // COPY leed details into current leed object 
+            setCurrentLeed(leed_details);
             })
         .catch(error => {
 
@@ -141,12 +143,8 @@ export async function showLeedAction( leed_preview , gotoDB ) {
         })
     }
 
-    console.log("GOT LEED DETAILS");
-    console.log(leed_details);
-    
-    // COPY leed details into current leed object
-    let CURRENT_LEED = setCurrentLeed(leed_details);
-    console.log(CURRENT_LEED);
+    let CURRENT_LEED = getCurrentLeed();    
+    // console.log(CURRENT_LEED);
     
     //
     // START DATE
@@ -456,15 +454,20 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     }
 
 
-    // HIDE the welcome panel if it exists
+
+    // HIDE the welcome panel
+    //
+
     let welcome = document.getElementById("welcome_panel");
     welcome.style.display = "none";
+
+    var closeColumn = document.getElementById("lic_close");
+    closeColumn.style.display = "flex";
 
 
     // SHOW the action_panel
     //
-    // got action above
-    // let action = document.getElementById("action_panel");
+
     action.style.display = "block";
     var screen = action.getAttribute("screen");
     if (screen == 0) {

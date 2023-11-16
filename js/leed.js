@@ -220,7 +220,6 @@ export function getCurrentLeed() {
  * 
  */
 export function setCurrentLeed( jsonObj ) {
-
     if (jsonObj == null)
         throwError("setCurrentLeed", "leed JSON is null");
   
@@ -290,7 +289,9 @@ export function clearCurrentLeed() {
     CURRENT_LEED.pr = null;
 
     CURRENT_LEED.op = START_OPTS;
-
+    
+    cacheCurrentLeed( blankLeedObject() );
+    
 }
 
 

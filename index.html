@@ -1117,21 +1117,22 @@ function trimAndRemoveSpaces(inputString) {
 
             action.setAttribute("screen", 2);
           
-            var closeColumn = document.getElementById("lic_close");
-            closeColumn.style.display = "none";
-
+            // var closeColumn = document.getElementById("lic_close");
+            // closeColumn.style.display = "none";
 
             SIDE_OPEN = true;
             openNav();
+
+            showWelcomeColumn();
             
             // 11/1
             // start with welcome screen always
             // to keep things consistent
             // Is there a current leed in cache
-            /**
+            
             let current_leed = getCurrentLeed();
-            if (( current_leed.id != null ) && (isSubscribed( current_leed.tn ))) {
-                    
+            if (( current_leed.id) && (isSubscribed( current_leed.tn ))) {
+                        
                 try {
                   showLeedAction(current_leed, false );
 
@@ -1139,20 +1140,15 @@ function trimAndRemoveSpaces(inputString) {
                   printError("cssScreenSize", error);
                   errorModal("Cannot load leed details", error);
                   clearCurrentLeed();
-                  welcomeColumn();
+                  showWelcomeColumn();
                 }
 
             } else {
               clearCurrentLeed();
-              welcomeColumn();
             }  
-            */
             
-            clearCurrentLeed();
-            welcomeColumn();
-            
-            modalClose();
 
+            modalClose();
             break;
 
 
@@ -1169,9 +1165,9 @@ function trimAndRemoveSpaces(inputString) {
 
       
 /**
- * Right-hand WELCOME column
+ * SHOW Right-hand WELCOME column
  */
-      function welcomeColumn() {
+      function showWelcomeColumn() {
 
         let action = document.getElementById("action_panel");
         action.style.display = "none";
@@ -1184,13 +1180,15 @@ function trimAndRemoveSpaces(inputString) {
         // let closeBut = document.getElementById("buy_modal_close");
         // closeBut.style.display = "none";
       }
-      window.welcomeColumn = welcomeColumn;
+      window.showWelcomeColumn = showWelcomeColumn;
 
 
 
 
 /**
- * Right-hand ACTTION column
+ * HIDE WELCOME column
+ * SHOW Right-hand ACTION modal
+ *
  */
     function actionModal() {
       let welcome = document.getElementById("welcome_panel");
@@ -1410,6 +1408,11 @@ function trimAndRemoveSpaces(inputString) {
 
 
 
+          // clear any pre-existing leed in memory
+          clearCurrentLeed();
+
+
+          
 
           // INIT USER PANEL
           //

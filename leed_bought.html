@@ -1,9 +1,8 @@
 <!--
 --
--- LEED BOUGHT back from DB LANDING PAGE
+-- LEED BOUGHT -- show receipt info
 --    
 -->
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,88 +12,91 @@
 <head>
 
     
-	<head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-        <TITLE>Leed Bought</TITLE>
-    
-        <!-- Favicon -->
-        <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
-        <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
-
-
-        <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="css/globals.css" type="text/css" />
         <link rel="stylesheet" href="css/modal.css" type="text/css" />
+
+
+   
+		 <meta charset="UTF-8">
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 
+		 <TITLE>Leed Bought</TITLE>
+	 
+	 	<!-- Favicon -->
+		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+ 
+         <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
+		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
 		 <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
-   </head>
+
+         <link rel="stylesheet" href="css/modal.css" type="text/css" />
 
 
+		 <script src="./js/inline-edit.js" type="module" defer></script> 
+	</head>
 
 
 		 
 	<center>
 
 
-	<body>
-	
-
-
-			
-        <div style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
-
-
-
-			<div class="column _1">
-                <a onclick="backButton()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
-            </div>
-
-
-
-            <div class="column _8" style="margin:auto 0;transform:translateY(6px)">
-                <h1 class="user_title">Leed Bought</h1>
-            </div>
-            
-            
-      
-            <div class="column _2 dropdown" style="margin:auto 0;">
-            
-                <span><a href="javascript:dropdownMenu();"><img src="./img/logo_dd.png" style="height:80px"></a></span>
-                <div id="dropdown_menu" class="dropdown-content">
-
-                    <a href="./leedz_how-to.html" id="dd_howto">How To</a>
-                    
-                    <a href="./leedz_about.html">About</a>
-
-                    <a href="./leedz_contact.html">Contact</a>
-
+        <body>
+        
+    
+    
+                
+            <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+    
+                <div class="column _1">
+    
+                    <a onclick="backButton()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
                 </div>
-
+    
+                <div class="column" style="margin:auto 0;transform:translateY(6px)">
+                    <h1 class="user_title">Leed Bought</h1>
+                </div>
+                    
+                <div class="column _3" style="padding:6px;text-align:center">
+                    <img src="./img/logo_2.png" style="width:120px">
+                </div>
+                
+                
+            
             </div>
-			
-
-<section>
+    
+    
+            <div id="alert_success" class="alert" style="display:none">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            </div>
+    
+        
+    
+    
+    
+    <section>
     
     </div>
 
+    <BR>
+
 
     <!--
+    --
     --  RECEIPT INFO
     -- 
     --
-    --
     -->
-<BR>
 
-<!-- BUYER -->
-<div style="font-size:larger;font-weight:600">
-Congratulations <b style="color:green"><span id="user_welcome"></span></b>, you bought a leed!
-<BR>An email receipt was sent to <b style="color:green"><span id="user_email"></span></b> with the information below.
-</div>
+            <!-- BUYER -->
+            <div style="font-size:larger;font-weight:600">
+            Congratulations <b style="color:green"><span id="user_welcome"></span></b>, you bought a leed!
+            <BR>An email receipt was sent to <b style="color:green"><span id="user_email"></span></b> with the information below.
+            </div>
 
-<div class="row" id="leed_info">
+    <div class="row" id="leed_info">
 
-    <table>
+        <table>
 
 
             <!-- CREATOR -->
@@ -245,7 +247,7 @@ Congratulations <b style="color:green"><span id="user_welcome"></span></b>, you 
         import { formatDTforInput } from "./js/dates.js";
 		
         import { getCurrentUser } from "./js/user.js";
-        import { CURRENT_LEED_KEY  } from "./js/leed.js";
+        import { CURRENT_LEED_KEY, getCurrentLeed  } from "./js/leed.js";
 		
         import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 
@@ -275,14 +277,15 @@ Congratulations <b style="color:green"><span id="user_welcome"></span></b>, you 
         //
         // LOAD THE CURRENT LEED
         //
-        const LEED_BOUGHT = sessionStorage.getItem( CURRENT_LEED_KEY);
+        const LEED_BOUGHT = getCurrentLeed();
+
 
         var the_div = document.getElementById("td_cr");
-        the_div.innerText = LEED_BOUGHT.cr;
+        the_div.innerText = LEED_BOUGHT['cr'];
 
 
         var the_div = document.getElementById("td_tn");
-        the_div.innerText = LEED_BOUGHT.tn;
+        the_div.innerText = LEED_BOUGHT['tn'];
 
 
         var the_div = document.getElementById("td_ti");
@@ -334,7 +337,7 @@ Congratulations <b style="color:green"><span id="user_welcome"></span></b>, you 
          */
 		function backButton() {
 
-			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
+			let href="./index.html?" + USERNAME_URL_PARAM + "=" + getCurrentUser().un;
 			window.open(href, "_self");
 
 			clearCurrentLeed();
@@ -342,43 +345,6 @@ Congratulations <b style="color:green"><span id="user_welcome"></span></b>, you 
 
 		}
 		window.backButton = backButton;
-
-
-
-
-        /**
-        * DROP DOWN MENU
-        */
-         let DROP_DOWN = false;
-
-         /* When the user clicks on the button,
-         toggle between hiding and showing the dropdown content */
-         export function dropdownMenu() {
-           
-            const menu = document.getElementById("dropdown_menu");
-            menu.classList.toggle("show");
-
-           DROP_DOWN ^= 1; // flip flag
-         }
-         window.dropdownMenu = dropdownMenu;
-
-          //
-          // ANY window click registers here
-          //
-          window.addEventListener( "click", (event) => {
-
-             if (! (event.target.matches('img'))) {
-              
-              // click -- not on a link and not on the dropdown image
-              // Close the dropdown menu if the user clicks outside of it
-        
-              var dropdown = document.getElementById("dropdown_menu");
-              dropdown.classList.remove("show");
-
-            }
-           
-
-          }, true);
 
 
 

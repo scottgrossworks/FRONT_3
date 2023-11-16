@@ -501,7 +501,7 @@
     import { initTrades } from "./js/trades.js";   
     import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
-    import { getCurrentLeed, clearCurrentLeed, buyCurrentLeed, deleteCurrentLeed, reportCurrentLeed  }  from "./js/leed.js";
+    import { getCurrentLeed, setCurrentLeed, clearCurrentLeed, buyCurrentLeed, deleteCurrentLeed, reportCurrentLeed  }  from "./js/leed.js";
     import { CURRENT_LEED_KEY } from "./js/leed.js";
     import { showLeedAction } from "./js/action.js";
     import { ALL_BADGES } from "./js/badges.js";
@@ -907,6 +907,7 @@ function trimAndRemoveSpaces(inputString) {
           return;
         }
         
+        waitCursor();
 
         let response = null;
         try {
@@ -925,6 +926,9 @@ function trimAndRemoveSpaces(inputString) {
             
             printError("Buy Leed", error);
             errorModal( msg , true );
+          
+          } finally {
+            normalCursor();
           }
 
           if (response.cd == 0) {
@@ -933,7 +937,8 @@ function trimAndRemoveSpaces(inputString) {
             errorModal(msg, true);
           }
 
-          sessionStorage.setItem( CURRENT_LEED_KEY, response );
+          setCurrentLeed( response );
+          // console.log(response);
 
           // GOTO BUY leed landing page
           // with link to get back to main page
@@ -1057,6 +1062,29 @@ function trimAndRemoveSpaces(inputString) {
 
         col.style.marginLeft = "-120px";
       }
+
+
+      
+        
+
+
+        /**
+        * Change to a wait cursor
+        */
+        function waitCursor() {
+          document.body.style.cursor = 'wait';
+      }
+      window.waitCursor = waitCursor;
+
+      /**
+      * Change back to normal cursor
+      */
+      function normalCursor() {
+          document.body.style.cursor = 'default';
+      }
+      window.normalCursor = normalCursor;
+
+
 
 
       /**

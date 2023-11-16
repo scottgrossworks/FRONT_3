@@ -267,19 +267,24 @@ function refreshCalendar( results ) {
 
 
 
-/**
- * Change to a wait cursor
- */
-function waitCursor() {
-    document.body.style.cursor = 'wait';
-}
+        
 
-/**
- * Change back to normal cursor
- */
-function normalCursor() {
-    document.body.style.cursor = 'default';
-}
+
+        /**
+        * Change to a wait cursor
+        */
+        function waitCursor() {
+            document.body.style.cursor = 'wait';
+        }
+        window.waitCursor = waitCursor;
+
+        /**
+        * Change back to normal cursor
+        */
+        function normalCursor() {
+            document.body.style.cursor = 'default';
+        }
+        window.normalCursor = normalCursor;
 
 
 

@@ -195,7 +195,30 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
          * 
          */
         case BUY_LEED:
+            
             console.log("dbTools.db_updateLeed() BUY LEED"); 
+            var theURL = new URL(API_GATEWAY + "buyLeed");
+            var params = new URLSearchParams();
+
+            // from user obj
+            params.append( USERNAME_URL_PARAM, user_obj.un );
+
+            params.append( TRADE_NAME_URL_PARAM, leed_obj.tn);
+            params.append( ID_URL_PARAM, leed_obj.id );
+
+            theURL.search = params.toString();
+
+            await doGet( theURL )
+            .then(data => {
+
+                json_obj = data;
+
+            })
+            .catch(error => {
+                printError("Delete Leed", error);
+                throwError("Delete Leed", error);
+            });
+
             break;
         
 

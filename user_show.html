@@ -207,6 +207,8 @@
 
         const SHOW_USER = blankUserObject();
 
+        waitCursor();
+
         let success = null;
         try {
 
@@ -216,27 +218,31 @@
             const msg = "Cannot show user profile for:<BR>" + url_username + "<BR>" + error.message;
             errorModal(msg, true);
             
-        }
-
+        } 
 
         if (success) {
-            if (SHOW_USER.un != null) {
+            
+            if (SHOW_USER.un) {
                 element = document.getElementById("td_username");
                 element.innerHTML = SHOW_USER.un;
             }
 
-            if (SHOW_USER.em != null) {
+            if (SHOW_USER.em) {
                 element = document.getElementById("td_email");
-                element.innerHTML = SHOW_USER.em;
+                var prefix = "<a href='mailto:" + SHOW_USER.em + "'>";
+                var postfix = "</a>";
+                element.innerHTML = prefix + SHOW_USER.em + postfix;
             }
 
-            if (SHOW_USER.ws != null) {
+            if (SHOW_USER.ws) {
                 element = document.getElementById("td_website");
-                element.innerHTML = SHOW_USER.ws;
+                var prefix = "<a href='" + SHOW_USER.ws + "'>";
+                var postfix = "</a>";
+                element.innerHTML = prefix + SHOW_USER.ws + postfix;
             }
 
 
-            if (SHOW_USER.ab != null) {
+            if (SHOW_USER.ab) {
                 element = document.getElementById("td_about");
                 element.innerHTML = SHOW_USER.ab;
             }
@@ -245,7 +251,7 @@
             //
             // TRADES SUBSCRIBED
             //
-            if (SHOW_USER.sb != null) {
+            if (SHOW_USER.sb) {
                 element = document.getElementById("td_subs");
                 showUserTrades(element, SHOW_USER.sb);
             }
@@ -254,13 +260,13 @@
             //
             // BADGES
             //
-            if (SHOW_USER.bg != null) {
+            if (SHOW_USER.bg) {
                 element = document.getElementById("td_badges");
                 showUserBadges(element, SHOW_USER.bg);
             }
 
 
-
+            normalCursor();
             
         }
 
@@ -396,6 +402,24 @@ function showUserBadges( element, badges ) {
        
    
 
+        
+
+
+        /**
+        * Change to a wait cursor
+        */
+        function waitCursor() {
+            document.body.style.cursor = 'wait';
+        }
+        window.waitCursor = waitCursor;
+  
+        /**
+        * Change back to normal cursor
+        */
+        function normalCursor() {
+            document.body.style.cursor = 'default';
+        }
+        window.normalCursor = normalCursor;
 
 
 

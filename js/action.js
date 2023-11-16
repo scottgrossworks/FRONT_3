@@ -5,10 +5,10 @@ import { getColorForTrade } from "./trades.js";
 import { db_getDeetz, USERNAME_URL_PARAM } from "./dbTools.js";
 import { errorModal, printError, throwError } from "./error.js";
 import { getCurrentUser } from "./user.js";
-import { getCurrentLeed, cacheCurrentLeed, LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed } from "./leed.js";
+import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed } from "./leed.js";
 
 
-const NO_VAL = "<i style='font-weight:600'>None Provided</i>";
+const NO_VAL = "<i style='font-weight:600;color:green'>None Provided</i>";
 
 
 
@@ -199,6 +199,8 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     radioButton.style.backgroundColor = trade_color; 
 
 
+
+
     // TRADE NAME
     //
     let theTrade = document.querySelector("#lic_trade");
@@ -206,10 +208,16 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     theTrade.style.border = "2px solid " + trade_color;
     theTrade.style.backgroundColor = trade_color;
 
+
+
+
     // DATE
     //
     let theDate = document.querySelector("#lic_date");
     theDate.innerHTML = leed_weekday + " " + leed_monthname + " " + leed_date + ", " + leed_year; 
+
+
+
 
     // TITLE
     //
@@ -229,11 +237,18 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // LOCATION
     // loc == full address
     // REQUIRED
+    //
     theDiv = document.querySelector("#loc_value");
+    if (! CURRENT_LEED.lc) {
 
-    if (CURRENT_LEED.op[ LEED_KEYS.LC ] == OPTS_HIDDEN ) {
+        theDiv.classList.remove("buy2show");
+        theDiv.innerHTML = NO_VAL;
+
+    } else if (CURRENT_LEED.op[ LEED_KEYS.LC ] == OPTS_HIDDEN ) { 
+       
         theDiv.classList.add("buy2show");
         theDiv.innerHTML = "Buy to show";
+    
     } else {
         theDiv.classList.remove("buy2show");
         theDiv.innerHTML = CURRENT_LEED.lc;
@@ -241,8 +256,8 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 
 
 
-
     // ZIP
+    //
     theDiv = document.querySelector("#zip_value");
     theDiv.innerHTML = CURRENT_LEED.zp;
     
@@ -253,14 +268,28 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // (OPTIONAL)
     //
     theDiv = document.querySelector("#em_value");
+    if (! CURRENT_LEED.em) {
 
-    if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN ) {
+        theDiv.classList.remove("buy2show");
+        theDiv.innerHTML = NO_VAL;
+
+    } else if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN ) { 
+       
         theDiv.classList.add("buy2show");
         theDiv.innerHTML = "Buy to show";
+    
     } else {
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = (CURRENT_LEED.em) ? CURRENT_LEED.em : NO_VAL;
+        theDiv.innerHTML = CURRENT_LEED.em;
     }
+
+
+
+
+
+
+
+
 
 
 
@@ -295,15 +324,23 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // (OPTIONAL)
     //
     theDiv = document.querySelector("#det_value");
-    if (CURRENT_LEED.op[ LEED_KEYS.DT ] == OPTS_HIDDEN ) { 
+    if (! CURRENT_LEED.dt) {
+
+        theDiv.classList.remove("buy2show");
+        theDiv.innerHTML = NO_VAL;
+
+    } else if (CURRENT_LEED.dt[ LEED_KEYS.DT ] == OPTS_HIDDEN ) { 
        
         theDiv.classList.add("buy2show");
         theDiv.innerHTML = "Buy to show";
     
     } else {
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = (CURRENT_LEED.dt) ? CURRENT_LEED.dt : NO_VAL;
+        theDiv.innerHTML = CURRENT_LEED.dt;
     }
+
+
+
 
 
 
@@ -315,15 +352,23 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // (OPTIONAL)
     // 
     theDiv = document.querySelector("#reqs_value");
-    if (CURRENT_LEED.op[ LEED_KEYS.RQ ] == OPTS_HIDDEN ) { 
+    if (! CURRENT_LEED.rq) {
+
+        theDiv.classList.remove("buy2show");
+        theDiv.innerHTML = NO_VAL;
+
+    } else if (CURRENT_LEED.rq[ LEED_KEYS.RQ ] == OPTS_HIDDEN ) { 
        
         theDiv.classList.add("buy2show");
         theDiv.innerHTML = "Buy to show";
     
     } else {
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = (CURRENT_LEED.rq) ? CURRENT_LEED.rq : NO_VAL;
+        theDiv.innerHTML = CURRENT_LEED.rq;
     }
+
+
+
 
 
 

@@ -41,13 +41,11 @@
 
 
 
-
-
-
   
 
   #action_panel {
     display:flex;
+    overflow-y:scroll;
 
   }
 

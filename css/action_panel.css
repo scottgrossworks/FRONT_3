@@ -13,7 +13,7 @@
     /* screen size-dependent -->  display:flex; */
     background-color:white;
     width: 100% !important;
-
+    max-height:400px;
 
     border-left:2px solid lightgray;
 
@@ -30,53 +30,26 @@
     margin-right:auto;
 
     overflow-x: hidden;
-    overflow-y: scroll;
 
 }
 
 
 
-
-
-
-/**
- * action window scrollbar control
- */
- @media screen and (max-height: 599px) {
+@media screen and (min-height: 600px) and (max-height:799px) {
 
     #action_panel {
-        height: 100%;
-        max-height:599px; 
+        max-height:700px;
     }
 }
 
-
-/**
- * action window scrollbar control
- */
-@media screen and (min-height: 600px) and  (max-height:799px) {
-
-    #action_panel {
-        height: 100%;
-        max-height:799px; 
-    }
-}
 
 
 @media screen and (min-height: 800px) {
 
     #action_panel {
-        height: 100%;
-
+        max-height:fit-content;
     }
 }
-
-
-
-
-
-
-
 
 
 #lic_close {
@@ -131,6 +104,7 @@
     font-size:1.1em;
 
     overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 
@@ -141,6 +115,7 @@
     align-items: center;
     
     border: 1px solid var(--LEEDZ_DARKGRAY) !important;
+    
 }
 
 
@@ -152,6 +127,7 @@
     padding-bottom:16px;
     padding-left:10px;
     padding-right:4px;
+    
 
 }
 

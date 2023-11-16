@@ -5,7 +5,7 @@
 
 import { daysInMonth, getShortDateString, getShortWeekday, getMonth, getYear, getHours, getMinutes, twoDigitInt, firstDayShowing, lastDayShowing } from "./dates.js";
 import { showLeedAction } from "./action.js";
-import { setCurrentLeed, loadLeedzFromDB, loadLeedzFromCache } from "./leed.js";
+import { setCurrentLeed, loadLeedzFromDB, loadLeedzFromCache, clearCurrentLeed } from "./leed.js";
 import { getColorForTrade } from "./trades.js";
 import { getCurrentUser } from "./user.js";
 import { printError, errorModal, throwError } from "./error.js";
@@ -461,20 +461,22 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     newLeed.addEventListener("click", function( event ) {
         
         waitCursor();
-
-        // turn off the thumbnail
+        
+        // turn OFF old leed
+        //
+        clearCurrentLeed();
         thumbnail.style.opacity = 0;
-
-        // turn off the old leed
         if ( CURRENT_SELECTION != null) {
             CURRENT_SELECTION.style.border = 0;
         } 
-        // turn on new leed
+
+        // turn ON new leed
+        //
         newLeed.style.border = "3px solid black";
         CURRENT_SELECTION = newLeed;
         setCurrentLeed( leed_fromDB );
         
-
+        // GOTO ACTION WINDOW WITH DETAILS INFO
         try {
             showLeedAction( leed_fromDB, true );
 
@@ -482,9 +484,11 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
             printError("showLeedAction", error);
             errorModal("Error showing Action Window: " + error.message, true);
         }
-            
-
+        
     });
+
+
+
 
     eachDay.appendChild( newLeed );
     // console.log("CREATING CALENDAR LEED=" + trade_name + "==" + leed_fromDB.st);

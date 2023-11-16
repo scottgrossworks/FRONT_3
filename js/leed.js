@@ -77,7 +77,7 @@ export const LEED_KEYS = {
 // 8 email
 // 9 phone
 //
-//
+// HIDE_ALL_OPTS = "0000022222220"
 export const SHOW_ALL_OPTS = "0000011111110";
 export const START_OPTS = "0000021122110";
 export const OPTS_LOCKED  = 0;
@@ -241,7 +241,11 @@ export function setCurrentLeed( jsonObj ) {
     if (jsonObj.et) CURRENT_LEED.et = jsonObj.et;
 
     if (jsonObj.em) CURRENT_LEED.em = jsonObj.em;
-    if (jsonObj.ph) CURRENT_LEED.ph = jsonObj.ph;
+
+    if ((jsonObj.ph) && (jsonObj.ph != '0')) {
+      CURRENT_LEED.ph = jsonObj.ph;
+    } 
+    
     if (jsonObj.dt) CURRENT_LEED.dt = jsonObj.dt;
     if (jsonObj.rq) CURRENT_LEED.rq = jsonObj.rq;
 

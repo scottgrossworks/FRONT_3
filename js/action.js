@@ -234,15 +234,23 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 
 
 
+    // ZIP
+    //
+    theDiv = document.querySelector("#zip_value");
+    theDiv.innerHTML = CURRENT_LEED.zp;
+    
+
+
     // LOCATION
     // loc == full address
     // REQUIRED
     //
     theDiv = document.querySelector("#loc_value");
-    if (! CURRENT_LEED.lc) {
+    if (CURRENT_LEED.lc) {
 
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = NO_VAL;
+        theDiv.innerHTML = CURRENT_LEED.lc;
+
 
     } else if (CURRENT_LEED.op[ LEED_KEYS.LC ] == OPTS_HIDDEN ) { 
        
@@ -251,16 +259,10 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     
     } else {
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = CURRENT_LEED.lc;
+        theDiv.innerHTML = NO_VAL;
     }
 
 
-
-    // ZIP
-    //
-    theDiv = document.querySelector("#zip_value");
-    theDiv.innerHTML = CURRENT_LEED.zp;
-    
 
      
 
@@ -268,11 +270,11 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // (OPTIONAL)
     //
     theDiv = document.querySelector("#em_value");
-    if (! CURRENT_LEED.em) {
+    if (CURRENT_LEED.em) {
 
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = NO_VAL;
-
+        theDiv.innerHTML = CURRENT_LEED.em;
+   
     } else if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN ) { 
        
         theDiv.classList.add("buy2show");
@@ -280,7 +282,8 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     
     } else {
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = CURRENT_LEED.em;
+        theDiv.innerHTML = NO_VAL;
+
     }
 
 
@@ -297,10 +300,10 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // (OPTIONAL)
     //
     theDiv = document.querySelector("#ph_value");
-    if (! CURRENT_LEED.ph) {
+    if (CURRENT_LEED.ph) {
 
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = NO_VAL;
+        theDiv.innerHTML = CURRENT_LEED.ph;
 
     } else if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN ) { 
        
@@ -308,8 +311,10 @@ export async function showLeedAction( leed_preview , gotoDB ) {
         theDiv.innerHTML = "Buy to show";
     
     } else {
+        
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = CURRENT_LEED.ph;
+        theDiv.innerHTML = NO_VAL;
+        
     }
 
 
@@ -324,19 +329,21 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // (OPTIONAL)
     //
     theDiv = document.querySelector("#det_value");
-    if (! CURRENT_LEED.dt) {
+    if (CURRENT_LEED.dt) {
 
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = NO_VAL;
+        theDiv.innerHTML = CURRENT_LEED.dt;
 
-    } else if (CURRENT_LEED.dt[ LEED_KEYS.DT ] == OPTS_HIDDEN ) { 
+    } else if (CURRENT_LEED.op[ LEED_KEYS.DT ] == OPTS_HIDDEN ) { 
        
         theDiv.classList.add("buy2show");
         theDiv.innerHTML = "Buy to show";
     
     } else {
+        
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = CURRENT_LEED.dt;
+        theDiv.innerHTML = NO_VAL;
+        
     }
 
 
@@ -352,19 +359,21 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // (OPTIONAL)
     // 
     theDiv = document.querySelector("#reqs_value");
-    if (! CURRENT_LEED.rq) {
+    if (CURRENT_LEED.rq) {
 
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = NO_VAL;
+        theDiv.innerHTML = CURRENT_LEED.rq;
+        
 
-    } else if (CURRENT_LEED.rq[ LEED_KEYS.RQ ] == OPTS_HIDDEN ) { 
+    } else if (CURRENT_LEED.op[ LEED_KEYS.RQ ] == OPTS_HIDDEN ) { 
        
         theDiv.classList.add("buy2show");
         theDiv.innerHTML = "Buy to show";
     
     } else {
+        
         theDiv.classList.remove("buy2show");
-        theDiv.innerHTML = CURRENT_LEED.rq;
+        theDiv.innerHTML = NO_VAL;
     }
 
 

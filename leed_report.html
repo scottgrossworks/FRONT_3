@@ -1,0 +1,603 @@
+<!--
+    --
+    -- SHOW the leed info
+    -- explain the reasons to report
+    -- provide a button to send reportLeed() to DB
+    --    
+    -->
+       
+    <!DOCTYPE html>
+    <html lang="en">
+        
+        <head>
+             <meta charset="UTF-8">
+             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         
+             <TITLE>Edit Leed</TITLE>
+         
+             <!-- Favicon -->
+             <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+             <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+     
+             <link rel="stylesheet" href="./css/action_panel.css" type="text/css" />
+             <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+             <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
+             <link rel="stylesheet" href="css/modal.css" type="text/css" />
+    
+             <script src="./js/inline-edit.js" type="module" defer></script> 
+        </head>
+    
+    
+             
+        <center>
+    
+    
+            
+    
+        <body>
+        
+    
+    
+                
+            <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+    
+                <div class="column _1">
+    
+                    <a onclick="backButton()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+                </div>
+    
+                <div class="column" style="margin:auto 0;transform:translateY(6px)">
+                    <h1 class="user_title">Report Leed</h1>
+                </div>
+                    
+                <div class="column _3" style="padding:6px;text-align:center">
+                    <img src="./img/logo_2.png" style="width:120px">
+                </div>
+                
+                
+            
+            </div>
+    
+    
+            <div id="alert_success" class="alert" style="display:none">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            </div>
+    
+        
+    
+    
+    
+    <section>
+                
+   <!-- 
+    -- DB -- WAITING.... --DB
+    -- 
+    -->
+    <div class="modal info_modal" id="waiting_modal">
+
+        <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
+            <table>
+                <TR><TD style="padding-bottom:20px; border:none;"><center>
+                    <h1 id="waiting_label" style="width:fit-content"></h1>
+                        </center>
+                </TD></TR>
+                <TR><TD style="border:none;"><center>
+                        <img src="./img/wait_spinner.gif" style="height:8vh;">
+                        </center>
+                    </TD>
+                </TR>
+            </table>
+
+  
+      </div>
+
+
+
+    
+      <!-- 
+        -- ERROR MODAL 
+        -- 
+      -->
+      <div class="row modal" id="error_modal">
+        <center><img id="error_logo" src="img/logo_2.png"></center> 
+        <h1></h1>
+        <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
+      </div>
+    
+
+
+
+
+
+    <div style="width:96vw" id="form_container">
+        
+        <B style="font-size:larger;font-weight:600">
+            <BR>	
+                Does this leed look fishy?  We encourage users to report any leed .....
+
+            <BR>
+                These are the things to look for
+        </B>
+
+            <table cellspacing="5w" cellpadding="10px">
+    
+    
+    
+                <tr id="row_creator">
+                                
+                    <TD class="labelTD">Creator: </TD>
+                    
+                    <td id="td_creator"></td>
+    
+                </tr>
+    
+    
+    
+                <tr id="row_trade">
+                                
+                    <TD class="labelTD">Trade Name: </TD>
+                    
+                    <td id="td_trade"></td>
+    
+                </tr>
+    
+    
+    
+                <!-- TITLE -->
+                <tr id="row_title">
+                            
+                    <TD class="labelTD">Title: </TD>
+                    
+                    <td id="td_title"></td>
+    
+                </tr>
+    
+    
+    
+                <!-- START TIME -->
+                <tr id="row_start">
+                            
+                    <TD class="labelTD">Start Time: </TD>
+                    
+                    <td id="td_start"></td>
+    
+                </tr>
+    
+    
+                        
+                <!-- END TIME -->
+                <tr id="row_end">
+                            
+                    <TD class="labelTD">End Time: </TD>
+                    
+                    <td id="td_end"><b style="color:green">Buy To Show</b></td>
+    
+                </tr>
+    
+    
+    
+                <!-- ADDRESS 
+                -->
+                <tr id="row_loc">
+                            
+                    <TD class="labelTD">Address: </TD>
+                    
+                    <td id="td_loc"><b style="color:green">Buy To Show</b></td>
+                </tr>
+    
+    
+    
+                <!-- EMAIL  -->
+                <tr id="row_em">
+                                
+                    <TD class="labelTD">Client Email: </TD>
+                    
+                    <td id="td_em"><b style="color:green">Buy To Show</b></td>
+    
+                </tr>
+    
+    
+    
+                <!-- PHONE -->
+                <tr id="row_ph">
+                                
+                    <TD class="labelTD">Client Phone: </TD>
+                    
+                    <td id="td_ph"><b style="color:green">Buy To Show</b></td>
+                </tr>
+    
+    
+    
+    
+                <!-- LEED DETAILS -->
+                <tr id="row_det">
+                            
+                    <TD class="labelTD">Details: </TD>
+                    
+                    <td id="td_det"><b style="color:green">Buy To Show</b></td>
+                </tr>
+    
+    
+    
+                
+                <!-- LEED REQUIREMENTS -->
+                <tr id="row_reqs">
+                            
+                    <TD class="labelTD">Requirements: </TD>
+                    
+                    <td id="td_reqs"><b style="color:green">Buy To Show</b></TD>
+                </tr>
+    
+    
+                
+                <!-- LEED PRICE -->
+                <tr id="row_pr">
+                            
+                    <TD class="labelTD">Price: </TD>
+                    
+                    <td id="td_pr"></TD>
+                </tr>
+    
+    
+    
+            </table>	
+    
+    </div>
+    
+    
+
+    
+
+<!--
+--
+-- BUTTON
+--
+--
+--
+-->
+<BR>
+<BR>
+
+<div class="row">
+    <!-- REPORT LEED  BUTTON -->
+    <button id="reportButton" class="button report_button" value="save" onclick="reportLeed()">Report</button>
+</div>
+    
+    
+<BR>
+    
+    </section>  
+    
+    
+</body>
+    
+    
+        <script type="module">
+                
+            import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } from "./js/dates.js";
+            import { getShortDateString, DTfromPretty } from "./js/dates.js";
+            
+            import { getCurrentUser } from "./js/user.js";
+            import { getCurrentLeed, reportCurrentLeed } from "./js/leed.js";            
+            import { LEED_KEYS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
+            
+            import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
+            
+            import { USERNAME_URL_PARAM } from "./js/dbTools.js";
+
+
+            window.errorModalClose = errorModalClose;
+           
+
+
+            const CURRENT_USER = getCurrentUser(true);
+    
+    
+            const CURRENT_LEED = getCurrentLeed(); 
+            if (CURRENT_LEED == null)
+                throwError("Cannot initialize leed editor: CURRENT_LEED is null");
+        
+
+    
+    
+            
+            var element = null;
+            
+
+            // FIXME
+            console.log("CURRENT LEED")
+            console.log(CURRENT_LEED);
+
+
+
+            // CREATOR
+            //
+            element = document.getElementById("td_creator");
+            element.innerHTML = '<B>' + CURRENT_USER.un + '</B>';
+    
+    
+    
+            // TRADE
+            //
+            element = document.getElementById("td_trade");
+            element.innerHTML = CURRENT_LEED.tn;
+    
+    
+            // TITLE
+            // title of this leed
+            element = document.getElementById("td_title");
+            element.innerHTML = CURRENT_LEED.ti;
+    
+    
+            // START DATE
+            // 
+            const startDate = new Date( CURRENT_LEED.st );
+            const isoStart = startDate.toISOString();
+    
+            const start_weekday = getWeekday( getShortDateString( isoStart ) );
+            const start_monthname = getShortMonthname( isoStart.substring(5, 7) ); 
+    
+            // remove '0' at front if any
+            let start_date = isoStart.substring(8, 10);
+            if (start_date.startsWith('0')) { start_date = start_date.substring(1) };
+    
+            const leed_year = isoStart.substring(0, 4);
+            const hours_start = getHours(isoStart);
+            const fullStartDate = start_weekday + " " + start_monthname + " " + start_date + ", " + leed_year; 
+            const start_time = hours_start[0] + ":" + getMinutes(isoStart) + hours_start[1];
+            element = document.getElementById("td_start");
+            element.innerHTML = fullStartDate + " at " + start_time;
+    
+
+
+
+            // END DATE/TIME CAN BE HIDDEN OR SHOWN
+            //
+            if (CURRENT_LEED.op[ LEED_KEYS.END ] != OPTS_HIDDEN ) {
+
+                const endDate = new Date( CURRENT_LEED.et );
+                const isoEnd = endDate.toISOString();
+            
+                const end_weekday = getWeekday( getShortDateString( isoEnd ) );
+                const end_monthname = getShortMonthname( isoEnd.substring(5, 7) ); 
+                
+                // remove '0' at front if any
+                let end_date = isoStart.substring(8, 10);
+                if (end_date.startsWith('0')) { end_date = end_date.substring(1) };
+                
+                const hours_end = getHours(isoEnd);
+        
+                const fullEndDate = end_weekday + " " + end_monthname + " " + end_date + ", " + leed_year; 
+        
+                const end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
+
+        
+                element = document.getElementById("td_end");
+                element.innerHTML = fullEndDate + " at " + end_time;
+            }
+
+    
+    
+            // LOCATION
+            // 
+            if (CURRENT_LEED.op[ LEED_KEYS.LOC ] != OPTS_HIDDEN ) {
+                element = document.getElementById("td_loc");
+                element.innerHTML = CURRENT_LEED.lc;
+            }
+
+            // EMAIL
+            // 
+            if (CURRENT_LEED.op[ LEED_KEYS.EM ] != OPTS_HIDDEN ) {
+                element = document.getElementById("td_em");
+                if (CURRENT_LEED.em) element.innerHTML = CURRENT_LEED.em;
+            }
+    
+            // PHONE
+            // 
+            if (CURRENT_LEED.op[ LEED_KEYS.PH ] != OPTS_HIDDEN ) {
+                element = document.getElementById("td_ph");
+                if (CURRENT_LEED.ph != 0) element.innerHTML = CURRENT_LEED.ph;
+            }
+
+            // DETAILS
+            // 
+            if (CURRENT_LEED.op[ LEED_KEYS.DET ] != OPTS_HIDDEN ) {
+                element = document.getElementById("td_det");
+                if (CURRENT_LEED.dt) element.innerHTML = CURRENT_LEED.dt;
+            }
+    
+            // REQS
+            // 
+            if (CURRENT_LEED.op[ LEED_KEYS.REQS ] != OPTS_HIDDEN ) {    
+                element = document.getElementById("td_reqs");
+                if (CURRENT_LEED.rq) element.innerHTML = CURRENT_LEED.rq;
+            }
+    
+    
+            // PRICE
+            // 
+            element = document.getElementById("td_pr");
+            element.innerHTML = CURRENT_LEED.pr;
+    
+    
+    
+    
+    
+
+            // 
+            // CHANGE the Report button to Reported and opacity = 0
+            //
+            function disableReportButton() {
+
+                let the_button = document.getElementById("reportButton");
+                the_button.style.opacity = 0.6;
+                the_button.innerText = "Reported";
+
+                the_button.setAttribute("onclick", null);
+            }
+
+
+
+            //
+            // open NEW USER welcome modal
+            // new account -- no subs / search
+            //
+            function showWaitingModal(msg) {
+                let wait_msg = document.getElementById("waiting_label");
+                wait_msg.innerText = msg;
+                let waiting = document.getElementById("waiting_modal");
+                waiting.style.display = "block";
+            }
+            window.showWaitingModal = showWaitingModal;
+
+
+
+
+
+            /**
+            * CLOSE (ANY) MODAL DIALOG
+            */
+            function modalClose() {
+
+                // close all modal dialogs
+                var modals = document.getElementsByClassName("info_modal");
+                for (var i = 0; i < modals.length; i++) {
+                modals[i].style.display = "none";
+                modals[i].style.setProperty("no_close", false);
+                }
+
+                errorModalClose();
+
+            }
+            window.modalClose = modalClose;
+
+
+
+
+
+
+            //
+            //
+            //
+            //
+            function backButton() {
+                const CURRENT_USER = getCurrentUser(true);
+        
+                let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
+                window.open(href, "_self");
+    
+                clearCurrentLeed();
+                self.close();
+    
+            }
+            window.backButton = backButton;
+    
+    
+    
+    
+    
+            
+    
+    
+        /**
+        *
+        *
+        */
+        async function reportLeed() {
+    
+    
+            waitCursor();
+            showWaitingModal("Reporting Leed to server . . .");
+    
+            let from_DB = null;
+            try {
+    
+                // GO BACK to server and delete leed
+                // compliment of add leed
+    
+                from_DB = await reportCurrentLeed();
+    
+            } catch ( error ) {
+                printError("Report Leed", error.message);
+                errorModal("Error reporting leed: " + error.message, false);
+    
+            } finally {
+                
+                normalCursor();
+                modalClose();
+                disableReportButton();
+            }
+    
+            
+            // success or failure
+            // console.log(from_DB)
+    
+    
+            /**
+            * SHOW THE ERROR ALERT
+            * will not get here if create throws exception above
+            * This is a catch-all for null responses and
+            * HTTP 200 codes that contain error messages 
+            */
+            if (from_DB.er) {
+                var msg = "Error reporting leed: " + from_DB.er;
+                printError("Report Leed", msg);
+                errorModal(msg, false);
+    
+            } else {
+    
+              /**
+                * SHOW THE SUCCESS ALERT
+                *
+                *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
+                *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
+                */
+                var theAlert = document.getElementById("alert_success");
+                var msg = 'Reported leed:  ' + from_DB.id + '  ( ' + from_DB.ti +' )';
+                var newChild = document.createElement("span");
+                newChild.textContent = msg;
+    
+                if (theAlert.children.length <= 1) {
+                    theAlert.appendChild(newChild);
+                } else {
+                    theAlert.replaceChild(newChild, theAlert.children[1]);
+                }
+    
+                theAlert.style.display = "block";
+    
+            }   
+    
+        }
+        window.reportLeed = reportLeed;
+    
+    
+    
+    
+        
+    
+    
+    
+            /**
+            * Change to a wait cursor
+            */
+            function waitCursor() {
+                document.body.style.cursor = 'wait';
+            }
+            window.waitCursor = waitCursor;
+    
+            /**
+            * Change back to normal cursor
+            */
+            function normalCursor() {
+                document.body.style.cursor = 'default';
+            }
+            window.normalCursor = normalCursor;
+    
+        
+        </script>
+    
+        
+            
+    
+    
+    </html>

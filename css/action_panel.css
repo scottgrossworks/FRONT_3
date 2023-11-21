@@ -7,6 +7,9 @@
 #action_panel {
 
     display:none;
+
+    z-index:500;
+
     top:0;
     left:0;
 

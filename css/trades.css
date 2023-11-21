@@ -10,7 +10,7 @@
   #trades_column {
 
     position: static;
-    z-index:300;
+    z-index:400;
 
     display: flex;
     flex-direction: column;

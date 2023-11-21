@@ -67,11 +67,15 @@
 
 
 #newUser_modal {
+  
+  margin: 10vh 10vw;
   z-index: 700;
 }
 
 
 #guest_modal {
+  
+  margin: 10vh 10vw;
   z-index: 600;
 }
 
@@ -86,7 +90,7 @@
   
   z-index:500;
 
-  margin: 5vh auto;
+  margin: 5vh 10vw;
 
   width:60vw !important;
   height:70vh !important;

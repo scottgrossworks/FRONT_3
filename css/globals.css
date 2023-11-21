@@ -143,7 +143,7 @@
 
   width: max-content; /* 0 width - change this with JavaScript */
   position: fixed; /* Stay in place */
-  z-index: 900; /* Stay on top */
+  z-index: 400; /* Stay on top */
 
 
   left: 0;
@@ -174,7 +174,7 @@
 
   
   position:fixed;
-  z-index: 900;
+  z-index: 300;
  
   left:200px;
   top:auto;

@@ -8,7 +8,7 @@ import { getCurrentUser } from "./user.js";
 import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed, getCurrentLeed } from "./leed.js";
 
 
-const NO_VAL = "<i style='font-weight:600;color:green'>None Provided</i>";
+const NO_VAL = "<i style='font-weight:600;color:coral'>None Provided</i>";
 
 
 
@@ -238,6 +238,11 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     theDiv.innerHTML = CURRENT_LEED.zp;
     
 
+    // approach to showing/hiding
+    // if it is returned from the DB at all -- it is not hidden
+    // if it is not returned -- check if it is hidden 
+    // if not -- it is not provided at all
+    //
 
     // LOCATION
     // loc == full address
@@ -461,22 +466,24 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     let welcome = document.getElementById("welcome_panel");
     welcome.style.display = "none";
 
+
+    // ACTION PANEL CLOSE BUTTON
+    //
     var closeColumn = document.getElementById("lic_close");
     closeColumn.style.display = "flex";
+    closeColumn.addEventListener( "click", (event) => { 
+        hideActionWindow();
+    }, true);
 
-
+    
     // SHOW the action_panel
     //
-
     action.style.display = "block";
     var screen = action.getAttribute("screen");
     if (screen == 0) {
         action.className = "modal";
     }
 
-
-    // let closeBut = document.getElementById("buy_modal_close");
-    // closeBut.style.display = "flex";
 
     normalCursor();
 
@@ -500,7 +507,7 @@ function normalCursor() {
  * 
  */
 export function hideActionWindow() {
-    
+
     // HIDE the action_panel
     //
     let action = document.getElementById("action_panel");

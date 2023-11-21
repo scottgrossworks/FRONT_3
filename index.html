@@ -607,7 +607,8 @@
 
        
             if ( event.target.id.endsWith("modal_close") ) {
-              // modal dialog close
+              // modal dialog close 
+              modalClose();
 
             } else if (event.target.matches('a')) {
               
@@ -1071,7 +1072,7 @@ function trimAndRemoveSpaces(inputString) {
         /**
         * Change to a wait cursor
         */
-        function waitCursor() {
+      function waitCursor() {
           document.body.style.cursor = 'wait';
       }
       window.waitCursor = waitCursor;
@@ -1092,6 +1093,8 @@ function trimAndRemoveSpaces(inputString) {
        */
       function cssScreenSize() {
 
+
+        modalClose();
 
         var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
         var action = document.getElementById("action_panel");
@@ -1145,7 +1148,6 @@ function trimAndRemoveSpaces(inputString) {
             }  
             
 
-            modalClose();
             break;
 
 

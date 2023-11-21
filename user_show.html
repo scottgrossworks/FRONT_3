@@ -62,7 +62,45 @@
 
 <section>
 
-    <BR>	
+
+        
+
+   <!-- 
+    -- DB -- WAITING.... --DB
+    -- 
+    -->
+    <div class="modal info_modal" id="waiting_modal">
+
+        <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
+            <table>
+                <TR><TD style="padding-bottom:20px; border:none;"><center>
+                    <h1 id="waiting_label" style="width:fit-content"></h1>
+                        </center>
+                </TD></TR>
+                <TR><TD style="border:none;"><center>
+                        <img src="./img/wait_spinner.gif" style="height:8vh;">
+                        </center>
+                    </TD>
+                </TR>
+            </table>
+
+  
+      </div>
+
+
+  <!-- 
+    -- ERROR MODAL 
+    -- 
+    -->
+    <div class="row modal" id="error_modal">
+        <center><img id="error_logo" src="img/logo_2.png"></center> 
+        <h1></h1>
+        <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
+      </div>
+    
+    
+    
+      
 
 
             
@@ -159,19 +197,6 @@
 
 
 
-  <!-- 
-    -- ERROR MODAL 
-    -- 
-    -->
-  <div class="row modal" id="error_modal">
-    <center><img id="error_logo" src="img/logo_2.png"></center> 
-    <h1></h1>
-    <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
-  </div>
-
-
-
-  
 
 	</body>
 
@@ -183,20 +208,68 @@
 			
 
 		import { blankUserObject, getCurrentUser } from "./js/user.js";
-		import { printError, throwError } from "./js/error.js";
+		import { printError, throwError, errorModalClose } from "./js/error.js";
 		import { getTradeInfo } from "./js/trades.js";
 		import { db_getUser, USERNAME_URL_PARAM } from "./js/dbTools.js";
         import { ALL_BADGES } from "./js/badges.js";
 
 
 
+        window.errorModalClose = errorModalClose;
         
         window.ALL_BADGES = ALL_BADGES;
 
         const urlParams = new URLSearchParams(window.location.search);
         const url_username = urlParams.get( USERNAME_URL_PARAM );
 
-        var element = null;
+
+
+
+            //
+            // open NEW USER welcome modal
+            // new account -- no subs / search
+            //
+            function showWaitingModal(msg) {
+                let wait_msg = document.getElementById("waiting_label");
+                wait_msg.innerText = msg;
+                let waiting = document.getElementById("waiting_modal");
+                waiting.style.display = "block";
+            }
+            window.showWaitingModal = showWaitingModal;
+
+
+
+
+
+
+            /**
+            * CLOSE (ANY) MODAL DIALOG
+            */
+            function modalClose() {
+
+                // close all modal dialogs
+                var modals = document.getElementsByClassName("info_modal");
+                for (var i = 0; i < modals.length; i++) {
+                modals[i].style.display = "none";
+                modals[i].style.setProperty("no_close", false);
+                }
+
+                errorModalClose();
+
+            }
+            window.modalClose = modalClose;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         // top of page
@@ -204,10 +277,14 @@
         // element = document.querySelector(".user_title");
         // element.innerHTML = url_username;
 
-
+        const NO_VAL = "<b style='color:coral'>None Provided</b>";
+        var element = null;
         const SHOW_USER = blankUserObject();
 
         waitCursor();
+
+        showWaitingModal("Getting User info . . .");
+
 
         let success = null;
         try {
@@ -218,13 +295,27 @@
             const msg = "Cannot show user profile for:<BR>" + url_username + "<BR>" + error.message;
             errorModal(msg, true);
             
-        } 
+        } finally {
+            
+            normalCursor();
+            modalClose();
+        }
 
         if (success) {
             
+
             if (SHOW_USER.un) {
                 element = document.getElementById("td_username");
                 element.innerHTML = SHOW_USER.un;
+            
+            } else {
+                // THIS IS AN ERROR CONDITION
+                // this should not happen
+                // throw up error modal and investiate cause
+                var msg = "No username in user object";
+                printError("Show User", msg);
+                errorModal("Invalid User info: " + msg, true);
+                throwError("Show User", msg);
             }
 
             if (SHOW_USER.em) {
@@ -232,6 +323,8 @@
                 var prefix = "<a href='mailto:" + SHOW_USER.em + "'>";
                 var postfix = "</a>";
                 element.innerHTML = prefix + SHOW_USER.em + postfix;
+            } else {
+                element.innerHTML = NO_VAL;
             }
 
             if (SHOW_USER.ws) {
@@ -239,18 +332,22 @@
                 var prefix = "<a href='" + SHOW_USER.ws + "'>";
                 var postfix = "</a>";
                 element.innerHTML = prefix + SHOW_USER.ws + postfix;
+            } else {
+                element.innerHTML = NO_VAL;
             }
 
 
             if (SHOW_USER.ab) {
                 element = document.getElementById("td_about");
                 element.innerHTML = SHOW_USER.ab;
+            } else {
+                element.innerHTML = NO_VAL;
             }
 
 
             //
             // TRADES SUBSCRIBED
-            //
+            // 
             if (SHOW_USER.sb) {
                 element = document.getElementById("td_subs");
                 showUserTrades(element, SHOW_USER.sb);
@@ -266,8 +363,6 @@
             }
 
 
-            normalCursor();
-            
         }
 
 /**

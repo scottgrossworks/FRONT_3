@@ -84,7 +84,7 @@
   .show {
     display:block;
     color:white !important;
-    z-index: 999;
+    z-index: 500;
 
 }
 

@@ -111,18 +111,32 @@
 
     <div style="width:96vw" id="form_container">
         
-        <B style="font-size:larger;font-weight:600">
-            <BR>	
-                Does this leed look fishy?  We encourage users to report any leed .....
 
-            <BR>
-                These are the things to look for
-        </B>
+        <div style="text-align:left;margin:0 5vw">
+                
+            <b style="font-size:large">
+                <BR>	
+                    <center style="font-size:larger">Is something wrong with this leed?</center>
+                    
+                    <div style="height:2vh;font-size:smaller"></div>
+                    
+                    As a good-faith community, we encourage users to report any leed that contains errors, looks incomplete, or does not 
+                    provide true information for buyers to consider.  Reporting a leed does not in any way impact your profile.  All reported leedz are 
+                    reviewed by a human before being deleted from the calendar.  These are the things to look for:
 
-            <table cellspacing="5w" cellpadding="10px">
-    
-    
-    
+                    <P>
+                        <ul type="1" style="color:green; margin: 2vh auto -2vh 10vw">
+                            <li>No client Email / Phone Number Provided</li>
+                            <li>Fake Email / Phone Number</li>
+                            <li>No Details about the gig</li>
+                            <li>Suspicious Address</li>
+                            <li>Start/End Times inappropriate for requested trade</li>
+                        </ul>
+            </b>
+        </div>
+
+            <table cellspacing="5w" cellpadding="10px" style="font-size:larger">
+
                 <tr id="row_creator">
                                 
                     <TD class="labelTD">Creator: </TD>
@@ -239,9 +253,15 @@
                 </tr>
     
     
+                
+            <tr><td colspan="3" style="padding-top:20px; font-size:smaller;color:darkgreen;border:none">
+                Thank you for making <b>the Leedz</b> an open, honest marketplace for quality information.  
+                <a href="./leedz_how-to.html" target="_new">Click here</a> for more info on reporting Leedz and what to look for.
+            </td></tr>
     
             </table>	
     
+
     </div>
     
     
@@ -288,7 +308,8 @@
 
             window.errorModalClose = errorModalClose;
            
-
+            const BUY_TO_SHOW = "<b>Buy To Show</b>";
+            const NO_VAL = "<b style='color:coral;'>None Provided</b>";
 
             const CURRENT_USER = getCurrentUser(true);
     
@@ -305,12 +326,13 @@
             
 
             // FIXME
-            console.log("CURRENT LEED")
-            console.log(CURRENT_LEED);
+            // console.log("CURRENT LEED")
+            // console.log(CURRENT_LEED);
 
 
 
             // CREATOR
+            // REQUIRED
             //
             element = document.getElementById("td_creator");
             element.innerHTML = '<B>' + CURRENT_USER.un + '</B>';
@@ -318,6 +340,7 @@
     
     
             // TRADE
+            // REQUIRED
             //
             element = document.getElementById("td_trade");
             element.innerHTML = CURRENT_LEED.tn;
@@ -325,11 +348,14 @@
     
             // TITLE
             // title of this leed
+            // REQUIRED
+            //
             element = document.getElementById("td_title");
             element.innerHTML = CURRENT_LEED.ti;
     
     
             // START DATE
+            // REQUIRED
             // 
             const startDate = new Date( CURRENT_LEED.st );
             const isoStart = startDate.toISOString();
@@ -351,9 +377,18 @@
 
 
 
+            // approach to showing/hiding
+            // if it is returned from the DB at all -- it is not hidden
+            // if it is not returned -- check if it is hidden 
+            // if not -- it is not provided at all
+
+
+            
             // END DATE/TIME CAN BE HIDDEN OR SHOWN
+            // OPTIONAL
             //
-            if (CURRENT_LEED.op[ LEED_KEYS.END ] != OPTS_HIDDEN ) {
+            element = document.getElementById("td_end");
+            if (CURRENT_LEED.et) {
 
                 const endDate = new Date( CURRENT_LEED.et );
                 const isoEnd = endDate.toISOString();
@@ -371,51 +406,109 @@
         
                 const end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
 
-        
-                element = document.getElementById("td_end");
                 element.innerHTML = fullEndDate + " at " + end_time;
+            
+
+            } else if (CURRENT_LEED.op[ LEED_KEYS.END ] == OPTS_HIDDEN ) {
+
+                element.innerHTML= BUY_TO_SHOW;
+            
+            } else {
+                element.innerHTML= NO_VAL;
             }
 
     
+
     
             // LOCATION
-            // 
-            if (CURRENT_LEED.op[ LEED_KEYS.LOC ] != OPTS_HIDDEN ) {
-                element = document.getElementById("td_loc");
+            // REQUIRED
+            //
+            element = document.getElementById("td_loc");
+            if (CURRENT_LEED.lc) {
                 element.innerHTML = CURRENT_LEED.lc;
+            
+            } else if (CURRENT_LEED.op[ LEED_KEYS.LOC ] == OPTS_HIDDEN ) {
+                
+                element.innerHTML= BUY_TO_SHOW;
+            } else {
+                // SHOULD NOT HAPPEN
+                element.innerHTML= NO_VAL;
             }
+
+
 
             // EMAIL
-            // 
-            if (CURRENT_LEED.op[ LEED_KEYS.EM ] != OPTS_HIDDEN ) {
-                element = document.getElementById("td_em");
-                if (CURRENT_LEED.em) element.innerHTML = CURRENT_LEED.em;
+            // OPTIONAL
+            //
+            element = document.getElementById("td_em");
+            if (CURRENT_LEED.em) {
+                element.innerHTML = CURRENT_LEED.em;
+
+            } else if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN ) {
+            
+                element.innerHTML= BUY_TO_SHOW;
+
+            } else {
+                element.innerHTML= NO_VAL;
             }
     
+
+
+
             // PHONE
-            // 
-            if (CURRENT_LEED.op[ LEED_KEYS.PH ] != OPTS_HIDDEN ) {
-                element = document.getElementById("td_ph");
-                if (CURRENT_LEED.ph != 0) element.innerHTML = CURRENT_LEED.ph;
+            // OPTIONAL
+            //
+            element = document.getElementById("td_ph");
+            if (CURRENT_LEED.ph) {
+                element.innerHTML = CURRENT_LEED.ph;
+
+            } else if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN ) {
+                
+                element.innerHTML= BUY_TO_SHOW;
+
+            } else {
+                element.innerHTML= NO_VAL;
             }
 
+
+
             // DETAILS
-            // 
-            if (CURRENT_LEED.op[ LEED_KEYS.DET ] != OPTS_HIDDEN ) {
-                element = document.getElementById("td_det");
-                if (CURRENT_LEED.dt) element.innerHTML = CURRENT_LEED.dt;
+            // OPTIONAL
+            //
+            element = document.getElementById("td_det");
+            if (CURRENT_LEED.dt) {
+                element.innerHTML = CURRENT_LEED.dt;
+
+            } else if (CURRENT_LEED.dt[ LEED_KEYS.DT ] == OPTS_HIDDEN ) {
+                
+                element.innerHTML= BUY_TO_SHOW;
+
+            } else {
+                element.innerHTML= NO_VAL;
             }
+
+
     
             // REQS
-            // 
-            if (CURRENT_LEED.op[ LEED_KEYS.REQS ] != OPTS_HIDDEN ) {    
-                element = document.getElementById("td_reqs");
-                if (CURRENT_LEED.rq) element.innerHTML = CURRENT_LEED.rq;
+            // OPTIONAL
+            //
+            element = document.getElementById("td_reqs");
+            if (CURRENT_LEED.rq) {
+                element.innerHTML = CURRENT_LEED.rq;
+
+            } else if (CURRENT_LEED.rq[ LEED_KEYS.RQ ] == OPTS_HIDDEN ) {
+                
+                element.innerHTML= BUY_TO_SHOW;
+
+            } else {
+                element.innerHTML= NO_VAL;
             }
     
     
+
             // PRICE
-            // 
+            // REQUIRED
+            //
             element = document.getElementById("td_pr");
             element.innerHTML = CURRENT_LEED.pr;
     

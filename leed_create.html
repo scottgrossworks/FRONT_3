@@ -106,7 +106,6 @@
                     </TD>
                 </TR>
             </table>
-
   
       </div>
 
@@ -626,6 +625,9 @@
 
             if (! EDITING) return;
 
+            endEditing();
+
+            
             // console.log("POSTING NEW LEED:");
             // console.log(LEED_CHANGES);
 
@@ -699,7 +701,6 @@
 
 
             
-            endEditing();
 
 
             //   client <---> API Gateway <===> DB

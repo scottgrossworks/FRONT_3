@@ -1105,13 +1105,15 @@ function trimAndRemoveSpaces(inputString) {
   
           case "S":
             action.setAttribute("screen", 0);
-            SIDE_OPEN = false;  
+            SIDE_OPEN = false;
+            closeNav();  
             actionModal();
             break;
           
           case "M":
             action.setAttribute("screen", 1);
             SIDE_OPEN = false;
+            closeNav();
             actionModal();
             break;
   

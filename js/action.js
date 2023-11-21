@@ -526,10 +526,12 @@ export function hideActionWindow() {
     let action = document.getElementById("action_panel");
     action.style.display = "none";
 
-    // SHOW the welcome panel if it exists
-    let welcome = document.getElementById("welcome_panel");
-    welcome.style.display = "block";
-
+    var screen = action.getAttribute("screen");
+    if (screen == 2) {
+        // SHOW the welcome panel if it exists
+        let welcome = document.getElementById("welcome_panel");
+        welcome.style.display = "block";
+    }
 
 }
 

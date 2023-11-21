@@ -41,7 +41,7 @@
 @media screen and (min-height: 600px) and (max-height:799px) {
 
     #action_panel {
-        max-height:700px;
+        max-height:750px;
     }
 }
 
@@ -50,7 +50,7 @@
 @media screen and (min-height: 800px) and (max-height:1199px) {
 
     #action_panel {
-        max-height:900px;
+        max-height:950px;
     }
 }
 

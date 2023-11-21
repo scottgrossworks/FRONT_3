@@ -111,20 +111,19 @@
 
     <div style="width:96vw" id="form_container">
         
-
-        <div style="text-align:left;margin:0 5vw">
+        <BR>
+        <div style="padding:4vw;text-align:left;margin:1vh 5vw;background-color:var(--LEEDZ_GRAY);border-radius:10px">
                 
-            <b style="font-size:large">
-                <BR>	
-                    <center style="font-size:larger">Is something wrong with this leed?</center>
+                    <center style="font-size:large;font-weight:600">Is something wrong with this leed?</center>
                     
-                    <div style="height:2vh;font-size:smaller"></div>
+                    <div style="height:2vh;"></div>
                     
-                    As a good-faith community, we encourage users to report any leed that contains errors, looks incomplete, or does not 
-                    provide true information for buyers to consider.  Reporting a leed does not in any way impact your profile.  All reported leedz are 
-                    reviewed by a human before being deleted from the calendar.  These are the things to look for:
+                    <div style="font-size:medium">
+                        As a good-faith community, we encourage users to report any leed that contains errors, looks incomplete, or does not 
+                        provide true information for buyers to consider.  Reporting a leed does not in any way impact your profile.  All reported leedz are 
+                        reviewed by a human before being deleted from the calendar.  These are the things to look for:
 
-                    <P>
+                        <P>
                         <ul type="1" style="color:green; margin: 2vh auto -2vh 10vw">
                             <li>No client Email / Phone Number Provided</li>
                             <li>Fake Email / Phone Number</li>
@@ -132,10 +131,14 @@
                             <li>Suspicious Address</li>
                             <li>Start/End Times inappropriate for requested trade</li>
                         </ul>
-            </b>
+                    </div>
+                    <BR>
+                    <BR>
+                    <div style="font-size:smaller"><a href="./leedz_how-to.html" target="_new">More info on reporting Leedz and what to look for.</a></div>
+
         </div>
 
-            <table cellspacing="5w" cellpadding="10px" style="font-size:larger">
+            <table cellspacing="5w" cellpadding="10px" style="font-size:large">
 
                 <tr id="row_creator">
                                 
@@ -256,7 +259,7 @@
                 
             <tr><td colspan="3" style="padding-top:20px; font-size:smaller;color:darkgreen;border:none">
                 Thank you for making <b>the Leedz</b> an open, honest marketplace for quality information.  
-                <a href="./leedz_how-to.html" target="_new">Click here</a> for more info on reporting Leedz and what to look for.
+                <a href="./leedz_how-to.html" target="_new">More info on reporting Leedz and what to look for.</a>
             </td></tr>
     
             </table>	
@@ -479,7 +482,7 @@
             if (CURRENT_LEED.dt) {
                 element.innerHTML = CURRENT_LEED.dt;
 
-            } else if (CURRENT_LEED.dt[ LEED_KEYS.DT ] == OPTS_HIDDEN ) {
+            } else if (CURRENT_LEED.op[ LEED_KEYS.DT ] == OPTS_HIDDEN ) {
                 
                 element.innerHTML= BUY_TO_SHOW;
 
@@ -496,7 +499,7 @@
             if (CURRENT_LEED.rq) {
                 element.innerHTML = CURRENT_LEED.rq;
 
-            } else if (CURRENT_LEED.rq[ LEED_KEYS.RQ ] == OPTS_HIDDEN ) {
+            } else if (CURRENT_LEED.op[ LEED_KEYS.RQ ] == OPTS_HIDDEN ) {
                 
                 element.innerHTML= BUY_TO_SHOW;
 

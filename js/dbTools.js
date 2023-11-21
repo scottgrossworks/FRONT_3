@@ -520,6 +520,8 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
     if (subs == null || start_date == null || end_date == null ) {
         throwError("db_getLeedz()", "null / undefined args");
     }
+
+    console.error("DB GET LEEDZ!!!!");
     
 
     // SUBS

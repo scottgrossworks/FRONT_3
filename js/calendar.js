@@ -302,6 +302,7 @@ function addLeedzToCalendar( results ) {
 
     // the UI contains all the each_date days
     const theList = document.querySelector("#calendar_list");
+    console.log("CHILD COUNT=" + theList.children.length);
 
     // FOR EACH LEED COMING IN FRON THE DB (Date sorted)....
     for (const the_Leed of results) {
@@ -320,7 +321,7 @@ function addLeedzToCalendar( results ) {
         // iterate through the calendar and find the corresponding date
         let shortDate_fromLeed = getShortDateString( startDate.toISOString() );
 
-        // console.log("%c---FROM DB=" + trade_name +  "--" + startDate.toString() +  "---" + shortDate_fromLeed, "color:" + trade_color + ";" );
+       //  console.log("%c---FROM DB=" + trade_name +  "--" + startDate.toString() +  "---" + shortDate_fromLeed, "color:" + trade_color + ";" );
         
 
 
@@ -331,7 +332,15 @@ function addLeedzToCalendar( results ) {
             // compare the date for this row in the calendar to the date of the leed
             // theDate is a String
             let each_day = theList.children[ day_counter ];
+
+            if (! each_day) {
+                // will happen on day 31 of alt months
+                day_counter++;
+                continue;
+            }
+
             let theDate = each_day.getAttribute("LEEDZ_DATE");
+    
 
             if (theDate == null) {
             // this should NEVER be null

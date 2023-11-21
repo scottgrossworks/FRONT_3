@@ -44,7 +44,7 @@
 
 
 			
-        <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+        <div class="row" style="left:0;width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
 
 
 
@@ -627,13 +627,9 @@
 
             endEditing();
 
-            
+
             // console.log("POSTING NEW LEED:");
             // console.log(LEED_CHANGES);
-
-            waitCursor();
-            
-            showWaitingModal("Creating new Leed . . .");
 
             // LEED verification
             //            
@@ -700,8 +696,11 @@
             }
 
 
+            waitCursor();
             
+            showWaitingModal("Creating new Leed . . .");
 
+            
 
             //   client <---> API Gateway <===> DB
             //

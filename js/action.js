@@ -9,6 +9,7 @@ import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed, getCurrentLeed }
 
 
 const NO_VAL = "<i style='font-weight:600;color:coral'>None Provided</i>";
+const BUY_TO_SHOW = "Buy to show";
 
 
 
@@ -107,11 +108,13 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // holds the return data
     let leed_details = [];
 
+
     if (CURRENT_USER.un == leed_preview.cr) {   
         // this leed was created by the current user
         // request ALL fields in details
         view_options = SHOW_ALL_OPTS;
     }
+
 
     // API request --> DB   
     // load full leed details for leed_preview.id
@@ -146,8 +149,15 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     let CURRENT_LEED = getCurrentLeed();    
     // console.log(CURRENT_LEED);
     
+
+
+
+
+
     //
     // START DATE
+    // REQUIRED MUST BE SHOWING AT TOP OF ACTION WINDOW HEADER
+    // 
     //
     let startDate = new Date( parseInt(CURRENT_LEED.st) );
     let isoStart = startDate.toISOString();
@@ -157,36 +167,52 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // and short monthname for the column view
     // var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
     var screen = action.getAttribute("screen");
-    let leed_monthname = "";
+    var leed_monthname = "";
     if (screen == "2") {
         leed_monthname = getShortMonthname( isoStart.substring(5, 7) ); 
     } else {
         leed_monthname = getMonthname( isoStart.substring(5, 7) ); 
     }
-
+    
     // remove '0' at front if any
     let leed_date = isoStart.substring(8, 10);
     if (leed_date.startsWith('0')) { leed_date = leed_date.substring(1) };
 
-    const leed_year = isoStart.substring(0, 4);
+    var leed_year = isoStart.substring(0, 4);
+    var theDate = document.querySelector("#lic_date");
+    theDate.innerHTML = leed_weekday + " " + leed_monthname + " " + leed_date + ", " + leed_year; 
+
     
-    let hours_start = getHours(isoStart);
+    var theDiv = null;
+
+
+    // START -- END DATE
+    // END TIME REQUIRED
+    // MAY BE OPTIONS HIDDEN
+    //
+    theDiv = document.querySelector("#start-end_value");
+    var hours_start = getHours(isoStart);
+    var start_time = hours_start[0] + ":" + getMinutes(isoStart) + hours_start[1];
+    theDiv.innerHTML = start_time;
+
+
+    if ( CURRENT_LEED.op[ LEED_KEYS.ET ] != OPTS_HIDDEN ) {
+
+        if (gotRetValue( CURRENT_LEED.et )) {
+            // END TIME SHOWING
+            var endDate = new Date( parseInt(CURRENT_LEED.et) );
+            var isoEnd = endDate.toISOString();
+            var hours_end = getHours(isoEnd);
+            var end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
+        
+            theDiv.innerHTML += " - " + end_time;
+        
+        }
     
-    // SHOULD BE SET
-    // CURRENT_LEED.st = leed_preview.st;
+    }
 
-    //
-    // END DATE
-    //
-    let endDate = new Date( parseInt(CURRENT_LEED.et) );
-    let isoEnd = endDate.toISOString();
-    let hours_end = getHours(isoEnd);
 
-    const start_time = hours_start[0] + ":" + getMinutes(isoStart) + hours_start[1];
-    const end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
-
-    // SHOULD BE SET
-    // CURRENT_LEED.et = leed_preview.et;
+ 
 
 
 
@@ -209,26 +235,13 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 
 
 
-    // DATE
-    //
-    let theDate = document.querySelector("#lic_date");
-    theDate.innerHTML = leed_weekday + " " + leed_monthname + " " + leed_date + ", " + leed_year; 
-
-
 
 
     // TITLE
     //
-    let theDiv = document.querySelector("#title_value");
+    theDiv = document.querySelector("#title_value");
     theDiv.innerHTML = CURRENT_LEED.ti;
 
-
-
-    // START TIME - END TIME
-    //
-    theDiv = document.querySelector("#start-end_value");
-    theDiv.innerHTML = start_time + " - " + end_time;
- 
 
 
 
@@ -239,32 +252,36 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     
 
     // approach to showing/hiding
-    // if it is returned from the DB at all -- it is not hidden
-    // if it is not returned -- check if it is hidden 
-    // if not -- it is not provided at all
+    // if it is supposed to be hidden, hide it
+    // if it is supposed to show...
+    //    -- if there is a value, show it
+    //    -- else no_value, show NO_VAL
     //
 
     // LOCATION
-    // loc == full address
-    // REQUIRED
+    // lc == full address
+    // REQUIRED BUT MAY BE HIDDEN
     //
     theDiv = document.querySelector("#loc_value");
-    if (CURRENT_LEED.lc) {
+    if (CURRENT_LEED.op[ LEED_KEYS.LC ] == OPTS_HIDDEN ) {
 
+        theDiv.classList.add("buy2show");
+        theDiv.innerHTML = BUY_TO_SHOW;
+
+    } else if (gotRetValue(CURRENT_LEED.lc)) {
+        
         theDiv.classList.remove("buy2show");
         theDiv.innerHTML = CURRENT_LEED.lc;
 
-
-    } else if (CURRENT_LEED.op[ LEED_KEYS.LC ] == OPTS_HIDDEN ) { 
-       
-        theDiv.classList.add("buy2show");
-        theDiv.innerHTML = "Buy to show";
-    
     } else {
         theDiv.classList.remove("buy2show");
         theDiv.innerHTML = NO_VAL;
     }
 
+   
+
+
+    
 
 
      
@@ -273,27 +290,22 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // (OPTIONAL)
     //
     theDiv = document.querySelector("#em_value");
-    if (CURRENT_LEED.em) {
+    if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN ) {
 
+        theDiv.classList.add("buy2show");
+        theDiv.innerHTML = BUY_TO_SHOW;
+
+    } else if (gotRetValue(CURRENT_LEED.em)) {
+        
         theDiv.classList.remove("buy2show");
         theDiv.innerHTML = CURRENT_LEED.em;
-   
-    } else if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN ) { 
-       
-        theDiv.classList.add("buy2show");
-        theDiv.innerHTML = "Buy to show";
-    
+
     } else {
         theDiv.classList.remove("buy2show");
         theDiv.innerHTML = NO_VAL;
-
     }
 
-
-
-
-
-
+   
 
 
 
@@ -303,23 +315,22 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // (OPTIONAL)
     //
     theDiv = document.querySelector("#ph_value");
-    if (CURRENT_LEED.ph) {
+    if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN ) {
 
+        theDiv.classList.add("buy2show");
+        theDiv.innerHTML = BUY_TO_SHOW;
+
+    } else if (gotRetValue(CURRENT_LEED.ph)) {
+        
         theDiv.classList.remove("buy2show");
         theDiv.innerHTML = CURRENT_LEED.ph;
 
-    } else if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN ) { 
-       
-        theDiv.classList.add("buy2show");
-        theDiv.innerHTML = "Buy to show";
-    
     } else {
-        
         theDiv.classList.remove("buy2show");
         theDiv.innerHTML = NO_VAL;
-        
     }
 
+   
 
 
 
@@ -332,25 +343,22 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // (OPTIONAL)
     //
     theDiv = document.querySelector("#det_value");
-    if (CURRENT_LEED.dt) {
+    if (CURRENT_LEED.op[ LEED_KEYS.DT ] == OPTS_HIDDEN ) {
 
+        theDiv.classList.add("buy2show");
+        theDiv.innerHTML = BUY_TO_SHOW;
+
+    } else if (gotRetValue(CURRENT_LEED.dt)) {
+        
         theDiv.classList.remove("buy2show");
         theDiv.innerHTML = CURRENT_LEED.dt;
 
-    } else if (CURRENT_LEED.op[ LEED_KEYS.DT ] == OPTS_HIDDEN ) { 
-       
-        theDiv.classList.add("buy2show");
-        theDiv.innerHTML = "Buy to show";
-    
     } else {
-        
         theDiv.classList.remove("buy2show");
         theDiv.innerHTML = NO_VAL;
-        
     }
 
-
-
+   
 
 
 
@@ -362,32 +370,31 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // (OPTIONAL)
     // 
     theDiv = document.querySelector("#reqs_value");
-    if (CURRENT_LEED.rq) {
+    if (CURRENT_LEED.op[ LEED_KEYS.RQ ] == OPTS_HIDDEN ) {
 
+        theDiv.classList.add("buy2show");
+        theDiv.innerHTML = BUY_TO_SHOW;
+
+    } else if (gotRetValue(CURRENT_LEED.rq)) {
+        
         theDiv.classList.remove("buy2show");
         theDiv.innerHTML = CURRENT_LEED.rq;
-        
 
-    } else if (CURRENT_LEED.op[ LEED_KEYS.RQ ] == OPTS_HIDDEN ) { 
-       
-        theDiv.classList.add("buy2show");
-        theDiv.innerHTML = "Buy to show";
-    
     } else {
-        
         theDiv.classList.remove("buy2show");
         theDiv.innerHTML = NO_VAL;
     }
 
-
-
+   
 
 
 
 
 
     // 
-    // creator
+    // CREATOR
+    // REQUIRED
+    // 
     // from leed_preview
     // open the user_show.html with the creator passed as a URL param
     //
@@ -475,7 +482,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
         hideActionWindow();
     }, true);
 
-    
+
     // SHOW the action_panel
     //
     action.style.display = "block";
@@ -490,6 +497,40 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 }
 
 
+
+
+/**
+ * RETURN TRUE IF VALUE VALID
+ * Failure-resistant way to handle different NO-VALUE values returned from DDB
+ */
+function gotRetValue( theVal ) {
+
+    // null or 0?
+    if (! theVal) return false;
+
+    // there IS a value but it may be '0' or "" string
+    if (theVal == '0' || theVal == "") return false;
+
+    return true;
+}
+
+
+
+
+/**
+ * RETURN TRUE IF VALUE EMPTY (INVALID)
+ * Failure-resistant way to handle different NO-VALUE values returned from DDB
+ */
+function noRetValue( theVal ) {
+
+    // null or 0?
+    if (! theVal) return true;
+
+    // there IS a value but it may be '0' or "" string
+    if (theVal == '0' || theVal == "") return true;
+
+    return false;
+}
 
 
 /**

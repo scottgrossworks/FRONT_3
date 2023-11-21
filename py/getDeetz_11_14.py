@@ -128,6 +128,10 @@ def buildProjExpr(op):
     
     if (op[5] != '2'):
         expr += 'lc,'
+        
+        
+    if (op[7] != '2'):
+        expr += 'et,'
     
     if (op[8] != '2'):
         expr += 'em,'

@@ -416,19 +416,25 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
     // LEED DATE
     // returns array [ hours(12) , AM/PM ]  
-    const startDate = new Date( parseInt(leed_fromDB.st) );
-    const endDate = new Date( parseInt(leed_fromDB.et) );
-    let isoStart = startDate.toISOString();
-    let isoEnd = endDate.toISOString();
-
-    let hours_start = getHours( isoStart ); 
-    let hours_end = getHours( isoEnd );
-
+    // END DATE MAY OR MAY NOT BE RETURNED
+    const startDate = new Date( parseInt(leed_fromDB.st) );;
+    const isoStart = startDate.toISOString();
+    const hours_start = getHours( isoStart ); 
     const startTime = hours_start[0] + ":" + getMinutes( isoStart ) + hours_start[1];
-    const endTime = hours_end[0] + ":" + getMinutes( isoEnd ) + hours_end[1];
 
-
-
+    let isoEnd = null;
+    let hours_end = null;
+    let endDate = null;
+    let endTime = null;
+    
+    if (leed_fromDB.et) {
+        // END TIME IS GIVEN
+        endDate = new Date( parseInt(leed_fromDB.et) );
+        isoEnd = endDate.toISOString();
+        hours_end = getHours( isoEnd );
+        endTime = hours_end[0] + ":" + getMinutes( isoEnd ) + hours_end[1];
+    }
+    
     // console.log("%cCREATING CALENDAR LEED " + trade_name + " START=" + isoStart, "color: " + trade_color + ";");
 
   
@@ -441,7 +447,9 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 
 
         // THUMBNAIL contains leed info preview
-        let thumb_html = leed_fromDB.ti + "<BR>" + startTime + "--" + endTime;
+        // show endTime if provided
+        let thumb_html = leed_fromDB.ti + "<BR>" + startTime;
+        if (endTime) thumb_html += "--" + endTime;
         thumbnail.innerHTML =thumb_html;     
 
         // PLACE the thumbnail

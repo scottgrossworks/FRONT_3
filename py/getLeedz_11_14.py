@@ -30,12 +30,6 @@ logger.setLevel(logging.INFO)
 # Use this to JSON encode the DYNAMODB output
 #
 #
-class DecimalEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, decimal.Decimal):
-            return str(o)
-        return super().default(o)
-    
 
 
 def encode_fakestr(func):
@@ -99,15 +93,6 @@ def haversine(lat1, lon1, lat2, lon2):
 
  
 
-
-    
-    
-
-#
-# flatten a list to a comma-delimited string
-#
-def listToString(lst):
-    return ','.join(str(x) for x in lst)
     
     
 
@@ -153,11 +138,14 @@ def get_xy_from_loc( loc ):
 #
 #
 #
-def handle_error(error):
+def handle_error( msg ):
        
-    msg = str(error)   
     logger.error(msg)
-    return msg
+
+    ret_obj = { "cd" : 0,
+                "er" : msg }
+
+    return ret_obj
     
     
     
@@ -192,6 +180,8 @@ def validateParam( event, param, required ):
 #
 #
 #
+
+
 def searchForLeedz(sb, st, et, zp, zr):
 
 
@@ -200,9 +190,10 @@ def searchForLeedz(sb, st, et, zp, zr):
 
     start_time = int(st)
     end_time = int(et)
-
     trades = sb.split(',')
-    
+   
+                    
+                    
     results = []
 
     # FOR EACH TRADE SUBSCRIPTION
@@ -212,37 +203,56 @@ def searchForLeedz(sb, st, et, zp, zr):
         
         # query for all the leedz matching that trade
         # whose start time is between st and et
+        # AND date bought == 0
+        
         fromDB = table.query(
-                    ProjectionExpression='pk,sk,st,et,lc,zp,ti,cr,op', 
+                    ProjectionExpression='pk,sk,st,et,zp,lc,ti,cr,op,db', 
                     KeyConditionExpression='pk=:pk',
-                    FilterExpression='st between :st and :et',
+                    FilterExpression='(st between :st and :et) AND (db = :zero)',
                     ExpressionAttributeValues={
                         ':pk': pk,
                         ':st': start_time,
                         ':et': end_time,
+                        ':zero': 0
                 }
          )
 
-        #logger.info("GOT RAW ITEMS!!!!")
-        #logger.info(fromDB['Items'])
-        
+        # logger.info("GOT RAW ITEMS!!!!")
+        # logger.info(fromDB['Items'])
+
      
         if ('Items' not in fromDB):
             raise ValueError("Server Error: GetLeedz query received empty response")
      
+        
+        # SOME data is returned - must be filtered
+            
+        # will use this below
+        home_xy = ""
+        zip_home = 0
+        zip_radius = 0
+        if (zp):
+            # get lon/lat coordinates for zip home
+            home_xy = get_xy_from_loc(zp)
+            zip_home = int(zp)
+        
+        if (zr):
+            zip_radius = int(zr)
+        
         for each_leed in fromDB['Items']:
             
-            # preselect all the leedz whose zip matches zip_home
+            # is a search zip code set?
             if (zp) :
                 
-                zip_home = int(zp)
+                # is there an exact hit on zip code?
                 if (each_leed['zp'] == zip_home) :
+                    # do not send back location data in preview
+                    each_leed['lc'] = ""
                     results.append( each_leed )
-                
-                else :
-                
-                    # get lon/lat coordinates for zip home
-                    home_xy = get_xy_from_loc(zp)
+                    continue
+                    
+                # look for zip home / search radius match using haversine
+                elif (zr) :
                     
                     # get the xy coords from the leed location
                     leed_loc = get_xy_from_loc( each_leed['lc'] )
@@ -250,25 +260,27 @@ def searchForLeedz(sb, st, et, zp, zr):
                     # run leed through Haversine to see if it falls within zip radius of zp
                     # careful -- haversine expects lat, long 
                     miles_from = haversine(home_xy[1], home_xy[0], leed_loc[1], leed_loc[0])
-                    
-                    zip_radius = int(zr)
+             
                     # does the leed fall within the search circle
                     if (miles_from <= zip_radius):
+                        # do not send back location data in preview
+                        each_leed['lc'] = ""
                         results.append(each_leed)
-
+                        continue
+                    
+                    # ELSE... do not include the leed in results
             
             else:
                 # no zip_home / search radius set -- return all results matching trade
+                  # do not send back location data in preview
+                each_leed['lc'] = ""
                 results.append(each_leed)
-                
+                continue
+          
+            
 
-
-    
     return results
 
-    
-    
-    
     
     
 
@@ -286,9 +298,6 @@ def searchForLeedz(sb, st, et, zp, zr):
         
 def lambda_handler(event, context):
 
-    
-    logger.info("$$$$$$$$$$$$$$$$$$$$$$$$ IN GETLEEDZ  ************** ")
-    
     result = ""
     try:
         
@@ -300,7 +309,6 @@ def lambda_handler(event, context):
         # TRADE SUBSCRIPTIONS - REQUIRED
         #
         sb = validateParam(event, 'sb', true)
-        logger.info("SB=" + sb);
         
         
         # START TIME - REQUIRED
@@ -317,50 +325,35 @@ def lambda_handler(event, context):
         zr = validateParam(event, 'zr', false)
 
 
-        logger.info("BEFORE") 
-        
         result = searchForLeedz(sb, st, et, zp, zr)
                   
-        logger.info(result)
+        # logger.info(result)
         
         
     except ValueError as ve:
         
-        logger.info("VE!!!")
-        logger.error(str(ve))
-        result = handle_error(ve)
+        result = handle_error( str(ve) )
         
 
     except ClientError as ce:
 
-        logger.info("CE!!!!")
-        logger.error(str(ce))
-        result = handle_error(ce)
+        result = handle_error( str(ce) )
      
     
     except BaseException as be:
         
-        logger.info("BE!!!!")
-        logger.error(str(be))
-        result = handle_error(be)
+        result = handle_error( str(be) )
 
 
     except Exception as e:
         
-        logger.info("EXCEPTION")
-        logger.error(str(e))
-        result = handle_error(e)
+        result = handle_error( str(e) )
         
         
+    finally:    
         
-    the_json = json.dumps(result, cls=DecimalJsonEncoder)
-    
-    
-            
-    logger.info("AFTER")
-    logger.info(the_json)
-    
-    return createHttpResponse( the_json )
+        the_json = json.dumps(result, cls=DecimalJsonEncoder)
+        return createHttpResponse( the_json )
 
 
 
@@ -383,8 +376,8 @@ def createHttpResponse( result ):
     }
 
 
-    logger.info("!!!!!! RETURNING RESPONSE")
-    logger.info(response)
+    # logger.info("GET LEEDZ")
+    # logger.info(response)
     
     
     return response

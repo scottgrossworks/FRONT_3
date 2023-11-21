@@ -579,7 +579,6 @@ export async function saveLeedChanges( leedObj ) {
   else
     CURRENT_LEED.op = START_OPTS;
 
-  
     try {
       // cache this Leed   
       cacheCurrentLeed( CURRENT_LEED );

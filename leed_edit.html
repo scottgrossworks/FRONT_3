@@ -150,7 +150,7 @@
                 </td>
 
                 <!-- END TIME IS NOT LOCKED AND MAY BE HIDDEN -->
-               <TD class="eyeballTD"><img src="./img/eye_show.png"  id="7_eye" onclick="toggleEyeball( 7 )"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_show.png"  id="7_eye" onclick="toggleEyeball( 'td_end', 7 )"></TD>
             </tr>
 
 
@@ -168,7 +168,7 @@
                 </td>
 
                 
-               <TD class="eyeballTD"><img src="./img/eye_show.png" id="5_eye" eyeball="show" onclick="toggleEyeball( 5 )"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="5_eye" eyeball="show" onclick="toggleEyeball( 'td_loc', 5 )"></TD>
             </tr>
 
 
@@ -188,7 +188,7 @@
                     <input type="button" value="Edit" onclick="inlineEdit('row_em', editOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="8_eye" eyeball="show" onclick="toggleEyeball( 8 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="8_eye" eyeball="show" onclick="toggleEyeball( 'td_em', 8 )"></TD>
             </tr>
 
 
@@ -206,7 +206,7 @@
                 </td>
 
                 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="9_eye" eyeball="show" onclick="toggleEyeball( 9 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="9_eye" eyeball="show" onclick="toggleEyeball( 'td_ph', 9 )"></TD>
             </tr>
 
 
@@ -224,7 +224,7 @@
                     <input type="button" value="Edit" onclick="inlineEdit('row_det', editOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="10_eye" eyeball="show" onclick="toggleEyeball( 10 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="10_eye" eyeball="show" onclick="toggleEyeball( 'td_det', 10 )"></TD>
             </tr>
 
 
@@ -241,7 +241,7 @@
                     <input type="button" value="Edit" onclick="inlineEdit('row_reqs', editOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="11_eye" eyeball="show" onclick="toggleEyeball( 11 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="11_eye" eyeball="show" onclick="toggleEyeball( 'td_reqs', 11 )"></TD>
             </tr>
 
 
@@ -638,8 +638,19 @@
         // Called by UI buttons
         // DOES NOT beginEditing()
         //
-        function toggleEyeball( fieldName ) {
-            
+        function toggleEyeball( textField, fieldName ) {
+
+            // CANNOT HIDE EMPTY FIELD
+
+            let theText = document.getElementById(textField);
+            if (theText.innerText == "") {
+                printError("Toggle Eyeball", "Cannot hide empty field");
+                errorModal("Cannot hide empty field", true);
+                return;
+            }
+         
+         
+
             beginEditing();
 
 

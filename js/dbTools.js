@@ -561,9 +561,13 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
         });
 
 
+        if (json_obj.er)
+            throwError("Get Leedz", json_obj.cd);
+
+
     } catch (error) {
-        printError("response.json()", error);
-        throwError("db_getLeedz()", error.message);
+        printError("Get Leedz", error);
+        throwError("Get Leedz", error.message);
     }
 
 

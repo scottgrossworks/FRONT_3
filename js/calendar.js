@@ -302,8 +302,7 @@ function addLeedzToCalendar( results ) {
 
     // the UI contains all the each_date days
     const theList = document.querySelector("#calendar_list");
-    console.log("CHILD COUNT=" + theList.children.length);
-
+  
     // FOR EACH LEED COMING IN FRON THE DB (Date sorted)....
     for (const the_Leed of results) {
 

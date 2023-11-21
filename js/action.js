@@ -188,32 +188,20 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 
     // START -- END DATE
     // END TIME REQUIRED
-    // MAY BE OPTIONS HIDDEN
+    // CANNOT BE HIDDEN
     //
-    theDiv = document.querySelector("#start-end_value");
     var hours_start = getHours(isoStart);
     var start_time = hours_start[0] + ":" + getMinutes(isoStart) + hours_start[1];
-    theDiv.innerHTML = start_time;
 
+    var endDate = new Date( parseInt(CURRENT_LEED.et) );
+    var isoEnd = endDate.toISOString();
+    var hours_end = getHours(isoEnd);
+    var end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
 
-    if ( CURRENT_LEED.op[ LEED_KEYS.ET ] != OPTS_HIDDEN ) {
-
-        if (gotRetValue( CURRENT_LEED.et )) {
-            // END TIME SHOWING
-            var endDate = new Date( parseInt(CURRENT_LEED.et) );
-            var isoEnd = endDate.toISOString();
-            var hours_end = getHours(isoEnd);
-            var end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
-        
-            theDiv.innerHTML += " - " + end_time;
-        
-        }
     
-    }
-
-
- 
-
+    theDiv = document.querySelector("#start-end_value");
+    theDiv.innerHTML = start_time + " - " + end_time;
+        
 
 
     // LEED TITLE
@@ -515,22 +503,6 @@ function gotRetValue( theVal ) {
 }
 
 
-
-
-/**
- * RETURN TRUE IF VALUE EMPTY (INVALID)
- * Failure-resistant way to handle different NO-VALUE values returned from DDB
- */
-function noRetValue( theVal ) {
-
-    // null or 0?
-    if (! theVal) return true;
-
-    // there IS a value but it may be '0' or "" string
-    if (theVal == '0' || theVal == "") return true;
-
-    return false;
-}
 
 
 /**

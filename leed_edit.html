@@ -149,8 +149,8 @@
                     <input type="button" value="Edit" onclick="inlineEdit('row_end', editOptions)"/>
                 </td>
 
-                <!-- END TIME IS NOT LOCKED AND MAY BE HIDDEN -->
-               <TD class="eyeballTD"><img src="./img/eye_show.png"  id="7_eye" onclick="toggleEyeball( 'td_end', 7 )"></TD>
+                <!-- END TIME IS LOCKED, CANNOT BE HIIDEN -->
+               <TD class="eyeballTD"><img src="./img/eye_show.png"  id="7_eye" class="lock"></TD>
             </tr>
 
 
@@ -384,7 +384,7 @@
         element.innerHTML = CURRENT_LEED.ti;
 
 
-    // START DATE
+        // START DATE
         // 
         const startDate = new Date( CURRENT_LEED.st );
         const isoStart = startDate.toISOString();
@@ -406,8 +406,8 @@
 
         
         // END DATE/TIME 
+        // END TIME IS REQUIRED AND CANNOT BE HIDDEN
         //
-       
         const endDate = new Date( CURRENT_LEED.et );
         const isoEnd = endDate.toISOString();
     
@@ -425,13 +425,8 @@
         const end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
 
       
-
-        // END TIME CAN BE HIDDEN OR SHOWN
-        //
         element = document.getElementById("td_end");
         element.innerHTML = fullEndDate + " at " + end_time;
-        if (CURRENT_LEED.op[ LEED_KEYS.ET ] == OPTS_HIDDEN )
-            hideEyeball( LEED_KEYS.ET );
 
 
         // LOCATION
@@ -445,7 +440,7 @@
         // EMAIL
         // 
         element = document.getElementById("td_em");
-        if (CURRENT_LEED.em) element.innerHTML = CURRENT_LEED.em;
+        if ( goodValue(CURRENT_LEED.em) ) element.innerHTML = CURRENT_LEED.em;
         if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.EM );
 
@@ -453,7 +448,7 @@
         // PHONE
         // 
         element = document.getElementById("td_ph");
-        if (CURRENT_LEED.ph != 0) element.innerHTML = CURRENT_LEED.ph;
+        if ( goodValue(CURRENT_LEED.ph) ) element.innerHTML = CURRENT_LEED.ph;
         if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.PH );
 
@@ -461,7 +456,7 @@
         // DETAILS
         // 
         element = document.getElementById("td_det");
-        if (CURRENT_LEED.dt) element.innerHTML = CURRENT_LEED.dt;
+        if ( goodValue(CURRENT_LEED.dt) ) element.innerHTML = CURRENT_LEED.dt;
         if (CURRENT_LEED.op[ LEED_KEYS.DT ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.DT );
 
@@ -469,7 +464,7 @@
         // REQS
         // 
         element = document.getElementById("td_reqs");
-        if (CURRENT_LEED.rq) element.innerHTML = CURRENT_LEED.rq;
+        if ( goodValue(CURRENT_LEED.rq) ) element.innerHTML = CURRENT_LEED.rq;
         if (CURRENT_LEED.op[ LEED_KEYS.RQ ] == OPTS_HIDDEN )
             hideEyeball( LEED_KEYS.RQ );
 
@@ -504,6 +499,24 @@
 		}
 		window.backButton = backButton;
 
+
+
+
+
+    /**
+    * RETURN TRUE IF VALUE IS NOT EMPTY (IS VALID)
+    * Failure-resistant way to handle different NO-VALUE values returned from DDB
+    */
+    function goodValue( theVal ) {
+
+        // null or 0?
+        if (! theVal) return false;
+
+        // there IS a value but it may be '0' or "" string
+        if (theVal == '0' || theVal.trim() == "") return false;
+
+        return true;
+    }
 
 
 

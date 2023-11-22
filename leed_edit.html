@@ -18,6 +18,7 @@
 		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
 		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
  
+         
  
 		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
 		 <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
@@ -42,7 +43,7 @@
 
 			<div class="column _1">
 
-				<a onclick="backButton()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+				<a onclick='backButton()'><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
 				</div>
 
 				<div class="column" style="margin:auto 0;transform:translateY(6px)">
@@ -411,6 +412,9 @@
         const endDate = new Date( CURRENT_LEED.et );
         const isoEnd = endDate.toISOString();
     
+        // FOOBAR
+
+
         const end_weekday = getWeekday( getShortDateString( isoEnd ) );
         const end_monthname = getShortMonthname( isoEnd.substring(5, 7) ); 
         
@@ -482,22 +486,6 @@
         // console.log(CURRENT_LEED);
 
 
-
-        //
-        //
-        //
-        //
-		function backButton() {
-			const CURRENT_USER = getCurrentUser(true);
-	
-			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
-			window.open(href, "_self");
-
-			clearCurrentLeed();
-			self.close();
-
-		}
-		window.backButton = backButton;
 
 
 
@@ -620,6 +608,22 @@
 
 
         
+        //
+        //
+        //
+        //
+		function backButton() {
+			const CURRENT_USER = getCurrentUser(true);
+	
+			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
+			window.open(href, "_self");
+
+			clearCurrentLeed();
+			self.close();
+
+		}
+		window.backButton = backButton;
+
 
 
         //

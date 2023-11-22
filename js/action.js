@@ -92,14 +92,6 @@ leed_details contains
 */
 export async function showLeedAction( leed_preview , gotoDB ) {
 
-
-
-    // SET THE WINDOW SIZE
-    // will show everything at the very end
-    let action = document.getElementById("action_panel");
-    // var action_height = Math.floor( window.innerHeight * 0.7 );
-    action.style.height = "100%";
-
     const CURRENT_USER = getCurrentUser(false);
 
     // which fields do we want to see in the action window?
@@ -163,16 +155,28 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     let isoStart = startDate.toISOString();
     const leed_weekday = getWeekday( getShortDateString( isoStart ) );
 
+
+
+    // SET THE WINDOW SIZE
+    // will show everything at the very end
+    let action = document.getElementById("action_panel");
+
+
     // use the long monthname for the modal action window
     // and short monthname for the column view
     // var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
-    var screen = action.getAttribute("screen");
+    const screen = action.getAttribute("screen");
+    console.log("SCREEN=" + screen);
+
     var leed_monthname = "";
     if (screen == "2") {
         leed_monthname = getShortMonthname( isoStart.substring(5, 7) ); 
     } else {
         leed_monthname = getMonthname( isoStart.substring(5, 7) ); 
     }
+
+
+
     
     // remove '0' at front if any
     let leed_date = isoStart.substring(8, 10);
@@ -450,18 +454,15 @@ export async function showLeedAction( leed_preview , gotoDB ) {
         row_edit_button.style.display = "none";
         row_del_button.style.display = "none";
 
-    
     }
-
 
 
     // HIDE the welcome panel
     //
-
     let welcome = document.getElementById("welcome_panel");
     welcome.style.display = "none";
 
-
+   
     // ACTION PANEL CLOSE BUTTON
     //
     var closeColumn = document.getElementById("lic_close");
@@ -470,15 +471,21 @@ export async function showLeedAction( leed_preview , gotoDB ) {
         hideActionWindow();
     }, true);
 
+    // var action_height = Math.floor( window.innerHeight * 0.7 );
+    action.style.height = "100%";
 
     // SHOW the action_panel
     //
-    action.style.display = "block";
-    var screen = action.getAttribute("screen");
-    if (screen == 0) {
+    console.error("SCREEN STILLL===" + screen);
+    if (screen == 2) {
+        action.classList.remove("modal");
+        action.classList.add("column");
+        action.classList.add("_35");
+    
+    } else {
         action.className = "modal";
     }
-
+    action.style.display = "block";
 
     normalCursor();
 

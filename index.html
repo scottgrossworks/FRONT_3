@@ -1104,6 +1104,11 @@ function trimAndRemoveSpaces(inputString) {
         switch (screen) {
   
           case "S":
+
+          
+            console.log("SMALL!!!!");
+
+
             action.setAttribute("screen", 0);
             SIDE_OPEN = false;
             closeNav();  
@@ -1111,6 +1116,10 @@ function trimAndRemoveSpaces(inputString) {
             break;
           
           case "M":
+
+          
+            console.log("MEDIUM!!!!");
+ 
             action.setAttribute("screen", 1);
             SIDE_OPEN = false;
             closeNav();
@@ -1118,8 +1127,9 @@ function trimAndRemoveSpaces(inputString) {
             break;
   
           case "L":
-
-            action.setAttribute("screen", 2);
+            
+            console.log("LARGE!!!!");
+            action.setAttribute("screen", 2);  
           
             // var closeColumn = document.getElementById("lic_close");
             // closeColumn.style.display = "none";
@@ -1130,9 +1140,10 @@ function trimAndRemoveSpaces(inputString) {
             
             // Is there a current leed in cache
             //
+            /**
             let current_leed = getCurrentLeed();
             if (( current_leed.id) && (isSubscribed( current_leed.tn ))) {
-                        
+               
                 try {
                   showLeedAction(current_leed, false );
 
@@ -1148,7 +1159,11 @@ function trimAndRemoveSpaces(inputString) {
               showWelcomeColumn();
               clearCurrentLeed();
             }  
-            
+            */
+
+            showWelcomeColumn();
+            clearCurrentLeed();
+
 
             break;
 
@@ -1227,7 +1242,9 @@ function trimAndRemoveSpaces(inputString) {
       }
     }
 
+    // FOOBAR
     // close action window if it is modal
+    /**
     let action = document.getElementById("action_panel");
     var screen = action.getAttribute("screen");
     if (screen == 0) {
@@ -1236,7 +1253,7 @@ function trimAndRemoveSpaces(inputString) {
       action.classList.add("_35");
       action.style.display = "none";
     }
-
+    */
   }
   window.modalClose = modalClose;
 

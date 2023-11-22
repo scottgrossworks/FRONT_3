@@ -81,10 +81,32 @@ table#badges_list tbody td {
 	overflow-y:scroll;
 	overflow-x: hidden;
 
+	font-size:medium;
 	background-color: var(--LEEDZ_LIGHTGREEN);
 }
 
 
+
+
+
+@media screen and (min-width: 600px) and (max-width: 949px) {
+
+	#form_container {
+		font-size:medium;
+	}
+}
+
+
+
+@media screen and (max-width:599px) {
+	
+
+	
+	#form_container {
+		font-size:small;
+	}
+
+}
 
 
 

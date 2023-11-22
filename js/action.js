@@ -476,7 +476,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 
     // SHOW the action_panel
     //
-    console.error("SCREEN STILLL===" + screen);
+    // console.error("SCREEN STILLL===" + screen);
     if (screen == 2) {
         action.classList.remove("modal");
         action.classList.add("column");

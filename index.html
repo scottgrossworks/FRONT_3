@@ -1235,7 +1235,6 @@ function trimAndRemoveSpaces(inputString) {
       }
     }
 
-    // FOOBAR
     // close action window if it is modal
     /**
     let action = document.getElementById("action_panel");
@@ -1305,6 +1304,8 @@ function trimAndRemoveSpaces(inputString) {
           const theTemplate = document.querySelector("#template_badge");
           
           for (var i = 0; i < current_user.bg.length; i++) {
+
+            if (i >= ALL_BADGES.length) break; // failsafe in case two are not in sync
 
             var the_badge = current_user.bg[i];
 

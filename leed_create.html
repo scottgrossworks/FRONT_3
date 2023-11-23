@@ -226,7 +226,7 @@
                 </td>
 
                 
-               <TD class="eyeballTD"><img src="./img/eye_hide.png" id="5_eye" data-eyeball="hide" onclick="toggleEyeball( 'td_loc', 5 )"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_show.png" id="5_eye" data-eyeball="show" onclick="toggleEyeball( 'td_loc', 5 )"></TD>
             </tr>
 
 
@@ -246,7 +246,7 @@
                     <input type="button" value="Edit" onclick="editField('row_em', createOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_hide.png" id="8_eye" data-eyeball="hide" onclick="toggleEyeball( 'td_em', 8 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="8_eye" data-eyeball="show" onclick="toggleEyeball( 'td_em', 8 )"></TD>
             </tr>
 
 
@@ -264,7 +264,7 @@
                 </td>
 
                 
-                <TD class="eyeballTD"><img src="./img/eye_hide.png" id="9_eye" data-eyeball="hide" onclick="toggleEyeball( 'td_ph', 9 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="9_eye" data-eyeball="show" onclick="toggleEyeball( 'td_ph', 9 )"></TD>
             </tr>
 
 
@@ -787,36 +787,33 @@
         //
         function toggleEyeball( textField, fieldName ) {
             
-            
-            // CANNOT HIDE EMPTY FIELD
-            //
-            let theText = document.getElementById(textField);
-            if ( noValue(theText.innerText) ) {
-                printError("Toggle Eyeball", "Cannot hide empty field");
-                errorModal("Cannot hide empty field", true);
-                return;
-            }
-
-
-
-            beginEditing();
-
             let theImg = document.getElementById(fieldName + "_eye");
-
             if (theImg.dataset.eyeball == "hide") {
-
                 theImg.src = "./img/eye_show.png";
                 theImg.dataset.eyeball = "show";
 
                 changeLeedOpts( LEED_CHANGES, fieldName, OPTS_SHOWING );
 
             } else {
+
+                // CANNOT HIDE EMPTY FIELD
+                //
+                let theText = document.getElementById(textField);
+                if ( noValue(theText.innerText) ) {
+                    var msg = "Cannot hide empty field.";
+                    printError("Toggle Eyeball", msg + textField);
+                    var img = "<img width=30px style='margin-bottom:-10px' src='./img/eye_show.png'>";
+                    errorModal(msg + "<BR>Enter a value, click Finish,<BR>then click " + img, false);
+                    return;
+                }
+
                 theImg.src = "./img/eye_hide.png";
                 theImg.dataset.eyeball = "hide";
 
                 changeLeedOpts( LEED_CHANGES, fieldName, OPTS_HIDDEN );
             }
 
+            beginEditing();
         }
         window.toggleEyeball = toggleEyeball;
 

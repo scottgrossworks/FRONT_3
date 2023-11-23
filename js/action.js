@@ -166,10 +166,10 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // and short monthname for the column view
     // var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
     const screen = action.getAttribute("screen");
-    console.log("SCREEN=" + screen);
+    // console.log("SCREEN=" + screen);
 
     var leed_monthname = "";
-    if (screen == "2") {
+    if (screen == "2") { // large
         leed_monthname = getShortMonthname( isoStart.substring(5, 7) ); 
     } else {
         leed_monthname = getMonthname( isoStart.substring(5, 7) ); 

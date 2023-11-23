@@ -72,14 +72,10 @@ export const LEED_KEYS = {
 // 1 - showing
 // 2 - hidden
 //
-// hidden by default:
-// 5 location
-// 8 email
-// 9 phone
 //
 // HIDE_ALL_OPTS = "0000022222220"
 export const SHOW_ALL_OPTS = "0000000000000";
-export const START_OPTS = "0000020022110";
+export const START_OPTS = "0000010011110";
 export const OPTS_LOCKED  = 0;
 export const OPTS_SHOWING = 1;
 export const OPTS_HIDDEN  = 2;

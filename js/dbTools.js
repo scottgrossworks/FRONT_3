@@ -539,8 +539,8 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
         let searchParams = new URLSearchParams();
         searchParams.append( START_TIME_URL_PARAM, start_date );
         searchParams.append( END_TIME_URL_PARAM, end_date );
-        searchParams.append( ZIP_HOME_URL_PARAM, zip_home );
-        searchParams.append( ZIP_RADIUS_URL_PARAM, zip_radius );
+        if (zip_home) searchParams.append( ZIP_HOME_URL_PARAM, zip_home );
+        if (zip_radius) searchParams.append( ZIP_RADIUS_URL_PARAM, zip_radius );
         searchParams.append( SUBS_URL_PARAM, subs_string );
 
         theURL.search = searchParams.toString();

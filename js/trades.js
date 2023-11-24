@@ -50,7 +50,6 @@ export async function initTrades() {
       // init TRADES struct
       // initialize the spectrum of colors
       createTradesAndColors( trades );  
-	    // printColors();
 
       if ( isGuestUser( true ) ) { 
         let guest_user = getCurrentUser();
@@ -63,7 +62,9 @@ export async function initTrades() {
   	
       initTradesColumn( tradeListener );
 
-
+	    // printColors();
+    
+    
     } catch (error) {
       
       // DO NOT FAIL -- show error modal dialog and print error to console

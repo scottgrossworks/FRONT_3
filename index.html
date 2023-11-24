@@ -1361,6 +1361,7 @@ function trimAndRemoveSpaces(inputString) {
           const url_username = urlParams.get( USERNAME_URL_PARAM );
           const alphaNum = /^[a-zA-Z0-9._-]+$/;
 
+
           //
           // validate the username param
           // must not be null
@@ -1443,8 +1444,9 @@ function trimAndRemoveSpaces(inputString) {
             errorModal( msg , true );
           }
           
-    
-
+          
+          
+  
           
           // INIT DISTANCE CHOOSER
           // using current_user preferences if set
@@ -1466,17 +1468,6 @@ function trimAndRemoveSpaces(inputString) {
           }
           
           
-          var trade_subs = true;
-          //
-          // USER HAS NO TRADE SUBSCRIPTIONS!
-          // no need to continue
-          // open new user welcome with instructions
-          if (current_user.sb.length == 0) {
-              openNewUserWelcome();
-              trade_subs = false;
-          }
-          
-          
           
           // Do not load full UI if user has no trade subs
           //
@@ -1489,6 +1480,17 @@ function trimAndRemoveSpaces(inputString) {
            * for each trade in current_user.sb[]
            */
           
+          // user is NOT guest.user
+          // user has NO TRADE SUBSCRIPTIONS
+          // 
+          // open new user welcome with instructions
+          var trade_subs = true;
+          if (isGuestUser(false) && current_user.sb.length == 0) {
+              openNewUserWelcome();
+              trade_subs = false;
+          }
+          
+
           if (trade_subs) {
             try {
             

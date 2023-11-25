@@ -7,7 +7,7 @@
 
 
  
-@media screen and (max-width: 599px) {
+@media screen and (max-width: 499px) {
 
  
       
@@ -39,6 +39,47 @@
      padding: 10px;
 
     }
+
+
+
+
+
+    #user_panel.row {
+      
+      padding-left:2vw;
+      padding-right:3vw;
+      font-size:smaller;
+    }
+
+        
+    #user_panel label {
+        font-size:smaller;
+    }
+
+    
+
+    .badge_img {
+        width:25px;
+        height:25px;
+    }
+
+        
+    #up_addLeed {
+        
+        height:26px;
+        width: 26px;
+        
+        padding-bottom:4px;
+        font-size:25px;
+    
+        margin-right:6px;
+    }
+
+
+
+
+
+
 
 
 

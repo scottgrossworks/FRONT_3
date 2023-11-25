@@ -70,6 +70,10 @@
   
   margin: 10vh 10vw;
   z-index: 700;
+
+  
+  border: 6px solid goldenrod;
+  border-radius: 20px;
 }
 
 
@@ -77,6 +81,10 @@
   
   margin: 10vh 10vw;
   z-index: 600;
+
+  
+  border: 6px solid green;
+  border-radius: 20px;
 }
 
 
@@ -103,8 +111,8 @@
   
   padding:20px;
 
-  border: 4px solid var(--LEEDZ_GREEN);
-  border-radius: 20px;
+  
+  font-size: medium;
 }
 
 
@@ -180,13 +188,13 @@
   max-height:700px;
 
   
-  border: 4px solid #f44336;
+  border: 6px solid #f44336;
   border-radius: 20px;
 }
 
 #error_modal h1 {
 
-  font-size: 1em;
+  font-size: large;
 }
 
 #error_modal a {

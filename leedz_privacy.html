@@ -1,0 +1,133 @@
+<!--
+--
+-- SECURITY AND PRIVACY STATEMENT
+--    
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	
+
+
+<head>
+
+    
+        <link rel="stylesheet" href="css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="css/modal.css" type="text/css" />
+
+
+   
+		 <meta charset="UTF-8">
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 
+		 <TITLE>Leedz Privacy</TITLE>
+	 
+	 	<!-- Favicon -->
+		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+ 
+ 
+		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+		 <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
+
+		 <script src="./js/inline-edit.js" type="module" defer></script> 
+	</head>
+
+
+		 
+	<center>
+
+
+	<body>
+	
+
+
+			
+        <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+
+			<div class="column _1">
+
+				<button class="back_button" style="margin:35px 20px; width:50px"><a onclick="backButton()">&#10140;</a></button>
+				</div>
+
+				<div class="column" style="margin:auto 0;transform:translateY(6px)">
+					<h1 class="user_title">Leedz Security and Privacy</h1>
+				</div>
+				
+				<div class="column _3" style="padding:6px;text-align:center">
+				<img src="./img/logo_2.png" style="width:120px">
+				</div>
+			
+			
+		
+			</div>
+			
+
+
+            <section>
+
+                <BR>
+
+                <BR>
+               Security and Privacy Policy
+                <BR>
+              
+                <BR>
+
+                <BR>
+
+                Here's a back button
+
+                <button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="backButton()">Back</button>
+
+		
+			
+              
+
+    </section>  
+        
+
+    
+  
+  </body>
+  
+
+
+
+<script type="module">
+
+
+    import { getCurrentUser } from "./js/user.js";
+
+    import { USERNAME_URL_PARAM } from "./js/dbTools.js";    
+    import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
+
+
+
+        const CURRENT_USER = getCurrentUser(true);
+ 
+
+
+        /**
+         *
+         */
+         function backButton() {
+
+            if (CURRENT_USER.un == null) {
+                window.open("./index.html", "_self");	
+                
+            } else {
+
+                var href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
+                window.open(href, "_self");	
+            }
+
+		}
+		window.backButton = backButton;
+
+
+
+
+
+</script>
+</html>

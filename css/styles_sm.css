@@ -56,28 +56,43 @@
         font-size:smaller;
     }
 
-    
+
+
+    #up_dot {
+        
+      margin: auto 4px;
+    }
+      
+
 
     .badge_img {
-        width:25px;
-        height:25px;
+        width:24px;
+        height:24px;
     }
 
         
     #up_addLeed {
         
-        height:26px;
-        width: 26px;
+        height:22px;
+        width: 22px;
         
-        padding-bottom:4px;
-        font-size:25px;
+        padding: auto 0;
+        font-size:22px;
     
-        margin-right:6px;
+        margin: 0 4px 0 0;
     }
 
 
 
-
+    #up_logo img {
+      padding: 4px;
+      vertical-align: middle;
+      width:60px;
+      margin-right:0px;
+  }
+  
+  
+  
 
 
 

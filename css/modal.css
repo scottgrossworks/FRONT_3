@@ -72,7 +72,7 @@
   z-index: 700;
 
   
-  border: 6px solid goldenrod;
+  border: 6px solid green;
   border-radius: 20px;
 }
 
@@ -83,7 +83,7 @@
   z-index: 600;
 
   
-  border: 6px solid green;
+  border: 6px solid goldenrod;
   border-radius: 20px;
 }
 
@@ -109,10 +109,12 @@
   color:black;
 
   
-  padding:20px;
+  padding:20px;  
+  font-size: medium;
 
   
-  font-size: medium;
+  border: 6px solid green;
+  border-radius: 20px;
 }
 
 

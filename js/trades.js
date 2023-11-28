@@ -190,6 +190,7 @@ function initTradesColumn( tradeListener ) {
     let theLabel = newNode.querySelector("label");
     theLabel.textContent = sub;
 
+
     // TRADES
     // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
     let num_leedz = window.localStorage.getObj(sub)[1];
@@ -258,25 +259,22 @@ function initTradesColumn( tradeListener ) {
  */
 function addTradeSorted( list, node ) {
 
-    const node_nl = node.getAttribute('nl');
-    
-    if (list.children.length === 0) {
-      list.push(node);
-
-    } else if (node_nl >= list.children[0].getAttribute('nl')) {
-      list.insertBefore( node, list.children[0] );
-
-    } else {
-      let index = 1;
-      while (node_nl < list.children[index].getAttribute('nl')) {
+    var index = 1;  // skip the first template element
+    var length = list.children.length;
+    const node_nl = parseInt( node.getAttribute('nl'));
+    while (index < length) {
+          
+      if ( node_nl > parseInt( list.children[index].getAttribute('nl') )) {
+        list.insertBefore(node, list.children[index]);
+        return;
+      
+      } else {
         index++;
       }
-      if (index >= list.length)
-        list.append(node);
-      else
-        list.insertBefore(node, list.children[index]);
-
     }
+    // if we get here, insert at the end
+    list.append(node);
+
 }
 
 
@@ -383,12 +381,12 @@ export function createTradesAndColors( all_trades ) {
       // nl: num_leedz
       /**
        * [     
-          0:{sk: 'airbrush', pk: 'trade', nl: '28'}
-          1:{sk: 'ballerina', pk: 'trade', nl: '11'}
-          2:{sk: 'boxer', pk: 'trade', nl: '33'}
-          3:{sk: 'caricatures', pk: 'trade', nl: '17'}
-          ]
-        */
+       *  0:{sk: 'boxer', , nl: '33'}
+       *  1:{sk: 'airbrush', nl: '28'}
+       *  2:{sk: 'caricatures', pk: 'trade', nl: '17'}
+       *  3:{sk: 'ballerina',  nl: '11'}
+       *  ]
+      */
 
       //
       var trade_name = all_trades[i].sk;

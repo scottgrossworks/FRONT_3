@@ -154,7 +154,7 @@ export function loadCacheLeedz( trade_name ) {
 
     CURRENT_SELECTION = null;
 
-    console.log("LOADING FRON CACHE!");
+    // console.log("LOADING FRON CACHE!");
 
     let results = [];
     try {
@@ -184,8 +184,8 @@ export function loadCacheLeedz( trade_name ) {
         return;
     }
     
-    console.log("UPDATING CALENDAR FROM CACHE");
-    console.log(results);
+    // console.log("UPDATING CALENDAR FROM CACHE");
+    // console.log(results);
 
     // update calendar
     addLeedzToCalendar( results );

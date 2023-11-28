@@ -498,9 +498,8 @@ export async function db_getDeetz( trade_name, leed_id, leed_op ) {
 
 
     
-    
-    console.log("GOT --- DETAILS --- JSON!!!");
-    console.log(json_obj);
+    // console.log("GOT --- DETAILS --- JSON!!!");
+    // console.log(json_obj);
 
 
     return json_obj;  // SHOULD NOT BE NULL
@@ -572,8 +571,8 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
 
 
     
-    console.log("GOT --- PREVIEW --- JSON!!!");
-    console.log(json_obj);
+ //    console.log("GOT --- PREVIEW --- JSON!!!");
+ //    console.log(json_obj);
 
 
     return json_obj;  // SHOULD NOT BE NULL
@@ -605,7 +604,7 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
  */
 async function doGet( theURL ) {
 
-    console.log("---------> DOGET URL=" + theURL);
+    // console.log("---------> DOGET URL=" + theURL);
 
 
     return fetch(theURL,

@@ -497,7 +497,7 @@
 
   <script type="module" charset=”utf-8″>
 
-    import { initUser, guestUser, getCurrentUser, saveCurrentUser, isGuestUser, isSubscribed } from "./js/user.js";      
+    import { getUserLogin,initUser, guestUser, getCurrentUser, saveCurrentUser, isGuestUser, isSubscribed } from "./js/user.js";      
     import { initTrades } from "./js/trades.js";   
     import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
@@ -1341,103 +1341,74 @@ function trimAndRemoveSpaces(inputString) {
 //
 //////////////////////////////////////////////////////////////////////
 
+    // <body onload=" window.open(...)">
+    window.onload = async function() {
 
-    window.onload = function() {
-      window.open(URL_LOGIN, "_self");
+      try {
+
+        let userLogin = await getUserLogin();
+
+        if (userLogin == null) {
+          throwError("Invalid Login Received");
+        }
+
+
+        // is there a current login?
+        // check the user login object
+        //
+        // FIXME 
+        //
+        /**
+        try {
+          Auth.federatedSignIn().then( result=>{
+            
+            console.log("!!!! GOT RESULT OBJECT !!!!");
+            console.log( result );
+          
+        })} catch (auth_err) {
+          throwError( auth_err );
+        }
+        */
+
+        console.log("LOGGING IN DAVE");
+
+
+      } catch (err) {
+
+          var msg = "Cannot log into the Leedz.";
+          msg = error + "<BR>" + msg;
+          errorModal( msg , false );
+
+      }
+
     };
 
 
 
-    // 
+    // FIXME FIXME FIXME
     //
-    
-//  LOOK FOR authorization code as URL parameter
+    let url_username = "dave.reyes";
+    let current_user;
+
+          try {
+            await initUser( url_username ); // will throw error
+
+            // return newly-loaded user
+            current_user = getCurrentUser( false );
 
 
+          } catch (error) {
 
-// FIXME FIXME FIXME FIXME
+            var msg = "Cannot load user data.<BR>Using guest account.";
+            msg = error + "<BR>" + msg;
+            errorModal( msg , false );
 
-          // getUserLogin()
-          // if null -- error
-          // else
-          // return data from login UI
-          // then initUser(username, email)
-          let currentUser = getCurrentUser(false);
-          
-
-
-          // full URL for index.html should include username parameter
-          // index.html?un=scott.gross
-
-          // IF WE COME HERE AFTER HOSTED LOGIN UI
-          //   username will come from login sequence (hopefully)
-          // IF WE COME HERE FROM BACK BUTTON ON user_edit page
-          //   username will be passed in from account edit page
-          
-          // LOAD user profile data
-          // LOAD list of subscribed trades
-          // do not fail on error -- load Guest User as default
-          //
-        
-
-          const urlParams = new URLSearchParams(window.location.search);
-          const url_username = urlParams.get( USERNAME_URL_PARAM );
-          const alphaNum = /^[a-zA-Z0-9._-]+$/;
-
-
-          //
-          // validate the username param
-          // must not be null
-           if (url_username == null) {
-            // use guest account
-            // printError("No username parameter", "Using Guest Account");
-            
+            // DO NOT FAIL
             // ! USE GUEST USER
-            current_user = guestUser();
-
-
-          //
-          // must contain only alphanum chars
-          } else if (! (alphaNum.test( url_username ))) {
-            printError("Invalid username: " + url_username, "username can only contain alphanumeric chars");
-            
-            // ! USE GUEST USER
-            current_user = guestUser();
-      
-
-
-          //
-          // is this the guest user coming back from cache or another landing page
-          //
-          } else if (url_username == "guest.user") {
-
-            current_user = guestUser();
-
-
-      
-          } else {
-
-            try {
-              await initUser( url_username ); // will throw error
-  
-              // return newly-loaded user
-              current_user = getCurrentUser( false );
-
-
-            } catch (error) {
-  
-              var msg = "Cannot load user data.<BR>Using guest account.";
-              msg = error + "<BR>" + msg;
-              errorModal( msg , false );
-  
-              // DO NOT FAIL
-              // ! USE GUEST USER
-              current_user = guestUser();   
-
-            }
+            current_user = guestUser();   
 
           }
-        
+
 
           
           //

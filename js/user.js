@@ -1,13 +1,64 @@
 /**
  * 
  */
-import Amplify, { Auth, Hub, API } from 'aws-amplify';
-import awsconfig from '../.aws-config/awsconfig';
-import awsauth from '../.aws-config/awsauth';
 
 
 import { db_getUser, db_updateUser, DEL_USER, CHG_USER, DB_FAIL } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
+
+
+
+//
+// AWS Cognito
+//
+/** 
+import { Auth } from './aws-amplify/src/auth';
+
+
+Auth.configure( {
+  userPoolId:'us-west-2_z2NSkKl4N',
+  userPoolWebClientId:'12tgt6nf496i446dq70gaoohrj',
+  oauth: {
+    region:'us-west-2',
+    domain: 'https://theleedz.auth.us-west-2.amazoncognito.com',
+    responseType:'code'
+  }
+});
+
+*/
+
+/**
+ * 
+ * 
+ * 
+ */
+export async function getUserLogin() {
+
+  let userLogin;
+  try {
+    //userLogin = await Auth.currentAuthenticatedUser();
+    userLogin="FOOBAR JONES";
+    console.log("GOT USER LOGIN!!!!");
+    console.log(userLogin);
+
+    return userLogin;
+
+  } catch (err) {
+    printError("User Login", err.message);
+    
+    // FIXME FIXME FIXME
+    // goto guest user?
+    // throwError(err);
+  }
+
+  return null;
+}
+
+
+
+
+
+
 
 export const CACHE_USER_KEY = "U";
 export const MAX_USER_SUBS = 6;
@@ -17,6 +68,9 @@ GUEST_USER.un = "guest.user";
 GUEST_USER.em = "scottgrossworks@gmail.com";
 
 let CURRENT_USER = blankUserObject();
+
+
+
 
 
 
@@ -70,6 +124,8 @@ export async function deleteCurrentUser() {
 
 
 }
+
+
 
 
 

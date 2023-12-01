@@ -516,7 +516,7 @@
     window.printError = printError;
     window.errorModalClose = errorModalClose;
       
-    const URL_LOGIN = "./index.html";
+    const URL_LOGIN = "https://theleedz.auth.us-west-2.amazoncognito.com/login?response_type=code&client_id=12tgt6nf496i446dq70gaoohrj&redirect_uri=theleedz.com";
 
     const URL_LEED_BOUGHT = "./leed_bought.html";
     const URL_LEED_CREATE = "./leed_create.html";
@@ -1342,6 +1342,30 @@ function trimAndRemoveSpaces(inputString) {
 //////////////////////////////////////////////////////////////////////
 
 
+    window.onload = function() {
+      window.open(URL_LOGIN, "_self");
+    };
+
+
+
+    // 
+    //
+    
+//  LOOK FOR authorization code as URL parameter
+
+
+
+// FIXME FIXME FIXME FIXME
+
+          // getUserLogin()
+          // if null -- error
+          // else
+          // return data from login UI
+          // then initUser(username, email)
+          let currentUser = getCurrentUser(false);
+          
+
+
           // full URL for index.html should include username parameter
           // index.html?un=scott.gross
 
@@ -1355,7 +1379,6 @@ function trimAndRemoveSpaces(inputString) {
           // do not fail on error -- load Guest User as default
           //
         
-          let current_user = null;
 
           const urlParams = new URLSearchParams(window.location.search);
           const url_username = urlParams.get( USERNAME_URL_PARAM );
@@ -1367,7 +1390,7 @@ function trimAndRemoveSpaces(inputString) {
           // must not be null
            if (url_username == null) {
             // use guest account
-            printError("No username parameter", "Using Guest Account");
+            // printError("No username parameter", "Using Guest Account");
             
             // ! USE GUEST USER
             current_user = guestUser();

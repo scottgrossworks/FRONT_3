@@ -1,6 +1,11 @@
 /**
  * 
  */
+import Amplify, { Auth, Hub, API } from 'aws-amplify';
+import awsconfig from '../.aws-config/awsconfig';
+import awsauth from '../.aws-config/awsauth';
+
+
 import { db_getUser, db_updateUser, DEL_USER, CHG_USER, DB_FAIL } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
 

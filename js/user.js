@@ -12,8 +12,7 @@ import { printError, throwError } from "./error.js";
 // AWS Cognito
 //
 /** 
-import { Auth } from './aws-amplify/src/auth';
-
+import { Auth } from "./amazon-cognito-identity.min.js";
 
 Auth.configure( {
   userPoolId:'us-west-2_z2NSkKl4N',
@@ -24,7 +23,6 @@ Auth.configure( {
     responseType:'code'
   }
 });
-
 */
 
 /**
@@ -36,6 +34,16 @@ export async function getUserLogin() {
 
   let userLogin;
   try {
+
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        console.log("PARAM=" + sParameterName[0] + "=" + sParameterName[1]);
+        
+    }
+
     //userLogin = await Auth.currentAuthenticatedUser();
     userLogin="FOOBAR JONES";
     console.log("GOT USER LOGIN!!!!");

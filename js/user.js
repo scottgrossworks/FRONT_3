@@ -35,14 +35,7 @@ export async function getUserLogin() {
   let userLogin;
   try {
 
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        console.log("PARAM=" + sParameterName[0] + "=" + sParameterName[1]);
-        
-    }
+    userLogin = getURLData();
 
     //userLogin = await Auth.currentAuthenticatedUser();
     userLogin="FOOBAR JONES";
@@ -64,6 +57,28 @@ export async function getUserLogin() {
 
 
 
+
+function getURLData() {
+  // Get the URL from window.location.href
+  const url = window.location.href;
+
+  // Split the URL into key-value pairs
+  const keyValuePairs = url.split(/[?#&]+/).slice(1);
+
+  // Create an object to store the key-value pairs
+  const result = {};
+
+  // Iterate through the key-value pairs and add them to the object
+  keyValuePairs.forEach((pair) => {
+    const [key, value] = pair.split('=');
+    result[key] = decodeURIComponent(value);
+    console.log("KEY=" + key + " VAL=" + value);
+
+  });
+
+  // Return the object with the key-value pairs
+  return result;
+}
 
 
 

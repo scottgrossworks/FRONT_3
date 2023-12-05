@@ -45,10 +45,7 @@
         <script src="./js/action.js" type="module" defer></script>
         <script src="./js/error.js" type="module" defer></script>
 
-<!--
-        <script src="./js/amazon-cognito-identity.min.js"></script>
-        <script src="./js/aws-sdk.min.js"></script>
--->
+
   </head>  
    
   <body>
@@ -1348,51 +1345,28 @@ function trimAndRemoveSpaces(inputString) {
     // <body onload=" window.open(...)">
     window.onload = async function() {
 
+      let userLogin;
       try {
 
-        let userLogin = await getUserLogin();
+        userLogin = await getUserLogin();
 
-        if (userLogin == null) {
-          throwError("Invalid Login Received");
+        if (! (userLogin) || (! ("un" in userLogin)) || (! ("em" in userLogin))) {
+          throwError("Invalid Login Received.  Does not contain ID credentials.");
         }
-
-
-        // is there a current login?
-        // check the user login object
-        //
-        // 
-        //
-        /**
-        try {
-          Auth.federatedSignIn().then( result=>{
-            
-            console.log("!!!! GOT RESULT OBJECT !!!!");
-            console.log( result );
-          
-        })} catch (auth_err) {
-          throwError( auth_err );
-        }
-        */
-
-
-        console.log("LOGGING IN DAVE");
 
 
       } catch (err) {
-
           var msg = "Cannot log into the Leedz.";
           msg = error + "<BR>" + msg;
           errorModal( msg , false );
-
       }
 
     };
 
 
-
     // FIXME FIXME FIXME
     //
-    let url_username = "dave.reyes";
+    let url_username = userLogin["un"];
     let current_user;
 
           try {

@@ -8,22 +8,6 @@ import { printError, throwError } from "./error.js";
 
 
 
-//
-// AWS Cognito
-//
-/** 
-import { Auth } from "./amazon-cognito-identity.min.js";
-
-Auth.configure( {
-  userPoolId:'us-west-2_z2NSkKl4N',
-  userPoolWebClientId:'12tgt6nf496i446dq70gaoohrj',
-  oauth: {
-    region:'us-west-2',
-    domain: 'https://theleedz.auth.us-west-2.amazoncognito.com',
-    responseType:'code'
-  }
-});
-*/
 
 /**
  * 
@@ -32,28 +16,47 @@ Auth.configure( {
  */
 export async function getUserLogin() {
 
-  let userLogin;
   try {
 
-    userLogin = parseURL();
+    const loginTokens = parseURL();
 
-    //userLogin = await Auth.currentAuthenticatedUser();
-    userLogin="FOOBAR JONES";
-    console.log("GOT USER LOGIN!!!!");
-    console.log(userLogin);
+    console.log("!!! PARSE URL GOT USER LOGIN!!!!");
+    console.log(loginTokens);
 
-    return userLogin;
+
+    if ("id_token" in loginTokens) {
+      return decodeJWT(loginTokens["id_token"]);
+   
+   
+    } else {
+      throwError("Cannot decode ID token.");
+    }
+
 
   } catch (err) {
-    printError("User Login", err.message);
-    
-    // FIXME FIXME FIXME
-    // goto guest user?
-    // throwError(err);
+    printError("User Login", "Error parsing login tokens: " + err.message);
+    throw err;
   }
 
   return null;
 }
+
+
+
+
+function decodeJWT(jwt) {
+  const [header, payload] = jwt.split('.').slice(0,2)
+    .map(el => el.replace(/-/g, '+').replace(/_/g, '/'))
+    .map(el => JSON.parse(window.atob(el)));
+
+    const userInfo = {
+      "un" : payload["cognito:username"],
+      "em" : payload["email"]
+    };
+
+    return userInfo;
+}
+
 
 
 

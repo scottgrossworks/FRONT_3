@@ -35,7 +35,7 @@ export async function getUserLogin() {
   let userLogin;
   try {
 
-    userLogin = getURLData();
+    userLogin = parseURL();
 
     //userLogin = await Auth.currentAuthenticatedUser();
     userLogin="FOOBAR JONES";
@@ -58,22 +58,23 @@ export async function getUserLogin() {
 
 
 
-function getURLData() {
-  // Get the URL from window.location.href
+function parseURL() {
+  // Get the URL from the address bar
   const url = window.location.href;
 
-  // Split the URL into key-value pairs
-  const keyValuePairs = url.split(/[?#&]+/).slice(1);
+  // Split the URL into the base URL and the fragment
+  const [baseUrl, fragment] = url.split("#");
+
+  // Split the fragment into key-value pairs
+  const keyValuePairs = fragment.split("&");
 
   // Create an object to store the key-value pairs
   const result = {};
 
-  // Iterate through the key-value pairs and add them to the object
+  // Iterate over the key-value pairs and store them in the object
   keyValuePairs.forEach((pair) => {
-    const [key, value] = pair.split('=');
-    result[key] = decodeURIComponent(value);
-    console.log("KEY=" + key + " VAL=" + value);
-
+    const [key, value] = pair.split("=");
+    result[key] = value;
   });
 
   // Return the object with the key-value pairs

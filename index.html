@@ -1340,12 +1340,16 @@ function trimAndRemoveSpaces(inputString) {
 //
 // START FROM HERE ON PAGE LOAD.....
 //
-//////////////////////////////////////////////////////////////////////
+///////////////////////////////////
+
+///////////////////////////////////
+
+  let userLogin;
+  
 
     // <body onload=" window.open(...)">
     window.onload = async function() {
 
-      let userLogin;
       try {
 
         userLogin = await getUserLogin();

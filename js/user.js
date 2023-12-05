@@ -14,7 +14,7 @@ import { printError, throwError } from "./error.js";
  * 
  * 
  */
-export async function getUserLogin() {
+export function getUserLogin() {
 
   try {
 

@@ -45,7 +45,7 @@
 
 			<div class="column _1">
 
-				<button class="back_button" style="margin:35px 20px; width:50px"><a onclick="backButton()">&#10140;</a></button>
+				<button class="back_button" style="margin:35px 20px; width:50px"><a onclick="history.back()">&#10140;</a></button>
 				</div>
 
 				<div class="column" style="margin:auto 0;transform:translateY(6px)">
@@ -99,42 +99,4 @@
   
 
 
-
-<script type="module">
-
-
-    import { getCurrentUser } from "./js/user.js";
-
-    import { USERNAME_URL_PARAM } from "./js/dbTools.js";    
-    import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
-
-
-
-
-
-
-
-
-        /**
-         *
-         */
-         function backButton() {
-            const CURRENT_USER = getCurrentUser(true);
-            if (CURRENT_USER.un == null) {
-                window.open("./index.html", "_self");	
-                
-            } else {
-
-                var href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
-                window.open(href, "_self");	
-            }
-
-		}
-		window.backButton = backButton;
-
-
-
-
-
-</script>
 </html>

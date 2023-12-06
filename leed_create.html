@@ -49,7 +49,7 @@
 
 
 			<div class="column _1">
-                <a onclick="backButton()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+                <a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
             </div>
 
 
@@ -426,7 +426,6 @@
                 var modals = document.getElementsByClassName("info_modal");
                 for (var i = 0; i < modals.length; i++) {
                 modals[i].style.display = "none";
-                // modals[i].setAttribute("noclose", false);
                 }
 
                 errorModalClose();
@@ -434,23 +433,6 @@
             }
             window.modalClose = modalClose;
 
-
-
-
-
-        /**
-         *
-         */
-		function backButton() {
-
-			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
-			window.open(href, "_self");
-
-			clearCurrentLeed();
-			self.close();
-
-		}
-		window.backButton = backButton;
 
 
 

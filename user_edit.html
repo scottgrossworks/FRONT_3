@@ -567,21 +567,6 @@ function initTradesTable( all_trades, tradeListener ) {
 
 
 
-		/**
-		 *
-		 */
-		function backButton() {
-			const CURRENT_USER = getCurrentUser(true);
-	
-			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
-			
-			window.open(href, "_self");
-
-			self.close();
-
-		}
-		window.backButton = backButton;
-
 
 
 

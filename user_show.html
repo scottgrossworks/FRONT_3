@@ -43,7 +43,7 @@
 
 			<div class="column _1">
 
-				<a onclick="backButton()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+				<a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
 				</div>
 
 				<div class="column" style="margin:auto 0;transform:translateY(6px)">
@@ -251,7 +251,6 @@
                 var modals = document.getElementsByClassName("info_modal");
                 for (var i = 0; i < modals.length; i++) {
                 modals[i].style.display = "none";
-                // modals[i].setAttribute("noclose", false);
                 }
 
                 errorModalClose();
@@ -518,34 +517,8 @@ function showUserBadges( element, badges ) {
 
 
 
-
-         
-
-		/**
-		 *
-		 */
-		function backButton() {
-			const CURRENT_USER = getCurrentUser(true);
-	
-			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
-			window.open(href, "_self");
-
-			self.close();
-
-        }
-		window.backButton = backButton;
-
-
-
-
-
-
-
 	
 	</script>
-
-	
-		
 
 
 </html>

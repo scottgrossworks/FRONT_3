@@ -487,6 +487,7 @@
             </center> 
           </h1>
           <a class="info_modal_close" href="javascript:modalClose(true);" href="">X</a>
+       
       </div>
   
 
@@ -1099,7 +1100,6 @@ function trimAndRemoveSpaces(inputString) {
         var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
         var action = document.getElementById("action_panel");
 
-        // console.log("%cCSS SCREEN SIZE=" + screen, "color:violet");
 
         switch (screen) {
   
@@ -1164,8 +1164,14 @@ function trimAndRemoveSpaces(inputString) {
             
   
           default:
-            console.error("--screen_size not found");
+
+            // USE SMALL
+            // console.error("--screen_size not found");
+            // console.log("SMALL!!!!");
+
+            action.setAttribute("screen", 0);
             SIDE_OPEN = false;
+            closeNav();  
             actionModal();
             break;
         }

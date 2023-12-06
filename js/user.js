@@ -20,6 +20,8 @@ export function getUserLogin( userLogin ) {
 
     const loginTokens = parseWindowURL();
 
+    if (! loginTokens) return;
+
     console.log("!!!!!!!!!!   HELLO >>>>>>>>PARSE URL GOT USER LOGIN!!!!");
     console.log(loginTokens);
 
@@ -41,28 +43,12 @@ export function getUserLogin( userLogin ) {
 }
 
 
-// used above
-//
-function decodeJWT(jwt, userInfo) {
-  const [header, payload] = jwt.split('.').slice(0,2)
-    .map(el => el.replace(/-/g, '+').replace(/_/g, '/'))
-    .map(el => JSON.parse(window.atob(el)));
-
-    userInfo["un"] = payload["cognito:username"];
-    userInfo["em"] = payload["email"];
-  
-    return userInfo;
-}
-
-
 
 // use above
 //
 function parseWindowURL() {
   // Get the URL from the address bar
   // Split the URL into the base URL and the fragment
-
-  console.log("RAW=" + window.location.href);
 
   let fragment;
   let index = window.location.href.indexOf('?');
@@ -71,11 +57,12 @@ function parseWindowURL() {
   }
 
   if (index == -1) {
-    throwError("No '?' or '#' found in URL: " + window.location.href);
+    printError("Parse URL", "No '?' or '#' found in URL: " + window.location.href);
+    return null;
   }
-  fragment = window.location.href.substring(index + 1);
 
-  console.log("!!!!! FRAGMENT=" + fragment);
+
+  fragment = window.location.href.substring(index + 1);
 
   // Split the fragment into key-value pairs
   const keyValuePairs = fragment.split("&");
@@ -92,6 +79,22 @@ function parseWindowURL() {
   // Return the object with the key-value pairs
   return result;
 }
+
+
+
+// used above
+//
+function decodeJWT(jwt, userInfo) {
+  const [header, payload] = jwt.split('.').slice(0,2)
+    .map(el => el.replace(/-/g, '+').replace(/_/g, '/'))
+    .map(el => JSON.parse(window.atob(el)));
+
+    userInfo["un"] = payload["cognito:username"];
+    userInfo["em"] = payload["email"];
+  
+    return userInfo;
+}
+
 
 
 

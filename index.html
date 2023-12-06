@@ -1340,12 +1340,10 @@ function trimAndRemoveSpaces(inputString) {
 
       try {
 
-        console.log("ONLOAD");
         getUserLogin( userLogin );
 
-        if (! (userLogin) || (! ("un" in userLogin)) || (! ("em" in userLogin))) {
-          printError("GOTCHA!!!!!!");
-          throwError("Invalid Login Received.  Does not contain ID credentials.");
+        if (! userLogin['un']) {
+          throwError("No username returned from login");
         }
 
 
@@ -1356,18 +1354,14 @@ function trimAndRemoveSpaces(inputString) {
       }
 
 
-
-
-
       // FIXME FIXME FIXME
       //
       console.log("GOT USERLOGIN  BACK FROM LOGIN!");
-      console.log(userLogin['un']);
-      let url_username = userLogin.un;
-      let current_user;
+      console.log( userLogin['un'] );
 
+      let current_user;
       try {
-        await initUser( url_username ); // will throw error
+        await initUser( userLogin['un'] ); // will throw error
 
         // return newly-loaded user
         current_user = getCurrentUser( false );

@@ -1171,7 +1171,7 @@ function trimAndRemoveSpaces(inputString) {
             break;
         }
       }
-
+      window.cssScreenSize = cssScreenSize;
 
       
 /**
@@ -1236,17 +1236,6 @@ function trimAndRemoveSpaces(inputString) {
       }
     }
 
-    // close action window if it is modal
-    /**
-    let action = document.getElementById("action_panel");
-    var screen = action.getAttribute("screen");
-    if (screen == 0) {
-      action.classList.remove("modal");
-      action.classList.add("column");
-      action.classList.add("_35");
-      action.style.display = "none";
-    }
-    */
   }
   window.modalClose = modalClose;
 
@@ -1344,252 +1333,262 @@ function trimAndRemoveSpaces(inputString) {
 
 ///////////////////////////////////
 
-  let userLogin;
+  const userLogin = {};
   
-
     // <body onload=" window.open(...)">
     window.onload = async function() {
 
       try {
 
-        userLogin = await getUserLogin();
+        console.log("ONLOAD");
+        getUserLogin( userLogin );
 
         if (! (userLogin) || (! ("un" in userLogin)) || (! ("em" in userLogin))) {
+          printError("GOTCHA!!!!!!");
           throwError("Invalid Login Received.  Does not contain ID credentials.");
         }
 
 
       } catch (err) {
           var msg = "Cannot log into the Leedz.";
-          msg = error + "<BR>" + msg;
+          msg = err.message + "<BR>" + msg;
           errorModal( msg , false );
       }
 
-    };
-
-
-    // FIXME FIXME FIXME
-    //
-    let url_username = userLogin["un"];
-    let current_user;
-
-          try {
-            await initUser( url_username ); // will throw error
-
-            // return newly-loaded user
-            current_user = getCurrentUser( false );
-
-
-          } catch (error) {
-
-            var msg = "Cannot load user data.<BR>Using guest account.";
-            msg = error + "<BR>" + msg;
-            errorModal( msg , false );
-
-            // DO NOT FAIL
-            // ! USE GUEST USER
-            current_user = guestUser();   
-
-          }
-
-
-          
-          //
-          // SHOW THE LOADING... MODAL
-          //
-          showWaitingModal("Loading the Leedz . . .");
-
-
-
-          // clear any pre-existing leed in memory
-          clearCurrentLeed();
-
-
-          
-
-          // INIT USER PANEL
-          //
-          try {
-
-            initUserPanel( current_user );
-
-          } catch (error) {
-            var msg = "Cannot create user panel.<BR>Please refresh page."
-            msg = error.message + "<BR>" + msg;
-            
-            printError("User Panel", error);
-            errorModal( msg , true );
-          }
-          
-          
-          
-  
-          
-          // INIT DISTANCE CHOOSER
-          // using current_user preferences if set
-          //
-          try {
-      
-            let miles = document.getElementById("distance_miles");
-            let zip = document.getElementById("distance_from");
-
-            if (current_user.zr != null) miles.value = current_user.zr;
-            if (current_user.zp != null) zip.value = current_user.zp;
-
-          } catch (error) {
-            var msg = "Cannot initialize distance chooser.<BR>Please refresh page."
-            msg = error.message + "<BR>" + msg;
-            
-            printError("Distance Chooser", error);
-            errorModal( msg , true );
-          }
-          
-          
-          
-          // Do not load full UI if user has no trade subs
-          //
-        
-          /**
-           * TRADES
-           *
-           * LOAD ALL trades and turn ON the ones subscribed to
-           * when we turn ON a trade this will ALSO load the leedz
-           * for each trade in current_user.sb[]
-           */
-          
-          // user is NOT guest.user
-          // user has NO TRADE SUBSCRIPTIONS
-          // 
-          // open new user welcome with instructions
-          var trade_subs = true;
-          if (isGuestUser(false) && current_user.sb.length == 0) {
-              openNewUserWelcome();
-              trade_subs = false;
-          }
-          
-
-          if (trade_subs) {
-            try {
-            
-              await initTrades();
-
-
-            } catch (error) {
-              
-              // DO NOT FAIL -- show error modal dialog and print error to console
-              var msg = "Cannot load trades.<BR>Please refresh page."
-              msg = error.message + "<BR>" + msg;
-              
-              printError("Init Trades Column", error);
-              errorModal( msg , true );
-            }
-          }
-
-
-          
-
-          /**
-           * INITIALIZE month chooser in middle column
-           *
-           */ 
-           try {
-             initMonthChooser();
-            
-            } catch (error) {
-              var msg = "Cannot create month chooser.<BR>Please refresh page."
-              msg = error.message + "<BR>" + msg;
-              
-              printError("Month Chooser", error);
-              errorModal( msg , true );
-            }
-
-
-          
-          /**
-           * BUILD central calendar column 
-           */
-           try {
-
-              buildCalendar();
-
-            } catch (error) {
-
-              var msg = "Cannot build calendar.<BR>Please refresh page."
-              msg = error.message + "<BR>" + msg;
-              
-              printError("Building Calendar", error);
-              errorModal( msg , true );
-            }
 
 
 
 
-          /**
-           * If there are subs Load CACHE leedz
-           */
-          if (trade_subs) {
+      // FIXME FIXME FIXME
+      //
+      console.log("GOT USERLOGIN  BACK FROM LOGIN!");
+      console.log(userLogin['un']);
+      let url_username = userLogin.un;
+      let current_user;
 
-            try {
+      try {
+        await initUser( url_username ); // will throw error
 
-              loadCacheLeedz();
-
-            } catch (error) {
-
-              var msg = "Cannot load leedz from cache.<BR>Please refresh page."
-              msg = error.message + "<BR>" + msg;
-              
-              printError("Loading Cache Leedz", error);
-              errorModal( msg , true );
-            }
-       
-            /**
-              * Load Leedz from DB -- will return immediately
-              * delegate to callback internally when data arrives
-              */
-
-            try {
-
-              loadDBLeedz();
-
-            } catch (error) {
-
-              var msg = "Cannot load leedz from DB.  <BR>Please refresh page."
-              msg = error.message + "<BR>" + msg;
-              
-              printError("Loading DB Leedz", error);
-              errorModal( msg , true );
-            
-            }
-          }
+        // return newly-loaded user
+        current_user = getCurrentUser( false );
 
 
-          /**
-          * 
-          */
+      } catch (error) {
 
-          cssScreenSize();
+        var msg = "Cannot load user data.<BR>Using guest account.";
+        msg = error + "<BR>" + msg;
+        errorModal( msg , false );
 
+        // DO NOT FAIL
+        // ! USE GUEST USER
+        current_user = guestUser();   
 
-          // set the trades sidebar      
-          if (SIDE_OPEN) {
-            openNav();
-          } else {
-            closeNav();
-          }
+      }
 
 
-          /**
-          * RESIZE
-          * called on window resize -- but AFTER css applied -- can read values from 
-          * different media_query css files depending on sizefvs
-          */
-          window.onresize = (event) => {
-            cssScreenSize();
-          };
+
+      //
+      // SHOW THE LOADING... MODAL
+      //
+      showWaitingModal("Loading the Leedz . . .");
 
 
-     </script>
-  
+
+      // clear any pre-existing leed in memory
+      clearCurrentLeed();
+
+
+
+
+      // INIT USER PANEL
+      //
+      try {
+
+        initUserPanel( current_user );
+
+      } catch (error) {
+        var msg = "Cannot create user panel.<BR>Please refresh page."
+        msg = error.message + "<BR>" + msg;
+
+        printError("User Panel", error);
+        errorModal( msg , true );
+      }
+
+
+
+
+
+      // INIT DISTANCE CHOOSER
+      // using current_user preferences if set
+      //
+      try {
+
+        let miles = document.getElementById("distance_miles");
+        let zip = document.getElementById("distance_from");
+
+        if (current_user.zr != null) miles.value = current_user.zr;
+        if (current_user.zp != null) zip.value = current_user.zp;
+
+      } catch (error) {
+        var msg = "Cannot initialize distance chooser.<BR>Please refresh page."
+        msg = error.message + "<BR>" + msg;
+
+        printError("Distance Chooser", error);
+        errorModal( msg , true );
+      }
+
+
+
+      // Do not load full UI if user has no trade subs
+      //
+
+      /**
+      * TRADES
+      *
+      * LOAD ALL trades and turn ON the ones subscribed to
+      * when we turn ON a trade this will ALSO load the leedz
+      * for each trade in current_user.sb[]
+      */
+
+      // user is NOT guest.user
+      // user has NO TRADE SUBSCRIPTIONS
+      // 
+      // open new user welcome with instructions
+      var trade_subs = true;
+      if (isGuestUser(false) && current_user.sb.length == 0) {
+        openNewUserWelcome();
+        trade_subs = false;
+      }
+
+
+      if (trade_subs) {
+        try {
+
+          await initTrades();
+
+
+        } catch (error) {
+
+          // DO NOT FAIL -- show error modal dialog and print error to console
+          var msg = "Cannot load trades.<BR>Please refresh page."
+          msg = error.message + "<BR>" + msg;
+
+          printError("Init Trades Column", error);
+          errorModal( msg , true );
+        }
+      }
+
+
+
+
+      /**
+      * INITIALIZE month chooser in middle column
+      *
+      */ 
+      try {
+        initMonthChooser();
+
+      } catch (error) {
+        var msg = "Cannot create month chooser.<BR>Please refresh page."
+        msg = error.message + "<BR>" + msg;
+
+        printError("Month Chooser", error);
+        errorModal( msg , true );
+      }
+
+
+
+      /**
+      * BUILD central calendar column 
+      */
+      try {
+
+        buildCalendar();
+
+      } catch (error) {
+
+        var msg = "Cannot build calendar.<BR>Please refresh page."
+        msg = error.message + "<BR>" + msg;
+
+        printError("Building Calendar", error);
+        errorModal( msg , true );
+      }
+
+
+
+
+      /**
+      * If there are subs Load CACHE leedz
+      */
+      if (trade_subs) {
+
+      try {
+
+        loadCacheLeedz();
+
+      } catch (error) {
+
+        var msg = "Cannot load leedz from cache.<BR>Please refresh page."
+        msg = error.message + "<BR>" + msg;
+
+        printError("Loading Cache Leedz", error);
+        errorModal( msg , true );
+      }
+
+      /**
+      * Load Leedz from DB -- will return immediately
+      * delegate to callback internally when data arrives
+      */
+
+      try {
+
+        loadDBLeedz();
+
+      } catch (error) {
+
+        var msg = "Cannot load leedz from DB.  <BR>Please refresh page."
+        msg = error.message + "<BR>" + msg;
+
+        printError("Loading DB Leedz", error);
+        errorModal( msg , true );
+
+        }
+      }
+
+
+      /**
+      * 
+      */
+
+      cssScreenSize();
+
+
+      // set the trades sidebar      
+      if (SIDE_OPEN) {
+      openNav();
+      } else {
+      closeNav();
+      }
+
+
+  };
+
+
+
+
+
+  /**
+  * RESIZE
+  * called on window resize -- but AFTER css applied -- can read values from 
+  * different media_query css files depending on sizefvs
+  */
+  window.onresize = (event) => {
+    cssScreenSize();
+  };
+
+
+</script>
+
   
  
    

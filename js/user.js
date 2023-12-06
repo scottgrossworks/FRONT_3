@@ -14,22 +14,23 @@ import { printError, throwError } from "./error.js";
  * 
  * 
  */
-export function getUserLogin() {
+export function getUserLogin( userLogin ) {
 
   try {
 
-    const loginTokens = parseURL();
+    const loginTokens = parseWindowURL();
 
-    console.log("!!! PARSE URL GOT USER LOGIN!!!!");
+    console.log("!!!!!!!!!!   HELLO >>>>>>>>PARSE URL GOT USER LOGIN!!!!");
     console.log(loginTokens);
 
 
     if ("id_token" in loginTokens) {
-      return decodeJWT(loginTokens["id_token"]);
-   
+      
+      decodeJWT(loginTokens["id_token"], userLogin);
+      return;
    
     } else {
-      throwError("Cannot decode ID token.");
+      throwError("Cannot decode JWT ID token");
     }
 
 
@@ -37,36 +38,44 @@ export function getUserLogin() {
     printError("User Login", "Error parsing login tokens: " + err.message);
     throw err;
   }
-
-  return null;
 }
 
 
-
-
-function decodeJWT(jwt) {
+// used above
+//
+function decodeJWT(jwt, userInfo) {
   const [header, payload] = jwt.split('.').slice(0,2)
     .map(el => el.replace(/-/g, '+').replace(/_/g, '/'))
     .map(el => JSON.parse(window.atob(el)));
 
-    const userInfo = {
-      "un" : payload["cognito:username"],
-      "em" : payload["email"]
-    };
-
+    userInfo["un"] = payload["cognito:username"];
+    userInfo["em"] = payload["email"];
+  
     return userInfo;
 }
 
 
 
-
-
-function parseURL() {
+// use above
+//
+function parseWindowURL() {
   // Get the URL from the address bar
-  const url = window.location.href;
-
   // Split the URL into the base URL and the fragment
-  const [baseUrl, fragment] = url.split("#");
+
+  console.log("RAW=" + window.location.href);
+
+  let fragment;
+  let index = window.location.href.indexOf('?');
+  if (index == -1) {
+    index = window.location.href.indexOf('#');
+  }
+
+  if (index == -1) {
+    throwError("No '?' or '#' found in URL: " + window.location.href);
+  }
+  fragment = window.location.href.substring(index + 1);
+
+  console.log("!!!!! FRAGMENT=" + fragment);
 
   // Split the fragment into key-value pairs
   const keyValuePairs = fragment.split("&");

@@ -517,7 +517,7 @@
     window.printError = printError;
     window.errorModalClose = errorModalClose;
       
-    const URL_LOGIN = "https://theleedz.auth.us-west-2.amazoncognito.com/login?response_type=code&client_id=12tgt6nf496i446dq70gaoohrj&redirect_uri=theleedz.com";
+    const URL_LOGIN = "https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com";
 
     const URL_LEED_BOUGHT = "./leed_bought.html";
     const URL_LEED_CREATE = "./leed_create.html";
@@ -1342,8 +1342,17 @@ function trimAndRemoveSpaces(inputString) {
 
         getUserLogin( userLogin );
 
+
+
         if (! userLogin['un']) {
-          throwError("No username returned from login");
+          // REDIRECT TO LOGIN URL
+
+          
+          console.log("REDIRECTING!!!!");
+
+
+          window.open(URL_LOGIN, "_self");
+          return;
         }
 
 
@@ -1351,13 +1360,12 @@ function trimAndRemoveSpaces(inputString) {
           var msg = "Cannot log into the Leedz.";
           msg = err.message + "<BR>" + msg;
           errorModal( msg , false );
+          return;
       }
 
 
-      // FIXME FIXME FIXME
-      //
-      console.log("GOT USERLOGIN  BACK FROM LOGIN!");
-      console.log( userLogin['un'] );
+      console.log("HELLO WORLD!");
+      console.log(userLogin['un']);
 
       let current_user;
       try {

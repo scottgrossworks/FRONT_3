@@ -57,7 +57,7 @@ function parseWindowURL() {
   }
 
   if (index == -1) {
-    printError("Parse URL", "No '?' or '#' found in URL: " + window.location.href);
+    // printError("Parse URL", "No '?' or '#' found in URL: " + window.location.href);
     return null;
   }
 

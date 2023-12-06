@@ -53,6 +53,12 @@
 
 
 
+.modal_noclose {
+  display:block !important;
+}
+
+
+
 .modal h2 {
 
   margin:0px auto 0px auto;

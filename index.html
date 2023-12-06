@@ -410,7 +410,7 @@
       -- WAITING MODAL
       -- 
       -->
-      <div class="modal info_modal" id="waiting_modal" style="display:block">
+      <div class="modal info_modal" id="waiting_modal" style="display:none">
 
         <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
             <table width="100%">
@@ -778,7 +778,7 @@ function trimAndRemoveSpaces(inputString) {
       //
       function openGuestWelcome() {
         let guest = document.getElementById("guest_modal");
-        guest.style.display = "block";
+        guest.classList.add("modal_noclose");
       }
       window.openGuestWelcome = openGuestWelcome;
 
@@ -791,7 +791,7 @@ function trimAndRemoveSpaces(inputString) {
       //
       function openNewUserWelcome() {
         let newU = document.getElementById("newUser_modal");
-        newU.style.display = "block";
+        newU.classList.add("modal_noclose");
       }
       window.openNewUserWelcome = openNewUserWelcome;
 
@@ -1225,13 +1225,16 @@ function trimAndRemoveSpaces(inputString) {
  */
   function modalClose() {
 
+    console.error("CALLING MODAL CLOSE");
+
     errorModalClose();
+
 
     // close all modal dialogs
     var modals = document.getElementsByClassName("info_modal");
     for (var i = 0; i < modals.length; i++) {
-      var no_close = modals[i].style.getPropertyValue("no_close");
-      if (! no_close) {
+      var noclose = modals[i].classList.contains("modal_noclose");
+      if (! noclose) {
         modals[i].style.display = "none";
       }
     }
@@ -1343,14 +1346,8 @@ function trimAndRemoveSpaces(inputString) {
         getUserLogin( userLogin );
 
 
-
         if (! userLogin['un']) {
           // REDIRECT TO LOGIN URL
-
-          
-          console.log("REDIRECTING!!!!");
-
-
           window.open(URL_LOGIN, "_self");
           return;
         }
@@ -1364,8 +1361,7 @@ function trimAndRemoveSpaces(inputString) {
       }
 
 
-      console.log("HELLO WORLD!");
-      console.log(userLogin['un']);
+      console.log("Logging in: " + userLogin['un']);
 
       let current_user;
       try {
@@ -1389,14 +1385,30 @@ function trimAndRemoveSpaces(inputString) {
 
 
 
+      //  Is user a guest.user or a NEW user with NO trade subscriptions
       //
-      // SHOW THE LOADING... MODAL
-      //
-      showWaitingModal("Loading the Leedz . . .");
+      const newUser = (isGuestUser(false) && current_user.sb.length == 0);
+      var trade_subs = true;
+      
+      if (newUser) {
+        console.log("NEW USER!");
+        // SHOW THE NEW USER WELCOME MODAL
+        //
+        openNewUserWelcome();
+        trade_subs = false;
+     
+      } else {
+
+        // SHOW THE LOADING... MODAL
+        //
+        showWaitingModal("Loading the Leedz . . .");
+
+      }
 
 
 
       // clear any pre-existing leed in memory
+      //
       clearCurrentLeed();
 
 
@@ -1451,17 +1463,6 @@ function trimAndRemoveSpaces(inputString) {
       * when we turn ON a trade this will ALSO load the leedz
       * for each trade in current_user.sb[]
       */
-
-      // user is NOT guest.user
-      // user has NO TRADE SUBSCRIPTIONS
-      // 
-      // open new user welcome with instructions
-      var trade_subs = true;
-      if (isGuestUser(false) && current_user.sb.length == 0) {
-        openNewUserWelcome();
-        trade_subs = false;
-      }
-
 
       if (trade_subs) {
         try {

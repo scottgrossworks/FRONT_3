@@ -62,7 +62,6 @@ export function errorModalClose() {
     if (! IS_SHOWING) return;
 
     let error = document.getElementById("error_modal");
-    error.style.setProperty("no_close", false);
     error.style.display = "none";
 
     error.setAttribute(ERR_KEY, "");
@@ -74,17 +73,19 @@ export function errorModalClose() {
 
 /**
  * 
- * @param {*} error 
- * @param {*} no_close 
+ *
  */
-export function errorModal( error, no_close ) {
+export function errorModal( error, noclose ) {
 
   // Change back to normal cursor
   document.body.style.cursor = 'default';
 
   let modal = document.getElementById("error_modal");
-  modal.setAttribute("no_close", (no_close) ? 1 : 0 );
-
+  if (noclose) {
+    modal.classList.add('modal_noclose');
+  } else {
+    modal.classList.remove('modal_noclose');
+  }
   let errorString = modal.getAttribute( ERR_KEY );
 
   if ((errorString == null) || errorString == "") {

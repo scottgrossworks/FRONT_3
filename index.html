@@ -270,7 +270,7 @@
             <div class="column lic_column" id="lic_date"></div>
             
             <div class="column _1 lic_column" id="lic_close">
-              <a id="" href="javascript:modalClose();">X</a>
+              <a id="" href="javascript:modalClose(true);">X</a>
             </div>
 
           </div>
@@ -393,14 +393,14 @@
     -- ERROR MODAL 
     -- 
     -->
-  <div class="row" id="error_modal" style="display:none">
+  <div class="modal info_modal modal_noclose" id="error_modal" style="display:none">
     <center><img id="error_logo" src="img/logo_2.png"></center> 
     <h1>
       <BR>
     </h1>
     <BR>
     <BR>
-    <a id="error_modal_close" href="javascript:modalClose();" href="">X</a>
+    <a id="error_modal_close" href="javascript:modalClose(true);" href="">X</a>
     
   </div>
 
@@ -435,7 +435,7 @@
       -- GUEST WELCOME MODAL 
       -- 
       -->
-      <div class="row modal info_modal" id="guest_modal" style="display:none">
+      <div class="row modal info_modal modal_noclose" id="guest_modal" style="display:none">
         <center><img class="info_logo" src="img/logo_2.png"></center> 
         <h1>
             <center>
@@ -453,7 +453,7 @@
           </h1>
   
             <BR>
-        <a class="info_modal_close" href="javascript:modalClose();" href="">X</a>
+        <a class="info_modal_close" href="javascript:modalClose(true);" href="">X</a>
         <BR>
      
       </div>
@@ -466,7 +466,7 @@
       -- NEW USER WELCOME MODAL 
       -- 
       -->
-      <div class="row modal info_modal" id="newUser_modal" style="display:none">
+      <div class="row modal info_modal modal_noclose" id="newUser_modal" style="display:none">
   
         <center><img class="info_logo" src="img/logo_2.png"></center> 
         <h1>
@@ -486,7 +486,7 @@
           </h1>
   
             <BR>
-        <a class="info_modal_close" href="javascript:modalClose();" href="">X</a>
+        <a class="info_modal_close" href="javascript:modalClose(true);" href="">X</a>
         <BR>
      
       </div>
@@ -609,7 +609,7 @@
        
             if ( event.target.id.endsWith("modal_close") ) {
               // modal dialog close 
-              modalClose();
+              modalClose( true );
 
             } else if (event.target.matches('a')) {
               
@@ -778,7 +778,7 @@ function trimAndRemoveSpaces(inputString) {
       //
       function openGuestWelcome() {
         let guest = document.getElementById("guest_modal");
-        guest.classList.add("modal_noclose");
+        guest.style.display = "block !important";
       }
       window.openGuestWelcome = openGuestWelcome;
 
@@ -791,7 +791,7 @@ function trimAndRemoveSpaces(inputString) {
       //
       function openNewUserWelcome() {
         let newU = document.getElementById("newUser_modal");
-        newU.classList.add("modal_noclose");
+        newU.style.display = "block !important";
       }
       window.openNewUserWelcome = openNewUserWelcome;
 
@@ -1095,7 +1095,7 @@ function trimAndRemoveSpaces(inputString) {
       function cssScreenSize() {
 
 
-        modalClose();
+        modalClose( false );
 
         var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
         var action = document.getElementById("action_panel");
@@ -1223,22 +1223,20 @@ function trimAndRemoveSpaces(inputString) {
 /**
  * CLOSE (ANY) MODAL DIALOG
  */
-  function modalClose() {
-
-    console.error("CALLING MODAL CLOSE");
-
+  function modalClose( force ) {
+    
     errorModalClose();
-
 
     // close all modal dialogs
     var modals = document.getElementsByClassName("info_modal");
     for (var i = 0; i < modals.length; i++) {
-      var noclose = modals[i].classList.contains("modal_noclose");
-      if (! noclose) {
+      if (force) {
+        modals[i].style.display = "none";
+      } else if (!  modals[i].classList.contains("modal_noclose")) {
         modals[i].style.display = "none";
       }
+      
     }
-
   }
   window.modalClose = modalClose;
 

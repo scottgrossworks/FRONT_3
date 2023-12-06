@@ -54,7 +54,6 @@
 
 
 .modal_noclose {
-  display:block !important;
 }
 
 
@@ -125,6 +124,19 @@
 
 
 
+
+
+
+#error_modal {
+
+  
+  z-index:900;
+  border: 6px solid #f44336;
+}
+
+
+
+
 .info_modal a {
 
 
@@ -169,36 +181,6 @@
 
 
 
-
-
-
- #error_modal {
-
-  display: none;
-  
-  z-index:900;
-
-  position: fixed;
-  top:0;
-  margin: 10vh 10vw;
-
-  text-decoration: none;
-
-  background-color: white;
-  color:black;
-
-  padding:20px;
-
-  width:60vw;
-  height:70vh;
-  
-  max-width: 500px;
-  max-height:700px;
-
-  
-  border: 6px solid #f44336;
-  border-radius: 20px;
-}
 
 #error_modal h1 {
 

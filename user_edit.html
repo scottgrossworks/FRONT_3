@@ -42,7 +42,7 @@
 
 			<div class="column _1">
 
-				<a onclick="backButton()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+				<a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
 				</div>
 
 				<div class="column" style="margin:auto 0;transform:translateY(6px)">
@@ -574,6 +574,7 @@ function initTradesTable( all_trades, tradeListener ) {
 			const CURRENT_USER = getCurrentUser(true);
 	
 			let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
+			
 			window.open(href, "_self");
 
 			self.close();

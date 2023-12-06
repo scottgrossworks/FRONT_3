@@ -99,7 +99,7 @@
  */
 .info_modal{
 
-  display: none;
+  display: block;
   
   z-index:500;
 
@@ -125,6 +125,36 @@
 
 
 
+ 
+@media screen and (max-width: 799px) {
+
+  .info_modal {
+    width:75vw !important;
+    height:90%;
+
+    margin: 0;
+    font-size:medium;
+    padding:5px;
+  }
+
+  .info_modal a {
+    font-size:medium;
+  }
+
+  .info_modal h1 {
+    font-size:medium;
+  }
+
+  #error_modal h1 {
+    font-size: medium;
+  }
+
+  #error_modal a {
+    font-size: medium;
+  }
+
+
+}
 
 
 #error_modal {
@@ -141,6 +171,7 @@
 
 
   font-weight: 600;
+  color:white;
   text-decoration: none;
 }
 

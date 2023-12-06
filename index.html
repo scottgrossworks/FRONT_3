@@ -473,22 +473,20 @@
             <center>
             <table>
               <TR><TD>
-               New User Welcome -- To get the most out of the Leedz......
+               New User Welcome -- To get the most out of the Leedz, <a href="#" onclick="openUserEdit()" id="dd_account">subscribe to trades</a>  and see the current leedz.
                 <BR>
                 <BR>
-                 Subscribe, set search radius....
-                 Contact Us
-                 Report a Leed
-                 <BR>
+                  <ul type="2" style="margin-left:2vw">
+                    <li><a href="#" onclick="openUserEdit()" id="dd_account">Account</a></li>
+                    <li><a href="./leedz_how-to.html" id="dd_howto">How To</a></li>
+                    <li><a href="./leedz_about.html">About</a></li>
+                    <li><a href="./leedz_contact.html">Contact</a></li>
+                  </ul>
                    </TD></TR>
             </table>
             </center> 
           </h1>
-  
-            <BR>
-        <a class="info_modal_close" href="javascript:modalClose(true);" href="">X</a>
-        <BR>
-     
+          <a class="info_modal_close" href="javascript:modalClose(true);" href="">X</a>
       </div>
   
 
@@ -764,7 +762,7 @@ function trimAndRemoveSpaces(inputString) {
         wait_msg.innerText = msg;
 
         let waiting = document.getElementById("waiting_modal");
-        waiting.style.display = "block !important";
+        waiting.style.display = "block";
       }
       window.showWaitingModal = showWaitingModal;
 
@@ -778,7 +776,7 @@ function trimAndRemoveSpaces(inputString) {
       //
       function openGuestWelcome() {
         let guest = document.getElementById("guest_modal");
-        guest.style.display = "block !important";
+        guest.style.display = "block";
       }
       window.openGuestWelcome = openGuestWelcome;
 
@@ -791,7 +789,8 @@ function trimAndRemoveSpaces(inputString) {
       //
       function openNewUserWelcome() {
         let newU = document.getElementById("newUser_modal");
-        newU.style.display = "block !important";
+        newU.style.display = "block";
+        console.log("HELLO WORLD");
       }
       window.openNewUserWelcome = openNewUserWelcome;
 
@@ -1224,7 +1223,9 @@ function trimAndRemoveSpaces(inputString) {
  * CLOSE (ANY) MODAL DIALOG
  */
   function modalClose( force ) {
-    
+
+    console.log("MODAL CLOSE=" + force);
+
     errorModalClose();
 
     // close all modal dialogs
@@ -1392,8 +1393,9 @@ function trimAndRemoveSpaces(inputString) {
       const newUser = (isGuestUser(false) && current_user.sb.length == 0);
       var trade_subs = true;
       
+    
       if (newUser) {
-        console.log("NEW USER!");
+        console.log("!!!!!   NEW USER!");
         // SHOW THE NEW USER WELCOME MODAL
         //
         openNewUserWelcome();
@@ -1406,8 +1408,7 @@ function trimAndRemoveSpaces(inputString) {
         showWaitingModal("Loading the Leedz . . .");
 
       }
-
-
+      
 
       // clear any pre-existing leed in memory
       //
@@ -1453,6 +1454,7 @@ function trimAndRemoveSpaces(inputString) {
         errorModal( msg , true );
       }
 
+    
 
 
       // Do not load full UI if user has no trade subs
@@ -1560,6 +1562,8 @@ function trimAndRemoveSpaces(inputString) {
         }
       }
 
+
+      
 
       /**
       * 

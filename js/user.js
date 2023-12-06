@@ -22,8 +22,7 @@ export function getUserLogin( userLogin ) {
 
     if (! loginTokens) return;
 
-    console.log("!!!!!!!!!!   HELLO >>>>>>>>PARSE URL GOT USER LOGIN!!!!");
-    console.log(loginTokens);
+    // console.log(loginTokens);
 
 
     if ("id_token" in loginTokens) {

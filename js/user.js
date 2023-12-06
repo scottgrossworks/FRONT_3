@@ -32,13 +32,17 @@ export function getUserLogin( userLogin ) {
       return;
    
     } else {
-      throwError("Cannot decode JWT ID token");
+      var msg = "Cannot decode JWT ID token";
+      printError("User Login", msg);
+      // do not fail -- will use guest account
+      return;
     }
 
 
   } catch (err) {
-    printError("User Login", "Error parsing login tokens: " + err.message);
-    throw err;
+    var msg = "Error parsing login tokens: " + err.message;
+    printError("User Login", msg);
+    throwError(msg);
   }
 }
 

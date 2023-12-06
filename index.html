@@ -1334,6 +1334,7 @@ function trimAndRemoveSpaces(inputString) {
 
 ///////////////////////////////////
 
+  let current_user; 
   const userLogin = {};
   
     // <body onload=" window.open(...)">
@@ -1353,32 +1354,35 @@ function trimAndRemoveSpaces(inputString) {
 
       } catch (err) {
           var msg = "Cannot log into the Leedz.";
-          msg = err.message + "<BR>" + msg;
+          msg = err.message + "<BR>" + msg + "<BR>Using guest account.";
           errorModal( msg , false );
-          return;
+          
+          // DO NOT FAIL
+          // ! USE GUEST USER
+          current_user = guestUser();   
       }
 
 
-      console.log("Logging in: " + userLogin['un']);
 
-      let current_user;
-      try {
-        await initUser( userLogin['un'] ); // will throw error
+      if (isGuestUser(false)) {
+        try {
+          await initUser( userLogin['un'] ); // will throw error
 
-        // return newly-loaded user
-        current_user = getCurrentUser( false );
+          // return newly-loaded user
+          current_user = getCurrentUser( false );
 
 
-      } catch (error) {
+        } catch (error) {
 
-        var msg = "Cannot load user data.<BR>Using guest account.";
-        msg = error + "<BR>" + msg;
-        errorModal( msg , false );
+          var msg = "Cannot load user data.<BR>Using guest account.";
+          msg = error + "<BR>" + msg;
+          errorModal( msg , false );
 
-        // DO NOT FAIL
-        // ! USE GUEST USER
-        current_user = guestUser();   
+          // DO NOT FAIL
+          // ! USE GUEST USER
+          current_user = guestUser();   
 
+        }
       }
 
 

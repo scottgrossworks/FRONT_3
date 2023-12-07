@@ -1354,6 +1354,9 @@ function trimAndRemoveSpaces(inputString) {
 
         if (! userLogin['un']) {
           // REDIRECT TO LOGIN URL
+
+          userLogin['un'] = 'clark.kent';
+
           window.open(URL_LOGIN, "_self");
           return;
         }
@@ -1362,6 +1365,7 @@ function trimAndRemoveSpaces(inputString) {
       } catch (err) {
           var msg = "Cannot log into the Leedz.";
           msg = err.message + "<BR>" + msg + "<BR>Using guest account.";
+          printError("Leedz Login", msg);
           errorModal( msg , false );
           
           // DO NOT FAIL
@@ -1383,6 +1387,7 @@ function trimAndRemoveSpaces(inputString) {
 
           var msg = "Cannot load user data.<BR>Using guest account.";
           msg = error + "<BR>" + msg;
+          printError("Leedz Login", msg);
           errorModal( msg , false );
 
           // DO NOT FAIL
@@ -1393,25 +1398,17 @@ function trimAndRemoveSpaces(inputString) {
       }
 
 
-
-      //  Is user a guest.user or a NEW user with NO trade subscriptions
+      // LOADING MODALS...
+      //
+      // Is user a guest.user or a NEW user with NO trade subscriptions
+      // will be given default top (MAX_TRADE_SUBSCRIPTIONS) like guest
       //
       const newUser = (isGuestUser(false) && current_user.sb.length == 0);
-
-      
       if (newUser) {
         console.log("!!!!!   NEW USER DETECTED OPEN WELCOME!");
-        // SHOW THE NEW USER WELCOME MODAL
-        //
         openNewUserWelcome();
-  
-     
       } else {
-
-        // SHOW THE LOADING... MODAL
-        //
         showWaitingModal("Loading the Leedz . . .");
-
       }
       
 

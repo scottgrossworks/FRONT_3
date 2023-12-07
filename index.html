@@ -1397,15 +1397,14 @@ function trimAndRemoveSpaces(inputString) {
       //  Is user a guest.user or a NEW user with NO trade subscriptions
       //
       const newUser = (isGuestUser(false) && current_user.sb.length == 0);
-      var trade_subs = true;
+
       
-    
       if (newUser) {
-        console.log("!!!!!   NEW USER!");
+        console.log("!!!!!   NEW USER DETECTED OPEN WELCOME!");
         // SHOW THE NEW USER WELCOME MODAL
         //
         openNewUserWelcome();
-        trade_subs = false;
+  
      
       } else {
 
@@ -1444,27 +1443,26 @@ function trimAndRemoveSpaces(inputString) {
       // INIT DISTANCE CHOOSER
       // using current_user preferences if set
       //
-      try {
+      if (! newUser) {
+        try {
 
-        let miles = document.getElementById("distance_miles");
-        let zip = document.getElementById("distance_from");
+          let miles = document.getElementById("distance_miles");
+          let zip = document.getElementById("distance_from");
 
-        if (current_user.zr != null) miles.value = current_user.zr;
-        if (current_user.zp != null) zip.value = current_user.zp;
+          if (current_user.zr) miles.value = current_user.zr;
+          if (current_user.zp) zip.value = current_user.zp;
 
-      } catch (error) {
-        var msg = "Cannot initialize distance chooser.<BR>Please refresh page."
-        msg = error.message + "<BR>" + msg;
+        } catch (error) {
 
-        printError("Distance Chooser", error);
-        errorModal( msg , true );
+          var msg = "Cannot initialize distance chooser.<BR>Please refresh page."
+          msg = error.message + "<BR>" + msg;
+
+          printError("Distance Chooser", error);
+          errorModal( msg , true );
+        }
       }
 
     
-
-
-      // Do not load full UI if user has no trade subs
-      //
 
       /**
       * TRADES
@@ -1474,31 +1472,30 @@ function trimAndRemoveSpaces(inputString) {
       * for each trade in current_user.sb[]
       */
 
-      if (trade_subs) {
-        try {
+      try {
 
-          await initTrades();
+        await initTrades();
 
+      } catch (error) {
 
-        } catch (error) {
+        // DO NOT FAIL -- show error modal dialog and print error to console
+        var msg = "Cannot load trades.<BR>Please refresh page."
+        msg = error.message + "<BR>" + msg;
 
-          // DO NOT FAIL -- show error modal dialog and print error to console
-          var msg = "Cannot load trades.<BR>Please refresh page."
-          msg = error.message + "<BR>" + msg;
-
-          printError("Init Trades Column", error);
-          errorModal( msg , true );
-        }
+        printError("Init Trades Column", error);
+        errorModal( msg , true );
       }
 
 
 
 
-      /**
-      * INITIALIZE month chooser in middle column
-      *
-      */ 
+
+    /**
+    * INITIALIZE month chooser in middle column
+    *
+    */ 
       try {
+  
         initMonthChooser();
 
       } catch (error) {
@@ -1533,7 +1530,7 @@ function trimAndRemoveSpaces(inputString) {
       /**
       * If there are subs Load CACHE leedz
       */
-      if (trade_subs) {
+    
 
       try {
 
@@ -1565,8 +1562,8 @@ function trimAndRemoveSpaces(inputString) {
         printError("Loading DB Leedz", error);
         errorModal( msg , true );
 
-        }
       }
+  
 
 
       

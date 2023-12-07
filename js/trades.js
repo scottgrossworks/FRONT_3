@@ -35,28 +35,26 @@ export async function initTrades() {
 
   let trades = [];
 
+  const currentUser = getCurrentUser(false);
+  let no_subs = isGuestUser(true) || (currentUser.sb.length == 0);
+
   try {
     await getAllTrades().then((response) => trades = response ); 
 
-      if (trades == null) {
-        throw new Error("server returned null trades.");
+   
+      if ((! trades) || trades.length == 0) {
+        throw new Error("server returned no trades.");
       }
-
-      if (trades.length == undefined || trades.length == 0) {
-        throw new Error("server returned empty (0) trades.");
-      }
-
 
       // init TRADES struct
       // initialize the spectrum of colors
       createTradesAndColors( trades );  
 
-      if ( isGuestUser( true ) ) { 
-        let guest_user = getCurrentUser();
+      if ( no_subs ) { 
         // the trades should be sorted by num_leedz
         // the guest user's subs are the top n leedz
         for (let i = 0; i < MAX_USER_SUBS; i++) {
-          guest_user.sb.push( trades[i].sk ) 
+          currentUser.sb.push( trades[i].sk ) 
         }
       }
   	

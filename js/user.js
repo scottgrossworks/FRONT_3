@@ -281,16 +281,16 @@ export async function initUser( login ) {
 
         CURRENT_USER.em = resObj.em;
 
-        CURRENT_USER.ws = (resObj.ws != null) ? resObj.ws : null;
-        CURRENT_USER.ab = (resObj.ab != null) ? resObj.ab : null;
-        CURRENT_USER.zp = (resObj.zp != null) ? resObj.zp : null;
-        CURRENT_USER.zr = (resObj.zr != null) ? resObj.zr : null;
+        CURRENT_USER.ws = (resObj.ws) ? resObj.ws : null;
+        CURRENT_USER.ab = (resObj.ab) ? resObj.ab : null;
+        CURRENT_USER.zp = (resObj.zpl) ? resObj.zp : null;
+        CURRENT_USER.zr = (resObj.zr) ? resObj.zr : null;
 
         // TRADES SUBSCRIPTIONS
-        CURRENT_USER.sb =  (resObj.sb == undefined || resObj.sb == null || resObj.sb == "") ? [] : resObj.sb.split(',').map(element=>element.trim());
+        CURRENT_USER.sb =  (resObj.sb) ? resObj.sb.split(',').map(element=>element.trim()) : [];
 
         // USER BADGES
-        CURRENT_USER.bg =  (resObj.bg == undefined || resObj.bg == null || resObj.bg == "") ? [] : resObj.bg.split(',').map(element=>parseInt(element.trim()));
+        CURRENT_USER.bg =  (resObj.bg) ? resObj.bg.split(',').map(element=>parseInt(element.trim())) : [];
 
         
 
@@ -403,28 +403,28 @@ export async function saveUserChanges( userObj ) {
   console.log("SAVING USER CHANGES!!");
   console.log(userObj);
 
-  if (userObj.un != null)
+  if (userObj.un)
     CURRENT_USER.un = userObj.un;
 
-  if (userObj.em != null)
+  if (userObj.em)
     CURRENT_USER.em = userObj.em;
 
-    if (userObj.ws != null)
+  if (userObj.ws)
     CURRENT_USER.ws = userObj.ws;
 
-  if (userObj.zp != null)
+  if (userObj.zp)
     CURRENT_USER.zp = userObj.zp;
 
-  if (userObj.zr != null)
+  if (userObj.zr)
     CURRENT_USER.zr = userObj.zr;
 
-  if (userObj.ab != null)
+  if (userObj.ab)
     CURRENT_USER.ab = userObj.ab;
 
-  if (userObj.sb != null)
+  if (userObj.sb)
     CURRENT_USER.sb = userObj.sb;
 
-  if (userObj.bg != null)
+  if (userObj.bg)
     CURRENT_USER.bg = userObj.bg;
 
   try {

@@ -104,20 +104,19 @@
   
   z-index:500;
 
-  margin: 5vh 10vw;
+  top: 0!important;;
+  margin: 5vh 5vw;
 
   width:60vw!important;
-  height:80%!important;
+  height:min-content!important;
 
   text-decoration: none;
 
   background-color: white;
   color:black;
-
   
   padding:20px;  
   font-size: medium;
-
   
   border: 6px solid green;
   border-radius: 20px;
@@ -131,7 +130,6 @@
 
   .info_modal {
     width:75vw !important;
-    height:100%;
 
     margin: 0;
     font-size:medium;

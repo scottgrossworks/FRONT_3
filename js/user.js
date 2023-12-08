@@ -283,8 +283,9 @@ export async function initUser( login ) {
 
         CURRENT_USER.ws = (resObj.ws) ? resObj.ws : null;
         CURRENT_USER.ab = (resObj.ab) ? resObj.ab : null;
-        CURRENT_USER.zp = (resObj.zp) ? resObj.zp : null;
-        CURRENT_USER.zr = (resObj.zr) ? resObj.zr : null;
+
+        CURRENT_USER.zp = (resObj.zp && resObj.zp != '0') ? resObj.zp : 0;
+        CURRENT_USER.zr = (resObj.zr && resObj.zr != '0') ? resObj.zr : 0;
 
         // TRADES SUBSCRIPTIONS
         CURRENT_USER.sb =  (resObj.sb) ? resObj.sb.split(',').map(element=>element.trim()) : [];
@@ -339,8 +340,8 @@ export function blankUserObject() {
   BLANK_USER.ws = null;
   BLANK_USER.ab = null
 
-  BLANK_USER.zp = null;
-  BLANK_USER.zr = null;
+  BLANK_USER.zp = 0;
+  BLANK_USER.zr = 0;
 
   BLANK_USER.sb = [];
   BLANK_USER.bg = [];
@@ -402,9 +403,9 @@ export async function saveUserChanges( userObj ) {
 
     CURRENT_USER.ws = userObj.ws;
 
-    CURRENT_USER.zp = userObj.zp;
+    CURRENT_USER.zp = (userObj.zp && userObj.zp != '0') ? userObj.zp : 0;
 
-    CURRENT_USER.zr = userObj.zr;
+    CURRENT_USER.zr = (userObj.zr && userObj.zr != '0') ? userObj.zr : 0;
 
     CURRENT_USER.ab = userObj.ab;
 

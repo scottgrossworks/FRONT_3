@@ -128,8 +128,6 @@
       <h1>
         <BR>
       </h1>
-      <BR>
-      <BR>
       <a id="error_modal_close" href="javascript:modalClose(true);" href="">X</a>
       
     </div>
@@ -661,10 +659,11 @@
           return;
         }
         
+        // SEARCH RADIUS
         const theMiles = new Number(trimVal);
-        if (theMiles > 9999) {
+        if (theMiles > 3000) {
           let msg = "Miles From is too large: " + theMiles;
-          let errMsg = "Search radius must be < 9999 miles";
+          let errMsg = "Search radius must be < 3000 miles";
           printError(msg, errMsg );
 
           errorModal("Cannot search for Leedz<BR>" + msg + "<BR>" + errMsg, false);
@@ -694,6 +693,7 @@
             return;
         }
 
+        // ZIP CODE
         const theZip = new Number(trimVal);
         
         // these values are inserted into the current user profile
@@ -1375,24 +1375,27 @@ async function mainPageLoad( current_user ) {
       // INIT DISTANCE CHOOSER
       // using current_user preferences if set
       //
-      if (! newUser) {
-        try {
+      try {
 
+        if (current_user.zr) {
           let miles = document.getElementById("distance_miles");
-          let zip = document.getElementById("distance_from");
-
-          if (current_user.zr) miles.value = current_user.zr;
-          if (current_user.zp) zip.value = current_user.zp;
-
-        } catch (error) {
-
-          var msg = "Cannot initialize distance chooser.<BR>Please refresh page."
-          msg = error.message + "<BR>" + msg;
-
-          printError("Distance Chooser", error);
-          errorModal( msg , true );
+          miles.value = current_user.zr;
         }
+        
+        if (current_user.zp) {
+          let zip = document.getElementById("distance_from");
+          zip.value = current_user.zp;
+        }
+
+      } catch (error) {
+
+        var msg = "Cannot initialize distance chooser.<BR>Please refresh page."
+        msg = error.message + "<BR>" + msg;
+
+        printError("Distance Chooser", error);
+        errorModal( msg , true );
       }
+
 
     
 

@@ -1520,12 +1520,12 @@ async function mainPageLoad( current_user ) {
 
 
 
-//////////////////////////////////////////////////////////////////////
+//
 //
 // START FROM HERE ON PAGE LOAD.....
 //
-//////////////////////////////////////////////////////////////////////
-
+//
+//
 // <body onload=" window.open(...)">
 window.onload = async function() {
 
@@ -1538,10 +1538,11 @@ window.onload = async function() {
 
 
     if (! userLogin['un']) {
-        // REDIRECT TO LOGIN URL
-        // window.open(URL_LOGIN, "_self");
-        userLogin['un'] = 'dave.reyes';
-        // return;
+        // 
+        // !! REDIRECT TO LOGIN URL
+        //
+        window.open(URL_LOGIN, "_self");
+        return;
     }
 
 
@@ -1617,7 +1618,7 @@ window.onload = async function() {
       mainPageLoad( current_user );
     };
   
-    
+
     // Add the storage event listener
     window.addEventListener("storage", storageEventListener);
   

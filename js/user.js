@@ -283,7 +283,7 @@ export async function initUser( login ) {
 
         CURRENT_USER.ws = (resObj.ws) ? resObj.ws : null;
         CURRENT_USER.ab = (resObj.ab) ? resObj.ab : null;
-        CURRENT_USER.zp = (resObj.zpl) ? resObj.zp : null;
+        CURRENT_USER.zp = (resObj.zp) ? resObj.zp : null;
         CURRENT_USER.zr = (resObj.zr) ? resObj.zr : null;
 
         // TRADES SUBSCRIPTIONS
@@ -305,8 +305,6 @@ export async function initUser( login ) {
     }
     
     // console.log("%cuser.initUser(): " + CURRENT_USER.un, "color:darkorange");
-    console.log(CURRENT_USER);
-
   }
 
 
@@ -378,9 +376,6 @@ export async function saveCurrentUser() {
       throwError("Save Current User", error.message);
   }
 
-  console.log("user.saveCurrentUser()  ******** SUCCESS! ******* ");
-  console.log(CURRENT_USER);
-
 }
 
 
@@ -399,33 +394,24 @@ export async function saveUserChanges( userObj ) {
   if (CURRENT_USER == null)
     throwError("saveUserChanges", "No CURRENT_USER initialized");
 
+  // will not change
+  // CURRENT_USER.un = userObj.un;
+  
+  // will not change
+  // CURRENT_USER.em = userObj.em;
 
-  console.log("SAVING USER CHANGES!!");
-  console.log(userObj);
-
-  if (userObj.un)
-    CURRENT_USER.un = userObj.un;
-
-  if (userObj.em)
-    CURRENT_USER.em = userObj.em;
-
-  if (userObj.ws)
     CURRENT_USER.ws = userObj.ws;
 
-  if (userObj.zp)
     CURRENT_USER.zp = userObj.zp;
 
-  if (userObj.zr)
     CURRENT_USER.zr = userObj.zr;
 
-  if (userObj.ab)
     CURRENT_USER.ab = userObj.ab;
 
-  if (userObj.sb)
     CURRENT_USER.sb = userObj.sb;
 
-  if (userObj.bg)
     CURRENT_USER.bg = userObj.bg;
+  
 
   try {
     saveCurrentUser();
@@ -449,6 +435,7 @@ export async function saveUserChanges( userObj ) {
  */
 function loadCacheUser() {
   
+
     let userJSON = window.localStorage.getItem( CACHE_USER_KEY );
     let userObj = null;
     if (userJSON == undefined || userJSON == null) {
@@ -467,6 +454,10 @@ function loadCacheUser() {
       return null;
     }
 
+    
+    // console.log("LOAD USER CACHE=" + new Date().getTime());
+    // console.log(userObj);
+
     return userObj;
 }
 
@@ -477,12 +468,15 @@ function loadCacheUser() {
  */
 function saveCacheUser( userObj ) {
 
+    // console.log("SAVE CACHE USER=" + new Date().getTime());  
+    // console.log(userObj);
+
     if (userObj == undefined || userObj == null) {
       printError("saveCacheUser()", "attempt to save empty user object");
       return;
     }
 
-    try {
+    try { 
       let userJSON = JSON.stringify (userObj);
       window.localStorage.setItem( CACHE_USER_KEY , userJSON);
 

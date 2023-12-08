@@ -35,7 +35,7 @@
   background-color: var(--LEEDZ_GRAY);
   padding: 20px;
   border-radius:10px;
-  font-size:24px;
+  font-size:medium;
   line-height:1.35em;
 }
 
@@ -106,8 +106,8 @@
 
   margin: 5vh 10vw;
 
-  width:60vw !important;
-  height:70vh !important;
+  width:60vw!important;
+  height:80%!important;
 
   text-decoration: none;
 
@@ -212,11 +212,6 @@
 
 
 
-
-#error_modal h1 {
-
-  font-size: large;
-}
 
 #error_modal a {
 

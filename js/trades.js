@@ -54,7 +54,7 @@ export async function initTrades() {
         // the trades should be sorted by num_leedz
         // the guest user's subs are the top n leedz
         for (let i = 0; i < MAX_USER_SUBS; i++) {
-          currentUser.sb.push( trades[i].sk ) 
+          currentUser.sb.push( trades[i].sk ); 
         }
       }
   	
@@ -175,8 +175,12 @@ function initTradesColumn( tradeListener ) {
 
   // import DOM elements from html
   const theList = document.querySelector("#trades_list");
-  const theTemplate = document.querySelector("#template_each_trade");
+  // start with a fresh list
+  while (theList.childElementCount > 1) {
+    theList.removeChild( theList.lastElementChild );
+  }
 
+  const theTemplate = document.querySelector("#template_each_trade");
 
   // for each subscription
   current_user.sb.forEach(( sub ) => {

@@ -118,7 +118,115 @@
     <div class="row" id="main_panel">       
       
 
+
+  <!-- 
+    -- ERROR MODAL 
+    -- 
+    -->
+    <div class="modal info_modal modal_noclose" id="error_modal" style="display:none">
+      <center><img id="error_logo" src="img/logo_2.png"></center> 
+      <h1>
+        <BR>
+      </h1>
+      <BR>
+      <BR>
+      <a id="error_modal_close" href="javascript:modalClose(true);" href="">X</a>
       
+    </div>
+  
+  
+  
+      <!-- 
+        -- WAITING MODAL
+        -- 
+        -->
+        <div class="modal info_modal" id="waiting_modal" style="display:none">
+  
+          <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
+              <table width="100%">
+                  <TR><TD style="border:none;">
+                    <h1 id="waiting_label" style="width:fit-content"></h1>
+                  </TD></TR>
+                  <TR><TD style="border:none;"><center>
+                          <img src="./img/wait_spinner.gif" style="height:10vh;">
+                          </center>
+                      </TD>
+                  </TR>
+              </table>
+    
+    
+        </div>
+    
+    
+    
+        
+    
+      <!-- 
+        -- GUEST WELCOME MODAL 
+        -- 
+        -->
+        <div class="row modal info_modal modal_noclose" id="guest_modal" style="display:none">
+          <center><img class="info_logo" src="img/logo_2.png"></center> 
+          <h1>
+              <center>
+              <table>
+                <TR><TD>
+                  Guest User Modal -- Some features are not available to Guest users.
+                  <BR>
+                  <BR>
+                  To edit your user profile, buy, post, edit, or report a leed,
+                  <BR>
+                  <a href="http://scottgross.works">sign-up</a> for a <a href="http://scottgross.works">FREE</a> account.
+                </TD></TR>
+              </table>
+              </center> 
+            </h1>
+    
+              <BR>
+          <a class="info_modal_close" href="javascript:modalClose(true);" href="">X</a>
+          <BR>
+       
+        </div>
+    
+    
+    
+        
+    
+      <!-- 
+        -- NEW USER WELCOME MODAL 
+        -- 
+        -->
+        <div class="row modal info_modal modal_noclose" id="newUser_modal" style="display:none">
+    
+          <center><img class="info_logo" src="img/logo_2.png"></center> 
+          <h1>
+              <center>
+              <table>
+                <TR><TD>
+                 New User Welcome -- To get the most out of the Leedz, <a href="#" onclick="openUserEdit()" id="dd_account">subscribe to trades</a>  and see the current leedz.
+                  <BR>
+                  <BR>
+                    <ul type="2" style="margin-left:2vw">
+                      <li><a href="#" onclick="openUserEdit()" id="dd_account">Account</a></li>
+                      <li><a href="./leedz_how-to.html" id="dd_howto">How To</a></li>
+                      <li><a href="./leedz_about.html">About</a></li>
+                      <li><a href="./leedz_contact.html">Contact</a></li>
+                    </ul>
+                     </TD></TR>
+              </table>
+              </center> 
+            </h1>
+            <a class="info_modal_close" href="javascript:modalClose(true);" href="">X</a>
+         
+        </div>
+    
+      
+
+
+
+
+
+
       <!-- 
         -- LEFT COLUMN
         -- TRADES PANEL 
@@ -376,120 +484,8 @@
       </div>
 
 
-
-
-
-
       
     </div>
-
-
-
-
-
-
-
-  <!-- 
-    -- ERROR MODAL 
-    -- 
-    -->
-  <div class="modal info_modal modal_noclose" id="error_modal" style="display:none">
-    <center><img id="error_logo" src="img/logo_2.png"></center> 
-    <h1>
-      <BR>
-    </h1>
-    <BR>
-    <BR>
-    <a id="error_modal_close" href="javascript:modalClose(true);" href="">X</a>
-    
-  </div>
-
-
-
-    <!-- 
-      -- WAITING MODAL
-      -- 
-      -->
-      <div class="modal info_modal" id="waiting_modal" style="display:none">
-
-        <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
-            <table width="100%">
-                <TR><TD style="border:none;">
-                  <h1 id="waiting_label" style="width:fit-content"></h1>
-                </TD></TR>
-                <TR><TD style="border:none;"><center>
-                        <img src="./img/wait_spinner.gif" style="height:10vh;">
-                        </center>
-                    </TD>
-                </TR>
-            </table>
-  
-  
-      </div>
-  
-  
-  
-      
-  
-    <!-- 
-      -- GUEST WELCOME MODAL 
-      -- 
-      -->
-      <div class="row modal info_modal modal_noclose" id="guest_modal" style="display:none">
-        <center><img class="info_logo" src="img/logo_2.png"></center> 
-        <h1>
-            <center>
-            <table>
-              <TR><TD>
-                Guest User Modal -- Some features are not available to Guest users.
-                <BR>
-                <BR>
-                To edit your user profile, buy, post, edit, or report a leed,
-                <BR>
-                <a href="http://scottgross.works">sign-up</a> for a <a href="http://scottgross.works">FREE</a> account.
-              </TD></TR>
-            </table>
-            </center> 
-          </h1>
-  
-            <BR>
-        <a class="info_modal_close" href="javascript:modalClose(true);" href="">X</a>
-        <BR>
-     
-      </div>
-  
-  
-  
-      
-  
-    <!-- 
-      -- NEW USER WELCOME MODAL 
-      -- 
-      -->
-      <div class="row modal info_modal modal_noclose" id="newUser_modal" style="display:none">
-  
-        <center><img class="info_logo" src="img/logo_2.png"></center> 
-        <h1>
-            <center>
-            <table>
-              <TR><TD>
-               New User Welcome -- To get the most out of the Leedz, <a href="#" onclick="openUserEdit()" id="dd_account">subscribe to trades</a>  and see the current leedz.
-                <BR>
-                <BR>
-                  <ul type="2" style="margin-left:2vw">
-                    <li><a href="#" onclick="openUserEdit()" id="dd_account">Account</a></li>
-                    <li><a href="./leedz_how-to.html" id="dd_howto">How To</a></li>
-                    <li><a href="./leedz_about.html">About</a></li>
-                    <li><a href="./leedz_contact.html">Contact</a></li>
-                  </ul>
-                   </TD></TR>
-            </table>
-            </center> 
-          </h1>
-          <a class="info_modal_close" href="javascript:modalClose(true);" href="">X</a>
-       
-      </div>
-  
 
 
   </body>
@@ -791,7 +787,6 @@ function trimAndRemoveSpaces(inputString) {
       function openNewUserWelcome() {
         let newU = document.getElementById("newUser_modal");
         newU.style.display = "block";
-        console.log("HELLO WORLD");
       }
       window.openNewUserWelcome = openNewUserWelcome;
 
@@ -1230,9 +1225,7 @@ function trimAndRemoveSpaces(inputString) {
  */
   function modalClose( force ) {
 
-    console.log("MODAL CLOSE=" + force);
-
-    errorModalClose();
+    if (! force) errorModalClose();
 
     // close all modal dialogs
     var modals = document.getElementsByClassName("info_modal");
@@ -1298,7 +1291,12 @@ function trimAndRemoveSpaces(inputString) {
           //    <a href="#" class="badge_href"><img class="badge_img"></a>
           //  </div>
           //  
-          const theList = document.querySelector("#up_center_column");
+          const theList = document.querySelector("#up_center_column");          
+          // start with a fresh list
+          while (theList.childElementCount > 1) {
+            theList.removeChild( theList.lastElementChild );
+          }
+
           const theTemplate = document.querySelector("#template_badge");
           
           for (var i = 0; i < current_user.bg.length; i++) {
@@ -1325,85 +1323,22 @@ function trimAndRemoveSpaces(inputString) {
 
 
 
+/**
+ * LOAD and INITALIZE the UI
+ *
+ *
+ */
+async function mainPageLoad( current_user ) {
+     
 
-
-
-
-
-
-
-
-//////////////////////////////////////////////////////////////////////
-//
-// START FROM HERE ON PAGE LOAD.....
-//
-///////////////////////////////////
-
-///////////////////////////////////
-
-  let current_user; 
-  const userLogin = {};
-  
-    // <body onload=" window.open(...)">
-    window.onload = async function() {
-
-      try {
-
-        getUserLogin( userLogin );
-
-
-        if (! userLogin['un']) {
-          // REDIRECT TO LOGIN URL
-
-          userLogin['un'] = 'clark.kent';
-
-          window.open(URL_LOGIN, "_self");
-          return;
-        }
-
-
-      } catch (err) {
-          var msg = "Cannot log into the Leedz.";
-          msg = err.message + "<BR>" + msg + "<BR>Using guest account.";
-          printError("Leedz Login", msg);
-          errorModal( msg , false );
-          
-          // DO NOT FAIL
-          // ! USE GUEST USER
-          current_user = guestUser();   
-      }
-
-
-
-      if (isGuestUser(false)) {
-        try {
-          await initUser( userLogin['un'] ); // will throw error
-
-          // return newly-loaded user
-          current_user = getCurrentUser( false );
-
-
-        } catch (error) {
-
-          var msg = "Cannot load user data.<BR>Using guest account.";
-          msg = error + "<BR>" + msg;
-          printError("Leedz Login", msg);
-          errorModal( msg , false );
-
-          // DO NOT FAIL
-          // ! USE GUEST USER
-          current_user = guestUser();   
-
-        }
-      }
-
+      console.log("LOADING PAGE");
 
       // LOADING MODALS...
       //
       // Is user a guest.user or a NEW user with NO trade subscriptions
       // will be given default top (MAX_TRADE_SUBSCRIPTIONS) like guest
       //
-      const newUser = (isGuestUser(false) && current_user.sb.length == 0);
+      const newUser = (isGuestUser(true) || current_user.sb.length == 0);
       if (newUser) {
         console.log("!!!!!   NEW USER DETECTED OPEN WELCOME!");
         openNewUserWelcome();
@@ -1585,6 +1520,71 @@ function trimAndRemoveSpaces(inputString) {
 
 
 
+//////////////////////////////////////////////////////////////////////
+//
+// START FROM HERE ON PAGE LOAD.....
+//
+//////////////////////////////////////////////////////////////////////
+
+// <body onload=" window.open(...)">
+window.onload = async function() {
+
+  let current_user; 
+  const userLogin = {};
+  
+  try {
+
+    getUserLogin( userLogin );
+
+
+    if (! userLogin['un']) {
+        // REDIRECT TO LOGIN URL
+        // window.open(URL_LOGIN, "_self");
+        userLogin['un'] = 'dave.reyes';
+        // return;
+    }
+
+
+  } catch (err) {
+      var msg = "Cannot log into the Leedz.";
+      msg = err.message + "<BR>" + msg + "<BR>Using guest account.";
+      printError("Leedz Login", msg);
+      errorModal( msg , false );
+      
+      // DO NOT FAIL
+      // ! USE GUEST USER
+      current_user = guestUser();   
+  }
+
+
+
+  if (isGuestUser(false)) {
+    try {
+      await initUser( userLogin['un'] ); // will throw error
+
+      // return newly-loaded user
+      current_user = getCurrentUser( false );
+
+
+    } catch (error) {
+
+      var msg = "Cannot load user data.<BR>Using guest account.";
+      msg = error + "<BR>" + msg;
+      printError("Leedz Login", msg);
+      errorModal( msg , false );
+
+      // DO NOT FAIL
+      // ! USE GUEST USER
+      current_user = guestUser();   
+
+    }
+  }
+
+  // LOAD the page with the current user info
+  mainPageLoad( current_user );
+}
+
+
 
   /**
   * RESIZE
@@ -1594,6 +1594,43 @@ function trimAndRemoveSpaces(inputString) {
   window.onresize = (event) => {
     cssScreenSize();
   };
+
+
+  /**
+   * BACK BUTTON
+   * called when user comes back to main page from edit/view html pages
+   */
+
+  window.addEventListener("popstate", () => {
+
+    let storageChanged = false;
+
+    // Define the storage event listener
+    const storageEventListener = function (e) {
+      storageChanged = true;
+      window.removeEventListener("storage", storageEventListener);
+   
+      const current_user = getCurrentUser(true);
+      // console.log(current_user);
+
+      // LOAD the page with the current user info
+      mainPageLoad( current_user );
+    };
+  
+    
+    // Add the storage event listener
+    window.addEventListener("storage", storageEventListener);
+  
+    // Check if the storage event has already occurred
+    if (storageChanged) {
+
+      const current_user = getCurrentUser(true);
+      // console.log(current_user);
+
+      // LOAD the page with the current user info
+      mainPageLoad( current_user );
+    }
+  });
 
 
 </script>

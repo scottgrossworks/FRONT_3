@@ -81,9 +81,10 @@ export async function db_updateUser( code, user_obj ) {
             params.append( EMAIL_URL_PARAM, user_obj.em );
             params.append( WEBSITE_URL_PARAM, user_obj.ws );
             params.append( ABOUT_URL_PARAM, user_obj.ab );
-            params.append( ZIP_HOME_URL_PARAM, user_obj.zp );
-            params.append( ZIP_RADIUS_URL_PARAM, user_obj.zr );
+            if (user_obj.zp) params.append( ZIP_HOME_URL_PARAM, user_obj.zp );
+            if (user_obj.zr) params.append( ZIP_RADIUS_URL_PARAM, user_obj.zr );
             params.append( SUBS_URL_PARAM, user_obj.sb );
+
 
             theURL.search = params.toString();
             
@@ -131,8 +132,6 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
     let json_obj = [];
 
     switch (code) {
-
-
 
     
         /**
@@ -297,7 +296,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
             theURL.search = params.toString();
 
-            console.log("THEURL=" + theURL);
+            console.log("CHANGE LEED URL=" + theURL);
 
             await doGet( theURL )
             .then(data => {
@@ -439,13 +438,14 @@ export async function db_getUser( username ) {
         });
 
 
-
     } catch (error) {
         throwError(error.src, error.message);
     }
 
     // SHOULD NOT BE NULL
     // or would have thrown error above
+    console.log("DB_GET_USER");
+    console.log(json_obj);
 
     return json_obj;
 }    
@@ -604,7 +604,7 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
  */
 async function doGet( theURL ) {
 
-    // console.log("---------> DOGET URL=" + theURL);
+    console.log("---------> DOGET URL=" + theURL);
 
 
     return fetch(theURL,
@@ -630,7 +630,8 @@ async function doGet( theURL ) {
             the_json = response.json();
         
         } catch (err) {
-            throwError("JSON", err.message);
+            var msg = "Cannot decode JSON: " + the_json;
+            throwError("JSON", msg);
         }
 
 
@@ -653,7 +654,7 @@ async function doGet( theURL ) {
         }
     }
     ).catch(error => {
-        printError( "HTTP GET", error.message );
+        printError( "HTTP GET error", error.message );
         throwError( error.status, error.message );
     });
 

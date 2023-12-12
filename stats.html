@@ -1,0 +1,451 @@
+<!-- 
+    --
+    --
+    -->
+   
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+         <title>Welcome to the Leedz</title>
+     
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+    <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+
+    <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+    <link rel="stylesheet" href="./css/stats.css" type="text/css" />
+    <link rel="stylesheet" href="./css/trades.css" type="text/css" />
+    <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
+
+    
+    <script src="./js/trades.js" type="module" defer></script>
+    <script src="./js/error.js" type="module" defer></script>
+    <script src="./js/dbTools.js" type="module" defer></script>
+
+ 
+   </head>  
+    
+   <body>
+
+
+    <div class="row" id="stats_header">
+
+
+                
+        <div class="column dropdown _2">
+
+            <span id="up_logo"><a href="javascript:dropdownMenu();">
+                <img id="dropdown_logo" src="./img/logo_dd.png"></a></span>
+            <div id="dropdown_menu" class="dropdown-content">
+
+                <a href="#" onclick="openUserEdit()" id="dd_account">Account</a>
+
+                <a href="./leedz_how-to.html" id="dd_howto">How To</a>
+
+                <a href="./leedz_about.html">About</a>
+
+                <a href="./leedz_contact.html">Contact</a>
+
+                <a id="dd_logout">Log Out</a>
+             </div>
+        </div>
+
+        
+
+        <div class="column header_col _6">
+            <center>Buy. Sell. Grow your Hustle.</center>
+        </div>
+                
+
+        <div class="column login_col _2">
+
+        <!-- LOGIN BUTTON -->
+        <button id="loginButton" class="button stats_button" value="login" onclick="">Login</button>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="container">
+        
+
+
+        
+
+
+
+        <div class="item" id="leedz_live">
+            <div class="item_title" style="width:100%">Leedz Live</div>
+     
+            <table>
+                <TR>
+                    <TD><b>Last post: <a id="date_posted"></a></TD>
+                </TR>
+
+                <TR>
+                    <TD><b>Last sale: <a id="date_bought_2"></a></TD>
+                </TR>
+
+            </table>
+        </div>
+
+
+
+
+        
+        <div class="item" id="top_trades">
+
+            <div class="item_title" style="width:100%">Top Trades</div>
+            <table>
+                <TR>
+                    <TD><b>The top <a id="maxTrades"></a> trades by <b style=color:green>leedz for sale:</b></b></TD>
+                <TR>
+                <TR>
+                    <td id="trades_table">
+
+                        <template id="template_each_trade">
+                            <span class="each_trade" style="display:inline-block;padding-right:4px">
+                                <button class="trade_radio" 
+                                style="transform:translate(2px, 3px);"></button>
+                                <label></label><sup></sup>
+                                
+                            </span>
+                        </template>
+                    </td>
+                </TR>
+            </table>
+
+
+        </div>
+
+
+        
+        
+
+        <div class="item" id="login_item">
+            <div class="item_title" style="width:100%">Secure Login</div>
+
+            <span>Your privacy protected by Amazon Web Services.</span>
+            <!-- LOGIN BUTTON -->
+            <button id="loginButton" class="button stats_button" value="login" style="" onclick="">Login</button>
+
+            
+        </div>
+
+
+
+
+
+        <div class="item" id="buying_selling">
+            <div class="item_title" style="width:100%">Buying &amp; Selling</div>
+     
+                    <table>
+                        <TR><TD><b>Leedz bought: <a id="leedz_bought"></a></TD></TR>
+                        <TR><TD>Last sale:</TD></TR>
+                        <TD><a id="date_bought_1"></a></TD></TR>
+                        <TR><TD>Where: <a id="sale_zip"></a></TD><TR>
+                        <TR><TD>Sold for: <a id="sale_price"></a></TD><TR>
+                    </table>
+
+        </div>
+
+
+
+
+
+        <div class="item" id="leedz_leaders">
+            <div class="item_title" style="width:100%">Leedz Leaders</div>
+     
+            <table>
+                <TR>
+                    <TD><b>Leedz</b> for sale: <a id="leedz_posted"></a></TD>
+                </TR>
+
+                <TR>
+                    <TD>in <a id="trades_total"></a> total <b>trades</b>.</TD>
+                </TR>
+
+            </table>
+        </div>
+
+
+
+        
+
+        <div class="item" id="contact_item">
+            <div class="item_title" style="width:100%">Contact the Leedz</div>
+
+            <!-- LOGIN BUTTON -->
+            <button id="contactButton" class="button stats_button" value="contact" style="padding-right:20px" onclick="">Contact</button>
+
+            
+        </div>
+
+
+
+
+
+    </div>
+    
+</body>
+
+
+
+
+
+
+
+<script type="module" charset=”utf-8″>
+	import { turnTrade_On, turnTrade_Off, getAllTrades, createTradesAndColors } from "./js/trades.js";
+    import { db_getStats } from "./js/dbTools.js";
+    import { printError, errorModal, throwError } from "./js/error.js";
+    import { prettyFormatDT, formatDTforInput } from "./js/dates.js";
+
+    const MAX_TRADES = 6;
+
+
+
+
+
+/**
+ * 
+ * 
+ */
+ async function initStats() {
+
+	waitCursor();
+    try {
+        const stats = await getStats();
+            
+
+        if (! stats) {
+            throw new Error("server returned null stats.");
+        }
+
+        console.log("STATS=");
+        console.log(stats);
+
+        var element;
+        
+        element = document.getElementById("leedz_posted");
+        element.innerHTML = stats.lp;
+
+        
+        element = document.getElementById("leedz_bought");
+        element.innerHTML = stats.lb;
+
+        // date posted
+        let the_date = prettyFormatDT( formatDTforInput( stats.dp ) );
+        element = document.getElementById("date_posted");
+        element.innerHTML = the_date;
+
+        // date bought
+        the_date = prettyFormatDT( formatDTforInput( stats.db ) );
+        element = document.getElementById("date_bought_1");
+        element.innerHTML = the_date;
+        element = document.getElementById("date_bought_2");
+        element.innerHTML = the_date;
+        
+
+
+        element = document.getElementById("sale_price");
+        element.innerHTML = '$ ' + stats.pr;
+
+
+        element = document.getElementById("sale_zip");
+        element.innerHTML = stats.zp;
+
+    } catch (error) {
+        
+        // DO NOT FAIL -- show error modal dialog and print error to console
+        var msg = "Cannot load stats.<BR>Please refresh page."
+        msg = error.message + "<BR>" + msg;
+        
+        printError("Init Stats", error);
+        // errorModal( msg , true );
+
+    } finally {
+        normalCursor();
+    }
+
+
+  }
+
+
+    
+
+/**
+ * 
+ * 
+ */
+ async function getStats() {
+    try {
+      const result = await db_getStats();
+      return result;
+    } catch (error) {
+      // Handle any errors that occur during the fetch request
+      throw error;
+    }
+}
+
+
+
+/**
+ * 
+ * 
+ */
+ async function initTrades() {
+
+	let trades = [];
+  
+	waitCursor();
+
+	try {
+	  await getAllTrades().then((response) => trades = response ); 
+  
+		if (trades == null) {
+		  throw new Error("server returned null trades.");
+		}
+  
+		if (trades.length == undefined || trades.length == 0) {
+		  throw new Error("server returned empty (0) trades.");
+		}
+
+
+
+		// init TRADES struct
+		// initialize the spectrum of colors
+		createTradesAndColors( trades );  
+		
+
+
+		initTradesTable( trades );
+
+        
+
+  
+	  } catch (error) {
+		
+		// DO NOT FAIL -- show error modal dialog and print error to console
+		var msg = "Cannot load trades.<BR>Please refresh page."
+		msg = error.message + "<BR>" + msg;
+		
+		printError("Init Trades Column", error);
+		// errorModal( msg , true );
+	
+	} finally {
+		normalCursor();
+	}
+  }
+
+
+	
+
+
+
+
+
+/**
+ *
+ * all_trades is the array 
+ * 
+ * ONLY display the trades to which the user is subscribed
+ * [
+ * {
+   tn: "caricatures",
+   nl: 5
+ * }, .... 
+ * ]
+*/
+function initTradesTable( all_trades ) {
+
+	if ((all_trades == null) || (all_trades.length == 0)) return;
+  
+
+    var element = document.getElementById("maxTrades");		
+    element.innerHTML = MAX_TRADES;
+
+    element = document.getElementById("trades_total");
+    element.innerHTML = all_trades.length;
+
+
+	// import DOM elements from html
+	const theList = document.querySelector("#trades_table");
+	const subs = [];
+	const theTemplate = document.querySelector("#template_each_trade");
+
+    var count = 0;
+	all_trades.forEach((trade) => {
+
+        if (++count > MAX_TRADES) return;
+
+        // clone a new node
+        const newNode = theTemplate.content.cloneNode(true).querySelector(".each_trade");
+
+        // set the label
+        let theLabel = newNode.querySelector("label");
+        theLabel.textContent = trade.sk;
+
+        // set the leed count as a superscript
+        // if there is an error we are using default leedz without numbers
+        if (trade.nl != undefined)
+            newNode.querySelector("sup").textContent = trade.nl;
+
+        let radioButton = newNode.querySelector(".trade_radio");
+        turnTrade_On(null, radioButton, theLabel, trade.sk);
+
+
+        theList.appendChild( newNode );
+	});
+
+    
+}
+
+
+	
+
+
+
+
+
+
+/**
+ * Change to a wait cursor
+ */
+ function waitCursor() {
+    document.body.style.cursor = 'wait';
+}
+
+/**
+ * Change back to normal cursor
+ */
+function normalCursor() {
+    document.body.style.cursor = 'default';
+}
+
+
+
+
+/**
+ * WINDOW OPEN 
+ * PAGE LOAD
+ *
+ */
+window.onload = async function() {
+    await initTrades();
+    console.log("STATS STATS STATS");
+    await initStats();
+}
+
+
+
+</script>
+
+</body>
+</html>

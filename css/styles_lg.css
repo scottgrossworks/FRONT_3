@@ -19,7 +19,7 @@
     font-family: var(--FONT_3);
 
 
-    --screen_size: L;
+    --screen_size: 'L';
     } 
 
 
@@ -46,6 +46,7 @@
   #action_panel {
     display:flex;
     overflow-y:scroll;
+    
 
   }
 

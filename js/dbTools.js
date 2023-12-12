@@ -407,6 +407,45 @@ export async function db_getTrades() {
 
 
 
+
+
+/**
+ * returns JSON list [ { key = "value" }, { key = "value" }, ... ] object
+ * 
+ * 
+ */
+export async function db_getStats() {
+
+    let json_obj= [];
+    try {
+
+        const theURL = new URL(API_GATEWAY + "getStats");
+       
+          
+        await doGet( theURL )
+        .then(data => {
+
+          json_obj = data;
+
+        })
+        .catch(error => {
+          printError("doGet()", error);
+          throwError('doGet()', 'There was a problem with the fetch operation:' + error.message);
+        });
+
+
+    } catch (error) {
+        throwError( error );
+
+    }
+
+    return json_obj;
+}
+
+
+
+
+
 /**
  * returns JSON user object
  * 
@@ -602,12 +641,11 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
  * 
  *
  */
-async function doGet( theURL ) {
+async function doGet(theURL) {
 
     console.log("---------> DOGET URL=" + theURL);
-
-
-    return fetch(theURL,
+try {
+    const response = await fetch(theURL,
     {
         method: 'GET',
         headers: {
@@ -616,31 +654,26 @@ async function doGet( theURL ) {
             },
         timeout:"8000"
         }
-    ).then(response => {
+    );
 
-        if (! response.ok) { 
-            console.log(response);
-            throw new Error('Network response was not OK: [' + response.status + "] :" + response.message);
-        }
+    if (! response.ok) { 
+        console.log(response);
+        throw new Error('Network response was not OK: [' + response.status + "] :" + response.message);
+    }
 
         let the_json = null;
-        
         // DECODE THE JSON
         try {   
-            the_json = response.json();
-        
+            the_json = await response.json();
+            
         } catch (err) {
             var msg = "Cannot decode JSON: " + the_json;
             throwError("JSON", msg);
-        }
-
+        } 
 
         if (response.status == 200) {
 
-            // SUCCESS!
-            // console.log(the_json);
-            return the_json;
-
+            return Promise.resolve(the_json);
 
         } else if (response.status == 204) {
 
@@ -652,12 +685,12 @@ async function doGet( theURL ) {
             var the_msg = "<BR>Error message: " + the_json.er;
             throw new Error( the_code + the_msg );
         }
-    }
-    ).catch(error => {
+
+
+    } catch(error) {
         printError( "HTTP GET error", error.message );
         throwError( error.status, error.message );
-    });
-
+    }
 }
       
 

@@ -1,0 +1,233 @@
+@import "./globals.css";
+
+
+.container {
+    
+    display: flex;
+    flex-wrap: wrap;
+    height:100%;
+    padding: 2vw;
+}
+
+#stats_header{
+    display: flex;
+
+    width:100vw;
+    border-bottom: 2px solid var(--LEEDZ_DARKGREEN);
+    margin: 1vh auto 3vh 1vw;
+}
+
+.login_col {
+    display: flex;
+    justify-content: right;
+    margin-right:3vw;
+    
+}
+
+
+.header_col {
+
+    color:black;
+    font-size:x-large;
+   
+    font-family: var(--FONT_2);
+    font-weight: 600;
+    margin:auto 0;
+}
+
+.item {
+
+  margin:1vh 2vw;
+
+    background-color: var(--LEEDZ_GRAY);    
+    color:black;
+    
+    border-radius: 14px;
+
+    padding:0;
+
+    text-align: left;
+    
+
+    flex-basis: 300px;
+    min-width: 300px;
+
+
+    height: max-content;
+    min-height: 130px;
+
+    box-sizing: border-box; /* Add box-sizing property */
+}
+
+
+
+.item_title {
+  position: sticky;
+  top: 0;
+  padding: 1vw;
+  width: 100%;
+  
+  background: linear-gradient(to right, green, white);
+  color: white;
+
+  text-align: left;
+  font-family:(--FONT_2);
+  font-weight:600;
+
+  box-sizing: border-box; /* Add box-sizing property */
+}
+
+
+
+a {
+  color:green;
+  font-weight:600;
+}
+
+#top_trades table {
+  padding: 2vw;
+}
+
+#buying_selling table {
+    padding:2vw;
+    line-height: 3vh;
+}
+
+
+#leedz_leaders table {
+    font-size: large;
+    padding:2vw;
+    line-height: 4vh;
+}
+
+
+#leedz_live table {
+  font-size:medium;
+  padding:2vw;
+  line-height: 4vh;
+}
+
+
+#login_item .item_title {
+  background: dodgerblue;
+ 
+}
+
+#loginButton {
+  margin:2vw auto;
+  background-color: dodgerblue;
+  color:white;
+}
+
+
+#contact_item .item_title {
+  background: gold;
+  color:black;
+}
+
+
+#contact_item #contactButton {
+  margin:2vw auto;
+  background-color: coral;
+  color:white;
+}
+
+
+
+@media screen and (max-width: 649px) {
+    .container {
+       flex-direction: column;
+        align-items: left;
+      }
+      
+      .item {
+        width:100%;
+      }
+
+      .item_title {
+        font-size:medium;
+      }
+
+
+      #dropdown_logo{
+        margin: 1vh 0 0 1vw;
+        width:100%;
+        min-width:40px;
+        max-width:100px;
+      }
+
+        
+      .stats_button {
+        padding:10px 10px 10px 10px;  
+    
+        margin: 1vh auto;
+        font-size:medium;
+        border-radius: 10px;
+    }   
+
+
+    .header_col {
+
+        font-size:4vw;
+    }
+
+}
+
+
+
+@media screen and (min-width: 650px) {
+
+  .container {
+    flex-direction: row;
+
+  }
+
+      .item {
+        flex-grow: 1;
+
+      }
+      
+      .item_title {
+        font-size:large;
+      }
+
+      #dropdown_logo{
+        width:max-content;
+        max-width:140px;
+        padding:4px;
+      }
+
+
+
+      .stats_button{
+    
+        font-size:large;
+        
+        padding:15px 20px;
+        margin: auto 1vw;    
+        border-radius: 14px;
+    }
+
+
+}
+
+
+
+
+.stats_button {
+
+    position:relative;
+
+    border: none;
+    color: white;
+   
+    text-decoration: none;
+    display: flex;
+    font-weight: bolder;
+
+
+    width:max-content;
+    height:max-content;
+
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
+}

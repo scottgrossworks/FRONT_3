@@ -75,8 +75,11 @@
 
     
     <div class="row" id="links_header">
-        <a href="">Contact</a>
+
+        <a href="">How-To</a>
         <a href="">About</a>
+        <a href="">Contact</a>
+        <a href="">Join Us</a>
     </div>
 
 
@@ -88,35 +91,32 @@
 
 
 
-        <div class="item" id="leedz_live">
-            <div class="item_title" style="width:100%">Leedz Live</div>
+        <div class="item" id="leedz_leaders">
+            <div class="item_title" style="width:100%">Leedz Leaders</div>
      
             <table>
+     
                 <TR>
-                    <TD><b>Last post: <a id="date_posted"></a></TD>
+                    <TD><b>Leedz</b> for sale: <a id="leedz_posted"></a></TD>
                 </TR>
 
+                <TR><TD><b>Total bought: <a id="leedz_bought"></a></TD></TR>
+
                 <TR>
-                    <TD><b>Last sale: <a id="date_bought_2"></a></TD>
+                    <TD><b>Total trades: </b><a id="trades_total"></a></TD>
                 </TR>
 
             </table>
         </div>
 
 
-
-
-        
-        <div class="item" id="top_trades">
-
-            <div class="item_title" style="width:100%">Top Trades</div>
-            <table>
-                <TR>
-                    <TD><b>The top <a id="maxTrades"></a> trades by <b style=color:green>leedz for sale:</b></b></TD>
-                <TR>
-                <TR>
-                    <td id="trades_table">
-
+        <div class="item" id="last_sale">
+            <div class="item_title" style="width:100%">Latest Leedz</div>
+     
+                    <table>
+                        <TR><TD id="trade_div">
+                            <!-- TRADE DIV -->
+                            <b>Trade: </b>
                         <template id="template_each_trade">
                             <span class="each_trade" style="display:inline-block;padding-right:4px">
                                 <button class="trade_radio" 
@@ -125,12 +125,19 @@
                                 
                             </span>
                         </template>
-                    </td>
-                </TR>
-            </table>
+                    
+                    </TD></TR>
 
+                        <TR><TD><a class="stats_date" id="date_bought_3"></a></TD></TR>
+                        <TR><TD><b>Where:</b> <a id="sale_zip_2"></a></TD><TR>
+                        <TR><TD><b>Sold for:</b> <a id="sale_price_2"></a></TD><TR>
+                    </table>
 
         </div>
+
+
+
+
 
 
         
@@ -156,15 +163,31 @@
 
         
 
-        <div class="item" id="last_sale">
-            <div class="item_title" style="width:100%">Last Sale</div>
-     
-                    <table>
-                        <TR><TD><b>Last sale:</b> <a id="last_trade"></a></TD></TR>
-                        <TR><TD><a id="date_bought_3"></a></TD></TR>
-                        <TR><TD><b>Where:</b> <a id="sale_zip_2"></a></TD><TR>
-                        <TR><TD><b>Sold for:</b> <a id="sale_price_2"></a></TD><TR>
-                    </table>
+
+
+        
+        <div class="item" id="top_trades">
+
+            <div class="item_title" style="width:100%">Top Trades</div>
+            <table>
+                <TR>
+                    <TD><b>The top <a id="maxTrades"></a> trades by <b style=color:green>leedz for sale:</b></b></TD>
+                </TR>                
+                <TR>
+                    <td id="trades_table">
+
+                        <template id="template_each_trade">
+                            <span class="each_trade" style="display:inline-block;padding-right:4px">
+                                <button class="trade_radio" 
+                                style="transform:translate(2px, 3px);"></button>
+                                <label></label><sup></sup>
+                                
+                            </span>
+                        </template>
+                    </td>
+                </TR>
+            </table>
+
 
         </div>
 
@@ -172,32 +195,34 @@
 
 
 
-
-        <div class="item" id="leedz_leaders">
-            <div class="item_title" style="width:100%">Leedz Leaders</div>
+        <div class="item" id="leedz_live">
+            <div class="item_title" style="width:100%">Leedz Live</div>
      
             <table>
-     
-                <TR>
-                    <TD><b>Leedz</b> for sale: <a id="leedz_posted"></a></TD>
-                </TR>
+                <TR><TD><b>Last post:</b></TD></TR>    
+                <TR><TD><a id="date_posted"></a></TD></TR>
 
-                <TR><TD><b>Total bought: <a id="leedz_bought"></a></TD></TR>
-
-                <TR>
-                    <TD><b>Total trades: </b><a id="trades_total"></a></TD>
-                </TR>
+                <TR><TD><b>Last sale:</b></TD></TR>    
+                <TR><TD><a id="date_bought_2"></a></TD></TR>
 
             </table>
         </div>
-
-
-
         
 
         <div class="item" id="contact_item">
             <div class="item_title" style="width:100%">Contact the Leedz</div>
 
+            <BR>
+                <ul type="disc">
+                
+                    <li>How-To Hustle</li>
+                    <li>Join our Team</li>
+                    <li>Suggest a new trade</li>
+                    <li>Report a Bug</li>
+    
+                </ul>
+           <BR>
+           
             <!-- LOGIN BUTTON -->
             <button id="contactButton" class="button stats_button" value="contact" style="padding-right:20px" onclick="">Contact</button>
 
@@ -209,6 +234,9 @@
 
 
     </div>
+    <BR>
+    <BR>
+    <BR>
     
 </body>
 
@@ -272,8 +300,7 @@
 
 
         // trade of last bought leed
-        element = document.getElementById("last_trade");
-        element.innerHTML = stats.ab;
+        addToTradeDiv( stats.ab );
 
 
         element = document.getElementById("sale_price_2");
@@ -413,14 +440,8 @@ function initTradesTable( all_trades ) {
         let theLabel = newNode.querySelector("label");
         theLabel.textContent = trade.sk;
 
-        // set the leed count as a superscript
-        // if there is an error we are using default leedz without numbers
-        if (trade.nl != undefined)
-            newNode.querySelector("sup").textContent = trade.nl;
-
         let radioButton = newNode.querySelector(".trade_radio");
         turnTrade_On(null, radioButton, theLabel, trade.sk);
-
 
         theList.appendChild( newNode );
 	});
@@ -431,8 +452,27 @@ function initTradesTable( all_trades ) {
 
 	
 
+/**
+ * The trade of the last sale
+ *
+ */
+function addToTradeDiv( trade_name ) {
+    const theList = document.querySelector("#trade_div");
+    const theTemplate = document.querySelector("#template_each_trade");
+
+    // clone a new node
+    const newNode = theTemplate.content.cloneNode(true).querySelector(".each_trade");
+
+    // set the label
+    let theLabel = newNode.querySelector("label");
+    theLabel.textContent = trade_name;
+
+    let radioButton = newNode.querySelector(".trade_radio");
+    turnTrade_On(null, radioButton, theLabel, trade_name);
 
 
+    theList.appendChild( newNode );
+}
 
 
 

@@ -111,6 +111,13 @@ a {
   padding: 2vw;
 }
 
+#trades_table {
+  padding-top:10px;
+}
+
+
+
+
 
 #leedz_leaders table {
   font-size:medium;
@@ -120,9 +127,9 @@ a {
 
 
 #leedz_live table {
-  font-size:medium;
+
   padding:2vw;
-  line-height: 4vh;
+  line-height: 3vh;
 }
 
 
@@ -139,7 +146,7 @@ a {
 
 #login_item span {
   margin: 20px 2vw 0px 2vw;
-  font-size:large;
+  font-size:medium;
 }
 
 #login_item img {
@@ -163,7 +170,17 @@ a {
 }
 
 
+a#date_posted {
+  font-size: small;
+}
 
+a#date_bought_2 {
+  font-size: small;
+}
+
+a#date_bought_3 {
+  font-size: small;
+}
 
 #last_sale table {
   font-size:medium;
@@ -177,6 +194,12 @@ a {
 #contact_item .item_title {
   background: gold;
   color:black;
+}
+
+#contact_item ul {
+    margin-left:20%;
+    font-size:medium;
+    width:70%;
 }
 
 
@@ -195,7 +218,7 @@ a {
       }
       
       .item {
-        width:100%;
+        width:96%;
       }
 
       .item_title {
@@ -210,14 +233,7 @@ a {
         max-width:100px;
       }
 
-        
-      .stats_button {
-        padding:10px 10px 10px 10px;  
-  
-        margin: 1vh 0;
-        font-size:medium;
-        border-radius: 10px;
-    }   
+       
 
 
     .header_col {
@@ -230,7 +246,33 @@ a {
       
       min-width:100px;
     }
+
+
+ 
+
+
+    .stats_button{
+    
+      font-size:medium;
+      margin: 1vh 0;
+      padding:15px 20px;
+      border-radius: 14px;
+
+      color:green;
+  }
+
+
+
+
+    #contact_item  {
+    height:fit-content;
+    min-height:230px;
+    }
+
+
+
 }
+
 
 
 

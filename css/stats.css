@@ -1,6 +1,10 @@
 @import "./globals.css";
 
 
+body {
+  overflow-y: scroll !important;
+}
+
 .container {
     
     display: flex;
@@ -13,8 +17,23 @@
     display: flex;
 
     width:100vw;
-    border-bottom: 2px solid var(--LEEDZ_DARKGREEN);
-    margin: 1vh auto 3vh 1vw;
+  
+    margin: 1vh auto 0 1vw;
+}
+
+
+
+#links_header {
+  line-height:4vh;
+  background-color: var(--LEEDZ_DARKGREEN);
+  color:white;
+}
+
+
+
+#links_header a {
+  text-decoration: none;
+  color:white;
 }
 
 .login_col {
@@ -37,26 +56,30 @@
 
 .item {
 
+
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+
+  text-align: left;
+
+
   margin:1vh 2vw;
 
-    background-color: var(--LEEDZ_GRAY);    
-    color:black;
-    
-    border-radius: 14px;
+  background-color: var(--LEEDZ_GRAY);    
+  color:black;
 
-    padding:0;
+  border-radius: 12px;
 
-    text-align: left;
-    
+  padding:0;
 
-    flex-basis: 300px;
-    min-width: 300px;
+  flex-basis: 200px;
+  min-width: 300px;
+  height:fit-content;
+  min-height: 130px;
 
 
-    height: max-content;
-    min-height: 130px;
-
-    box-sizing: border-box; /* Add box-sizing property */
+  box-sizing: border-box; /* Add box-sizing property */
 }
 
 
@@ -64,10 +87,10 @@
 .item_title {
   position: sticky;
   top: 0;
-  padding: 1vw;
+  padding: 2vw;
   width: 100%;
   
-  background: linear-gradient(to right, green, white);
+  background: linear-gradient(to right, var(--LEEDZ_DARKGREEN), white);
   color: white;
 
   text-align: left;
@@ -88,16 +111,11 @@ a {
   padding: 2vw;
 }
 
-#buying_selling table {
-    padding:2vw;
-    line-height: 3vh;
-}
-
 
 #leedz_leaders table {
-    font-size: large;
-    padding:2vw;
-    line-height: 4vh;
+  font-size:medium;
+  padding:2vw;
+  line-height: 4vh;
 }
 
 
@@ -108,16 +126,52 @@ a {
 }
 
 
+#login_item {
+  
+  min-height:fit-content;
+ 
+}
+
 #login_item .item_title {
   background: dodgerblue;
  
 }
 
-#loginButton {
-  margin:2vw auto;
-  background-color: dodgerblue;
-  color:white;
+#login_item span {
+  margin: 20px 2vw 0px 2vw;
+  font-size:large;
 }
+
+#login_item img {
+  max-width: 100px;
+  width:min-content;
+  padding:10px;
+}
+
+
+#login_item table {
+  margin:0 auto;
+  max-width: 80%;
+  max-height: 100%;
+}
+
+
+
+#login_item table td {
+  padding:0;
+  align-self: center;
+}
+
+
+
+
+#last_sale table {
+  font-size:medium;
+  padding:2vw;
+  line-height: 3.25vh;
+}
+
+
 
 
 #contact_item .item_title {
@@ -159,8 +213,8 @@ a {
         
       .stats_button {
         padding:10px 10px 10px 10px;  
-    
-        margin: 1vh auto;
+  
+        margin: 1vh 0;
         font-size:medium;
         border-radius: 10px;
     }   
@@ -171,6 +225,11 @@ a {
         font-size:4vw;
     }
 
+
+    #login_item table td {
+      
+      min-width:100px;
+    }
 }
 
 
@@ -220,7 +279,8 @@ a {
 
     border: none;
     color: white;
-   
+    background-color: dodgerblue;
+
     text-decoration: none;
     display: flex;
     font-weight: bolder;

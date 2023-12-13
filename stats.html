@@ -56,20 +56,28 @@
 
         
 
-        <div class="column header_col _6">
+        <div class="column header_col _55">
             <center>Buy. Sell. Grow your Hustle.</center>
         </div>
                 
 
-        <div class="column login_col _2">
+        <div class="column login_col _15">
 
         <!-- LOGIN BUTTON -->
-        <button id="loginButton" class="button stats_button" value="login" onclick="">Login</button>
+        <button  class="button stats_button" value="login" onclick="">Login</button>
 
         </div>
 
+        <div class="column _1"></div>
     </div>
 
+
+
+    
+    <div class="row" id="links_header">
+        <a href="">Contact</a>
+        <a href="">About</a>
+    </div>
 
 
     <div class="container">
@@ -130,30 +138,36 @@
 
         <div class="item" id="login_item">
             <div class="item_title" style="width:100%">Secure Login</div>
-
             <span>Your privacy protected by Amazon Web Services.</span>
             <!-- LOGIN BUTTON -->
-            <button id="loginButton" class="button stats_button" value="login" style="" onclick="">Login</button>
+            <table><TR>
+                <TD>
+                    <img src="img/aws.png">
+                </TD>
+                <TD>
+                    <button id="loginButton" class="button stats_button" value="login" style="" onclick="">Login</button>
+                </TD>
+            </TR></table>
 
             
         </div>
 
 
 
+        
 
-
-        <div class="item" id="buying_selling">
-            <div class="item_title" style="width:100%">Buying &amp; Selling</div>
+        <div class="item" id="last_sale">
+            <div class="item_title" style="width:100%">Last Sale</div>
      
                     <table>
-                        <TR><TD><b>Leedz bought: <a id="leedz_bought"></a></TD></TR>
-                        <TR><TD>Last sale:</TD></TR>
-                        <TD><a id="date_bought_1"></a></TD></TR>
-                        <TR><TD>Where: <a id="sale_zip"></a></TD><TR>
-                        <TR><TD>Sold for: <a id="sale_price"></a></TD><TR>
+                        <TR><TD><b>Last sale:</b> <a id="last_trade"></a></TD></TR>
+                        <TR><TD><a id="date_bought_3"></a></TD></TR>
+                        <TR><TD><b>Where:</b> <a id="sale_zip_2"></a></TD><TR>
+                        <TR><TD><b>Sold for:</b> <a id="sale_price_2"></a></TD><TR>
                     </table>
 
         </div>
+
 
 
 
@@ -163,12 +177,15 @@
             <div class="item_title" style="width:100%">Leedz Leaders</div>
      
             <table>
+     
                 <TR>
                     <TD><b>Leedz</b> for sale: <a id="leedz_posted"></a></TD>
                 </TR>
 
+                <TR><TD><b>Total bought: <a id="leedz_bought"></a></TD></TR>
+
                 <TR>
-                    <TD>in <a id="trades_total"></a> total <b>trades</b>.</TD>
+                    <TD><b>Total trades: </b><a id="trades_total"></a></TD>
                 </TR>
 
             </table>
@@ -247,18 +264,22 @@
 
         // date bought
         the_date = prettyFormatDT( formatDTforInput( stats.db ) );
-        element = document.getElementById("date_bought_1");
-        element.innerHTML = the_date;
+
         element = document.getElementById("date_bought_2");
         element.innerHTML = the_date;
-        
+        element = document.getElementById("date_bought_3");
+        element.innerHTML = the_date;
 
 
-        element = document.getElementById("sale_price");
+        // trade of last bought leed
+        element = document.getElementById("last_trade");
+        element.innerHTML = stats.ab;
+
+
+        element = document.getElementById("sale_price_2");
         element.innerHTML = '$ ' + stats.pr;
 
-
-        element = document.getElementById("sale_zip");
+        element = document.getElementById("sale_zip_2");
         element.innerHTML = stats.zp;
 
     } catch (error) {

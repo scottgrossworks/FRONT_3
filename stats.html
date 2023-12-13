@@ -111,7 +111,7 @@
 
 
         <div class="item" id="last_sale">
-            <div class="item_title" style="width:100%">Latest Leedz</div>
+            <div class="item_title" style="width:100%">Leedz Latest</div>
      
                     <table>
                         <TR><TD id="trade_div">
@@ -439,6 +439,9 @@ function initTradesTable( all_trades ) {
         // set the label
         let theLabel = newNode.querySelector("label");
         theLabel.textContent = trade.sk;
+        
+        // set the leed count as a superscript
+        newNode.querySelector("sup").textContent = trade.nl;
 
         let radioButton = newNode.querySelector(".trade_radio");
         turnTrade_On(null, radioButton, theLabel, trade.sk);

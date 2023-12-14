@@ -21,11 +21,39 @@ body {
     margin: 1vh auto 0 1vw;
 }
 
+#stats_footer{
+
+  display: flex;
+  align-items: center;
+  position: static;
+  bottom: 0;
+  margin: 0 auto;
+
+  padding:1vw;
+  width:100vw;
+  height:5vh;
+  background-color: var(--LEEDZ_EMERALD);
+  color:white;
+
+  font-family: var(--FONT_2);
+}
+
+
+
+#stats_footer span {
+  margin:0 auto;
+  width:80%;
+}
+
+#stats_footer a {
+  text-decoration: none;
+  color:white;
+}
 
 
 #links_header {
   line-height:4vh;
-  background-color: var(--LEEDZ_DARKGREEN);
+  background-color: var(--LEEDZ_EMERALD);
   color:white;
 }
 
@@ -47,7 +75,6 @@ body {
 .header_col {
 
     color:black;
-    font-size:x-large;
    
     font-family: var(--FONT_2);
     font-weight: 600;
@@ -200,6 +227,7 @@ a#date_bought_3 {
     margin-left:20%;
     font-size:medium;
     width:70%;
+    font-weight:400;
 }
 
 
@@ -208,6 +236,9 @@ a#date_bought_3 {
   background-color: coral;
   color:white;
 }
+
+
+
 
 
 
@@ -270,6 +301,10 @@ a#date_bought_3 {
     }
 
 
+    
+  #stats_footer{
+    font-size:smaller;
+  }
 
 }
 
@@ -308,6 +343,19 @@ a#date_bought_3 {
         margin: auto 1vw;    
         border-radius: 14px;
     }
+
+    
+
+    .header_col {
+
+      font-size:4vw;
+    }
+
+
+    
+  #stats_footer{
+    font-size:small;
+  }
 
 
 }

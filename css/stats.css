@@ -114,7 +114,7 @@ body {
 .item_title {
   position: sticky;
   top: 0;
-  padding: 2vw;
+  padding: 1vw 2vw;
   width: 100%;
   
   background: linear-gradient(to right, var(--LEEDZ_DARKGREEN), white);
@@ -211,7 +211,7 @@ a#date_bought_3 {
 
 #last_sale table {
   font-size:medium;
-  padding:2vw;
+  padding: 1vw 2vw 2vw 2vw;
   line-height: 3.25vh;
 }
 

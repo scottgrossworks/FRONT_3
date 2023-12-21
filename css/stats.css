@@ -121,7 +121,7 @@ body {
   color: white;
 
   text-align: left;
-  font-family:(--FONT_2);
+  font-family: var(--FONT_2);
   font-weight:600;
 
   box-sizing: border-box; /* Add box-sizing property */
@@ -143,6 +143,26 @@ a {
 }
 
 
+
+#leedz_text_1, #leedz_text_2, #leedz_text_3 {
+  background-color: white;
+}
+
+
+
+#leedz_text_1 a, #leedz_text_2 a, #leedz_text_3 a  {
+ text-decoration: none;
+}
+
+
+#leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span {
+  font-family: var(--FONT_1);
+  font-size:medium;
+  line-height: normal;
+  padding: 1vw 2vw;
+
+
+}
 
 
 
@@ -301,6 +321,15 @@ a#date_bought_3 {
     }
 
 
+
+#leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span {
+      font-size:medium;
+      line-height:normal;
+    }
+
+    
+
+
     
   #stats_footer{
     font-size:smaller;
@@ -350,6 +379,18 @@ a#date_bought_3 {
 
       font-size:4vw;
     }
+
+
+
+    
+
+  #leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span {
+      font-size:large;
+      line-height: normal;
+    }
+
+
+
 
 
     

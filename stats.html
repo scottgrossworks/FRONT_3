@@ -94,50 +94,21 @@
 
 
 
-        <div class="item" id="leedz_leaders">
-            <div class="item_title" style="width:100%">Leedz Leaders</div>
-     
-            <table>
-     
-                <TR>
-                    <TD><b>Leedz</b> for sale: <a id="leedz_posted"></a></TD>
-                </TR>
 
-                <TR><TD><b>Total bought: <a id="leedz_bought"></a></TD></TR>
-
-                <TR>
-                    <TD><b>Total trades: </b><a id="trades_total"></a></TD>
-                </TR>
-
-            </table>
+        <div class="item" id="leedz_text_1">
+            <span>
+                <b>The Leedz</b> is a market for vendors to buy and sell booking info.  
+                When a request arrives for a time you already booked, sell that information and 
+                make money on the dates you <i>can't</i> fill.  If you are just starting a new trade, 
+                use <b>the Leedz</b> to find your first bookings.
+                <BR>
+                <BR>
+                <b style="color:green;">Buy.  Sell.  Grow your hustle on the Leedz</b>.                 
+            </span>
         </div>
 
 
 
-
-        
-        
-        
-
-        <div class="item" id="login_item">
-            <div class="item_title" style="width:100%">Secure Login</div>
-            <span>Your privacy protected by Amazon Web Services.</span>
-            <!-- LOGIN BUTTON -->
-            <table><TR>
-                <TD>
-                    <img src="img/aws.png">
-                </TD>
-                <TD>
-                    <button id="loginButton" class="button stats_button" value="login" style="" onclick="">Login</button>
-                </TD>
-            </TR></table>
-
-            
-        </div>
-
-
-
-        
 
         <div class="item" id="last_sale">
             <div class="item_title" style="width:100%">Last Sale</div>
@@ -167,6 +138,41 @@
 
 
 
+
+
+
+        
+        
+        
+
+        <div class="item" id="login_item">
+            <div class="item_title" style="width:100%">Secure Login</div>
+            <span>Your privacy protected by <b>Amazon Web Services</b></span>
+            <!-- LOGIN BUTTON -->
+            <table><TR>
+                <TD>
+                    <img src="img/aws.png">
+                </TD>
+                <TD>
+                    <button id="loginButton" class="button stats_button" value="login" style="" onclick="">Login</button>
+                </TD>
+            </TR></table>
+
+            
+        </div>
+
+
+
+
+
+        <div class="item" id="leedz_text_2">
+            <span>
+                <b>The Leedz</b> was created by a <a href='mailto:scottgrossworks@gmail.com'>caricature artist</a> who knows how hard you work to fill 
+                your calendar with bookings, just to get calls for the same dates over and over.  
+                Sell those <b style="color:green">Leedz</b>, make back your advertising money, and develop a reliable network of other vendors 
+                you can trade with in the future.
+            </span>
+        </div>
 
 
 
@@ -203,6 +209,51 @@
 
 
 
+        
+
+
+<!--
+
+        <div class="item" id="leedz_leaders">
+            <div class="item_title" style="width:100%">Leedz Leaders</div>
+     
+            <table>
+     
+                <TR>
+                    <TD><b>Leedz</b> for sale: <a id="leedz_posted"></a></TD>
+                </TR>
+
+                <TR><TD><b>Total bought: <a id="leedz_bought"></a></TD></TR>
+
+                <TR>
+                    <TD><b>Total trades: </b><a id="trades_total"></a></TD>
+                </TR>
+
+            </table>
+        </div>
+    -->
+
+
+
+
+    <div class="item" id="leedz_live">
+        <div class="item_title" style="width:100%">Leedz Live</div>
+ 
+        <table>
+
+            <TR>
+                <TD><b>Leedz</b> for sale: <a id="leedz_posted"></a></TD>
+            </TR>
+
+            <TR><TD><b>Last post:</b></TD></TR>    
+            <TR><TD><a id="date_posted"></a></TD></TR>
+
+            <TR><TD><b>Last sale:</b></TD></TR>    
+            <TR><TD><a id="date_bought_2"></a></TD></TR>
+
+        </table>
+    </div>
+    
 
 
         <div class="item" id="contact_item">
@@ -228,22 +279,26 @@
 
 
 
+   
 
-        <div class="item" id="leedz_live">
-            <div class="item_title" style="width:100%">Leedz Live</div>
-     
-            <table>
-                <TR><TD><b>Last post:</b></TD></TR>    
-                <TR><TD><a id="date_posted"></a></TD></TR>
 
-                <TR><TD><b>Last sale:</b></TD></TR>    
-                <TR><TD><a id="date_bought_2"></a></TD></TR>
 
-            </table>
-        </div>
+
+
+
+
+
         
 
-   
+
+        <div class="item" id="leedz_text_3">
+            <span>
+                <b>The Leedz</b> is in beta and welcomes new members by invitation to build a community of trusted vendors working together to grow their businesses.  
+                If you are looking to invest in the gig economy and join our growing team, please <a href="mailto:theleedz.com@gmail.com">contact us</a>.
+                
+        </div>
+
+
 
 
 
@@ -355,8 +410,8 @@
         element.innerHTML = stats.lp;
 
         
-        element = document.getElementById("leedz_bought");
-        element.innerHTML = stats.lb;
+        // element = document.getElementById("leedz_bought");
+        // element.innerHTML = stats.lb;
 
         // date posted
         let the_date = prettyFormatDT( formatDTforInput( stats.dp ) );
@@ -492,8 +547,8 @@ function initTradesTable( all_trades ) {
     var element = document.getElementById("maxTrades");		
     element.innerHTML = MAX_TRADES;
 
-    element = document.getElementById("trades_total");
-    element.innerHTML = all_trades.length;
+    // element = document.getElementById("trades_total");
+    // element.innerHTML = all_trades.length;
 
 
 	// import DOM elements from html

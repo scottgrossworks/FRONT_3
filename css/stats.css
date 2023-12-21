@@ -245,6 +245,9 @@ a#date_bought_3 {
 
 #contact_item ul {
     margin-left:20%;
+    margin-bottom:1vh;
+
+    font-family: var(--FONT_1);
     font-size:medium;
     width:70%;
     font-weight:400;
@@ -377,14 +380,14 @@ a#date_bought_3 {
 
     .header_col {
 
-      font-size:4vw;
+      font-size:3.8vw;
     }
 
 
 
     
 
-  #leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span {
+  #leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span   {
       font-size:large;
       line-height: normal;
     }

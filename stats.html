@@ -42,7 +42,8 @@
                 <img id="dropdown_logo" src="./img/logo_dd.png"></a></span>
             <div id="dropdown_menu" class="dropdown-content">
 
-                <a href="#" onclick="" style='color:green;' id="dd_login">Login</a>
+                
+                <a href="https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com" onclick="" style='color:green;' id="dd_login">Login</a>
 
                 <a href="./leedz_how-to.html" id="dd_howto">How To</a>
 
@@ -50,7 +51,7 @@
 
                 <a href="./leedz_contact.html">Contact</a>
 
-                <a href="./leedz_contact.html">For Investors</a>
+                <a href="./leedz_tos.html">Terms</a>
 
                 <a href="./leedz_privacy.html">Privacy</a>
 
@@ -67,7 +68,8 @@
         <div class="column login_col _15">
 
         <!-- LOGIN BUTTON -->
-        <button  class="button stats_button" value="login" onclick="">Login</button>
+        <a href="https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com">
+            <button id="header_login" class="button stats_button" value="login">Login</button></a>
 
         </div>
 
@@ -154,7 +156,8 @@
                     <img src="img/aws.png">
                 </TD>
                 <TD>
-                    <button id="loginButton" class="button stats_button" value="login" style="" onclick="">Login</button>
+                    <a href="https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com">
+                        <button id="loginButton" class="button stats_button" value="login">Login</button></a>
                 </TD>
             </TR></table>
 
@@ -337,6 +340,7 @@
 
     const MAX_TRADES = 6;
 
+    const URL_LOGIN = "https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com";
 
 
     
@@ -407,8 +411,8 @@
             throw new Error("server returned null stats.");
         }
 
-        console.log("STATS=");
-        console.log(stats);
+        // console.log("STATS=");
+        // console.log(stats);
 
         var element;
         

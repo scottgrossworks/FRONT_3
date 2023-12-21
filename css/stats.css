@@ -71,6 +71,10 @@ body {
     
 }
 
+#header_login {
+ margin-top:15px;
+ font-family: var(--FONT_3);
+}
 
 .header_col {
 
@@ -180,6 +184,10 @@ a {
 }
 
 
+#loginButton {
+  font-family: var(--FONT_3);
+}
+
 #login_item {
   
   min-height:fit-content;
@@ -258,7 +266,40 @@ a#date_bought_3 {
   margin:2vw auto;
   background-color: coral;
   color:white;
+  font-family: var(--FONT_3);
 }
+
+
+
+
+ 
+
+.stats_button {
+
+  position:relative;
+  padding:15px 20px;
+  
+  border: none;
+  color: white;
+  background-color: dodgerblue;
+
+  text-decoration: none;
+  display: flex;
+
+  border-radius: 14px;
+
+  width:max-content;
+  height:max-content;
+
+
+  font-family: var(--FONT_3);
+  font-size:medium;
+  font-weight:600;
+
+  box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
+}
+
+
 
 
 
@@ -301,19 +342,6 @@ a#date_bought_3 {
       min-width:100px;
     }
 
-
- 
-
-
-    .stats_button{
-    
-      font-size:medium;
-      margin: 1vh 0;
-      padding:15px 20px;
-      border-radius: 14px;
-
-      color:green;
-  }
 
 
 
@@ -406,22 +434,3 @@ a#date_bought_3 {
 
 
 
-
-.stats_button {
-
-    position:relative;
-
-    border: none;
-    color: white;
-    background-color: dodgerblue;
-
-    text-decoration: none;
-    display: flex;
-    font-weight: bolder;
-
-
-    width:max-content;
-    height:max-content;
-
-    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
-}

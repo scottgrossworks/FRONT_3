@@ -1093,8 +1093,21 @@ function trimAndRemoveSpaces(inputString) {
         modalClose( false );
 
         var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
+
+        if (! screen) {
+          if (document.clientWidth < 500) {
+            screen = "S";
+          } else if (document.clientWidth < 950) {
+            screen = "M";
+          } else {
+            screen = "L";
+          }
+        }
+
+
         var action = document.getElementById("action_panel");
 
+        
 
         switch (screen) {
   
@@ -1159,9 +1172,9 @@ function trimAndRemoveSpaces(inputString) {
             
   
           default:
-
+            // SHOULD NEVER HAPPEN!
             // USE SMALL
-            // console.error("--screen_size not found");
+            console.error("--screen_size not found and not computed, using 'small'");
             // console.log("SMALL!!!!");
 
             action.setAttribute("screen", 0);

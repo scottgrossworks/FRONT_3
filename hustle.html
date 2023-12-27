@@ -1092,98 +1092,59 @@ function trimAndRemoveSpaces(inputString) {
 
         modalClose( false );
 
-        var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
-
-        if (! screen) {
-          if (document.clientWidth < 500) {
-            screen = "S";
-          } else if (document.clientWidth < 950) {
-            screen = "M";
-          } else {
-            screen = "L";
-          }
+        let screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
+        // console.log("SCREEN=" + screen);
+        
+          if (! screen) {
+            
+            if (document.clientWidth < 500) {
+              screen = 'S';
+            } else if (document.clientWidth < 950) {
+              screen = 'M';
+            } else {
+              screen = 'L';
+            }
         }
 
 
-        var action = document.getElementById("action_panel");
+          var action = document.getElementById("action_panel");
 
-        
 
-        switch (screen) {
-  
-          case "S":
+          if (screen == 'L') {
 
-            // console.log("SMALL!!!!");
-
-            action.setAttribute("screen", 0);
-            SIDE_OPEN = false;
-            closeNav();  
-            actionModal();
-            break;
-          
-          case "M":
-
-            // console.log("MEDIUM!!!!");
- 
-            action.setAttribute("screen", 1);
-            SIDE_OPEN = false;
-            closeNav();
-            actionModal();
-            break;
-  
-          case "L":
-            
-            // console.log("LARGE!!!!");
+            //console.log("LARGE!!!!");
             action.setAttribute("screen", 2);  
             SIDE_OPEN = true;
             openNav();
 
-            
-            // Is there a current leed in cache
-            //
-            /**
-            let current_leed = getCurrentLeed();
-            if (( current_leed.id) && (isSubscribed( current_leed.tn ))) {
-               
-                try {
-                  showLeedAction(current_leed, false );
-
-                } catch (error) {
-                  printError("cssScreenSize", error);
-                  errorModal("Cannot load leed details", error);
-                  clearCurrentLeed();
-                  showWelcomeColumn();
-                }
-
-            } else {
-
-              showWelcomeColumn();
-              clearCurrentLeed();
-            }  
-            */
-
             showWelcomeColumn();
-            clearCurrentLeed();
 
 
-            break;
+          } else if (screen == 'M') {
+
+            //console.log("MEDIUM!!!!");
+
+            action.setAttribute("screen", 1);
+            SIDE_OPEN = false;
+            closeNav();
+            actionModal();
 
 
-            
-  
-          default:
-            // SHOULD NEVER HAPPEN!
+
+          } else {
+
             // USE SMALL
-            console.error("--screen_size not found and not computed, using 'small'");
-            // console.log("SMALL!!!!");
+            //console.log("SMALL!!!!");
 
             action.setAttribute("screen", 0);
             SIDE_OPEN = false;
             closeNav();  
             actionModal();
-            break;
-        }
+
+          }
       }
+
+
       window.cssScreenSize = cssScreenSize;
 
       

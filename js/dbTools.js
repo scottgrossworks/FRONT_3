@@ -649,7 +649,7 @@ async function doGet(theURL) {
     // ACCESS_TOKEN
     // returned from login sequence
     //    	headers: new Headers({"Authorization": `Bearer ${tokens.access_token}`}),
-    const access_token = window.localStorage.getItem(COGNITO_ACCESS_TOKEN);
+    // const access_token = window.localStorage.getItem(COGNITO_ACCESS_TOKEN);
 
 try {
     const response = await fetch(theURL,
@@ -657,8 +657,8 @@ try {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Connection':'close',
-            'Authorization':access_token
+            'Connection':'close'
+            // 'Authorization':access_token
             },
         timeout:"8000"
         }

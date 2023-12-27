@@ -8,6 +8,7 @@
 
 
 import { printError, throwError } from "./error.js";
+import { COGNITO_ACCESS_TOKEN } from "./user.js";
 
 
 
@@ -644,13 +645,20 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
 async function doGet(theURL) {
 
     console.log("---------> DOGET URL=" + theURL);
+
+    // ACCESS_TOKEN
+    // returned from login sequence
+    //    	headers: new Headers({"Authorization": `Bearer ${tokens.access_token}`}),
+    const access_token = window.localStorage.getItem(COGNITO_ACCESS_TOKEN);
+
 try {
     const response = await fetch(theURL,
     {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Connection':'close'
+            'Connection':'close',
+            'Authorization':access_token
             },
         timeout:"8000"
         }

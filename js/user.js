@@ -7,6 +7,7 @@ import { db_getUser, db_updateUser, DEL_USER, CHG_USER, DB_FAIL } from "./dbTool
 import { printError, throwError } from "./error.js";
 
 
+export const COGNITO_ACCESS_TOKEN = "CT";
 
 
 /**
@@ -31,13 +32,20 @@ export function getUserLogin( userLogin ) {
     if ("id_token" in loginTokens) {
       
       decodeJWT(loginTokens["id_token"], userLogin);
-      return;
-   
+
+
     } else {
       var msg = "Cannot decode JWT ID token";
       printError("User Login", msg);
       // do not fail -- will use guest account
       return;
+    }
+
+    // ACCESS TOKEN
+    // will not get here if there is no ID token validation
+    //
+    if ("access_token" in loginTokens) {
+      window.localStorage.setItem(COGNITO_ACCESS_TOKEN, loginTokens["access_token"]);
     }
 
 

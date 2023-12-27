@@ -11,7 +11,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-        <title>Welcome to the Leedz</title>
+        <title>the Leedz</title>
     
         
     <!-- Favicon -->
@@ -1329,9 +1329,7 @@ function trimAndRemoveSpaces(inputString) {
  *
  */
 async function mainPageLoad( current_user ) {
-     
-
-      console.log("LOADING PAGE");
+    
 
       // LOADING MODALS...
       //
@@ -1340,7 +1338,6 @@ async function mainPageLoad( current_user ) {
       //
       const newUser = (isGuestUser(true) || current_user.sb.length == 0);
       if (newUser) {
-        console.log("!!!!!   NEW USER DETECTED OPEN WELCOME!");
         openNewUserWelcome();
       } else {
         showWaitingModal("Loading the Leedz . . .");

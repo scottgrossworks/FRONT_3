@@ -1,10 +1,8 @@
 <!-- 
-    -- STATS PAGES
-    -- Gateway to theLeedz.com
+    -- INDEX
     --
-    -- Introduction Text
-    -- HTTP getStats from AWS
-    -- Login / Contact Buttons
+    -- theleedz.com STATS PAGE and login gateway
+    --
     -->
    
     <!DOCTYPE html>
@@ -58,7 +56,7 @@
             <div id="dropdown_menu" class="dropdown-content">
 
                 
-                <a href="https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com" onclick="" style='color:green;' id="dd_login">Login</a>
+                <a class="login_url" style='color:green;' id="dd_login">Login</a>
 
                 <a href="./leedz_how-to.html" id="dd_howto">How To</a>
 
@@ -83,7 +81,7 @@
         <div class="column login_col _15">
 
         <!-- LOGIN BUTTON -->
-        <a href="https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com">
+        <a class="login_url">
             <button id="header_login" class="button stats_button" value="login">Login</button></a>
 
         </div>
@@ -171,7 +169,7 @@
                     <img src="img/aws.png">
                 </TD>
                 <TD>
-                    <a href="https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com">
+                    <a class="login_url">
                         <button id="loginButton" class="button stats_button" value="login">Login</button></a>
                 </TD>
             </TR></table>
@@ -355,10 +353,12 @@
 
     const MAX_TRADES = 6;
 
-    const URL_LOGIN = "https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com";
-
-
-    
+    const URL_LOGIN = "https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid+profile&redirect_uri=https%3A%2F%2Ftheleedz.com%2Fhustle.html";
+   
+    const login_links = document.getElementsByClassName("login_url");
+    for (let i = 0; i < login_links.length; i++) {
+        login_links[i].href = URL_LOGIN;
+      }
 
        /**
          * DROP DOWN MENU

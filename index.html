@@ -1,549 +1,364 @@
 <!-- 
+    -- STATS PAGES
+    -- Gateway to theLeedz.com
     --
-    --
+    -- Introduction Text
+    -- HTTP getStats from AWS
+    -- Login / Contact Buttons
     -->
    
-   <!DOCTYPE html>
-   <html lang="en">
-   
-   <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!DOCTYPE html>
+    <html lang="en">
     
-        <title>Welcome to the Leedz</title>
-    
-        
+    <head>
+         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+         <title>Welcome to the Leedz</title>
+     
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/png" href="/img/favicon.png"> 
-    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+    <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+    <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+
+    <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+    <link rel="stylesheet" href="./css/stats.css" type="text/css" />
+    <link rel="stylesheet" href="./css/trades.css" type="text/css" />
+    <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
+
+    
+    <script src="./js/trades.js" type="module" defer></script>
+    <script src="./js/error.js" type="module" defer></script>
+    <script src="./js/dbTools.js" type="module" defer></script>
 
 
-        <link rel="stylesheet" href="css/globals.css" type="text/css" />
+    <meta name="description" content="A marketplace for vendors to buy and sell booking info - theleedz.com">
+	
+    <meta name="keywords" content="The Leedz, leedz, leads, lead generation, sales leads, parties, events, event production, talent, event planner, 
+    event planning, wedding planning, wedding planner, weddings, quincineara, bookings, crm, catering, service providers, thumbtack, gigsalad, gigs, gig economy, vendors, marketing, 
+    small business, sales, leads, parties">
+	
+	<meta name="author" content="Scott Gross">
 
-        <link rel="stylesheet" href="css/user_panel.css" type="text/css" />        
-        <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
-        <link rel="stylesheet" href="css/trades.css" type="text/css" />
-        <link rel="stylesheet" href="css/calendar.css" type="text/css" />
-        <link rel="stylesheet" href="css/month_chooser.css" type="text/css" />
-        <link rel="stylesheet" href="css/distance_chooser.css" type="text/css" />
-        <link rel="stylesheet" href="css/action_panel.css" type="text/css" />
-        <link rel="stylesheet" href="css/welcome_panel.css" type="text/css" />
-        <link rel="stylesheet" href="css/modal.css" type="text/css" />
+        <!-- FIXME GOOGLE SITE VERIFICATION -->
 
-        <link rel="stylesheet" href="css/styles_sm.css" type="text/css" />
-        <link rel="stylesheet" href="css/styles_med.css" type="text/css" />
-        <link rel="stylesheet" href="css/styles_lg.css" type="text/css" />
-
-
-        <script src="./js/dbTools.js" type="module" defer></script>
-
-        <script src="./js/user.js" type="module" defer></script>
-        <script src="./js/dates.js" type="module" defer></script>
-        <script src="./js/trades.js" type="module" defer></script>
-        <script src="./js/calendar.js" type="module" defer></script>
-        <script src="./js/months.js" type="module" defer></script>
-        <script src="./js/action.js" type="module" defer></script>
-        <script src="./js/error.js" type="module" defer></script>
+ 
+   </head>  
+    
+   <body>
 
 
-  </head>  
-   
-  <body>
-   
+    <div class="row" id="stats_header">
 
 
+                
+        <div class="column dropdown _2">
 
+            <span id="up_logo"><a href="javascript:dropdownMenu();">
+                <img id="dropdown_logo" src="./img/logo_dd.png"></a></span>
+            <div id="dropdown_menu" class="dropdown-content">
 
+                
+                <a href="https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com" onclick="" style='color:green;' id="dd_login">Login</a>
 
-  <!--
-  -- USER PANEL
-  --
-  --
-  -->    
+                <a href="./leedz_how-to.html" id="dd_howto">How To</a>
 
-    <div class="row" id="user_panel">
+                <a href="./leedz_about.html">About</a>
 
-      <div class="column _05" style="max-width:45px;"><button id="up_dot"></button></div>
-      <div class="column _15" id="up_left_column"><label><a id="user_href" href="#"></a></label></div>
-      
-      
-      <div class="column _65" id="up_center_column">
+                <a href="./leedz_contact.html">Contact</a>
 
-        <template id="template_badge">
-          <div class="each_badge">
-            <a href="#" class="badge_href"><img class="badge_img"></a>
-          </div>
-        </template>     
+                <a href="./leedz_tos.html">Terms</a>
 
-      </div>
-      
-      
-      <div class="column _15 dropdown" id="up_right_column">
-        
-        <span id="up_addLeed"><a href="javascript:openCreateLeed();" title="Create Leed">+</a></span>
-        
-        <span id="up_logo"><a href="javascript:dropdownMenu();"><img src="./img/logo_dd.png"></a></span>
-        <div id="dropdown_menu" class="dropdown-content">
+                <a href="./leedz_privacy.html">Privacy</a>
 
-          <a href="#" onclick="openUserEdit()" id="dd_account">Account</a>
-
-          <a href="./leedz_how-to.html" id="dd_howto">How To</a>
-          
-          <a href="./leedz_about.html">About</a>
-
-          <a href="./leedz_contact.html">Contact</a>
-
-
-          <a id="dd_logout">Log Out</a>
+             </div>
         </div>
-      </div>
 
-      
+        
+
+        <div class="column header_col _55">
+            <center><a style="color:green;">Buy. Sell. Grow</a> your Hustle.</center>
+        </div>
+                
+
+        <div class="column login_col _15">
+
+        <!-- LOGIN BUTTON -->
+        <a href="https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com">
+            <button id="header_login" class="button stats_button" value="login">Login</button></a>
+
+        </div>
+
+        <div class="column _1"></div>
     </div>
 
 
-    <!-- SUCCESS ALERT -->
-    <div id="alert_success" class="alert" style="display:none">
-      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+
+    
+    <div class="row" id="links_header">
+
+        <a href="./leedz_how-to.html">How-To</a>
+        <a href="./leedz_about.html">About</a>
+        <a href="./leedz_contact.html">Contact</a>
+        <a href="./leedz_contact.html">Join Us</a>
     </div>
 
 
+    <div class="container">
+        
+
+
+        
+
+
+
+
+        <div class="item" id="leedz_text_1">
+            <span>
+                <b>The Leedz</b> is a market for vendors to buy and sell booking info.  
+                When a request arrives for a time you already booked, sell that information and 
+                make money on the dates you <i>can't</i> fill.  If you are just starting a new trade, 
+                use <b>the Leedz</b> to find your first bookings.
+                <BR>
+                <BR>
+                <b style="color:green;">Buy.  Sell.  Grow your hustle on the Leedz</b>.                 
+            </span>
+        </div>
+
+
+
+
+        <div class="item" id="last_sale">
+            <div class="item_title" style="width:100%">Last Sale</div>
+     
+                    <table>
+                        <TR><TD id="trade_div">
+                            <!-- TRADE DIV -->
+                            <b>Trade: </b>
+                        <template id="template_each_trade">
+                            <span class="each_trade" style="display:inline-block;padding-right:4px">
+                                <button class="trade_radio" 
+                                style="transform:translate(2px, 3px);"></button>
+                                <label></label><sup></sup>
+                                
+                            </span>
+                        </template>
+                    
+                    </TD></TR>
+
+                        <TR><TD><a class="stats_date" id="date_bought_3"></a></TD></TR>
+                        <TR><TD><b>Where:</b> <a id="sale_zip_2"></a></TD><TR>
+                        <TR><TD><b>Sold for:</b> <a id="sale_price_2"></a></TD><TR>
+                    </table>
+
+        </div>
+
+
+
+
+
+
+
+        
+        
+        
+
+        <div class="item" id="login_item">
+            <div class="item_title" style="width:100%">Secure Login</div>
+            <span>Your privacy protected by <b>Amazon Web Services</b></span>
+            <!-- LOGIN BUTTON -->
+            <table><TR>
+                <TD>
+                    <img src="img/aws.png">
+                </TD>
+                <TD>
+                    <a href="https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com">
+                        <button id="loginButton" class="button stats_button" value="login">Login</button></a>
+                </TD>
+            </TR></table>
+
+            
+        </div>
+
+
+
+
+
+        <div class="item" id="leedz_text_2">
+            <span>
+                <b>The Leedz</b> was created by a fellow <a href='http://scottgross.works' target="_top">gig worker</a> who knows how hard it is to fill a 
+                calendar with bookings, just to get calls for the same dates over and over.  
+                Sell those <b style="color:green">Leedz</b>, make back your advertising money, and develop a reliable network of other vendors 
+                you can trade with in the future.
+            </span>
+        </div>
+
+
+
+
+        
+
+
+
+        
+        <div class="item" id="top_trades">
+
+            <div class="item_title" style="width:100%">Top Trades</div>
+            <table>
+                <TR>
+                    <TD><b>The top <a id="maxTrades"></a> trades by <b style=color:green>leedz for sale:</b></b></TD>
+                </TR>                
+                <TR>
+                    <td id="trades_table">
+
+                        <template id="template_each_trade">
+                            <span class="each_trade" style="display:inline-block;padding-right:4px">
+                                <button class="trade_radio" 
+                                style="transform:translate(2px, 3px);"></button>
+                                <label></label><sup></sup>
+                                
+                            </span>
+                        </template>
+                    </td>
+                </TR>
+            </table>
+
+
+        </div>
+
+
+
+        
 
 
 <!--
-  --
-  --
-  --
-  -->    
-    <div class="row" id="main_panel">       
-      
 
+        <div class="item" id="leedz_leaders">
+            <div class="item_title" style="width:100%">Leedz Leaders</div>
+     
+            <table>
+     
+                <TR>
+                    <TD><b>Leedz</b> for sale: <a id="leedz_posted"></a></TD>
+                </TR>
 
-  <!-- 
-    -- ERROR MODAL 
-    -- 
+                <TR><TD><b>Total bought: <a id="leedz_bought"></a></TD></TR>
+
+                <TR>
+                    <TD><b>Total trades: </b><a id="trades_total"></a></TD>
+                </TR>
+
+            </table>
+        </div>
     -->
-    <div class="modal info_modal modal_noclose" id="error_modal" style="display:none">
-      <center><img id="error_logo" src="img/logo_2.png"></center> 
-      <h1>
-        <BR>
-      </h1>
-      <a id="error_modal_close" href="javascript:modalClose(true);" href="">X</a>
-      
-    </div>
-  
-  
-  
-      <!-- 
-        -- WAITING MODAL
-        -- 
-        -->
-        <div class="modal info_modal" id="waiting_modal" style="display:none">
-  
-          <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
-              <table width="100%">
-                  <TR><TD style="border:none;">
-                    <h1 id="waiting_label" style="width:fit-content"></h1>
-                  </TD></TR>
-                  <TR><TD style="border:none;"><center>
-                          <img src="./img/wait_spinner.gif" style="height:10vh;">
-                          </center>
-                      </TD>
-                  </TR>
-              </table>
-    
-    
-        </div>
-    
-    
-    
-        
-    
-      <!-- 
-        -- GUEST WELCOME MODAL 
-        -- 
-        -->
-        <div class="row modal info_modal modal_noclose" id="guest_modal" style="display:none">
-          <center><img class="info_logo" src="img/logo_2.png"></center> 
-          <h1>
-              <center>
-              <table>
-                <TR><TD>
-                  Guest User Modal -- Some features are not available to Guest users.
-                  <BR>
-                  <BR>
-                  To edit your user profile, buy, post, edit, or report a leed,
-                  <BR>
-                  <a href="http://scottgross.works">sign-up</a> for a <a href="http://scottgross.works">FREE</a> account.
-                </TD></TR>
-              </table>
-              </center> 
-            </h1>
-    
-              <BR>
-          <a class="info_modal_close" href="javascript:modalClose(true);" href="">X</a>
-          <BR>
-       
-        </div>
-    
-    
-    
-        
-    
-      <!-- 
-        -- NEW USER WELCOME MODAL 
-        -- 
-        -->
-        <div class="row modal info_modal modal_noclose" id="newUser_modal" style="display:none">
-    
-          <center><img class="info_logo" src="img/logo_2.png"></center> 
-          <h1>
-              <center>
-              <table>
-                <TR><TD>
-                 New User Welcome -- To get the most out of the Leedz, <a href="#" onclick="openUserEdit()" id="dd_account">subscribe to trades</a>  and see the current leedz.
-                  <BR>
-                  <BR>
-                    <ul type="2" style="margin-left:2vw">
-                      <li><a href="#" onclick="openUserEdit()" id="dd_account">Account</a></li>
-                      <li><a href="./leedz_how-to.html" id="dd_howto">How To</a></li>
-                      <li><a href="./leedz_about.html">About</a></li>
-                      <li><a href="./leedz_contact.html">Contact</a></li>
-                    </ul>
-                     </TD></TR>
-              </table>
-              </center> 
-            </h1>
-            <a class="info_modal_close" href="javascript:modalClose(true);" href="">X</a>
-         
-        </div>
-    
-      
 
 
 
 
-
-
-      <!-- 
-        -- LEFT COLUMN
-        -- TRADES PANEL 
-        -->
-      <div id="trades_column" class="column _15">
-          
-          
-        
-        <!-- OPEN SIDEBAR BUTTON -->
-        <button id="open_side_btn" class="openbtn" onclick="javascript:openClose()"></button>
-
-
-        <!-- all of the trades code -->
-        <div id="side_panel" class="trades_side">
-
-
-          <BR>
-
-                    <!-- distance radius chooser -->
-        <div id="distance_chooser">
-          <form id="distance_form">
-            <input id="distance_miles" type="text" title="Miles"> Miles From
-            <input id="distance_from" type="text" title="From Zip"> Zip Code
-            <input type="button" value="Find Leedz" id="distance_button" onclick="findLeedz()">
-          </form>
-
-        </div>
-
-        
-        <P style="height:16px"></P>
-
-            <div class="trades" >
-              <ul id="trades_list">
-          
-          
-                <template id="template_each_trade">
-                  <li class="each_trade">
-                    <input type="checkbox" class="trade_checkbox" />
-                    <button class="trade_radio"></button>
-                    <label></label><sup></sup>
-                  </li>
-                </template>          
-
-              </ul>
-
-
-
-              <button id="add_trade_button" onclick='javascript:openUserEdit();'><img src="./img/plus.png"><b>Trade</b></button>
+    <div class="item" id="leedz_live">
+        <div class="item_title" style="width:100%">Leedz Live</div>
  
-            </div>
+        <table>
 
-            <BR>
+            <TR>
+                <TD><b>Leedz</b> for sale: <a id="leedz_posted"></a></TD>
+            </TR>
 
-       
+            <TR><TD><b>Last post:</b></TD></TR>    
+            <TR><TD><a id="date_posted"></a></TD></TR>
+
+            <TR><TD><b>Last sale:</b></TD></TR>    
+            <TR><TD><a id="date_bought_2"></a></TD></TR>
+
+        </table>
+    </div>
+    
+
+
+
+
+
+
+
+
    
 
 
-          </div>  
+
+
+
+
+
 
         
-        </div>      
 
 
-       
-      <!-- CENTER COLUMN  -->      
-      <div id="calendar_main" class="column _5">
-
-           <!-- MONTH CHOOSER --> 
-        <div id="months" class="row month_chooser">
-          
-          <div class="column _1" id="month-left"></div>
-          <div class="column _7"><span id="month_label"></span></div>
-          <div class="column _1" id="month-right"></div>
-
+        <div class="item" id="leedz_text_3">
+            <span>
+                <b>The Leedz</b> is in beta and welcomes new members by invitation to build a community of trusted vendors working together to grow their businesses.  
+                If you are looking to invest in the gig economy and join our growing team, please <a href="mailto:theleedz.com@gmail.com">contact us</a>.
+                
         </div>
+
+
+
+
+
+
+
+        <div class="item" id="contact_item">
+            <div class="item_title" style="width:100%">Contact the Leedz</div>
+
+            <BR>
+                <ul type="disc">
+                
+                    <li>How-To Hustle</li>
+                    <li>Join our Team</li>
+                    <li>Suggest a new trade</li>
+                    <li>Report a Bug</li>
     
-        <!-- CALENDAR PANEL -->
-        <div id="calendar_panel" class="row trades_calendar">
-            <ul id="calendar_list">
+                </ul>
+           
+            <!-- LOGIN BUTTON -->
+            <button id="contactButton" class="button stats_button" value="contact" style="padding-right:20px" onclick="">Contact</button>
 
-              <template id="template_each_day">
-                <li class="each_day">
-                  <div class="dateSquare"><span></span></div>                
-                </li>
-              </template>          
             
-            </ul>
-
-
-          <div class="leed_thumbnail"></div>
         </div>
+
+
+
+
+
+    </div>
+    <BR>
+    <BR>
         
-      </div>
-        
-
-
-
-
-
-      <!-- RIGHT COLUMN
-        -- WELCOME PANEL / ACTION PANEL 
-        -->
-      <div id="welcome_panel" class="column _35">
-        <div class="row">
-          <span>
-            <img id="welcome_logo" src="./img/logo_2.png">
-          </span>
-        </div>
-          
-        <div class="row">
-          <div id="welcome_tag">Buy. Sell. Grow your hustle.</div>
-        </div>
-
-        
-        <div class="row">
-          <button class="button welcomeButton">How It Works</button>
-       
-        </div>      
-
-        <div class="row">
-          <button class="button welcomeButton">Contact Us</button>
-       
-        </div>      
-
-        </div>
-
-
-
-
-
-      <div id="action_panel" style="display:none;" class="column _35">
-
-
-
-        <div class="leed_info_container">
-
-
-
-
-          <div class="row lic_row" id="leed_title">
-            
-            <div class="column lic_column"  id="lic_color">
-                <button id="lic_trade_radio" class="trade_radio"></button>
-            </div>
-
-            <div class="column lic_column" id="lic_trade"></div>
-
-            
-            <div class="column lic_column" id="lic_date"></div>
-            
-            <div class="column _1 lic_column" id="lic_close">
-              <a id="" href="javascript:modalClose(true);">X</a>
-            </div>
-
-          </div>
-
-
-
-
-          <div class="row lic_row" id="title">
-            <div class="column lic_column _25 label" id="title_label">Event</div>
-            <div class="column lic_column _75" id="title_value"></div>
-          </div>
-
-
-
-          <div class="row lic_row" id="start-end">
-            <div class="column lic_column _25 label" id="start-end_label">Time</div>
-            <div class="column lic_column _75" id="start-end_value"></div>
-          </div>
-
-
-          
-
-          <div class="row lic_row" id="loc">
-            <div class="column lic_column _25 label" id="loc_label">Address</div>
-            <div class="column lic_column _75" id="loc_value"></div>
-          </div>
-      
-
-          
-          <div class="row lic_row" id="zip">
-            <div class="column lic_column _25 label" id="zip_label">Zip</div>
-            <div class="column lic_column _75" id="zip_value"></div>
-          </div>
-
-
-
-
-          <div class="row lic_row" id="em">
-            <div class="column lic_column _25 label" id="em_label">Email</div>
-            <div class="column lic_column _75" id="em_value"></div>
-          </div>
-                    
-
-
-          <div class="row lic_row" id="ph">
-            <div class="column lic_column _25 label" id="ph_label">Phone</div>
-            <div class="column lic_column _75" id="ph_value"></div>
-          </div>
-                    
-
-
-
-          <div class="row lic_row" id="det">
-            <div class="column lic_column _25 label" id="det_label">Details</div>
-            <div class="column lic_column _75" id="det_value"></div>
-          </div>
-
-
-          <div class="row lic_row" id="reqs">
-            <div class="column lic_column _25 label" id="reqs_label">Requires</div>
-            <div class="column lic_column _75" id="reqs_value"></div>
-          </div>
-
-
-          <div class="row lic_row" id="creator">
-            <div class="column lic_column _25 label" id="creator_label">Posted By</div>
-            <div class="column lic_column _75" id="creator_value"></div>
-          </div>
-          
-
-          
-          <div class="row lic_row" id="pr">
-            <div class="column lic_column _25 label" id="pr_label">Price</div>
-            <div class="column lic_column _75" id="pr_value"></div>
-          </div>
-
-
-        </div>
-
-        <!--
-          --
-          --  ACTION BUTTONS 
-          --
-        -->
-
-        <div class="row" id="row_buy_button">
-          <button id="action_buy" class="button buy_button"  onclick="buyLeed()">Buy<img id="shopping_cart" src="img/shopping-cart.png"></button>
-        </div>
-
-        <div class="row" id="row_report_button">
-          <button id="action_report" class="button report_button" onclick="reportLeed()">Report</button>
-        </div>
-    
-
-        <div class="row" id="row_edit_button">
-          <button id="action_edit" class="button edit_button" onclick="openLeedEdit()">Edit&nbsp;<img id="edit_icon" src="img/edit.png"></button>
-        </div>
-
-        <div class="row" id="row_del_button">
-          <button id="action_del" class="button del_button" onclick="deleteLeed()">Delete&nbsp;</button>
-        </div>
-
-      </div>
-
-
-      
+    <div class="row" id="stats_footer">
+        <span>
+        All content is &copy;2024 The Leedz, all rights reserved, and may not be reproduced for 
+        commercial purposes without written permission.
+        </span>
     </div>
 
-
-  </body>
-
-
-  <script type="module" charset=”utf-8″>
-
-    import { getUserLogin,initUser, guestUser, getCurrentUser, saveCurrentUser, isGuestUser, isSubscribed } from "./js/user.js";      
-    import { initTrades } from "./js/trades.js";   
-    import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./js/calendar.js";
-    import { initMonthChooser } from "./js/months.js";
-    import { getCurrentLeed, setCurrentLeed, clearCurrentLeed, buyCurrentLeed, deleteCurrentLeed, reportCurrentLeed  }  from "./js/leed.js";
-    import { CURRENT_LEED_KEY } from "./js/leed.js";
-    import { showLeedAction } from "./js/action.js";
-    import { ALL_BADGES } from "./js/badges.js";
-    import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
-
-    import { USERNAME_URL_PARAM, DB_FAIL, DB_SUCCESS } from "./js/dbTools.js";
+</body>
 
 
-    window.ALL_BADGES = ALL_BADGES;
 
-    const BUG_EMAIL = "<a href='mailto:scottgrossworks@gmail.com'>Report Error</a>"
-    window.printError = printError;
-    window.errorModalClose = errorModalClose;
-      
+
+
+
+
+<script type="module" charset=”utf-8″>
+	import { turnTrade_On, turnTrade_Off, getAllTrades, createTradesAndColors } from "./js/trades.js";
+    import { db_getStats } from "./js/dbTools.js";
+    import { printError, errorModal, throwError } from "./js/error.js";
+    import { prettyFormatDT, formatDTforInput } from "./js/dates.js";
+
+    const MAX_TRADES = 6;
+
     const URL_LOGIN = "https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com";
 
-    const URL_LEED_BOUGHT = "./leed_bought.html";
-    const URL_LEED_CREATE = "./leed_create.html";
-    const URL_LEED_DELETED = "./leed_deleted.html";
-    const URL_LEED_EDIT = "./leed_edit.html";
-    const URL_LEED_REPORTED = "./leed_reported.html";
-          
-    const URL_USER_EDIT = "./user_edit.html";
 
-
-
-      /** 
-      * Set the width of the sidebar to 250px (show it)
-      *
-      *
-      */
-
-      export function openClose() {
-          
-          if (SIDE_OPEN) {
-              closeNav();
-              SIDE_OPEN = false;
-          
-          } else {
-              openNav();
-              SIDE_OPEN = true;
-          }
-      }
-      window.openClose = openClose;
-
-
-
-
+    
 
        /**
          * DROP DOWN MENU
@@ -553,34 +368,6 @@
          /* When the user clicks on the button,
          toggle between hiding and showing the dropdown content */
          export function dropdownMenu() {
-
-          if (isGuestUser( true )) {  
-
-            // ACCOUNT DROPDOWN
-            //
-            var ddAccount = document.getElementById("dd_account");
-            ddAccount.style.opacity = 0.5;
-            ddAccount.setAttribute("onclick", "printError('openUserEdit', 'Cannot edit Guest user account')");
-
-
-            // LOGIN / LOGOUT DROPDOWN
-            // <a href="./index.html" id="dd_logout">Log Out</a>
-            var ddLogout = document.getElementById("dd_logout");
-            ddLogout.style.opacity = 1;
-            ddLogout.setAttribute("onclick", "window.open('" + URL_LOGIN + "', '_self')");
-            ddLogout.innerHTML = "Log In";
-
-          } else {
-            
-            // <a href="./index.html" id="dd_logout">Log Out</a>
-            var ddLogout = document.getElementById("dd_logout");
-            ddLogout.style.opacity = 0.5;
-            var the_url = "./index.html?" + USERNAME_URL_PARAM + "=guest.user";
-            ddLogout.setAttribute("onclick", "window.open('" + the_url + "', '_self')");
-            ddLogout.innerHTML = "Log Out";
-          }
-
-
 
           const menu = document.getElementById("dropdown_menu");
           menu.classList.toggle("show");
@@ -594,126 +381,30 @@
 
 
 
+         
+
+
           //
           // ANY window click registers here
           //
           window.addEventListener( "click", (event) => {
 
        
-            if ( event.target.id.endsWith("modal_close") ) {
-              // modal dialog close 
-              modalClose( true );
-
-            } else if (event.target.matches('a')) {
+            if (event.target.matches('a')) {
               
               // event.target will be http link
               window.open( event.target , "_self");
             
-
-
             } else if (! (event.target.matches('img'))) {
-              
-              // click -- not on a link and not on the dropdown image
-              // Close the dropdown menu if the user clicks outside of it
-        
-              var dropdown = document.getElementById("dropdown_menu");
-              dropdown.classList.remove("show");
+                var dropdown = document.getElementById("dropdown_menu");
+                dropdown.classList.remove("show");
 
             }
            
 
           }, true);
 
-          
-      
 
-
-
-
-      //  
-      //  DISTANCE CHOOSER
-      //
-      // search for leedz using distance chooser 'Find Leedz' dialog and current trades subscribed
-      // 
-      //
-      // <div id="distance_chooser">
-      // <form id="distance_form">
-      //   <input id="distance_miles" type="text" title="Miles"> Miles From
-      //   <input id="distance_from" type="text" title="From Zip"> Zip Code
-      //   <input type="button" value="Find Leedz" id="distance_button" onclick="findLeedz()">
-      // </form>
-      //
-      function findLeedz() {
-
-        let miles = document.getElementById("distance_miles");
-        let zip = document.getElementById("distance_from");
-        
-        // verify that miles is a number <= 9999
-        var trimVal = trimAndRemoveSpaces( miles.value );
-       
-        if (! isNumOnly( trimVal )) {
-          let errMsg = "Miles From must be a number";
-          printError("Miles contains non-numeric", errMsg );
-          
-          errorModal("Cannot search for Leedz<BR>" + errMsg, false);
-          return;
-        }
-        
-        // SEARCH RADIUS
-        const theMiles = new Number(trimVal);
-        if (theMiles > 3000) {
-          let msg = "Miles From is too large: " + theMiles;
-          let errMsg = "Search radius must be < 3000 miles";
-          printError(msg, errMsg );
-
-          errorModal("Cannot search for Leedz<BR>" + msg + "<BR>" + errMsg, false);
-          return;
-        }
-
-        
-        // verify that zip is a 5-digit number
-        //
-        trimVal = trimAndRemoveSpaces( zip.value );
-
-        if (trimVal.length != 5) {
-            let errMsg = "Zip code must be 5 digits";
-            printError("Zip Code length", errMsg );
-            
-            errorModal("Cannot search for Leedz<BR>" + errMsg, false);
-            return;
-        }
-
-        if (! isNumOnly( trimVal )) {
-
-            let msg = "Invalid Zip code: " + trimVal;
-            let errMsg = "Zip code must be all digits";
-            printError(msg, errMsg );
-            
-            errorModal("Cannot search for Leedz<BR>" + msg + "<BR>" + errMsg, false);
-            return;
-        }
-
-        // ZIP CODE
-        const theZip = new Number(trimVal);
-        
-        // these values are inserted into the current user profile
-        //
-        const current_user = getCurrentUser(false);
-        current_user.zr = theMiles.valueOf();
-        current_user.zp = theZip.valueOf();
-        
-
-        // this is an async call
-        // will return immediately - data shows up later
-        loadDBLeedz();
-
-
-        // this is an async call
-        // will return immediately - data shows up later        
-        saveCurrentUser();
-
-      }
-      window.findLeedz = findLeedz;
 
 
 
@@ -721,928 +412,258 @@
 
 
 /**
- * returns true if the str represents a number
- *  
+ * 
+ * 
  */
- function isNumOnly( str ) {
+ async function initStats() {
 
-  // Defining the regular expression
-  const strRegex = new RegExp(/^[0-9]+$/i);
-       
-  // match the regex with the string
-  let result = strRegex.test( str );
-  return result;
-}
-
-
-
-
-function trimAndRemoveSpaces(inputString) {
-  // Trim leading/trailing white spaces and remove spaces in between
-  let trimmedString = inputString.trim().replace(/\s+/g, " ");
-  // Replace all single spaces with ""
-  let resultString = trimmedString.replace(/ /g, "");
-
-  return resultString;
-}
-
-
-
-
-      //
-      // WAITING -- Loading the Leedz....
-      // MODAL
-      //
-      function showWaitingModal(msg) {
-
-        let wait_msg = document.getElementById("waiting_label");
-        wait_msg.innerText = msg;
-
-        let waiting = document.getElementById("waiting_modal");
-        waiting.style.display = "block";
-      }
-      window.showWaitingModal = showWaitingModal;
-
-
-
-
-      //
-      // open GUEST welcome modal
-      // some features not available to guest accounts
-      // invite user to sign up for account -- provide sign-up link
-      //
-      function openGuestWelcome() {
-        let guest = document.getElementById("guest_modal");
-        guest.style.display = "block";
-      }
-      window.openGuestWelcome = openGuestWelcome;
-
-
-
-
-      //
-      // open NEW USER welcome modal
-      // new account -- no subs / search
-      //
-      function openNewUserWelcome() {
-        let newU = document.getElementById("newUser_modal");
-        newU.style.display = "block";
-      }
-      window.openNewUserWelcome = openNewUserWelcome;
-
-
-
-
-
-
-
-      
-
-      // do NOT open leed create for guest account
-      //
-      //
-      function openCreateLeed() {
-
-
-        if (isGuestUser( true )) {
-          printError("openCreateLeed", "Guest user cannot create leedz");
-          openGuestWelcome();
-
-        } else {
-          window.open( URL_LEED_CREATE , "_self");
-        }
-      }
-
-      window.openCreateLeed = openCreateLeed;
-
-
-
-
-
-
-      // do NOT open user edit page for guest account
-      //
-      //
-      function openUserEdit() {
-
-        if (isGuestUser( true )) {
-          printError("openUserEdit", "Cannot edit Guest user account");
-          openGuestWelcome();
-
-        } else {
-          window.open( URL_USER_EDIT , "_self");
-        }
-      }
-
-      window.openUserEdit = openUserEdit;
-
-
-
-      
-
-
-
-      
-      //
-      // open LEED edit page
-      //
-      //
-      function openLeedEdit() {
-
-        // should NEVER happen
-        if (isGuestUser( true )) {
-          printError("openLeedEdit", "Guest User cannot edit leeds");
-          openGuestWelcome();
-
-        } else {
-
-          window.open( URL_LEED_EDIT , "_self");
-        }
-      }
-      window.openLeedEdit = openLeedEdit;
-
-
-
-
-      //
-      // REPORT a problem leed
-      // showing in the action window
-      // responsible for showing modal on error
-      //
-      async function reportLeed() {
-
-        if (isGuestUser( true )) {
-          printError("reportLeed", "Guest User cannot report leeds");
-          openGuestWelcome();
-          return;
-        }
-
-
-        // GOTO report leed confirmation
-        // with link to get back to main page
-        window.open( URL_REPORT_LEED , "_self");
-
-
-      }
-      window.reportLeed = reportLeed;
-
-
-
-
-      
-
-      //
-      // BUY current leed 
-      // showing in the action window
-      // responsible for showing modal on error
-      //
-      async function buyLeed() {
-        
-        if (isGuestUser( true )) {
-          printError("buyLeed", "Guest User cannot buy leeds");
-          openGuestWelcome();
-          return;
-        }
-        
-        waitCursor();
-
-        let response = null;
-        try {
-            await buyCurrentLeed().then(( fromDB ) => response = fromDB );
-
-            if (response == null) {
-              throw new Error("Error reporting current leed: null server response");
-            }
-
-
-          } catch (error) {
-            
-            // DO NOT FAIL -- show error modal dialog and print error to console
-            var msg = "Cannot buy current leed.<BR>Please refresh page."
-            msg = error.message + "<BR>" + msg;
-            
-            printError("Buy Leed", error);
-            errorModal( msg , true );
-          
-          } finally {
-            normalCursor();
-          }
-
-          if (response.cd == 0) {
-            var msg = "Error received from server: " + response.er;
-            printError("Buy Leed", msg);
-            errorModal(msg, true);
-          }
-
-          setCurrentLeed( response );
-          // console.log(response);
-
-          // GOTO BUY leed landing page
-          // with link to get back to main page
-          window.open( URL_LEED_BOUGHT , "_self");
-
-
-      }
-      window.buyLeed = buyLeed;
-
-
-
-
-
-
-
-      //
-      // DELETE the leed showing in the action window
-      // responsible for showing modal on error
-      //
-      async function deleteLeed() {
-
-
-        if (isGuestUser( true )) {
-          printError("deleteLeed", "Guest User cannot delete leeds");
-          openGuestWelcome();
-          return;
-        }
-        waitCursor();
-
-        let from_DB = null;
-        try {
-
-            // GO BACK to server and delete leed
-            // compliment of add leed
-
-            from_DB = await deleteCurrentLeed();
-
-        } catch ( error ) {
-            printError("Delete Leed", error.message);
-            errorModal("Error deleting leed: " + error.message, false);
-
-        } finally {
-            endEditing();
-            normalCursor();
-        }
-
-        console.log("GOT RESULTS!!!");
-        console.log(from_DB)
-
-
-        /**
-          * SHOW THE ERROR ALERT
-          */
-        if (fromDB == null || from_DB.er) {
-          var msg = "Error deleting leed";
-          if (fromDB) msg += (": " + from_DB.er);
-          printError("Delete Leed", msg);
-          errorModal(msg, false);
-
-
-        } else {
-          /**
-            * SHOW THE SUCCESS ALERT
-            *
-            *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
-            *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
-            */
-            var theAlert = document.getElementById("alert_success");
-            var msg = 'Deleted leed:  ' + from_DB.ti + '  ($ ' + from_DB.pr +' )';
-            var newChild = document.createElement("span");
-            newChild.textContent = msg;
-
-            if (theAlert.children.length <= 1) {
-                theAlert.appendChild(newChild);
-            } else {
-                theAlert.replaceChild(newChild, theAlert.children[1]);
-            }
-
-            theAlert.style.display = "block";
-        }
-
-      }
-      window.deleteLeed = deleteLeed;
-
-
-
-      
-      const URL_BUY_LEED = "./leed_buy.html";
-      const URL_REPORT_LEED = "./leed_report.html";
-
-        
-      const col = document.getElementById("trades_column");      
-      const side = document.getElementById("side_panel");
-      const open = document.getElementById("open_side_btn");
-      
-      let SIDE_OPEN = true;
-      let SCREEN_SIZE = 0; // 0, 1, 2 small
-
-      
-      
-
-
-      function openNav() {
-
-        side.style.width = "max-content";
-   
-        open.style.left = side.clientWidth + "px";
-        open.innerHTML = "&#10140;"
-
-        col.style.marginLeft = "0";
-      }
- 
-      
-
-      function closeNav() {
-
-        side.style.width = "0";
-
-        open.style.left = 0;
-        open.innerHTML = "&#9776;"
-
-        col.style.marginLeft = "-120px";
-      }
-
-
-      
-        
-
-
-        /**
-        * Change to a wait cursor
-        */
-      function waitCursor() {
-          document.body.style.cursor = 'wait';
-      }
-      window.waitCursor = waitCursor;
-
-      /**
-      * Change back to normal cursor
-      */
-      function normalCursor() {
-          document.body.style.cursor = 'default';
-      }
-      window.normalCursor = normalCursor;
-
-
-
-
-      /**
-       *
-       */
-      function cssScreenSize() {
-
-
-        modalClose( false );
-
-        var screen = getComputedStyle( document.documentElement ).getPropertyValue('--screen_size').trim();
-        var action = document.getElementById("action_panel");
-
-
-        switch (screen) {
-  
-          case "S":
-
-            // console.log("SMALL!!!!");
-
-            action.setAttribute("screen", 0);
-            SIDE_OPEN = false;
-            closeNav();  
-            actionModal();
-            break;
-          
-          case "M":
-
-            // console.log("MEDIUM!!!!");
- 
-            action.setAttribute("screen", 1);
-            SIDE_OPEN = false;
-            closeNav();
-            actionModal();
-            break;
-  
-          case "L":
-            
-            // console.log("LARGE!!!!");
-            action.setAttribute("screen", 2);  
-            SIDE_OPEN = true;
-            openNav();
-
-            
-            // Is there a current leed in cache
-            //
-            /**
-            let current_leed = getCurrentLeed();
-            if (( current_leed.id) && (isSubscribed( current_leed.tn ))) {
-               
-                try {
-                  showLeedAction(current_leed, false );
-
-                } catch (error) {
-                  printError("cssScreenSize", error);
-                  errorModal("Cannot load leed details", error);
-                  clearCurrentLeed();
-                  showWelcomeColumn();
-                }
-
-            } else {
-
-              showWelcomeColumn();
-              clearCurrentLeed();
-            }  
-            */
-
-            showWelcomeColumn();
-            clearCurrentLeed();
-
-
-            break;
-
-
-            
-  
-          default:
-
-            // USE SMALL
-            // console.error("--screen_size not found");
-            // console.log("SMALL!!!!");
-
-            action.setAttribute("screen", 0);
-            SIDE_OPEN = false;
-            closeNav();  
-            actionModal();
-            break;
-        }
-      }
-      window.cssScreenSize = cssScreenSize;
-
-      
-/**
- * SHOW Right-hand WELCOME column
- */
-      function showWelcomeColumn() {
-
-        let action = document.getElementById("action_panel");
-        action.style.display = "none";
-
-        let welcome = document.getElementById("welcome_panel");
-
-        welcome.classList.replace("modal", "column");
-        welcome.style.display = "flex";
-        
-        // let closeBut = document.getElementById("buy_modal_close");
-        // closeBut.style.display = "none";
-      }
-      window.showWelcomeColumn = showWelcomeColumn;
-
-
-
-
-/**
- * HIDE WELCOME column
- * SHOW Right-hand ACTION modal
- *
- */
-  function actionModal() {
-    let welcome = document.getElementById("welcome_panel");
-    welcome.style.display = "none";
-
-    var closeColumn = document.getElementById("lic_close");
-    closeColumn.style.display = "flex";
-
-    // let closeBut = document.getElementById("buy_modal_close");
-    // closeBut.style.display = "flex";
-
-    let action = document.getElementById("action_panel");
-    action.className = "modal";
-
-  }
-  window.actionModal = actionModal;
-
-
-
-
-
-/**
- * CLOSE (ANY) MODAL DIALOG
- */
-  function modalClose( force ) {
-
-    if (! force) errorModalClose();
-
-    // close all modal dialogs
-    var modals = document.getElementsByClassName("info_modal");
-    for (var i = 0; i < modals.length; i++) {
-      if (force) {
-        modals[i].style.display = "none";
-      } else if (!  modals[i].classList.contains("modal_noclose")) {
-        modals[i].style.display = "none";
-      }
-      
-    }
-  }
-  window.modalClose = modalClose;
-
-
-
-      
-
-
-  /**
-    * USER
-    *
-    */
-    function initUserPanel(current_user) {
-
-      // whatever the current user identity -- continue ....
-      // UPDATE the UI with the current user info
-      // user clicks on username --> user edit account page
-
-      let dot = document.getElementById("up_dot");
-      dot.addEventListener( "click", (event) => {    
-        openUserEdit();
-      });
-      
-      let user_href = document.getElementById("user_href");
-      user_href.innerHTML = current_user.un;
-      // user_href.setAttribute("href", "#");
-      user_href.addEventListener( "click", (event) => {    
-          openUserEdit();
-      });
-
-      // force style the dot color in case of multiple login/refreshes
-      dot.style.backgroundColor = "var(--LEEDZ_GREEN)";
-      
-      if (isGuestUser( true )) {
-        user_href.style.color = "darkorange";
-        dot.style.backgroundColor = "darkorange";
-        //
-        // FIXME FIXME FIXME
-        // send guest.user to info/intro/sign-up page
-        //
-        user_href.setAttribute("href", "#");
-        // user_href.addEventListener( "click", (event) => { });
-        
-
-      // BADGES
-      } else if (current_user.bg.length != 0) {
-          
-          // clone a new node
-          //
-          //
-          //  <div class="each_badge">
-          //    <a href="#" class="badge_href"><img class="badge_img"></a>
-          //  </div>
-          //  
-          const theList = document.querySelector("#up_center_column");          
-          // start with a fresh list
-          while (theList.childElementCount > 1) {
-            theList.removeChild( theList.lastElementChild );
-          }
-
-          const theTemplate = document.querySelector("#template_badge");
-          
-          for (var i = 0; i < current_user.bg.length; i++) {
-
-            if (i >= ALL_BADGES.length) break; // failsafe in case two are not in sync
-
-            var the_badge = current_user.bg[i];
-
-            var newNode = theTemplate.content.cloneNode(true).querySelector(".each_badge");
-
-            var theImg = newNode.querySelector(".badge_img");
-            theImg.src = "./img/badge_" + the_badge + ".png";
-
-            var theHref = newNode.querySelector(".badge_href");
-            theHref.setAttribute("href", "./leedz_about.html#badges");   // FIXME explain badge in About section #
-            theHref.setAttribute("title", ALL_BADGES[ the_badge ].tit);
-
-            theList.appendChild(newNode);
-          } // for  
-
-      }
-  }
-
-
-
-
-/**
- * LOAD and INITALIZE the UI
- *
- *
- */
-async function mainPageLoad( current_user ) {
-     
-
-      console.log("LOADING PAGE");
-
-      // LOADING MODALS...
-      //
-      // Is user a guest.user or a NEW user with NO trade subscriptions
-      // will be given default top (MAX_TRADE_SUBSCRIPTIONS) like guest
-      //
-      const newUser = (isGuestUser(true) || current_user.sb.length == 0);
-      if (newUser) {
-        console.log("!!!!!   NEW USER DETECTED OPEN WELCOME!");
-        openNewUserWelcome();
-      } else {
-        showWaitingModal("Loading the Leedz . . .");
-      }
-      
-
-      // clear any pre-existing leed in memory
-      //
-      clearCurrentLeed();
-
-
-
-
-      // INIT USER PANEL
-      //
-      try {
-
-        initUserPanel( current_user );
-
-      } catch (error) {
-        var msg = "Cannot create user panel.<BR>Please refresh page."
-        msg = error.message + "<BR>" + msg;
-
-        printError("User Panel", error);
-        errorModal( msg , true );
-      }
-
-
-
-
-
-      // INIT DISTANCE CHOOSER
-      // using current_user preferences if set
-      //
-      try {
-
-        if (current_user.zr) {
-          let miles = document.getElementById("distance_miles");
-          miles.value = current_user.zr;
-        }
-        
-        if (current_user.zp) {
-          let zip = document.getElementById("distance_from");
-          zip.value = current_user.zp;
-        }
-
-      } catch (error) {
-
-        var msg = "Cannot initialize distance chooser.<BR>Please refresh page."
-        msg = error.message + "<BR>" + msg;
-
-        printError("Distance Chooser", error);
-        errorModal( msg , true );
-      }
-
-
-    
-
-      /**
-      * TRADES
-      *
-      * LOAD ALL trades and turn ON the ones subscribed to
-      * when we turn ON a trade this will ALSO load the leedz
-      * for each trade in current_user.sb[]
-      */
-
-      try {
-
-        await initTrades();
-
-      } catch (error) {
-
-        // DO NOT FAIL -- show error modal dialog and print error to console
-        var msg = "Cannot load trades.<BR>Please refresh page."
-        msg = error.message + "<BR>" + msg;
-
-        printError("Init Trades Column", error);
-        errorModal( msg , true );
-      }
-
-
-
-
-
-    /**
-    * INITIALIZE month chooser in middle column
-    *
-    */ 
-      try {
-  
-        initMonthChooser();
-
-      } catch (error) {
-        var msg = "Cannot create month chooser.<BR>Please refresh page."
-        msg = error.message + "<BR>" + msg;
-
-        printError("Month Chooser", error);
-        errorModal( msg , true );
-      }
-
-
-
-      /**
-      * BUILD central calendar column 
-      */
-      try {
-
-        buildCalendar();
-
-      } catch (error) {
-
-        var msg = "Cannot build calendar.<BR>Please refresh page."
-        msg = error.message + "<BR>" + msg;
-
-        printError("Building Calendar", error);
-        errorModal( msg , true );
-      }
-
-
-
-
-      /**
-      * If there are subs Load CACHE leedz
-      */
-    
-
-      try {
-
-        loadCacheLeedz();
-
-      } catch (error) {
-
-        var msg = "Cannot load leedz from cache.<BR>Please refresh page."
-        msg = error.message + "<BR>" + msg;
-
-        printError("Loading Cache Leedz", error);
-        errorModal( msg , true );
-      }
-
-      /**
-      * Load Leedz from DB -- will return immediately
-      * delegate to callback internally when data arrives
-      */
-
-      try {
-
-        loadDBLeedz();
-
-      } catch (error) {
-
-        var msg = "Cannot load leedz from DB.  <BR>Please refresh page."
-        msg = error.message + "<BR>" + msg;
-
-        printError("Loading DB Leedz", error);
-        errorModal( msg , true );
-
-      }
-  
-
-
-      
-
-      /**
-      * 
-      */
-
-      cssScreenSize();
-
-
-      // set the trades sidebar      
-      if (SIDE_OPEN) {
-      openNav();
-      } else {
-      closeNav();
-      }
-
-
-  };
-
-
-
-
-//
-//
-// START FROM HERE ON PAGE LOAD.....
-//
-//
-//
-// <body onload=" window.open(...)">
-window.onload = async function() {
-
-  let current_user; 
-  const userLogin = {};
-  
-  try {
-
-    getUserLogin( userLogin );
-
-
-    if (! userLogin['un']) {
-        // 
-        // !! REDIRECT TO LOGIN URL
-        //
-        window.open(URL_LOGIN, "_self");
-        return;
-    }
-
-
-  } catch (err) {
-      var msg = "Cannot log into the Leedz.";
-      msg = err.message + "<BR>" + msg + "<BR>Using guest account.";
-      printError("Leedz Login", msg);
-      errorModal( msg , false );
-      
-      // DO NOT FAIL
-      // ! USE GUEST USER
-      current_user = guestUser();   
-  }
-
-
-
-  if (isGuestUser(false)) {
+	waitCursor();
     try {
-      await initUser( userLogin['un'] ); // will throw error
+        const stats = await getStats();
+            
 
-      // return newly-loaded user
-      current_user = getCurrentUser( false );
+        if (! stats) {
+            throw new Error("server returned null stats.");
+        }
 
+        // console.log("STATS=");
+        // console.log(stats);
+
+        var element;
+        
+        element = document.getElementById("leedz_posted");
+        element.innerHTML = stats.lp;
+
+        
+        // element = document.getElementById("leedz_bought");
+        // element.innerHTML = stats.lb;
+
+        // date posted
+        let the_date = prettyFormatDT( formatDTforInput( stats.dp ) );
+        element = document.getElementById("date_posted");
+        element.innerHTML = the_date;
+
+        // date bought
+        the_date = prettyFormatDT( formatDTforInput( stats.db ) );
+
+        element = document.getElementById("date_bought_2");
+        element.innerHTML = the_date;
+        element = document.getElementById("date_bought_3");
+        element.innerHTML = the_date;
+
+
+        // trade of last bought leed
+        addToTradeDiv( stats.ab );
+
+
+        element = document.getElementById("sale_price_2");
+        element.innerHTML = '$ ' + stats.pr;
+
+        element = document.getElementById("sale_zip_2");
+        element.innerHTML = stats.zp;
 
     } catch (error) {
+        
+        // DO NOT FAIL -- show error modal dialog and print error to console
+        var msg = "Cannot load stats.<BR>Please refresh page."
+        msg = error.message + "<BR>" + msg;
+        
+        printError("Init Stats", error);
+        // errorModal( msg , true );
 
-      var msg = "Cannot load user data.<BR>Using guest account.";
-      msg = error + "<BR>" + msg;
-      printError("Leedz Login", msg);
-      errorModal( msg , false );
-
-      // DO NOT FAIL
-      // ! USE GUEST USER
-      current_user = guestUser();   
-
+    } finally {
+        normalCursor();
     }
+
+
   }
 
-  // LOAD the page with the current user info
-  mainPageLoad( current_user );
+
+    
+
+/**
+ * 
+ * 
+ */
+ async function getStats() {
+    try {
+      const result = await db_getStats();
+      return result;
+    } catch (error) {
+      // Handle any errors that occur during the fetch request
+      throw error;
+    }
 }
 
 
 
-  /**
-  * RESIZE
-  * called on window resize -- but AFTER css applied -- can read values from 
-  * different media_query css files depending on sizefvs
-  */
-  window.onresize = (event) => {
-    cssScreenSize();
-  };
+/**
+ * 
+ * 
+ */
+ async function initTrades() {
+
+	let trades = [];
+  
+	waitCursor();
+
+	try {
+	  await getAllTrades().then((response) => trades = response ); 
+  
+		if (trades == null) {
+		  throw new Error("server returned null trades.");
+		}
+  
+		if (trades.length == undefined || trades.length == 0) {
+		  throw new Error("server returned empty (0) trades.");
+		}
 
 
-  /**
-   * BACK BUTTON
-   * called when user comes back to main page from edit/view html pages
-   */
 
-  window.addEventListener("popstate", () => {
+		// init TRADES struct
+		// initialize the spectrum of colors
+		createTradesAndColors( trades );  
+		
 
-    let storageChanged = false;
 
-    // Define the storage event listener
-    const storageEventListener = function (e) {
-      storageChanged = true;
-      window.removeEventListener("storage", storageEventListener);
-   
-      const current_user = getCurrentUser(true);
-      // console.log(current_user);
+		initTradesTable( trades );
 
-      // LOAD the page with the current user info
-      mainPageLoad( current_user );
-    };
+        
+
+  
+	  } catch (error) {
+		
+		// DO NOT FAIL -- show error modal dialog and print error to console
+		var msg = "Cannot load trades.<BR>Please refresh page."
+		msg = error.message + "<BR>" + msg;
+		
+		printError("Init Trades Column", error);
+		// errorModal( msg , true );
+	
+	} finally {
+		normalCursor();
+	}
+  }
+
+
+	
+
+
+
+
+
+/**
+ *
+ * all_trades is the array 
+ * 
+ * ONLY display the trades to which the user is subscribed
+ * [
+ * {
+   tn: "caricatures",
+   nl: 5
+ * }, .... 
+ * ]
+*/
+function initTradesTable( all_trades ) {
+
+	if ((all_trades == null) || (all_trades.length == 0)) return;
   
 
-    // Add the storage event listener
-    window.addEventListener("storage", storageEventListener);
-  
-    // Check if the storage event has already occurred
-    if (storageChanged) {
+    var element = document.getElementById("maxTrades");		
+    element.innerHTML = MAX_TRADES;
 
-      const current_user = getCurrentUser(true);
-      // console.log(current_user);
+    // element = document.getElementById("trades_total");
+    // element.innerHTML = all_trades.length;
 
-      // LOAD the page with the current user info
-      mainPageLoad( current_user );
-    }
-  });
+
+	// import DOM elements from html
+	const theList = document.querySelector("#trades_table");
+	const subs = [];
+	const theTemplate = document.querySelector("#template_each_trade");
+
+    var count = 0;
+	all_trades.forEach((trade) => {
+
+        if (++count > MAX_TRADES) return;
+
+        // clone a new node
+        const newNode = theTemplate.content.cloneNode(true).querySelector(".each_trade");
+
+        // set the label
+        let theLabel = newNode.querySelector("label");
+        theLabel.textContent = trade.sk;
+        
+        // set the leed count as a superscript
+        newNode.querySelector("sup").textContent = trade.nl;
+
+        let radioButton = newNode.querySelector(".trade_radio");
+        turnTrade_On(null, radioButton, theLabel, trade.sk);
+
+        theList.appendChild( newNode );
+	});
+
+    
+}
+
+
+	
+
+/**
+ * The trade of the last sale
+ *
+ */
+function addToTradeDiv( trade_name ) {
+    const theList = document.querySelector("#trade_div");
+    const theTemplate = document.querySelector("#template_each_trade");
+
+    // clone a new node
+    const newNode = theTemplate.content.cloneNode(true).querySelector(".each_trade");
+
+    // set the label
+    let theLabel = newNode.querySelector("label");
+    theLabel.textContent = trade_name;
+
+    let radioButton = newNode.querySelector(".trade_radio");
+    turnTrade_On(null, radioButton, theLabel, trade_name);
+
+
+    theList.appendChild( newNode );
+}
+
+
+
+/**
+ * Change to a wait cursor
+ */
+ function waitCursor() {
+    document.body.style.cursor = 'wait';
+}
+
+/**
+ * Change back to normal cursor
+ */
+function normalCursor() {
+    document.body.style.cursor = 'default';
+}
+
+
+
+
+/**
+ * WINDOW OPEN 
+ * PAGE LOAD
+ *
+ *
+ */
+window.onload = async function() {
+    await initTrades();
+    await initStats();
+
+}
+
 
 
 </script>
 
-  
- 
-   
-   
-   
-   </body>
-  </html>
+</body>
+</html>

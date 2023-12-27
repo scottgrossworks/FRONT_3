@@ -11,7 +11,8 @@ import { printError, throwError } from "./error.js";
 
 /**
  * 
- * 
+ * DOES this window contain AWS auth tokens?
+ * break out all individual tokens into key-value pairs
  * 
  */
 export function getUserLogin( userLogin ) {
@@ -22,9 +23,11 @@ export function getUserLogin( userLogin ) {
 
     if (! loginTokens) return;
 
-    // console.log(loginTokens);
+    console.log("GOT TOKENS!!!");
+    console.log(loginTokens);
 
-
+    // ID TOKEN
+    //
     if ("id_token" in loginTokens) {
       
       decodeJWT(loginTokens["id_token"], userLogin);
@@ -46,7 +49,7 @@ export function getUserLogin( userLogin ) {
 }
 
 
-
+//
 // use above
 //
 function parseWindowURL() {
@@ -84,7 +87,10 @@ function parseWindowURL() {
 }
 
 
-
+//
+// un - USERNAME
+// em - EMAIL
+//
 // used above
 //
 function decodeJWT(jwt, userInfo) {

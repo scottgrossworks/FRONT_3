@@ -73,6 +73,7 @@ body {
 
 #header_login {
  margin-top:15px;
+ margin-left:2vw;
  font-family: var(--FONT_3);
 }
 
@@ -137,6 +138,24 @@ a {
   color:green;
   font-weight:600;
 }
+
+.item .statsTable {
+  display:none;
+}
+
+.item .waitSpinner {
+  display:block;
+
+  padding:1.5vh;
+
+  z-index:600;
+}
+
+.item .waitSpinner img {
+  border-radius: 10px;
+  
+}
+
 
 #top_trades table {
   padding: 2vw;
@@ -323,7 +342,7 @@ a#date_bought_3 {
 
 
       #dropdown_logo{
-        margin: 1vh 0 0 1vw;
+        margin: 1vh auto 0 1vw;
         width:100%;
         min-width:40px;
         max-width:100px;
@@ -340,7 +359,7 @@ a#date_bought_3 {
     #header_login {
       padding:12px;
       font-size:90%;
-      margin: 8px 0;
+      margin: 8px auto;
      }
 
     #login_item table td {
@@ -397,6 +416,7 @@ a#date_bought_3 {
         width:max-content;
         max-width:140px;
         padding:4px;
+        margin: 1vh 0 0 1vw;
       }
 
 

@@ -73,7 +73,7 @@
 
         
 
-        <div class="column header_col _55">
+        <div class="column header_col _6">
             <center><a style="color:green;">Buy. Sell. Grow</a> your Hustle.</center>
         </div>
                 
@@ -86,7 +86,6 @@
 
         </div>
 
-        <div class="column _1"></div>
     </div>
 
 
@@ -128,7 +127,14 @@
         <div class="item" id="last_sale">
             <div class="item_title" style="width:100%">Last Sale</div>
      
-                    <table>
+            <span class="waitSpinner">
+                <center>
+                <img src="./img/wait_spinner.gif" style="height:8vh;">
+                </center>
+            </span>
+
+
+            <table class="statsTable">
                         <TR><TD id="trade_div">
                             <!-- TRADE DIV -->
                             <b>Trade: </b>
@@ -201,7 +207,16 @@
         <div class="item" id="top_trades">
 
             <div class="item_title" style="width:100%">Top Trades</div>
-            <table>
+
+
+            <span class="waitSpinner">
+                <center>
+                <img src="./img/wait_spinner.gif" style="height:8vh;">
+                </center>
+            </span>
+
+
+            <table class="statsTable">
                 <TR>
                     <TD><b>The top <a id="maxTrades"></a> trades by <b style=color:green>leedz for sale:</b></b></TD>
                 </TR>                
@@ -254,9 +269,16 @@
 
     <div class="item" id="leedz_live">
         <div class="item_title" style="width:100%">Leedz Live</div>
- 
-        <table>
+        
+        <span class="waitSpinner">
+            <center>
+            <img src="./img/wait_spinner.gif" style="height:8vh;">
+            </center>
+        </span>
 
+
+        <table class="statsTable">
+        
             <TR>
                 <TD><b>Leedz</b> for sale: <a id="leedz_posted"></a></TD>
             </TR>
@@ -360,6 +382,8 @@
         login_links[i].href = URL_LOGIN;
       }
 
+
+
        /**
          * DROP DOWN MENU
          */
@@ -431,6 +455,17 @@
 
         var element;
         
+        
+        const spinners = document.getElementsByClassName("waitSpinner");
+        for (let j = 0; j< spinners.length; j++) {
+            spinners[j].style.display = 'none';
+        }
+        const stats_tables = document.getElementsByClassName("statsTable");
+        for (let j = 0; j< stats_tables.length; j++) {
+            stats_tables[j].style.display = 'block';
+          }
+
+          
         element = document.getElementById("leedz_posted");
         element.innerHTML = stats.lp;
 

@@ -105,7 +105,7 @@ body {
 
   padding:0;
 
-  flex-basis: 200px;
+  flex-basis: 180px;
   min-width: 300px;
   height:fit-content;
   min-height: 130px;
@@ -198,6 +198,7 @@ a {
 
 #leedz_live table {
 
+  margin-left:1vw;
   padding:2vw;
   line-height: 3vh;
 }
@@ -256,6 +257,11 @@ a#date_bought_3 {
   font-size: small;
 }
 
+
+.item #last_sale {
+  max-height:fit-content;
+}
+
 #last_sale table {
   font-size:medium;
   padding: 1vw 2vw 2vw 2vw;
@@ -263,7 +269,9 @@ a#date_bought_3 {
 }
 
 
-
+#contact_item {
+  min-height:200px;
+}
 
 #contact_item .item_title {
   background: gold;
@@ -283,7 +291,7 @@ a#date_bought_3 {
 
 
 #contact_item #contactButton {
-  margin:2vw auto;
+  margin:1vh auto 1vh auto;
   background-color: coral;
   color:white;
   font-family: var(--FONT_3);
@@ -367,14 +375,6 @@ a#date_bought_3 {
       min-width:100px;
     }
 
-
-
-
-
-    #contact_item  {
-    height:fit-content;
-    min-height:230px;
-    }
 
 
 

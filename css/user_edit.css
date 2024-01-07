@@ -89,6 +89,52 @@ table#badges_list tbody td {
 
 
 
+.sq_button {
+
+	display: none;
+	position:relative;
+	padding:15px 20px;
+	
+	border: none;
+
+  
+	text-decoration: none;
+	display: flex;
+  
+	border-radius: 14px;
+  
+	width:max-content;
+	height:max-content;
+  
+  
+	font-family: var(--FONT_3);
+	font-size:medium;
+	font-weight:600;
+  
+	box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
+  }
+  
+
+
+  .sq_url {
+	color: white;
+	background-color: dodgerblue;
+  }
+
+
+  .sq_auth {
+	color: white;
+	background-color: green;
+  }
+
+
+  .sq_error {
+	color: white;
+	background-color: red;
+  }
+
+
+
 @media screen and (min-width: 600px) and (max-width: 949px) {
 
 	#form_container {

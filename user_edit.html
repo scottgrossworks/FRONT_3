@@ -1,7 +1,8 @@
 <!--
 --
 -- EDIT the current user profile logged in
---    
+-- 
+-- 1/2024 -- adding Square button integration
 -->   
 <!DOCTYPE html>
 <html lang="en">
@@ -94,7 +95,7 @@
 						<td data-inlineType="text" data-inlineName="login"></td>
 		
 						<!-- FIXME FIXME FIXME 
-						URL TO CHANGE LOGIN / PASSWORD
+						DELETE ACCOUNT confirmation page
 						-->
 
 						<td data-inlineType="doneButton" class="buttonTD">
@@ -105,17 +106,22 @@
 
 
 
-
+					<!--
+					  -- 1/6/2024: Square payment integration
+					  --
+					-->
 					<tr id="row_payment">
 					
 						<TD class="labelTD">Payment Info: </TD>
 						<td data-inlineType="text" data-inlineName="payment"></td>
 						
+						<div id="sq_msg"></div>
 
-						<!-- FIXME FIXME FIXME 
-						URL TO CHANGE PAYMENT INFO
-						-->
+						<button id="sq_auth_url_button" class="button sq_button sq_url">Register&nbsp;<img id="sq_auth_img" src="img/sq_logo.png"></button>
 
+						<button id="sq_auth_auth_button" class="button sq_button sq_auth">Square&nbsp;<img id="sq_auth_img" src="img/sq_logo.png"></button>
+
+						<button id="sq_auth_error_button" class="button sq_button sq_error">Square&nbsp;<img id="sq_auth_img" src="img/sq_logo.png"></button>
 
 						<td data-inlineType="doneButton" class="buttonTD">
 							<input type="button" value="Edit" onclick=""/>
@@ -341,6 +347,10 @@
 		}
 
 
+		// program the square button depending on status
+		initSquareButton();
+
+
 		element = document.getElementById("maxTrades");		
 		element.innerHTML = MAX_USER_SUBS;
 		// INIT TRADES
@@ -369,9 +379,89 @@ function normalCursor() {
 
 
 
+/**
+ *
+ */
+async function initSquareButton() {
+	
+	waitCursor();
+
+	try {
+
+			if (! CURRENT_USER.sq_st)
+				throwError("Square Init", "No Square status returned");
+
+			let sq_msg = document.getElementById("sq_msg");
+			if (CURRENT_USER.sq_st == 'authorized') {
+				
+				// ALL GOOD!
+				// show AUTHORIZED
+				//
+				sq_msg.innerText = "Authorized! Click to change.";
+				
+				// REVOKE Square Authorization
+				// requires AUTH token -- must be done by AWS Lambda
+				// take user to confirmation page
+
+				let sq_button = document.getElementById("sq_auth_auth_button");
+				sq_button.addEventListener("click", function( event ) {
+					// takes user --> Square to authorize account
+					window.open( "./user_delete_confirm.html", "_self ");
+			
+				});
+  
+				sq_button.style.display = "block";
 
 
+
+			} else if (CURRENT_USER.sq_st.startsWith("http")) {
+
+				// NEW USER
+				// show AUTHORIZATION LINK
+				//
+				sq_msg.innerText = "Connect The Leedz to Square:";
+			
+				let sq_button = document.getElementById("sq_auth_url_button");
+				sq_button.addEventListener("click", function( event ) {
+					// takes user --> Square to authorize account
+					window.open( CURRENT_USER.sq_st, "_self ");
+			
+				});
+  
+				sq_button.style.display = "block";
+
+
+
+			} else {
+				
+				// ERROR
+				//
+				sq_msg.innerText = "The Leedz is not authorized";
+			
+				let sq_button = document.getElementById("sq_auth_error_button");
+				sq_button.style.display = "block";
+
+				throwError("Square Init", "Malformed Square status: " + CURRENT_USER.sq_st);
+			}
+
+
+		} catch (error) {
 		
+			// DO NOT FAIL -- show error modal dialog and print error to console
+			var msg = "Cannot init Square button.<BR>Please refresh page."
+			msg = error.message + "<BR>" + msg;
+			
+			printError("Init Square", error);
+			errorModal( msg , true );
+
+		} finally {
+			normalCursor();
+		}
+  }
+
+
+
+
 /**
  * 
  * 
@@ -504,15 +594,6 @@ function initTradesTable( all_trades, tradeListener ) {
 
 }
 
-  
-
-
-  
-
-
-			
-
-	
   
 
 

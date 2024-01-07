@@ -490,36 +490,39 @@ def checkForExistingLeed( table, tn, id ):
 
     
     return response['Items'][0]
-    
+
+
+
 
 #
 # PARSE note fromSQUARE event
 # will throw Error if Webhook response not contain note / invalid format
 #
-def getLeedzInfo(event):
+def getLeedzInfo(body):
     
-    if 'data' not in event:
-        raise Exception("Malformed Webhook response.  No data[] section")
+    if 'data' not in body:
+        raise Exception("Malformed Webhook response.  No data section")
     
-    if 'object' in event['data']:
-        
-        if event['data']['object']['status'] in ['CANCELED', 'FAILED']:
-            raise Exception("Purchase has not been approved")
+    if 'object' not in body['data']:
+        raise Exception("Malformed Webhook response.  No object section")
+    
+    if body['data']['object']['status'] in ['CANCELED', 'FAILED']:
+        raise Exception("Purchase has not been approved")
 
-        if 'note' not in event['data']['object']:
-            raise Exception("Malformed Webhook response.  No note section")
+    if 'note' not in body['data']['object']:
+        raise Exception("Malformed Webhook response.  Missing Leedz note")
  
  
-        note = event['data']['object']['note']
-        if note is not None:
-            note_parts = note.split('|')
-            if len(note_parts) == 3:
-                return note_parts
-            
-            else:
-                raise Exception("Invalid note format: " + note)
+    note = body['data']['object']['note']
+    if note is not None:
+        note_parts = note.split('|')
+        # will be copied into vars above
+        if len(note_parts) == 3:
+            return note_parts
         else:
-            raise Exception("Note value is undefined")
+            raise Exception("Invalid Leedz note format: " + note)
+    else:
+        raise Exception("Leez note is undefined / empty")
    
     
     
@@ -536,32 +539,30 @@ def lambda_handler(event, context):
 
     the_json = ""
     TRUE = 1
-    
+    id = "leed_id"
+    tn = "trade"
+    un = "buyer"
     
     try:
         dynamodb_client = boto3.resource("dynamodb")
         table = dynamodb_client.Table('Leedz_DB')
-        
-        id = "leed_id"
-        tn = "trade"
-        un = "buyer"
+       
 
-        fromSQ = 0
+        fromSQ = 0 # FALSE
+        body = event["body"]
 
-        if ('body' in event) :
-            # FIXME FIXME FIXME
-
-
-        fromSQ = ('type' in event and event['type'] == "payment.created")
+        # COMING FROM SQUARE
+        fromSQ = (('type' in body) and body['type'] == "payment.created")
         if (fromSQ):
             
-            leedz_info = getLeedzInfo(event)
-            
+            # will throw Exception if body is missing Leedz 'note'
+            leedz_info = getLeedzInfo(body)
             id = leedz_info[0]
             tn = leedz_info[1]
             un = leedz_info[2]
         
-
+        
+        # COMING FROM TEST
         else: 
 
             # BUYER  - REQUIRED
@@ -581,6 +582,9 @@ def lambda_handler(event, context):
 
         
         
+        ##
+        ## BOOKEEPING
+        ##
         
         # Find the leed -- will throw Exception if not found
         # increment leed bought date and buyer name
@@ -589,23 +593,19 @@ def lambda_handler(event, context):
         the_leed = leed_updatePurchaseInfo( table, tn, id, un ) 
         
         
-        # BOOKEEPING -- increment buyer and seller counters
-        #
+        # increment buyer and seller counters
         #
         the_buyer = buyer_incrementLeedzBought( table, un )
         
         the_seller = seller_incrementLeedzSold( table, the_leed['cr'] )
         
-        #
-        #
+        # award badges
         #
         buyer_awardUserBadge( table, the_buyer )
         
         seller_awardUserBadge( table, the_seller )
 
 
-        
-        #
         # UPDATE stats page
         #
         updateStats(table, tn)
@@ -631,7 +631,8 @@ def lambda_handler(event, context):
         
         if error.response['Error']['Code'] == 'ValidationException' or error.response['Error']['Code'] == 'ConditionalCheckFailedException':
             # one or more attribute fields doesn't match DB config
-            msg = "Error buying " + tn + " leed: " + id
+            buyer_msg = " Buyer: " + un
+            msg = "Error buying leed [" + tn + "] id: " + id + buyer_msg
             result = handle_error(msg)
             
         else :
@@ -640,20 +641,16 @@ def lambda_handler(event, context):
         the_json = json.dumps( result, cls=DecimalJsonEncoder )
     
      
-    except ValueError as error:
-        
-        result = handle_error(error)
-        the_json = json.dumps( result, cls=DecimalJsonEncoder )
-        
     
-    
-    except BaseException as error:
+    except Exception as error:
         
         result = handle_error(error)
         the_json = json.dumps( result, cls=DecimalJsonEncoder )
        
     
 
+
+    # MUST respond with 200 to SQUARE API
     return createHttpResponse( 200, the_json )
 
 

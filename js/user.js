@@ -1,4 +1,5 @@
 /**
+ * USER object 
  * 
  */
 
@@ -7,7 +8,7 @@ import { db_getUser, db_updateUser, DEL_USER, CHG_USER, DB_FAIL } from "./dbTool
 import { printError, throwError } from "./error.js";
 
 
-export const COGNITO_ACCESS_TOKEN = "CT";
+ const COGNITO_KEY = "CT";
 
 
 /**
@@ -45,7 +46,7 @@ export function getUserLogin( userLogin ) {
     // will not get here if there is no ID token validation
     //
     if ("access_token" in loginTokens) {
-      window.localStorage.setItem(COGNITO_ACCESS_TOKEN, loginTokens["access_token"]);
+      window.localStorage.setItem(COGNITO_KEY, loginTokens["access_token"]);
     }
 
 
@@ -289,25 +290,27 @@ export async function initUser( login ) {
         // some are optional and may be null
         // if statements are in case cache v  ersion is more recent
         // 
-        CURRENT_USER.un = resObj.sk;
-        if (! resObj.em)
-          throwError("No email set for username: " + resObj.sk);
+        CURRENT_USER.un = resObj['sk'];
+        if (! resObj['em'])
+          throwError("No email set for username: " + resObj['sk']);
 
-        CURRENT_USER.em = resObj.em;
+        CURRENT_USER.em = resObj['em'];
 
-        CURRENT_USER.ws = (resObj.ws) ? resObj.ws : null;
-        CURRENT_USER.ab = (resObj.ab) ? resObj.ab : null;
+        CURRENT_USER.ws = (resObj['ws']) ? resObj['ws']: null;
+        CURRENT_USER.ab = (resObj['ab']) ? resObj['ab'] : null;
 
-        CURRENT_USER.zp = (resObj.zp && resObj.zp != '0') ? resObj.zp : 0;
-        CURRENT_USER.zr = (resObj.zr && resObj.zr != '0') ? resObj.zr : 0;
+        CURRENT_USER.zp = (resObj['zp'] && resObj['zp'] != '0') ? resObj['zp'] : 0;
+        CURRENT_USER.zr = (resObj['zr'] && resObj['zr'] != '0') ? resObj['zr'] : 0;
 
         // TRADES SUBSCRIPTIONS
-        CURRENT_USER.sb =  (resObj.sb) ? resObj.sb.split(',').map(element=>element.trim()) : [];
+        CURRENT_USER.sb =  (resObj['sb']) ? resObj['sb'].split(',').map(element=>element.trim()) : [];
 
         // USER BADGES
-        CURRENT_USER.bg =  (resObj.bg) ? resObj.bg.split(',').map(element=>parseInt(element.trim())) : [];
+        CURRENT_USER.bg =  (resObj['bg']) ? resObj['bg'].split(',').map(element=>parseInt(element.trim())) : [];
 
-        
+        // 1/2024
+        // SQUARE STATUS
+        CURRENT_USER.sq_st = (resObj['sq_st']) ? resObj['sq_st'] : null;
 
       } catch (error) {
 
@@ -359,6 +362,9 @@ export function blankUserObject() {
 
   BLANK_USER.sb = [];
   BLANK_USER.bg = [];
+
+  // 1/2024 SQUARE STATUS
+  BLANK_USER.sq_st = null;
 
   return BLANK_USER;
 }
@@ -415,18 +421,20 @@ export async function saveUserChanges( userObj ) {
   // will not change
   // CURRENT_USER.em = userObj.em;
 
-    CURRENT_USER.ws = userObj.ws;
+    CURRENT_USER.ws = userObj['ws'];
 
-    CURRENT_USER.zp = (userObj.zp && userObj.zp != '0') ? userObj.zp : 0;
+    CURRENT_USER.zp = (userObj['zp'] && userObj['zp'] != '0') ? userObj['zp'] : 0;
 
-    CURRENT_USER.zr = (userObj.zr && userObj.zr != '0') ? userObj.zr : 0;
+    CURRENT_USER.zr = (userObj['zr'] && userObj['zr'] != '0') ? userObj['zr'] : 0;
 
-    CURRENT_USER.ab = userObj.ab;
+    CURRENT_USER.ab = userObj['ab'];
 
-    CURRENT_USER.sb = userObj.sb;
+    CURRENT_USER.sb = userObj['sb'];
 
-    CURRENT_USER.bg = userObj.bg;
+    CURRENT_USER.bg = userObj['bg'];
   
+    CURRENT_USER.sq_st = userObj['sq_st'];
+
 
   try {
     saveCurrentUser();

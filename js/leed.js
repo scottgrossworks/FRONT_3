@@ -36,6 +36,13 @@ LEED DETAILS
         
     }
 
+    1/2024
+    Added SQUARE Payment QuickCheckout Link
+    sq_url
+    SQUARE Order ID
+    sq_oid
+    not part of options or anything shown to client 
+*
 */
 
 
@@ -75,7 +82,7 @@ export const LEED_KEYS = {
 //
 // HIDE_ALL_OPTS = "0000022222220"
 export const SHOW_ALL_OPTS = "0000000000000";
-export const START_OPTS = "0000010011110";
+export const START_OPTS = "0000020022110";
 export const OPTS_LOCKED  = 0;
 export const OPTS_SHOWING = 1;
 export const OPTS_HIDDEN  = 2;
@@ -185,6 +192,10 @@ export function blankLeedObject() {
 
     BLANK_LEED.op = START_OPTS;
 
+    // Square QuickPayment Link / Order ID
+    BLANK_LEED.sq_url = null;
+    BLANK_LEED.sq_oid = null;
+
     return BLANK_LEED;
   }
   
@@ -213,47 +224,52 @@ export function getCurrentLeed() {
 
 
 /**
- * 
+ *
+ * 1/2024 added Square info
+ * going with bracket notation for more robust implementation in cases where key or values are undefined
  */
 export function setCurrentLeed( jsonObj ) {
-    if (jsonObj == null)
+    
+	if (! jsonObj)
         throwError("setCurrentLeed", "leed JSON is null");
   
 
-    if (jsonObj.sk) CURRENT_LEED.id = jsonObj.sk;
+    if (jsonObj['sk']) CURRENT_LEED.id = jsonObj['sk'];
    
-    if (jsonObj.ti) CURRENT_LEED.ti = jsonObj.ti;
+    if (jsonObj['ti']) CURRENT_LEED.ti = jsonObj['ti'];
     
-    if (jsonObj.cr) CURRENT_LEED.cr = jsonObj.cr;
+    if (jsonObj['cr']) CURRENT_LEED.cr = jsonObj['cr'];
 
     // user#scott.gross
-    if (jsonObj.pk) CURRENT_LEED.tn = jsonObj.pk.substr(5);
+    if (jsonObj['pk']) CURRENT_LEED.tn = jsonObj['pk'].substr(5);
 
-    if (jsonObj.zp) CURRENT_LEED.zp = jsonObj.zp;
-    if (jsonObj.lc) CURRENT_LEED.lc = jsonObj.lc;
+    if (jsonObj['zp']) CURRENT_LEED.zp = jsonObj['zp'];
+    if (jsonObj['lc']) CURRENT_LEED.lc = jsonObj['lc'];
     
-    if (jsonObj.st) CURRENT_LEED.st = jsonObj.st;
-    if (jsonObj.et) CURRENT_LEED.et = jsonObj.et;
+    if (jsonObj['st']) CURRENT_LEED.st = jsonObj['st'];
+    if (jsonObj['et']) CURRENT_LEED.et = jsonObj['et'];
 
-    if (jsonObj.em) CURRENT_LEED.em = jsonObj.em;
+    if (jsonObj['em']) CURRENT_LEED.em = jsonObj['em'];
 
-    if ((jsonObj.ph) && (jsonObj.ph != '0')) {
-      CURRENT_LEED.ph = jsonObj.ph;
+    if ((jsonObj['ph']) && (jsonObj['ph'] != '0')) {
+		CURRENT_LEED.ph = jsonObj['ph'];
     } 
     
-    if (jsonObj.dt) CURRENT_LEED.dt = jsonObj.dt;
-    if (jsonObj.rq) CURRENT_LEED.rq = jsonObj.rq;
+    if (jsonObj['dt']) CURRENT_LEED.dt = jsonObj['dt'];
+    if (jsonObj['rq']) CURRENT_LEED.rq = jsonObj['rq'];
 
-    if (jsonObj.pr) CURRENT_LEED.pr = jsonObj.pr;
+    if (jsonObj['pr']) CURRENT_LEED.pr = jsonObj['pr'];
 
-    if ( jsonObj.op ) CURRENT_LEED.op = jsonObj.op;
+    if (jsonObj['op']) CURRENT_LEED.op = jsonObj['op'];
 
+    // SQUARE PAYMENT LINK / ORDER ID
+    if ( jsonObj['sq_url'] )  CURRENT_LEED.sq_url = jsonObj['sq_url'];
+    if ( jsonObj['sq_oid'] )  CURRENT_LEED.sq_oid = jsonObj['sq_oid'];
 
     cacheCurrentLeed( CURRENT_LEED );
 
     return CURRENT_LEED;
 }
-
 
 
 
@@ -285,6 +301,10 @@ export function clearCurrentLeed() {
     CURRENT_LEED.pr = null;
 
     CURRENT_LEED.op = START_OPTS;
+
+    // SQUARE PAYMENT LINK /  OrderID
+    CURRENT_LEED.sq_url = null;
+    CURRENT_LEED.sq_oid = null;
     
     cacheCurrentLeed( blankLeedObject() );
     
@@ -358,39 +378,38 @@ export function cacheCurrentLeed( theLeed ) {
         printError("loadCacheLeed", "Invalid JSON: " + leedJSON);
         throwError("loadCahceLeed", "Cannot load leed from cache KEY=" + CURRENT_LEED_KEY);
     }
-    
 
-    CURRENT_LEED.id = cacheObj.id;
-    
-    CURRENT_LEED.tn = cacheObj.tn;
-    
-    CURRENT_LEED.cr = cacheObj.cr;
+    CURRENT_LEED.id = cacheObj['id'];
 
-    CURRENT_LEED.ti = cacheObj.ti;
+    CURRENT_LEED.tn = cacheObj['tn'];
 
-    CURRENT_LEED.zp = cacheObj.zp;
+    CURRENT_LEED.cr = cacheObj['cr'];
 
-    CURRENT_LEED.st = cacheObj.st;
+    CURRENT_LEED.ti = cacheObj['ti'];
 
-    CURRENT_LEED.et = cacheObj.et;
+    CURRENT_LEED.zp = cacheObj['zp'];
 
-    
-    
-    CURRENT_LEED.lc = cacheObj.lc;
+    CURRENT_LEED.st = cacheObj['st'];
 
-    CURRENT_LEED.em = cacheObj.em;
+    CURRENT_LEED.et = cacheObj['et'];
 
-    CURRENT_LEED.ph = cacheObj.ph;
+    CURRENT_LEED.lc = cacheObj['lc'];
 
-    CURRENT_LEED.dt = cacheObj.dt;
+    CURRENT_LEED.em = cacheObj['em'];
 
-    CURRENT_LEED.rq = cacheObj.rq;
+    CURRENT_LEED.ph = cacheObj['ph'];
 
-    CURRENT_LEED.pr = cacheObj.pr;
+    CURRENT_LEED.dt = cacheObj['dt'];
 
+    CURRENT_LEED.rq = cacheObj['rq'];
 
-    CURRENT_LEED.op = cacheObj.op;
+    CURRENT_LEED.pr = cacheObj['pr'];
 
+    CURRENT_LEED.op = cacheObj['op'];
+
+    // SQUARE PAYMENT LINK / ORDER ID
+    CURRENT_LEED.sq_url = cacheObj['sq_url'];
+    CURRENT_LEED.sq_oid = cacheObj['sq_oid'];
 
 }
 
@@ -575,6 +594,10 @@ export async function saveLeedChanges( leedObj ) {
   else
     CURRENT_LEED.op = START_OPTS;
 
+    // SQUARE PAYMENT LINK / ORDER ID
+    if (leedObj.sq_url) CURRENT_LEED.sq_url = leedObj.sq_url;
+    if (leedObj.sq_oid) CURRENT_LEED.sq_oid = leedObj.sq_oid;
+
     try {
       // cache this Leed   
       cacheCurrentLeed( CURRENT_LEED );
@@ -584,10 +607,9 @@ export async function saveLeedChanges( leedObj ) {
     }
 
 
-    console.log("----------> ******** POSTING LEED CHANGES TO SERVER ******* ");
-    console.log(CURRENT_LEED);
+    // console.log("----------> ******** POSTING LEED CHANGES TO SERVER ******* ");
+    // console.log(CURRENT_LEED);
  
-
     // API request --> DB 
     // save leed to DB
     //
@@ -646,12 +668,9 @@ export async function createDBLeed( current_user, leedObj ) {
   if (leedObj == null)
     throwError("saveLeedChanges", "null leed object");
 
-
-
-    console.log("----------> ******** POSTING NEW LEED TO SERVER ******* ");
-    console.log(leedObj);
+    // console.log("----------> ******** POSTING NEW LEED TO SERVER ******* ");
+    // console.log(leedObj);
  
-
     // API request --> DB 
     // save leed to DB
     //
@@ -707,19 +726,15 @@ export async function createDBLeed( current_user, leedObj ) {
 
 
 /** 
- *
- * BUY the Leed
+ * STEP 1 of BUY LEED process
+ * call Leedz API buyLeed() -- return Square Order data
  */
 export async function buyCurrentLeed() {
 
   if (CURRENT_LEED == null)
     throwError("buyCurrentLeed", "CURRENT_LEED is null");
 
-
-    console.log("----------> ******** BUYING CURRENT LEED TO SERVER ******* ");
-
     const current_user = getCurrentUser(false);
-
  
     // API request --> DB 
     // save leed to DB

@@ -202,7 +202,8 @@
               <center>
               <table>
                 <TR><TD>
-                 New User Welcome -- To get the most out of the Leedz, <a href="#" onclick="openUserEdit()" id="dd_account">subscribe to trades</a>  and see the current leedz.
+                 New User Welcome -- To get the most out of the Leedz, <a href="#" onclick="openUserEdit()" id="dd_account">subscribe to trades</a> and see the current leedz.  
+                 To post a leed, first configure your Square account to accept payment.
                   <BR>
                   <BR>
                     <ul type="2" style="margin-left:2vw">
@@ -458,13 +459,13 @@
         </div>
 
         <!--
-          --
           --  ACTION BUTTONS 
           --
+          --  1/2024 added Square Payment link to Buy button sq_url
         -->
-
+        <!-- BUY BUTTON -->
         <div class="row" id="row_buy_button">
-          <button id="action_buy" class="button buy_button"  onclick="buyLeed()">Buy<img id="shopping_cart" src="img/shopping-cart.png"></button>
+          <button id="action_buy" class="button buy_button"  onclick="buyButton()">Buy<img id="shopping_cart" src="img/shopping-cart.png"></button>
         </div>
 
         <div class="row" id="row_report_button">
@@ -498,7 +499,6 @@
     import { initMonthChooser } from "./js/months.js";
     import { getCurrentLeed, setCurrentLeed, clearCurrentLeed, buyCurrentLeed, deleteCurrentLeed, reportCurrentLeed  }  from "./js/leed.js";
     import { CURRENT_LEED_KEY } from "./js/leed.js";
-    import { showLeedAction } from "./js/action.js";
     import { ALL_BADGES } from "./js/badges.js";
     import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
 
@@ -889,22 +889,116 @@ function trimAndRemoveSpaces(inputString) {
 
 
 
-      
+      /**
+      * BUY BUTTON
+      * 
+      * STEP 1 -- LEEDZ API buyLeed() call
+      * STEP 2 -- validate return data
+      * STEP 3 -- open Square QuickPay Checkout Link
+      * responsible for showing modal on error
+      */
+      async function buyButton() {
 
-      //
-      // BUY current leed 
-      // showing in the action window
-      // responsible for showing modal on error
-      //
-      async function buyLeed() {
-        
         if (isGuestUser( true )) {
           printError("buyLeed", "Guest User cannot buy leeds");
           openGuestWelcome();
           return;
         }
-        
+
         waitCursor();
+
+
+        const current_leed = getCurrentLeed();
+
+        /**
+        ret_obj = {
+          'id':id,
+          'tn':tn,
+          'sq_oid':sq_order_id,
+          'sq_url':sq_long_url,
+          'cd':1
+        }
+        *
+        * 
+        */
+        let the_leed = null;
+        try {
+          // STEP 1 -- buyLeed() AWS lambda
+          try {
+            await buyLeed().then(( fromDB ) => the_leed = fromDB );
+
+            if (the_leed == null) {
+              throw new Error("Error buying current leed: null server response");
+            }
+
+
+          } catch (error) {
+            
+            // DO NOT FAIL -- show error modal dialog and print error to console
+            var msg = "Cannot buy current leed.<BR>Please refresh page."
+            msg = error.message + "<BR>" + msg;
+            
+            printError("Buy Leed", error);
+            errorModal( msg , true );
+            return;
+            
+
+          } finally {
+            normalCursor();
+          }
+
+
+          // STEP 2 -- GOTO Square QuickCheckout Payment page
+          //
+          if (! the_leed['id'])
+              throw new Error("Server did not return leed id");
+  
+          if (! the_leed['sq_url'])
+            throw new Error("Server did not return Square payment url");
+
+          // IS THE LEED WE CLICKED ON THE SAME AS THE ONE WE ARE SUPPOSED TO BE BUYING?!
+          if (the_leed['id'] != current_leed.id)
+            throw new Error("Leed being bought does not match leed requested: " + current_leed.id + " != " + the_leed['id'])
+
+       
+        } catch (error) {
+          var msg = "Error buying leed: " + error.message;
+          printError("Buy Leed", msg);
+          errorModal(msg, true);
+          return;
+        }
+
+        // save to current_leed and wait for callback...
+        current_leed.sq_oid = the_leed['sq_oid'];
+        current_leed.sq_url = the_leed['sq_url'];
+        
+        let leed_desc = "[" + current_leed.tn + "] " + current_leed.ti + " (" + current_leed.id + ")";
+        console.log("Buying Leed: " + leed_desc);
+        console.log("Square order:" + current_leed.sq_oid);
+
+
+        // STEP 2 -- send BUYER to Square hosted QuickCheckout page 
+        // https://developer.squareup.com/reference/square/checkout-api/create-payment-link
+        window.open( current_leed.sq_url, "_self"); 
+
+
+      }
+      window.buyButton = buyButton;
+
+
+      
+
+      /**
+       * BUY LEED
+       * 
+       * STEP 1 -- buyLeed() function begins process
+       * associate BUYER username with this Leed
+       * GET BACK Square QuickPay Checkout Link and Square Order ID
+       *
+       * responsible for showing modal on error
+       */
+      async function buyLeed() {
+        
 
         let response = null;
         try {
@@ -934,17 +1028,8 @@ function trimAndRemoveSpaces(inputString) {
             errorModal(msg, true);
           }
 
-          setCurrentLeed( response );
-          // console.log(response);
-
-          // GOTO BUY leed landing page
-          // with link to get back to main page
-          window.open( URL_LEED_BOUGHT , "_self");
-
-
+          return response;
       }
-      window.buyLeed = buyLeed;
-
 
 
 
@@ -982,7 +1067,6 @@ function trimAndRemoveSpaces(inputString) {
             normalCursor();
         }
 
-        console.log("GOT RESULTS!!!");
         console.log(from_DB)
 
 

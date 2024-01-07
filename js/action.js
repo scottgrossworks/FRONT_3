@@ -113,7 +113,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     //
     if (gotoDB) {
 
-        await db_getDeetz( leed_preview.tn, leed_preview.id, view_options )
+        await db_getDeetz( CURRENT_USER.un, leed_preview.tn, leed_preview.id, view_options )
             .then(data => {
 
             if (data == null) throw new Error("null response from GET");
@@ -435,6 +435,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // 
     if (CURRENT_USER.un == leed_preview.cr) {
 
+        // EDIT / DEL
         // the current user POSTED this leed
         // show the EDIT/DEL buttons
         row_buy_button.style.display = "none";
@@ -443,12 +444,11 @@ export async function showLeedAction( leed_preview , gotoDB ) {
         row_del_button.style.display = "flex";
 
 
-
-
     } else {
 
-
+        // BUY BUTTON
         // current user is trying to BUY someone else's leed
+        //
         row_buy_button.style.display = "flex";
         row_report_button.style.display = "flex";
         row_edit_button.style.display = "none";

@@ -8,8 +8,6 @@
 
 
 import { printError, throwError } from "./error.js";
-import { COGNITO_ACCESS_TOKEN } from "./user.js";
-
 
 
 export const API_GATEWAY = "https://jjz8op6uy4.execute-api.us-west-2.amazonaws.com/Leedz_Stage_1/";
@@ -501,7 +499,7 @@ export async function db_getUser( username ) {
  * 
  * 
  */
-export async function db_getDeetz( trade_name, leed_id, leed_op ) {
+export async function db_getDeetz( user_name, trade_name, leed_id, leed_op ) {
     
     // GET JSON from http server
 
@@ -512,14 +510,14 @@ export async function db_getDeetz( trade_name, leed_id, leed_op ) {
     
         const theURL = new URL(API_GATEWAY + "getDeetz");
         let searchParams = new URLSearchParams();
+        searchParams.append( USERNAME_URL_PARAM, user_name );
         searchParams.append( TRADE_NAME_URL_PARAM, trade_name );
         searchParams.append( LEED_ID_URL_PARAM, leed_id );
-        searchParams.append( OPTIONS_URL_PARAM, leed_op );
         
-        theURL.search = searchParams.toString();
+        // options go in headers
+        const headers = { OPTIONS_URL_PARAM: leed_op };
 
-
-        await doGet( theURL )
+        await doGetHeaders( theURL, headers )
         .then(data => {
 
           json_obj = data;
@@ -537,7 +535,6 @@ export async function db_getDeetz( trade_name, leed_id, leed_op ) {
     }
 
 
-    
     // console.log("GOT --- DETAILS --- JSON!!!");
     // console.log(json_obj);
 
@@ -632,104 +629,69 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
 
 
 
+/**
+ * DO GET
+ * pass-through with no addl headers
+ */
+async function doGet(theUrl) {
+    return doGetHeaders(theUrl, {});
+}
+
+
+
 
 /**
+ * DO GET WITH HEADERS
  * 
- * 
- * 
- * 
- * 
- * 
+ * pipeline to AWS API Gateway
  *
  */
-async function doGet(theURL) {
+async function doGetHeaders(theUrl, new_headers) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'Connection': 'close'
+    };
 
-    console.log("---------> DOGET URL=" + theURL);
-
-    // ACCESS_TOKEN
-    // returned from login sequence
-    //    	headers: new Headers({"Authorization": `Bearer ${tokens.access_token}`}),
-    // const access_token = window.localStorage.getItem(COGNITO_ACCESS_TOKEN);
-
-try {
-    const response = await fetch(theURL,
-    {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Connection':'close'
-            // 'Authorization':access_token
-            },
-        timeout:"8000"
-        }
-    );
-
-    if (! response.ok) { 
-        console.log(response);
-        throw new Error('Network response was not OK: [' + response.status + "] :" + response.message);
+    for (const [key, value] of Object.entries(new_headers)) {
+        headers[key] = value;
     }
+
+    return fetch(theUrl, {
+        method: 'GET',
+        headers: headers,
+        timeout: "8000"
+    }).then(response => {
+        if (!response.ok) {
+            console.log(response);
+            throw new Error('Network response was not OK: [' + response.status + "] :" + response.message);
+        }
 
         let the_json = null;
+
         // DECODE THE JSON
-        try {   
-            the_json = await response.json();
-            
+        try {
+            the_json = response.json();
+
         } catch (err) {
-            var msg = "Cannot decode JSON: " + the_json;
-            throwError("JSON", msg);
-        } 
+            throwError("JSON", err.message);
+        }
 
         if (response.status == 200) {
-
-            return Promise.resolve(the_json);
-
+            // SUCCESS!
+            // console.log(the_json);
+            return the_json;
         } else if (response.status == 204) {
-
-            throw new Error( the_json.er );
-
+            throw new Error(the_json.er);
         } else {
-
             var the_code = "Error code received from server: " + response.status;
             var the_msg = "<BR>Error message: " + the_json.er;
-            throw new Error( the_code + the_msg );
+            throw new Error(the_code + the_msg);
         }
-
-
-    } catch(error) {
-        printError( "HTTP GET error", error.message );
-        throwError( error.status, error.message );
-    }
-}
-      
-
-
-
-/**
- * 
- *
- */
-async function doPost( theURL, params ) {
-
-    return fetch(theURL,
-    {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Connection':'close'
-            },
-        timeout:"4000",
-        body:params
-        }
-    ).then(response => {
-    
-        if (! response.ok) {
-           throw new Error('Network response was not ok');
-        }
-        
-        return response.json();
-    })
-    .catch(error => {
-        printError("fetch", error);
-        throwError("fetch", error);
+    }).catch(error => {
+        printError("HTTP GET", error.message);
+        throwError(error.status, error.message);
     });
 }
+
+
+

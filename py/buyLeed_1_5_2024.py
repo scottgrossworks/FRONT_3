@@ -4,6 +4,9 @@
 # 1/2024
 # the payment is NOT COMPLETE
 #
+# REQUIRES environ vars
+#    sq_checkout_url
+#    sq_location_id
 #
 # BOOKEEPING will be completed in callback from Square once purchase complete
 #
@@ -250,6 +253,7 @@ def lambda_handler(event, context):
         ret_obj = {
             'id':id,
             'tn':tn,
+            'ti':the_leed['ti'],
             'sq_oid':sq_order_id,
             'sq_url':sq_long_url,
             'cd':1
@@ -455,6 +459,9 @@ def getLeedInfo(table, tn, id):
                 date_bought = prettyDate( the_leed['db'] ) 
                 msg = "This leed has been bought: " + date_bought
                 raise Exception(msg)
+            
+            # ALL GOOD
+            return the_leed
 
 
     except Exception as err:

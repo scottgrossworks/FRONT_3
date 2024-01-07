@@ -297,21 +297,6 @@
 
 
 
-
-
-
-   
-
-
-
-
-
-
-
-
-        
-
-
         <div class="item" id="leedz_text_3">
             <span>
                 <b>The Leedz</b> is in <a color='green'>beta</a> and welcomes new members by invitation to build a community of trusted vendors working together to grow their businesses.  
@@ -375,7 +360,7 @@
     const MAX_TRADES = 6;
 
     const URL_LOGIN = "https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid+profile&redirect_uri=https%3A%2F%2Ftheleedz.com%2Fhustle.html";
-   
+    // set the LOGIN LINKS across the page
     const login_links = document.getElementsByClassName("login_url");
     for (let i = 0; i < login_links.length; i++) {
         login_links[i].href = URL_LOGIN;

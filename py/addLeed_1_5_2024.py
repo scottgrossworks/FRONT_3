@@ -25,9 +25,6 @@ logger.setLevel(logging.INFO)
 
 
 
-
-        
-
         
 #
 # current time since epoch GMT (hopefully)
@@ -76,12 +73,6 @@ class DecimalJsonEncoder(json.encoder.JSONEncoder):
 
 
 
-
-
-
-
-
-
 # ERROR
 # {'er': " + err_str + ",'cd': '0'}
 #
@@ -112,9 +103,9 @@ def intOrZero( val ):
             return 0
     
 
-    except error:
+    except Exception as err:
         logger.error("Cannot convert value to int: " + val)
-        throw
+        raise
 
 
 
@@ -303,9 +294,6 @@ def checkForExistingLeed( table, tn, lc, xy, st, et ):
 
     
     
-    
-    
-    
 
 
 #
@@ -427,13 +415,6 @@ def updateSeller(table, the_seller) :
 
 
    
-   
-   
-        
-        
-
-
-
 
 
 # UPDATE stats leedz
@@ -555,8 +536,6 @@ def addLeed(table, tn, ti, lc, zp, xy, st, et, dt, rq, ph, em, cr, pr, op):
     
     
     
-    
-    
 #   
 # 
 #
@@ -565,8 +544,6 @@ def addLeed(table, tn, ti, lc, zp, xy, st, et, dt, rq, ph, em, cr, pr, op):
         
 def lambda_handler(event, context):
 
-
-    
     the_json = ""
     try:
         
@@ -771,8 +748,4 @@ def createHttpResponse( code, result ):
 
     logger.info(response)
     return response
-
-
-
-
 

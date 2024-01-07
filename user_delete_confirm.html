@@ -1,0 +1,102 @@
+<!--
+    --
+    -- CONFIRM PAGE TO DELETE USER / DISCONNECT SQUARE
+    -- explain what happens / consequences
+    -- show links to tos - privacy 
+    -->
+    
+    <!DOCTYPE html>
+    <html lang="en">
+        
+    
+    
+    <head>
+    
+       
+             <meta charset="UTF-8">
+             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         
+             <TITLE>Leedz User</TITLE>
+         
+             <!-- Favicon -->
+             <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+             <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+     
+     
+             <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+             
+            <link rel="stylesheet" href="css/modal.css" type="text/css" />
+
+
+        </head>
+    
+    
+             
+        <center>
+    
+    
+        <body>
+        
+    
+    
+                
+            <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+    
+                <div class="column _1">
+    
+                    <a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+                    </div>
+    
+                    <div class="column" style="margin:auto 0;transform:translateY(6px)">
+                        <h1 class="user_title">Delete User</h1>
+                    </div>
+                    
+                    <div class="column _3" style="padding:6px;text-align:center">
+                    <img src="./img/logo_2.png" style="width:120px">
+                    </div>
+                
+                
+            
+                </div>
+                
+    
+    
+                <section>
+    
+                    <BR> Explain Delete User and Delete Square Account and consequences of each.
+                    <BR>
+                    <button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="history.back()">
+                        Delete</button>
+    
+                     </section>  
+            
+    
+    
+        <!-- 
+          -- ERROR MODAL 
+          -- 
+          -->
+        <div class="row modal" id="error_modal">
+          <center><img id="error_logo" src="img/logo_2.png"></center> 
+          <h1></h1>
+          <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
+        </div>
+      
+      
+      
+        
+      
+      </body>
+    <script type="module">
+    
+    
+        import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
+  
+                // 1/2024
+                // Square Revoke Authorization
+				// requires AUTH token -- must be done by AWS Lambda
+				// take user to confirmation page
+
+        
+    </script>
+    </html>

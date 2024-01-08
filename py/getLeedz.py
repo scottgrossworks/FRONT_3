@@ -165,8 +165,12 @@ def validateParam( event, param, required ):
             if required:
                 raise ValueError("HTTP Request error.  No '" + param + "' query string parameter")
     else:
-        value = event['queryStringParameters'][param] 
-        
+        value = event['queryStringParameters'][param]
+        if (value == 'null'):
+            value = ""
+        elif (value == '0'):
+            value = 0
+
     return value
 
 
@@ -192,7 +196,19 @@ def searchForLeedz(sb, st, et, zp, zr):
     end_time = int(et)
     trades = sb.split(',')
    
-                    
+   
+    # will use this below
+    #
+    home_xy = ""
+    zip_home = 0
+    zip_radius = 0
+    if (zp):
+        zip_home = int(zp)
+        # get lon/lat coordinates for zip home
+        home_xy = get_xy_from_loc(zp)
+        if (zr):
+            zip_radius = int(zr)
+            
                     
     results = []
 
@@ -217,43 +233,26 @@ def searchForLeedz(sb, st, et, zp, zr):
                 }
          )
 
-        # logger.info("GOT RAW ITEMS!!!!")
         # logger.info(fromDB['Items'])
 
-     
         if ('Items' not in fromDB):
             raise ValueError("Server Error: GetLeedz query received empty response")
      
         
         # SOME data is returned - must be filtered
-            
-        # will use this below
-        home_xy = ""
-        zip_home = 0
-        zip_radius = 0
-        if (zp):
-            # get lon/lat coordinates for zip home
-            home_xy = get_xy_from_loc(zp)
-            zip_home = int(zp)
-        
-        if (zr):
-            zip_radius = int(zr)
-        
         for each_leed in fromDB['Items']:
             
             # is a search zip code set?
             if (zp) :
-                
                 # is there an exact hit on zip code?
                 if (each_leed['zp'] == zip_home) :
                     # do not send back location data in preview
-                    each_leed['lc'] = ""
+                    del each_leed['lc']
                     results.append( each_leed )
                     continue
                     
                 # look for zip home / search radius match using haversine
                 elif (zr) :
-                    
                     # get the xy coords from the leed location
                     leed_loc = get_xy_from_loc( each_leed['lc'] )
                     
@@ -264,7 +263,7 @@ def searchForLeedz(sb, st, et, zp, zr):
                     # does the leed fall within the search circle
                     if (miles_from <= zip_radius):
                         # do not send back location data in preview
-                        each_leed['lc'] = ""
+                        del each_leed['lc']
                         results.append(each_leed)
                         continue
                     
@@ -273,7 +272,7 @@ def searchForLeedz(sb, st, et, zp, zr):
             else:
                 # no zip_home / search radius set -- return all results matching trade
                   # do not send back location data in preview
-                each_leed['lc'] = ""
+                del each_leed['lc']
                 results.append(each_leed)
                 continue
           

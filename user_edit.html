@@ -113,16 +113,15 @@
 					<tr id="row_payment">
 					
 						<TD class="labelTD">Payment Info: </TD>
-						<td data-inlineType="text" data-inlineName="payment"></td>
-						
-						<div id="sq_msg"></div>
+						<TD>
+							<div id="sq_msg"></div>
 
-						<button id="sq_auth_url_button" class="button sq_button sq_url">Register&nbsp;<img id="sq_auth_img" src="img/sq_logo.png"></button>
+							<button id="sq_auth_url_button" class="button sq_button sq_url" style="display:none">Register&nbsp;<img id="sq_auth_img" src="img/sq_logo.png"></button>
 
-						<button id="sq_auth_auth_button" class="button sq_button sq_auth">Square&nbsp;<img id="sq_auth_img" src="img/sq_logo.png"></button>
+							<button id="sq_auth_auth_button" class="button sq_button sq_auth" style="display:none">Square&nbsp;<img id="sq_auth_img" src="img/sq_logo.png"></button>
 
-						<button id="sq_auth_error_button" class="button sq_button sq_error">Square&nbsp;<img id="sq_auth_img" src="img/sq_logo.png"></button>
-
+							<button id="sq_auth_error_button" class="button sq_button sq_error" style="display:none">Square&nbsp;<img id="sq_auth_img" src="img/sq_logo.png"></button>
+						</TD>
 						<td data-inlineType="doneButton" class="buttonTD">
 							<input type="button" value="Edit" onclick=""/>
 						</td>
@@ -302,6 +301,7 @@
 		var EDITING = false;
 
 		const CURRENT_USER = getCurrentUser( true );
+		console.log(CURRENT_USER);
 
 		if (CURRENT_USER == null || CURRENT_USER.un == null) {
 			printError("User Edit", "No user currently logged in");
@@ -419,7 +419,7 @@ async function initSquareButton() {
 				// NEW USER
 				// show AUTHORIZATION LINK
 				//
-				sq_msg.innerText = "Connect The Leedz to Square:";
+				sq_msg.innerText = "Connect to Square:";
 			
 				let sq_button = document.getElementById("sq_auth_url_button");
 				sq_button.addEventListener("click", function( event ) {

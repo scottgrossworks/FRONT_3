@@ -1,16 +1,28 @@
 #
-# BUY LEED
+# BUY LEED (BEGIN)
 #
+# 1/2024
+# the payment is NOT COMPLETE
+#
+# REQUIRES environ vars
+#    sq_checkout_url
+#    sq_location_id
+#
+# BOOKEEPING will be completed in callback from Square once purchase complete
 #
 
+import os
 import json
+
+import urllib.request
+
 import boto3
-from boto3.dynamodb.conditions import Attr
-from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
 from decimal import Decimal
 
-import random
+from datetime import datetime, timezone
+
+
 import logging
 
 
@@ -20,17 +32,40 @@ logger.setLevel(logging.INFO)
 
 
 
+        
+#
+# current time since epoch GMT (hopefully)
+#
+def now_milliseconds():
+    current_time = datetime.now(timezone.utc)
+    epoch = datetime(1970, 1, 1, tzinfo=timezone.utc)
+    milliseconds_since_epoch = int((current_time - epoch).total_seconds() * 1000)
+    return milliseconds_since_epoch
 
 
+#
+# convert a long date from now_milliseconds() into a pretty date
+# January 05, 2024 - 11:29
+#
+def prettyDate( the_date ):
+    
+    if (not the_date) :
+        return ""
+    
+    int_date = int(the_date)
+    timestamp = datetime.datetime.fromtimestamp( int_date / 1000)  # Convert milliseconds to seconds
+    formatted_date = timestamp.strftime("%B %d, %Y - %H:%M")
+    return formatted_date
 
-
+ 
+ 
+ 
+ 
  
 #
 # Use this to JSON encode the DYNAMODB output
 #
 #
-
-
 def encode_fakestr(func):
     def wrap(s):
         if isinstance(s, fakestr):
@@ -66,8 +101,6 @@ class DecimalJsonEncoder(json.encoder.JSONEncoder):
 
 
 #
-# SUCCESS
-# {'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': '1'} 
 # ERROR
 # {'er': " + err_str + ",'cd': '0'}
 #
@@ -96,11 +129,10 @@ def intOrZero( val ):
             return int(val)
         else:
             return 0
-    
-
-    except error:
+        
+    except Exception:
         logger.error("Cannot convert value to int: " + val)
-        throw
+        raise
 
 
 
@@ -114,8 +146,23 @@ def listToString(lst):
 
 
      
-      
+
+
+#
+#
+#
+#
+def validateEnviron( var, required ):
     
+    the_val = ""
+    try:
+        the_val = os.environ[var]
+    except Exception:
+        if required:
+            raise ValueError("Environment Variable not found: " + var)
+        the_val = ""
+        
+    return the_val
     
     
     
@@ -138,315 +185,87 @@ def validateParam( event, param, required ):
 
 
 
-#
-#
-# Each seller user has a leedz_sold ls counter
-# will throw error
-#
-def seller_incrementLeedzSold(table, un):
-    
-    # update the leedz posted for this user
-    #
-    try:
-        response = table.update_item(
-                Key={ 'pk': 'user', 'sk': un },
-                UpdateExpression="SET ls = ls + :inc",
-                ExpressionAttributeValues={ ":inc": 1 },
-                ConditionExpression='attribute_exists(sk)',
-                ReturnValues="ALL_NEW"
-            )
-    
-
-        # throw an error
-        #
-        if 'Attributes' not in response:
-            msg = "Error updating leedz sold for user: " + un
-            logger.error(msg)
-            raise ValueError(msg)
-            
-        
-        # return just the SELLER user object
-        #
-        return response['Attributes']
-    
-    
-    except ClientError as err:
-        
-        logger.error("Couldn't increment leedz sold for user %s: %s: %s", un, err.response['Error']['Code'], err.response['Error']['Message'])
-        raise
-
-   
 
 
 
-
-#
-#
-# Each buyer user has a leedz_bought lb counter
-# will throw error
-#
-def buyer_incrementLeedzBought(table, un):
-    
-    
-    # update the leedz posted for this user
-    #
-    try:
-        response = table.update_item(
-                Key={ 'pk': 'user', 'sk': un },
-                UpdateExpression="SET lb = lb + :inc",
-                ExpressionAttributeValues={ ":inc": 1 },
-                ConditionExpression='attribute_exists(sk)',
-                ReturnValues="ALL_NEW"
-            )
-    
-
-        # throw an error
-        #
-        if 'Attributes' not in response:
-            msg = "Error updating leedz bought for user: " + un
-            logger.error(msg)
-            raise ValueError(msg)
-            
-        
-        # return just the user object
-        #
-        return response['Attributes']
-    
-    
-    except ClientError as err:
-        
-        logger.error("Couldn't increment leedz bought for user %s: %s: %s", un, err.response['Error']['Code'], err.response['Error']['Message'])
-        raise
-
-
-
-   
-   
-#        
-#
-# if the buyer user has more than 10 leedz bought - award the new badge 
-# BADGE_4 --> 10+ leedz bought
-#
-#
-def buyer_awardUserBadge( table, the_buyer ):      
-    
-    un = the_buyer['sk']
-    lb = the_buyer['lb']
-    
-    leedz_bought = int(json.dumps( lb , cls=DecimalJsonEncoder))
-    if ( leedz_bought < 10) :
-        # user has not yet bought 10 leedz
-        return
-         
-    if ('4' in the_user['bg']) :
-        # badges already contains badge 4
-        return
-    
-    # new badges string
-    new_bg = the_user['bg'] + ',4'
-    
-
-    # update the badges string for this trade
-    #
-    try:
-        response = table.update_item(
-                Key={ 'pk': 'user', 'sk': un },
-                UpdateExpression="SET bg = :new_bg",
-                ExpressionAttributeValues={ ":new_bg": new_bg },
-                ConditionExpression='attribute_exists(sk)',
-                ReturnValues="NONE"
-            )
-            
-            
-        # logger.info("BADGES")
-        # logger.info(response)
-        return response
-    
-    
-    except ClientError as err:
-        
-        logger.error("Couldn't award user badge 4 for user %s: %s: %s", un, err.response['Error']['Code'], err.response['Error']['Message'])
-        raise
-        
-
-
-
-
-
-#        
-#
-# if the seller user has more than 10 leedz sold - award the new badge 
-# BADGE_3 --> 10+ leedz sold
-#
-#
-def seller_awardUserBadge( table, the_user ):      
-    
-    ls = the_user['ls']
-    un = the_user['sk']
-    
-    leedz_sold = int(json.dumps( ls , cls=DecimalJsonEncoder))
-    if ( leedz_sold < 10) :
-        # user has not yet sold 10 leedz
-        return
-         
-    if ('3' in the_user['bg']) :
-        # badges already contains badge 3
-        return
-    
-    # new badges string
-    new_bg = the_user['bg'] + ',3'
-    
-
-    # update the badges string for this trade
-    #
-    try:
-        response = table.update_item(
-                Key={ 'pk': 'user', 'sk': un },
-                UpdateExpression="SET bg = :new_bg",
-                ExpressionAttributeValues={ ":new_bg": new_bg },
-                ConditionExpression='attribute_exists(sk)',
-                ReturnValues="ALL_NEW"
-            )
-            
-            
-        # logger.info("BADGES")
-        # logger.info(response)
-        return response
-    
-    
-    except ClientError as err:
-        
-        logger.error("Couldn't award user badge 3 for user %s: %s: %s", un, err.response['Error']['Code'], err.response['Error']['Message'])
-        raise
-        
-
-        
-        
-        
-
-
-
-
-
-    
-#
-# matching leed will have
-# == tn    trade name
-# == id    matching ID
-#
-# will throw Error if check succeeds
-#
-def checkForExistingLeed( table, tn, id ):
-    
-    response = []
-    
-    try:
-        
-        pk = "leed#" + tn     
-        sk = id
-  
-        response = table.query(
-            KeyConditionExpression=Key('pk').eq(pk) & Key('sk').eq(sk),
-        )
-
-    
-    except ClientError as err:
-            logger.error(
-                "Error searching for matching leed %s: %s: %s",
-                tn, err.response['Error']['Code'], err.response['Error']['Message'])
-            raise
-  
-    
-    if "Items" not in response:
-        msg = tn + " leed not found: " + id 
-        raise ValueError( msg )
-
-    
-    return response['Items'][0]
-    
-    
-    
-    
-    
-    
     
 #   
-# 
+# STEP 1 of Checkout
+# return to Javascript Client with Square QuickPay Checkout link
 #
 #
-#
-        
 def lambda_handler(event, context):
 
-
-    
     the_json = ""
     try:
         
         dynamodb_client = boto3.resource("dynamodb")
         table = dynamodb_client.Table('Leedz_DB')
 
-        true = 1
-        false = 0
-        
-        
+        TRUE = 1
+
         # BUYER  - REQUIRED
         # un
-        # username
+        # bn - buyer name
         #
-        un = validateParam(event, 'un', true)
+        bn = validateParam(event, 'un', TRUE)
         
         
         # LEED
         # tn
         # TRADE NAME - REQUIRED
         #
-        tn = validateParam(event, 'tn', true)
+        tn = validateParam(event, 'tn', TRUE)
 
         
         # LEED
-        # id
+        # Square Order ID 
         # ID - REQUIRED
         #
-        id = validateParam(event, 'id', true)
+        id = validateParam(event, 'id', TRUE)
 
         
-        # Find the leed -- will throw Exception if not found
+        # !!!  the payment is NOT COMPLETE !!!
         #
-        the_leed = checkForExistingLeed(table, tn, id)
-        
-        
-        # logger.info("FOUND LEED!")
-        # logger.info( the_leed ) 
-        
-        # BUY THE LEED
-        #
-        # FIXME FIXME FIXME
-        
-        
-        # BOOKEEPING -- increment buyer and seller counters
-        #
-        #
-        the_buyer = buyer_incrementLeedzBought( table, un )
-        
-        the_seller = seller_incrementLeedzSold( table, the_leed['cr'] )
-        
-        #
-        #
-        #
-        buyer_awardUserBadge( table, the_buyer )
-        
-        seller_awardUserBadge( table, the_seller )
 
+        # will throw error if leed has completed checkout
+        # and has bn == buyer_name set in callback
+        the_leed = getLeedInfo(table, tn, id)
+        
+        # 1/2024
+        # retrieves the full DB entry for the seller
+        # seller_info contains SQUARE authorization
+        seller_info = getSellerInfo(table, bn, tn, id)
+         
+         
+        # generate Square QuickPay Checkout Link
+        # code buyer and trade name into link
+        sq_pay_link = createPaymentLink(seller_info, the_leed, bn)
+        # 1/2024
+        # DO NOT store the_leed.bn until callback lambda AFTER Square payment authorized
+        
+        # SUCCESS
+        sq_order_id = sq_pay_link['order_id']
+        sq_long_url = sq_pay_link['long_url']
+       
+        # create a dictionary with details        
+        # 
+        ret_obj = {
+            'id':id,
+            'tn':tn,
+            'ti':the_leed['ti'],
+            'sq_oid':sq_order_id,
+            'sq_url':sq_long_url,
+            'cd':1
+        }
+        
+        
+        # ALL BOOKEEPING will be completed in callback from Square once purchase complete
 
         
         # SUCCESS
-        #
-        # return FULL LEED DETAILS
-        #
-        # {'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",.....} 
-        #
-        the_json = json.dumps( the_leed, cls=DecimalJsonEncoder )
+        # will return below as an HTTP response to client
+        the_json = json.dumps( ret_obj, cls=DecimalJsonEncoder )
        
        
        
@@ -467,26 +286,240 @@ def lambda_handler(event, context):
         
         the_json = json.dumps( result, cls=DecimalJsonEncoder )
     
-     
-    except ValueError as error:
-        
-        result = handle_error(error)
-        the_json = json.dumps( result, cls=DecimalJsonEncoder )
-        
     
-    
-    except BaseException as error:
+    except Exception as error:
         
         result = handle_error(error)
         the_json = json.dumps( result, cls=DecimalJsonEncoder )
        
     
 
+
+    # BACK TO JAVASCRIPT CLIENT
     return createHttpResponse( 200, the_json )
 
 
+
+
+
+
+# CREATE SQUARE PAYMENT LINK 
+#
+# generate SQUARE QuickPay Checkout Link
+# the_seller contains SELLER authorization code
+#
+# https://developer.squareup.com/explorer/square/checkout-api/create-payment-link
+#
+def createPaymentLink(the_seller, the_leed, bn) :
+    
+    SQUARE_URL = validateEnviron("sq_checkout_url", 1)
+    LOCATION_ID = validateEnviron("sq_location_id", 1)
+
+    # tn - trade name
+    # trade#balloons --> balloons
+    #
+    tn = the_leed['pk'].split('#', 1)[-1]
+
+    # where we pass info through to the client and back up to the leed_bought callback  
+    # id | trade | bn
+    payment_note = the_leed['sk'] + '|' + tn + '|' + bn
+
+    # displayed in checkout
+    long_title = '[' + tn + '] ' + the_leed['ti'] + ' (' + the_leed['zp'] + ')'        
+
+    # PRICE
+    # must be expressed in cents
+    price_cents = int(the_leed['pr']) * 100
+    app_fee = int(price_cents * 0.09)
+
+    # Square Access Token
+    # FIXME 1/2024
+    # MUST fernet (un)encrypt token
+    acc_token = 'Bearer ' + the_seller['sq_at']
+
+    
+    # Define the payload as a Python dictionary
+    payload = {
+        "checkout_options": {
+            "app_fee_money": {
+                "currency": "USD",
+                "amount": app_fee
+            },
+            "redirect_url": "theleedz.com/hustle.html",
+            "merchant_support_email": "theleedz.com@gmail.com"
+        },
+        "quick_pay": {
+            "location_id": LOCATION_ID,
+            "name": the_leed['ti'],
+            "price_money": {
+                "currency": "USD",
+                "amount": price_cents
+            }
+        },
+        "description":long_title,
+        "payment_note": payment_note
+    }
+
+    # Convert the payload to JSON format
+    json_payload = json.dumps(payload).encode('utf-8')
+    
+        
+    # Set the request headers
+    headers = {
+        'Accept': 'application/json',
+        'Square-Version': '2023-12-13',
+        'Authorization': acc_token,
+        'Content-Type': 'application/json'
+    }
+    
+    #
+    # POST request to Square API
+    #
+    try :
+    
+        # Send the HTTP POST request
+        res = urllib.request.urlopen(
+            urllib.request.Request(
+            url = SQUARE_URL,
+            headers = headers,
+            data = json_payload,
+            method = 'POST'
+        ),
+            timeout=8)
+
+        
+        # RETURN payment_link dict -- will throw Exception
+        return decodeSquareResponse( SQUARE_URL, res )
+        
+    
+    except Exception as err:
+        
+        msg = "Cannot create Square Payment Link.  Error in POST request to: " + SQUARE_URL
+        logger.error(msg + ": " + str(err))
+        raise
     
     
+    
+    
+#
+# DECODE / simplify the response from Square
+# return a dict
+#    dict['long_url'] = response_json['payment_link']['long_url']
+#    dict['order_id'] = response_json['payment_link']['order_id']
+def decodeSquareResponse(sq_url, res):
+
+    response = res.read().decode('utf-8')
+    response_json = json.loads(response)
+    
+    if 'payment_link' not in response_json or 'long_url' not in response_json['payment_link']:
+        url_msg = "Invalid response from " + sq_url
+        error_message = url_msg + ". Quick Checkout payment_link / long_url not found"
+        logging.error(error_message)
+        raise Exception(error_message)
+    
+    # else -- extract and return just the quick-pay link dictionary containing long_url and order_id
+    return response_json['payment_link']
+
+
+
+
+
+
+
+
+
+ 
+ # 
+ # GET LEED INFO
+ #
+ # check for buyer_name bn
+ # throw an error if leed has already been bought
+ #
+def getLeedInfo(table, tn, id):
+
+    pk = "leed#" + tn
+
+    try:
+        response = table.get_item(
+            Key={'pk': pk, 'sk': id}
+        )
+
+        if ('Item' not in response):
+            leed_info = "[" + tn + "] " + id
+            msg = "Cannot generate Pay Link for " + leed_info + ". Leed not found."
+            logger.error(msg)
+            raise Exception( msg )
+
+        else:
+            the_leed = response['Item']
+
+            # CHECK BUYER NAME / DATE BOUGHT
+            # Has this leed been bought - or in the process-of?
+            if (the_leed['bn']):
+                date_bought = prettyDate( the_leed['db'] ) 
+                msg = "This leed has been bought: " + date_bought
+                raise Exception(msg)
+            
+            # ALL GOOD
+            return the_leed
+
+
+    except Exception as err:
+        leed_info = "[" + tn + "] " + id
+        msg = "Cannot find leed " + leed_info + ". Error: " + str(err)
+        logger.error(msg)
+        raise  
+    
+    
+    
+    
+    
+    
+#
+# GET SELLER INFO
+#
+# extra params are for error reporting of potentially spurrious activity
+#
+def getSellerInfo(table, cr, tn, id):
+         
+    pk = "user"
+    
+    try:
+        response = table.get_item(
+            Key={'pk': pk, 'sk': cr}
+        )
+       
+        if ('Item' not in response):
+            leed_info = "[" + tn + "] " + id
+            msg = "Cannot generate Pay Link for " + leed_info + ". Seller not found:" + cr
+            logger.error(msg)
+            raise Exception( msg )
+        
+        else:
+            the_seller = response['Item']
+            
+            # seller SQUARE STATE must be AUTHORIZED
+            # RETURN seller data
+            if (the_seller['sq_st'] == 'authorized'):
+                return the_seller
+    
+    
+            # OTHERWISE WE ARE IN AN ERROR CONDITION  
+            raise Exception("Seller not authorized: " + cr)
+    
+    except Exception as err:
+        leed_info = "[" + tn + "] " + id
+        err_str = " Error: " + str(err)
+        msg = "Cannot generate Pay Link for " + leed_info + ". Seller:" + cr + err_str
+        logger.error(msg)
+        raise  
+    
+
+ 
+
+
+ 
+   
  
 #
 # Create the HTTP response object
@@ -494,6 +527,8 @@ def lambda_handler(event, context):
 #
 def createHttpResponse( code, result ):
    
+    logger.info(result)
+    
     response = {
         'statusCode': code,
         'body': result,
@@ -506,8 +541,3 @@ def createHttpResponse( code, result ):
 
     logger.info(response)
     return response
-
-
-
-
-

@@ -103,9 +103,9 @@ table#badges_list tbody td {
   
 	border-radius: 14px;
   
-	width:max-content;
-	height:max-content;
-  
+	max-height:60px;
+	width:auto;
+	
   
 	font-family: var(--FONT_3);
 	font-size:medium;

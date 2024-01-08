@@ -1,5 +1,8 @@
 #
-#
+# DELETE LEED
+# 
+# 12/2023
+# do not change stats -- stats only grow
 #
 
 import json
@@ -60,20 +63,16 @@ def handle_error(error):
        
     msg = str(error)
     logger.error(msg)
-    return msg
+    
+    result = {}
+    result['cd'] = 0
+    result['er'] = msg
+    
+    return result
     
  
     
     
-
-
-
-#
-# flatten a list to a comma-delimited string
-#
-def listToString(lst):
-    return ', '.join(str(x) for x in lst)
-
 
     
 #   
@@ -156,6 +155,7 @@ def lambda_handler(event, context):
         id = validateParam(event, 'id', true)
   
     
+        result = {}
 
 
         try:
@@ -169,10 +169,15 @@ def lambda_handler(event, context):
                     ReturnValues='ALL_OLD'
             ) 
             
-            
-            print("RESPONSE!")
-            print(response)
       
+            logger.info(response)
+            
+            if (response['ResponseMetadata']['HTTPStatusCode'] != 200) :
+                msg = "Delete Failed: " + tn + " id: " + sk + " Error: " + str(err)
+                logger.error(msg)
+                raise ValueError(msg)
+            
+            
             if 'Attributes' not in response :
                 msg = "Leed not found: (" + tn + ") " + id
                 logger.error( msg )
@@ -181,7 +186,7 @@ def lambda_handler(event, context):
            
              
         except ClientError as err:
-                msg = "Delete Failed: " + ti + " id: " + sk + " Error: " + str(err)
+                msg = "Delete Failed: " + tn + " id: " + sk + " Error: " + str(err)
                 logger.error(msg)
                 raise
             
@@ -191,10 +196,13 @@ def lambda_handler(event, context):
                 #
                 # SUCCESS
                 #
-                result = response['Attributes']
+                del_leed = response['Attributes']
+                
+                result['cd'] = 1
+                result['ti'] = del_leed['ti']
+                result['pr'] = del_leed['pr']
                 
                 
-  
   
         #
         # decrement leed counter

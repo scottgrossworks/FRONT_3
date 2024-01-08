@@ -1,6 +1,6 @@
 <!--
 --
--- LEED BOUGHT -- show receipt info
+-- LEED RECEIPT -- show receipt info
 --    
 -->
 
@@ -20,7 +20,7 @@
 		 <meta charset="UTF-8">
 		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	 
-		 <TITLE>Leed Bought</TITLE>
+		 <TITLE>Leed Receipt</TITLE>
 	 
 	 	<!-- Favicon -->
 		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
@@ -49,8 +49,7 @@
             <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
     
                 <div class="column _1">
-    
-                    <a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+                    <a href="./hustle.html"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
                 </div>
     
                 <div class="column" style="margin:auto 0;transform:translateY(6px)">
@@ -237,7 +236,16 @@
     </div>
 </section>  
 
-  
+  <BR>
+
+
+    <div class="row" id="stats_footer">
+        <span>
+        All content is &copy;2024 <a href='mailto:theleedz.com@gmail.com' style="color:white">The Leedz</a>, all rights reserved, and may not be reproduced for 
+        commercial purposes without written permission.
+        </span>
+    </div>
+
 
 </body>
 
@@ -247,8 +255,8 @@
         import { formatDTforInput } from "./js/dates.js";
 		
         import { getCurrentUser } from "./js/user.js";
-        import { CURRENT_LEED_KEY, getCurrentLeed  } from "./js/leed.js";
-		
+		import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed, getCurrentLeed } from "./leed.js";
+
         import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 
 
@@ -275,59 +283,89 @@
 
 
         //
-        // LOAD THE CURRENT LEED
+        // FULL REFRESH leed details with SHOW_ALL options
         //
-        const LEED_BOUGHT = getCurrentLeed();
-
+        const leed_preview = getCurrentLeed();
+        const LEED_BOUGHT = getLeedDeetz(CURRENT_USER, leed_preview);
 
         var the_div = document.getElementById("td_cr");
         the_div.innerText = LEED_BOUGHT['cr'];
-
-
+        
         var the_div = document.getElementById("td_tn");
         the_div.innerText = LEED_BOUGHT['tn'];
-
-
+        
         var the_div = document.getElementById("td_ti");
-        the_div.innerText = LEED_BOUGHT.ti;
-
-
+        the_div.innerText = LEED_BOUGHT['ti'];
+        
         var the_div = document.getElementById("td_st");
-        the_div.innerText = formatDTforInput( LEED_BOUGHT.st );
-
-
+        the_div.innerText = formatDTforInput(LEED_BOUGHT['st']);
+        
         var the_div = document.getElementById("td_et");
-        the_div.innerText = formatDTforInput( LEED_BOUGHT.et );
-
-
+        the_div.innerText = formatDTforInput(LEED_BOUGHT['et']);
+        
         var the_div = document.getElementById("td_lc");
-        the_div.innerText = LEED_BOUGHT.lc;
-
-
+        the_div.innerText = LEED_BOUGHT['lc'];
         
         var the_div = document.getElementById("td_dt");
-        the_div.innerText = LEED_BOUGHT.dt;
-
+        the_div.innerText = LEED_BOUGHT['dt'];
         
         var the_div = document.getElementById("td_rq");
-        the_div.innerText = LEED_BOUGHT.rq;
-
-
+        the_div.innerText = LEED_BOUGHT['rq'];
+        
         var the_div = document.getElementById("td_em");
-        the_div.innerText = LEED_BOUGHT.em;
-
-
+        the_div.innerText = LEED_BOUGHT['em'];
+        
         var the_div = document.getElementById("td_ph");
-        the_div.innerText = LEED_BOUGHT.ph;
-
-
-
+        the_div.innerText = LEED_BOUGHT['ph'];
+        
         var the_div = document.getElementById("td_pr");
-        the_div.innerText = '$ ' + LEED_BOUGHT.pr;
+        the_div.innerText = '$ ' + LEED_BOUGHT['pr'];
+        
 
 
 
 
+        
+
+        /**
+         * full refresh of leed details with SHOW_ALL_OPTS
+         */
+        export async function getLeedDeetz( CURRENT_USER, leed_preview ) {
+        
+            // API request --> DB   
+            // load full leed details for leed_preview.id
+            //
+            try {
+        
+                await db_getDeetz( CURRENT_USER.un, leed_preview.tn, leed_preview.id, SHOW_ALL_OPTS )
+                    .then(data => {
+        
+                        if (! data) throw new Error("null response from GET");
+                        const leed_details = data;
+                        
+                        // query returns empty result set
+                        if (! leed_details)
+                            throw new Error("No leed details for id: " + leed_preview.id);
+                        
+                        // COPY leed details into current leed object 
+                        setCurrentLeed(leed_details);
+
+                        return leed_details;
+
+                    })
+                .catch(error => {
+                    throw error;            
+                })
+            } catch ( error ) {
+
+                printError( "db_getDeetz()", error.message );
+                errorModal("Cannot get leed details for [" + leed_preview.tn + "] " + leed_preview.id, true);
+                
+            }
+        }
+        
+        
+    
 
 	</script>
 

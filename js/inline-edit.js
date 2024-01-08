@@ -4,7 +4,7 @@
  */
 
 import { printError, throwError } from "./error.js";
-import { getCurrentLeed } from "./leed.js";
+import { MAX_LEED_PRICE, getCurrentLeed } from "./leed.js";
 import { isValidTrade } from "./trades.js";
 import { prettyFormatDT, formatDTforInput, DTfromPretty, getTodayUTC } from "./dates.js";
 
@@ -556,12 +556,26 @@ function inlineDefaultFinish(rowName, options) {
                         safeVal = safeVal.substring(1);
                     }
 
+                    // MUST BE A NUMBER
                     if (! ( /^[0-9]+$/.test( safeVal ))) {
                         let errMsg = "Price must be a whole number"
                         printError("inlineDefaultFinish", errMsg );
                         alert(errMsg);
                        return;
                     }
+
+                    // 1/2024
+                    // MAXIMUM leed price : $250
+                    const the_price = parseInt( safeVal );
+                    if (the_price > MAX_LEED_PRICE) {
+                        let errMsg = "Maxiumum leed price: " + MAX_LEED_PRICE;
+                        printError("inlineDefaultFinish", errMsg );
+                        alert(errMsg);
+                       return;
+                    }
+
+
+
                 }
 
 

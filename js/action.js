@@ -116,11 +116,11 @@ export async function showLeedAction( leed_preview , gotoDB ) {
         await db_getDeetz( CURRENT_USER.un, leed_preview.tn, leed_preview.id, view_options )
             .then(data => {
 
-            if (data == null) throw new Error("null response from GET");
+            if ( ! data ) throw new Error("null response from GET");
             leed_details = data;
             
             // query returns empty result set
-            if (leed_details == null) throw new Error("No leed details for id: " + leed_preview.id);
+            if ( ! leed_details ) throw new Error("No leed details for id: " + leed_preview.id);
             
             // COPY leed details into current leed object 
             setCurrentLeed(leed_details);

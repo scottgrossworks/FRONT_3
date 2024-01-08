@@ -1,0 +1,335 @@
+<!--
+--
+-- LEED BOUGHT -- show receipt info
+--    
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	
+
+
+<head>
+
+    
+        <link rel="stylesheet" href="css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="css/modal.css" type="text/css" />
+
+
+   
+		 <meta charset="UTF-8">
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 
+		 <TITLE>Leed Bought</TITLE>
+	 
+	 	<!-- Favicon -->
+		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+ 
+         <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
+		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+		 <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
+
+         <link rel="stylesheet" href="css/modal.css" type="text/css" />
+
+
+		 <script src="./js/inline-edit.js" type="module" defer></script> 
+	</head>
+
+
+		 
+	<center>
+
+
+        <body>
+        
+    
+    
+                
+            <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+    
+                <div class="column _1">
+    
+                    <a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+                </div>
+    
+                <div class="column" style="margin:auto 0;transform:translateY(6px)">
+                    <h1 class="user_title">Leed Bought</h1>
+                </div>
+                    
+                <div class="column _3" style="padding:6px;text-align:center">
+                    <img src="./img/logo_2.png" style="width:120px">
+                </div>
+                
+                
+            
+            </div>
+    
+    
+            <div id="alert_success" class="alert" style="display:none">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            </div>
+    
+        
+    
+    
+    
+    <section>
+    
+    </div>
+
+    <BR>
+
+
+    <!--
+    --
+    --  RECEIPT INFO
+    -- 
+    --
+    -->
+
+            <!-- BUYER -->
+            <div style="font-size:larger;font-weight:600">
+            Congratulations <b style="color:green"><span id="user_welcome"></span></b>, you bought a leed!
+            <BR>An email receipt was sent to <b style="color:green"><span id="user_email"></span></b> with the information below.
+            </div>
+
+    <div class="row" id="leed_info">
+
+        <table>
+
+
+            <!-- CREATOR -->
+            <tr id="row_cr">
+                            
+                <TD class="labelTD">Creator: </TD>
+                
+                <td id="td_cr"></td>
+
+                <td>
+                </td>
+            </tr>
+
+
+            <!-- TRADE NAME -->
+            <tr id="row_tn">
+                            
+                <TD class="labelTD">Trade Name: </TD>
+                
+                <td id="td_tn"></td>
+
+                <td>
+                </td>
+            </tr>
+
+
+            <!-- TITLE -->
+            <tr id="row_ti">
+                        
+                <TD class="labelTD">Title: </TD>
+                
+                <td id="td_ti"></td>
+
+                <td>
+                </td>
+            </tr>
+
+
+            <!-- START TIME -->
+            <tr id="row_st">
+                        
+                <TD class="labelTD">Start Time: </TD>
+                
+                <td id="td_st"></td>
+
+                <td>
+                </td>
+            </tr>
+
+                    
+            <!-- END TIME -->
+            <tr id="row_et">
+                        
+                <TD class="labelTD">End Time: </TD>
+                
+                <td id="td_et"></td>
+
+                <td>
+                </td>
+            </tr>
+
+
+            <!-- LOC ADDRESS -->
+            <tr id="row_lc">
+                        
+                <TD class="labelTD">Location: </TD>
+                
+                <td id="td_lc"></td>
+
+                <td>
+                </td>
+            </tr>
+
+
+            <!-- EMAIL -->
+            <tr id="row_em">
+                        
+                <TD class="labelTD">Email: </TD>
+                
+                <td id="td_em"></td>
+
+                <td>
+                </td>
+            </tr>
+
+            
+
+            <!-- PHONE -->
+            <tr id="row_ph">
+                        
+                <TD class="labelTD">Phone: </TD>
+                
+                <td id="td_ph"></td>
+
+                <td>
+                </td>
+            </tr>
+
+
+            <!-- DETAILS -->
+            <tr id="row_dt">
+                        
+                <TD class="labelTD">Details: </TD>
+                
+                <td id="td_dt"></td>
+
+                <td>
+                </td>
+            </tr>
+
+
+                    
+            <!-- REQUIREMENTS -->
+            <tr id="row_rq">
+                                
+                <TD class="labelTD">Requirements: </TD>
+                
+                <td id="td_rq"></td>
+
+                <td>
+                </td>
+            </tr>
+
+
+
+            <!-- PRICE -->
+            <tr id="row_pr">
+                        
+                <TD class="labelTD">Price: </TD>
+                
+                <td id="td_pr"></td>
+
+                <td>
+                </td>
+            </tr>
+
+        </table>	
+    </div>
+</section>  
+
+  
+
+</body>
+
+
+	<script type="module">
+			
+        import { formatDTforInput } from "./js/dates.js";
+		
+        import { getCurrentUser } from "./js/user.js";
+        import { CURRENT_LEED_KEY, getCurrentLeed  } from "./js/leed.js";
+		
+        import { USERNAME_URL_PARAM } from "./js/dbTools.js";
+
+
+        //
+        // LOAD THE CURRENT USER
+        //
+        const CURRENT_USER = getCurrentUser(true);
+ 
+        if (CURRENT_USER == null || CURRENT_USER.un== null) {
+            
+            printError("Leed Bought", "No current user");
+            errorModal("No current user logged in.", true);
+  
+        } else {
+
+            let user_welcome = document.getElementById("user_welcome");
+            user_welcome.innerText = CURRENT_USER.un;
+           
+            let user_email = document.getElementById("user_email");
+            user_email.innerText = CURRENT_USER.em;
+        }
+
+
+
+
+        //
+        // LOAD THE CURRENT LEED
+        //
+        const LEED_BOUGHT = getCurrentLeed();
+
+
+        var the_div = document.getElementById("td_cr");
+        the_div.innerText = LEED_BOUGHT['cr'];
+
+
+        var the_div = document.getElementById("td_tn");
+        the_div.innerText = LEED_BOUGHT['tn'];
+
+
+        var the_div = document.getElementById("td_ti");
+        the_div.innerText = LEED_BOUGHT.ti;
+
+
+        var the_div = document.getElementById("td_st");
+        the_div.innerText = formatDTforInput( LEED_BOUGHT.st );
+
+
+        var the_div = document.getElementById("td_et");
+        the_div.innerText = formatDTforInput( LEED_BOUGHT.et );
+
+
+        var the_div = document.getElementById("td_lc");
+        the_div.innerText = LEED_BOUGHT.lc;
+
+
+        
+        var the_div = document.getElementById("td_dt");
+        the_div.innerText = LEED_BOUGHT.dt;
+
+        
+        var the_div = document.getElementById("td_rq");
+        the_div.innerText = LEED_BOUGHT.rq;
+
+
+        var the_div = document.getElementById("td_em");
+        the_div.innerText = LEED_BOUGHT.em;
+
+
+        var the_div = document.getElementById("td_ph");
+        the_div.innerText = LEED_BOUGHT.ph;
+
+
+
+        var the_div = document.getElementById("td_pr");
+        the_div.innerText = '$ ' + LEED_BOUGHT.pr;
+
+
+
+
+
+	</script>
+
+	
+</html>

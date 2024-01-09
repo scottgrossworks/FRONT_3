@@ -207,20 +207,23 @@ def lambda_handler(event, context):
         # generated in authorization link sent during sign-up
         state = validateParam(event, 'state', TRUE)
 
+
         # COOKIE
         # 
         # get the auth state cookie to compare with the state that is in the callback
         cookie_state = ''
-        cookie = validateHeader(event, 'cookie', TRUE)
+        cookie = validateHeader(event, 'cookie', FALSE)
 
         if cookie:
             c = cookies.SimpleCookie(cookie)
             cookie_state = c['OAuthState'].value
             
-        # ERROR
-        # cookie state fron web client either NULL or doesn't match param state
-        if (not cookie_state) or (state != cookie_state):
-            raise ValueError("Authorization failed: invalid auth state")
+            # ERROR
+            # cookie state fron web client either NULL or doesn't match param state
+            if (not cookie_state) or (state != cookie_state):
+                raise ValueError("Authorization failed: invalid auth state")
+        else:
+            logger.info("NO COOKIE RECEIVED")
                 
     
         # RESPONSE TYPE

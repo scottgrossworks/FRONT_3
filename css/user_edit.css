@@ -105,6 +105,7 @@ table#badges_list tbody td {
     display: flex;
     align-items: center;
     justify-content: center;
+	padding:2px;
 }
 
 .sq_button {

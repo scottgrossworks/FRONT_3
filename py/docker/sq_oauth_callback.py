@@ -78,16 +78,17 @@ def validateParam( event, param, required ):
 #
 def validateHeader( event, header, required ):
     
-    if ('headers' not in event):
-        raise ValueError("Http Request error.  No headrrs found")
-    
+    str_event = str(event)
+    logger.info("Validate Header: " + str_event)
+   
     value = ""
     
-    if (header not in event.headers):
-            if required:
-                raise ValueError("HTTP Request error.  No '" + header + "' header")
+    if ('headers' not in event) or (header not in event['headers']):
+        logger.info("CANNOT FIND HEADERS!")
+        if required:
+            raise ValueError("HTTP Request error.  No '" + header + "' header")
     else:
-        value = event.headers[header] 
+        value = event['headers'][header] 
         
     return value
 
@@ -105,9 +106,11 @@ def handle_error( err ):
     err_msg = str( err )
     
     logger.error(err_msg)
+    
+    long_msg = "Error receiving Square authorization.  " + err_msg + ".  Please report this error at theleedz.com@gmail.com"
 
     ret_obj = { "cd" : 0,
-                "er" : err_msg }
+                "er" : long_msg }
 
     return ret_obj
     
@@ -216,7 +219,7 @@ def lambda_handler(event, context):
             
         # ERROR
         # cookie state fron web client either NULL or doesn't match param state
-        if cookie_state == '' or state != cookie_state:
+        if (not cookie_state) or (state != cookie_state):
             raise ValueError("Authorization failed: invalid auth state")
                 
     

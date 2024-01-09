@@ -464,6 +464,16 @@ a#date_bought_3 {
     font-size:small;
   }
 
+}
+
+
+
+  @media screen and (min-width: 1024px) {
+
+
+    .header_col {
+      padding: 0 3vw 6px 0;
+  }
 
 }
 

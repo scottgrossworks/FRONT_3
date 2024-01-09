@@ -192,9 +192,8 @@ a {
 #leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span {
   font-family: var(--FONT_1);
   font-size:medium;
-  line-height: normal;
+  line-height: 115%;
   padding: 1vw 2vw;
-
 
 }
 
@@ -391,7 +390,7 @@ a#date_bought_3 {
 
 #leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span {
       font-size:medium;
-      line-height:normal;
+      line-height: 115%;
     }
 
     
@@ -454,7 +453,7 @@ a#date_bought_3 {
 
   #leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span   {
       font-size:large;
-      line-height: normal;
+      line-height: 125%;
     }
 
 

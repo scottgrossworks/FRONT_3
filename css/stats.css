@@ -51,6 +51,17 @@ body {
 }
 
 
+#page_title {
+  width: auto;
+  max-width: 0%;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: max-width 2s linear;
+}
+
+
+
+
 #links_header {
   line-height:4vh;
   background-color: var(--LEEDZ_EMERALD);

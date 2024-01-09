@@ -74,7 +74,7 @@
         
 
         <div class="column header_col _6">
-            <center><a style="color:green;">Buy. Sell. Grow</a> your Hustle.</center>
+            <center id="page_title"><a style="color:green;">Buy. Sell. Grow</a> your Hustle.</center>
         </div>
                 
 
@@ -119,6 +119,7 @@
                 <BR>
                 <b style="color:green;">Buy.  Sell.  Grow your hustle on the Leedz</b>.                 
             </span>
+            <BR>
         </div>
 
 
@@ -338,7 +339,7 @@
         
     <div class="row" id="stats_footer">
         <span>
-        All content is &copy;2024 <a href="a href='mailto:theleedz.com@gmail.com">The Leedz</a>, all rights reserved, and may not be reproduced for 
+        All content is &copy;2024 <a href="a href='mailto:theleedz.com@gmail.com" style="color:white">The Leedz</a>, all rights reserved, and may not be reproduced for 
         commercial purposes without written permission.
         </span>
     </div>
@@ -366,7 +367,8 @@
         login_links[i].href = URL_LOGIN;
       }
 
-
+    const page_title = document.getElementById("page_title");
+    page_title.style.maxWidth='100%';
 
        /**
          * DROP DOWN MENU

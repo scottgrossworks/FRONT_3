@@ -111,22 +111,29 @@
 					  --
 					-->
 					<tr id="row_payment">
-					
 						<TD class="labelTD">Payment Info: </TD>
 						<TD>
 							<div id="sq_msg"></div>
-
-							<button id="sq_auth_url_button" class="button sq_button sq_url" style="display:none">Register&nbsp;<img id="sq_auth_img" src="img/sq_logo.png"></button>
-
-							<button id="sq_auth_auth_button" class="button sq_button sq_auth" style="display:none">Square&nbsp;<img id="sq_auth_img" src="img/sq_logo.png"></button>
-
-							<button id="sq_auth_error_button" class="button sq_button sq_error" style="display:none">Square&nbsp;<img id="sq_auth_img" src="img/sq_logo.png"></button>
+							<div class="button-container">
+								<button id="sq_auth_url_button" class="button sq_button sq_url" style="display:none">
+									<span class="button-label">Register</span>
+									<img id="sq_auth_img" src="img/sq_logo.png">
+								</button>
+								<button id="sq_auth_auth_button" class="button sq_button sq_auth" style="display:none">
+									<span class="button-label">Square</span>
+									<img id="sq_auth_img" src="img/sq_logo.png">
+								</button>
+								<button id="sq_auth_error_button" class="button sq_button sq_error" style="display:none">
+									<span class="button-label">Square</span>
+									<img id="sq_auth_img" src="img/sq_logo.png">
+								</button>
+							</div>
 						</TD>
 						<td data-inlineType="doneButton" class="buttonTD">
 							<input type="button" value="Edit" onclick=""/>
 						</td>
 					</tr>
-
+					
 
 
 

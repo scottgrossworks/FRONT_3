@@ -88,32 +88,43 @@ table#badges_list tbody td {
 
 
 
+.button-container {
+    display: flex;
+    align-items: center;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-label {
+    margin-right: 5px;
+}
 
 .sq_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 20px;
+    border: none;
+    text-decoration: none;
+    display: flex;
+    border-radius: 14px;
+    max-height: 60px;
+    width: auto;
+    font-family: var(--FONT_3);
+    font-size: medium;
+    font-weight: 600;
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);
+}
 
-	display: none;
-	position:relative;
-	padding:15px 20px;
-	
-	border: none;
+#sq_auth_img {
+    max-height: 60px;
+    max-width: 60px;
+}
 
-  
-	text-decoration: none;
-	display: flex;
-  
-	border-radius: 14px;
-  
-	max-height:60px;
-	width:auto;
-	
-  
-	font-family: var(--FONT_3);
-	font-size:medium;
-	font-weight:600;
-  
-	box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
-  }
-  
 
 
   .sq_url {

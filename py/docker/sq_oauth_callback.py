@@ -6,13 +6,15 @@
 #
 
 import os
+
 from cryptography.fernet import Fernet
+import base64
+import hashlib
 
 from http import cookies
 import json
 
 import boto3
-from boto3.dynamodb.conditions import Attr
 from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
 
@@ -109,6 +111,41 @@ def handle_error( err ):
 
     return ret_obj
     
+
+
+
+
+#
+# ENCRYPTION HANDLING
+#
+
+def encryptToken( key_txt, token_txt):
+    fernet_key = generateFernetKey(key_txt)
+    f = Fernet(fernet_key)
+    encrypted_token = f.encrypt(token_txt.encode())
+    return encrypted_token
+
+
+
+def decryptToken( key_txt , encrypted_token):
+    fernet_key = generateFernetKey( key_txt )
+    f = Fernet(fernet_key)
+    decrypted_token = f.decrypt(encrypted_token).decode()
+    return decrypted_token
+
+
+# take a string as input and converts it into a string of 32 bytes suitable for cryptographic use
+#
+def convert( src ):
+    hash_object = hashlib.sha256( src.encode() )
+    return hash_object.digest()
+
+# create a Fernet encryption key from a plain text source
+#
+def generateFernetKey( txt_src ) :
+    seed = convert( txt_src )        
+    return base64.urlsafe_b64encode( seed )
+
 
 
 
@@ -223,11 +260,10 @@ def lambda_handler(event, context):
                 
                 # 1/2024 TODO FERNET ENCRYPT TOKENS 
                 # encrypt the refresh_token and access_token before save to db
-                
-                # token_encrypt_key = validateEnviron('token_encrypt_key', 1)
-                # fernet = Fernet(token_encrypt_key)
-                # sq_rt = encrypted_refresh_token = fernet.encrypt( refresh_token )
-                # sq_at = encrypted_access_token = fernet.encrypt( access_token )
+                # TOKEN ENCRYPT KEY WILL BE USERNAME
+                # 
+                # sq_rt = encrypted_refresh_token = encryptToken( un, refresh_token )
+                # sq_at = encrypted_access_token = encryptToken( un, access_token )
 
                 if not expires_at:
                     expires_at = '0'
@@ -349,8 +385,8 @@ def getLeedzUser( table, sq_st ) :
 #
 # sq_id = used only for error reporting
 #
-# sq_at = encrypted_access_token = fernet.encrypt( access_token )
-# sq_rt = encrypted_refresh_token = fernet.encrypt( refresh_token )
+# sq_at = encrypted access_token 
+# sq_rt = encrypted refresh_token 
 # sq_st = state --> authorized
 # sq_ex = expires_at
 #

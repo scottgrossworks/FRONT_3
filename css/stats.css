@@ -2,7 +2,6 @@
 
 
 body {
-  overflow-y: scroll !important;
 }
 
 .container {
@@ -77,14 +76,13 @@ body {
 
 .login_col {
     display: flex;
-    justify-content: right;
-    margin-right:3vw;
+    justify-content: left;
+    margin: auto;
+    padding-right:25px;
     
 }
 
 #header_login {
- margin-top:15px;
- margin-left:2vw;
  font-family: var(--FONT_3);
 }
 
@@ -95,6 +93,7 @@ body {
     font-family: var(--FONT_2);
     font-weight: 600;
     margin:auto 0;
+    padding-left:10px;
 }
 
 .item {

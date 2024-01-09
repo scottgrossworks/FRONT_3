@@ -56,14 +56,14 @@ def validateEnviron( var, required ):
 #
 def validateParam( event, param, required ):
     
-    if ('queryStringParameters' not in event):
+    if (required and 'queryStringParameters' not in event):
         raise ValueError("Http Request error.  No query string parameters found")
     
     value = ""
     
     if (param not in event['queryStringParameters']):
-            if required:
-                raise ValueError("HTTP Request error.  No '" + param + "' query string parameter")
+        if required:
+            raise ValueError("HTTP Request error.  No '" + param + "' query string parameter")
     else:
         value = event['queryStringParameters'][param] 
         
@@ -231,6 +231,9 @@ def lambda_handler(event, context):
         # look for 'code' indicating refresh/access tokens
         #
         response_type = validateParam(event, "response_type", TRUE)
+        logger.info("RESPONSE_TYPE=" + response_type)
+        
+        
         if (response_type == 'code'):
             # authorization to trade for tokens
             auth_code = validateParam(event, "code", TRUE)   
@@ -246,9 +249,16 @@ def lambda_handler(event, context):
             # calls Square client to make special POST req to Square
             the_response = exchange_oauth_tokens( environment, auth_code, app_ID, app_secret )
   
-  
+            logger.info("GOT RESPONSE!")
+            logger.info(the_response)
+            
+            
             if (the_response.is_success()):
                 
+                
+                logger.info("RESPONSE SUCCESS!")
+                        
+                        
                 access_token = the_response.body['access_token'].encode('ASCII')
                 refresh_token = the_response.body['refresh_token'].encode('ASCII')
                 expires_at = the_response.body['expires_at']
@@ -287,6 +297,7 @@ def lambda_handler(event, context):
             # ERROR
             #
             elif (the_response.is_error()):
+                logger.error("RESPONSE INDICATES ERROR")
                 err_type = "Authorization Error [" + the_response.body['type'] + "]: "
                 err_msg = the_response.body['message']
                 raise ValueError( err_type + err_msg )

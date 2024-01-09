@@ -219,7 +219,8 @@
 
             <table class="statsTable">
                 <TR>
-                    <TD><b>The top <a id="maxTrades"></a> trades by <b style=color:green>leedz for sale:</b></b></TD>
+                    <TD><b>Total trades: </b><a id="trades_total"></a></TD>
+                    <TD><b>Top <a id="maxTrades"></a> by <b style=color:green>leedz for sale:</b></b></TD>
                 </TR>                
                 <TR>
                     <td id="trades_table">
@@ -593,8 +594,8 @@ function initTradesTable( all_trades ) {
     var element = document.getElementById("maxTrades");		
     element.innerHTML = MAX_TRADES;
 
-    // element = document.getElementById("trades_total");
-    // element.innerHTML = all_trades.length;
+    element = document.getElementById("trades_total");
+    element.innerHTML = all_trades.length;
 
 
 	// import DOM elements from html

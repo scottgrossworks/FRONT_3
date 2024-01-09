@@ -78,9 +78,6 @@ def validateParam( event, param, required ):
 #
 def validateHeader( event, header, required ):
     
-    str_event = str(event)
-    logger.info("Validate Header: " + str_event)
-   
     value = ""
     
     if ('headers' not in event) or (header not in event['headers']):
@@ -224,6 +221,10 @@ def lambda_handler(event, context):
                 raise ValueError("Authorization failed: invalid auth state")
         else:
             logger.info("NO COOKIE RECEIVED")
+            
+            #
+            # FIXME FIXME FIXME -- are we ever going to get that cookie?
+            #
                 
     
         # RESPONSE TYPE
@@ -231,9 +232,7 @@ def lambda_handler(event, context):
         # look for 'code' indicating refresh/access tokens
         #
         response_type = validateParam(event, "response_type", TRUE)
-        logger.info("RESPONSE_TYPE=" + response_type)
-        
-        
+  
         if (response_type == 'code'):
             # authorization to trade for tokens
             auth_code = validateParam(event, "code", TRUE)   
@@ -248,17 +247,26 @@ def lambda_handler(event, context):
             
             # calls Square client to make special POST req to Square
             the_response = exchange_oauth_tokens( environment, auth_code, app_ID, app_secret )
-  
-            logger.info("GOT RESPONSE!")
+
+            # DEBUG
             logger.info(the_response)
             
             
-            if (the_response.is_success()):
+            
+            
+            #
+            # ERROR
+            #
+            if (the_response['errors']):
+               
+                err_type = the_response['errors']['category'] + ':' + the_response['errors']['code']
+                err_msg = err_type + ' -- ' + the_response.body['detail']
+                logger.error( err_msg )
+                raise ValueError( err_msg )
+  
                 
+            else :
                 
-                logger.info("RESPONSE SUCCESS!")
-                        
-                        
                 access_token = the_response.body['access_token'].encode('ASCII')
                 refresh_token = the_response.body['refresh_token'].encode('ASCII')
                 expires_at = the_response.body['expires_at']
@@ -294,14 +302,7 @@ def lambda_handler(event, context):
                           }
 
             
-            # ERROR
-            #
-            elif (the_response.is_error()):
-                logger.error("RESPONSE INDICATES ERROR")
-                err_type = "Authorization Error [" + the_response.body['type'] + "]: "
-                err_msg = the_response.body['message']
-                raise ValueError( err_type + err_msg )
-  
+         
   
         # ERROR
         #

@@ -139,7 +139,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     }
 
     let CURRENT_LEED = getCurrentLeed();    
-    // console.log(CURRENT_LEED);
+    console.log(CURRENT_LEED);
     
 
 
@@ -408,7 +408,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 
 
     
-    // *** PRICE ***
+    // PRICE 
     // from leed_details
     //
     theDiv = document.querySelector("#pr_value");

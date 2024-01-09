@@ -109,9 +109,11 @@ table#badges_list tbody td {
 }
 
 .sq_button {
+	
     display: flex;
     align-items: center; /* Center the content vertically */
-    padding: 8px;
+
+    padding: 6px 8px 8px 8px;
     border: none !important;
     text-decoration: none;
     display: flex;

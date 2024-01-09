@@ -121,7 +121,7 @@
 								<button id="sq_auth_url_button" class="button sq_button sq_url" style="display:none">
 									<div class="button-label">
 										<img id="sq_auth_img" src="img/sq_logo.png">
-										<a>Register</a>
+										<a>Square</a>
 									</div>
 								</button>
 								<button id="sq_auth_auth_button" class="button sq_button sq_auth" style="display:none">
@@ -422,7 +422,7 @@ async function initSquareButton() {
 				// ALL GOOD!
 				// show AUTHORIZED
 				//
-				sq_msg.innerText = "Authorized! Click to change.";
+				sq_msg.innerText = "Authorized! Click to change";
 				
 				// REVOKE Square Authorization
 				// requires AUTH token -- must be done by AWS Lambda
@@ -444,7 +444,7 @@ async function initSquareButton() {
 				// NEW USER
 				// show AUTHORIZATION LINK
 				//
-				sq_msg.innerText = "Connect to Square:";
+				sq_msg.innerText = "Authorize the Leedz";
 			
 				let sq_button = document.getElementById("sq_auth_url_button");
 				sq_button.addEventListener("click", function( event ) {

@@ -168,11 +168,11 @@ a {
 
 
 #top_trades table {
-  padding: 2vw;
+  padding: 1vw 2vw 1vw 2vw;
 }
 
 #trades_table {
-  padding-top:10px;
+  padding-top:6px;
 }
 
 
@@ -208,7 +208,7 @@ a {
 #leedz_live table {
 
   margin-left:1vw;
-  padding:2vw;
+  padding:1vw 2vw 1vw 2vw;
   line-height: 3vh;
 }
 
@@ -279,7 +279,7 @@ a#date_bought_3 {
 
 
 #contact_item {
-  min-height:200px;
+  min-height:220px;
 }
 
 #contact_item .item_title {

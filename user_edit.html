@@ -83,7 +83,6 @@
 						<td colspan=2 id="td_username" data-inlineType="text" data-inlineName="username" 
 						data-inlineRequired="true" data-inlinePlaceholder="(Required)" style="color:green;font-weight:600;font-size:1.5em;"></td>
 		
-						
 					</tr>
 
 
@@ -92,6 +91,7 @@
 					<tr id="row_login">
 					
 						<TD class="labelTD">Login &amp; Password: </TD>
+						
 						<td data-inlineType="text" data-inlineName="login"></td>
 		
 						<!-- FIXME FIXME FIXME 
@@ -111,32 +111,35 @@
 					  --
 					-->
 					<tr id="row_payment">
+						
 						<TD class="labelTD">Payment Info: </TD>
-						<TD>
-							<div id="sq_msg"></div>
+
+						<TD style="width:80%"><div id="sq_msg"></div></TD>
+						
+						<TD style="border:none">
 							<div class="button-container">
 								<button id="sq_auth_url_button" class="button sq_button sq_url" style="display:none">
-									<span class="button-label">Register</span>
-									<img id="sq_auth_img" src="img/sq_logo.png">
+									<div class="button-label">
+										<img id="sq_auth_img" src="img/sq_logo.png">
+										<a>Register</a>
+									</div>
 								</button>
 								<button id="sq_auth_auth_button" class="button sq_button sq_auth" style="display:none">
-									<span class="button-label">Square</span>
-									<img id="sq_auth_img" src="img/sq_logo.png">
+									<div class="button-label">
+										<img id="sq_auth_img" src="img/sq_logo.png">
+										<a>Square</a>
+									</div>
 								</button>
 								<button id="sq_auth_error_button" class="button sq_button sq_error" style="display:none">
-									<span class="button-label">Square</span>
-									<img id="sq_auth_img" src="img/sq_logo.png">
+									<div class="button-label">
+										<img id="sq_auth_img" src="img/sq_logo.png">
+										<a>Square</a>
+									</div>
 								</button>
 							</div>
 						</TD>
-						<td data-inlineType="doneButton" class="buttonTD">
-							<input type="button" value="Edit" onclick=""/>
-						</td>
 					</tr>
 					
-
-
-
 
 
 				<tr id="row_email">
@@ -310,7 +313,13 @@
 		const CURRENT_USER = getCurrentUser( true );
 		console.log(CURRENT_USER);
 
-		if (CURRENT_USER == null || CURRENT_USER.un == null) {
+		const TESTING = false;
+		
+		if (TESTING) {
+			console.log("TESTING");
+			console.log(CURRENT_USER);
+
+		} else if (CURRENT_USER == null || CURRENT_USER.un == null) {
 			printError("User Edit", "No user currently logged in");
 			errorModal("Cannot Edit User<BR>Not currently logged in.", true);
 			throwError("User Edit", "Not logged in");
@@ -395,11 +404,20 @@ async function initSquareButton() {
 
 	try {
 
-			if (! CURRENT_USER.sq_st)
-				throwError("Square Init", "No Square status returned");
-
 			let sq_msg = document.getElementById("sq_msg");
-			if (CURRENT_USER.sq_st == 'authorized') {
+
+			if (! CURRENT_USER.sq_st) {
+				// ERROR
+				//
+				sq_msg.innerText = "Not Authorized";
+				let sq_button = document.getElementById("sq_auth_error_button");
+				sq_button.style.display = "block";
+
+				throwError("Square status not found", "The Leedz is not authorized");
+
+				
+
+			} else if (CURRENT_USER.sq_st == 'authorized') {
 				
 				// ALL GOOD!
 				// show AUTHORIZED
@@ -443,23 +461,32 @@ async function initSquareButton() {
 				
 				// ERROR
 				//
-				sq_msg.innerText = "The Leedz is not authorized";
-			
+				sq_msg.innerText = "Not Authorized";
 				let sq_button = document.getElementById("sq_auth_error_button");
 				sq_button.style.display = "block";
 
-				throwError("Square Init", "Malformed Square status: " + CURRENT_USER.sq_st);
+				throwError("Invalid Square status: " + CURRENT_USER.sq_st, "The Leedz is not authorized");
 			}
 
-
+		
+			// ERROR
+		//
 		} catch (error) {
 		
 			// DO NOT FAIL -- show error modal dialog and print error to console
 			var msg = "Cannot init Square button.<BR>Please refresh page."
 			msg = error.message + "<BR>" + msg;
 			
-			printError("Init Square", error);
-			errorModal( msg , true );
+			printError("Init Square", msg);
+			
+			sq_msg.innerText = "The Leedz is not authorized";
+			
+			let sq_button = document.getElementById("sq_auth_error_button");
+			sq_button.style.display = "block";
+			
+			errorModal(msg, true);
+
+
 
 		} finally {
 			normalCursor();

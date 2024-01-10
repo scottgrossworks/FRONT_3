@@ -275,14 +275,17 @@ def lambda_handler(event, context):
             return handle_success( 'authorized', the_user['sk'], the_user['sq_ex'])
             
 
+        # does user profile contain a state key generated in getUser()
+        # check state against user state
+        verifyUserState(state, the_user)
+        
+        
         # COOKIE
-        # FIXME FIXME FIXME -- are we ever going to get that cookie?
+        # FIXME FIXME FIXME -- are we ever going to get that cookie in header?
         # 1/9 not getting the cookie at all
         # will throw exception
-        checkForCookie(event, state, FALSE)
+        # checkForCookie(event, state, FALSE)
         
-    
-            
     
         # RESPONSE TYPE
         # 
@@ -413,6 +416,22 @@ def exchange_oauth_tokens(env, code, id, secret):
 
 
 
+# state created in getUser -- saved in the_user
+# programmed into login link
+# state comes back from oauth callback
+# 
+# does state == the_user['sq_st']
+#
+def verifyUserState(state, the_user) :
+    
+    if (the_user['sq_st'] != state) :
+        msg = "Cannot validate OAuth request state.  " + the_user['sq_st'] + " != " + state
+        logger.error( msg )
+        raise ValueError(msg)
+        
+
+
+
 
 # COOKIE
 # 
@@ -439,33 +458,28 @@ def checkForCookie( event, state, required ) :
 
 #
 # return entire user object
+# reverse lookuo in GSI_sq_st
+# using sq_st as key --> leedz un
 #
-def getLeedzUser( table, sq_st ) :
-    
-    try:  
+def getLeedzUser(table, sq_st):
+    try:
         response = table.query(
             IndexName='GSI_sq_st',
             KeyConditionExpression=Key('sq_st').eq(sq_st)
         )
 
-    
         logger.info("GET LEEDZ USER GOT RESPONSE!")
         logger.info(response)
-        
-    
-        if (('Items' not in response) or len(response['Items'] == 0):
+
+        if 'Items' not in response or len(response['Items']) == 0:
             msg = "OAuth Error. Leedz user not found: " + sq_st
             raise ValueError(msg)
-            
         else:
             the_user = response['Items'][0]
             return the_user
-    
-    
-    except Exception as err:
-        
-        raise
 
+    except Exception as err:
+        raise
         
         
 

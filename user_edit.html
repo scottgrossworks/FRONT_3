@@ -299,7 +299,7 @@
 		import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
 		import { inlineEdit } from "./js/inline-edit.js";
 		import { clearCurrentLeed } from "./js/leed.js";
-		import { isSubscribed, saveUserChanges, getCurrentUser, deleteCurrentUser } from "./js/user.js";
+		import { isSubscribed, saveUserChanges, reloadCurrentUser, deleteCurrentUser } from "./js/user.js";
 		import { printError, errorModal, throwError } from "./js/error.js";
 		import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 		import { turnTrade_On, turnTrade_Off, getAllTrades, createTradesAndColors } from "./js/trades.js";
@@ -309,70 +309,85 @@
 		const URL_USER_DELETED = "./user_deleted.html";
 
 		var EDITING = false;
+		let CURRENT_USER;
 
-		const CURRENT_USER = getCurrentUser( true );
-		console.log(CURRENT_USER);
+		try {
 
-		const TESTING = false;
+			waitCursor();
+
+			CURRENT_USER = reloadCurrentUser();
+			console.log(CURRENT_USER)
 		
-		if (TESTING) {
-			console.log("TESTING");
-			console.log(CURRENT_USER);
-
-		} else if (CURRENT_USER == null || CURRENT_USER.un == null) {
-			printError("User Edit", "No user currently logged in");
-			errorModal("Cannot Edit User<BR>Not currently logged in.", true);
-			throwError("User Edit", "Not logged in");
-		}	
+			if ( ! CURRENT_USER.un ) {
+				printError("User Edit", "No user currently logged in");
+				errorModal("Cannot Edit User<BR>Not currently logged in.", true);
+				throwError("User Edit", "Not logged in");
+			}	
 
 
-		const USER_CHANGES = CURRENT_USER;
+			// this will take on any changes the user makes on the form
+			const USER_CHANGES = CURRENT_USER;
+
+
+			// INITIALIZE UI
+			//
+			var element = document.getElementById("td_username");
+			element.innerHTML = CURRENT_USER.un;
+
+
+			if (CURRENT_USER.em) {
+				element = document.getElementById("td_email");
+				element.innerHTML = CURRENT_USER.em;
+			}
+
+			if (CURRENT_USER.ws) {
+				element = document.getElementById("td_website");
+				element.innerHTML = CURRENT_USER.ws;
+			}
+
+
+			if (CURRENT_USER.ab) {
+				element = document.getElementById("td_about");
+				element.innerHTML = CURRENT_USER.ab;
+			}
+
+			if (CURRENT_USER.zp) {
+				element = document.getElementById("td_zip");
+				element.innerHTML = CURRENT_USER.zp;
+			}
+
+			if (CURRENT_USER.zr) {
+				element = document.getElementById("td_radius");
+				element.innerHTML = CURRENT_USER.zr
+			}
+
+
+			// program the square button depending on status
+			initSquareButton();
+
+
+			element = document.getElementById("maxTrades");		
+			element.innerHTML = MAX_USER_SUBS;
+			// INIT TRADES
+			initTrades( tradeListener );
 
 
 
-		// INITIALIZE UI
-		//
-		var element = document.getElementById("td_username");
-		element.innerHTML = CURRENT_USER.un;
+	} catch (error) {
+		
+		// DO NOT FAIL -- show error modal dialog and print error to console
+		var msg = "Error loading user profile.<BR>Please refresh page."
+		msg = error.message + "<BR>" + msg;
+		
+		printError("Reload User", msg);
+		
+		errorModal(msg, true);
 
 
-		if (CURRENT_USER.em) {
-			element = document.getElementById("td_email");
-			element.innerHTML = CURRENT_USER.em;
-		}
 
-		if (CURRENT_USER.ws) {
-			element = document.getElementById("td_website");
-			element.innerHTML = CURRENT_USER.ws;
-		}
-
-
-		if (CURRENT_USER.ab) {
-			element = document.getElementById("td_about");
-			element.innerHTML = CURRENT_USER.ab;
-		}
-
-		if (CURRENT_USER.zp) {
-			element = document.getElementById("td_zip");
-			element.innerHTML = CURRENT_USER.zp;
-		}
-
-		if (CURRENT_USER.zr) {
-			element = document.getElementById("td_radius");
-			element.innerHTML = CURRENT_USER.zr
-		}
-
-
-		// program the square button depending on status
-		initSquareButton();
-
-
-		element = document.getElementById("maxTrades");		
-		element.innerHTML = MAX_USER_SUBS;
-		// INIT TRADES
-		initTrades( tradeListener );
-
-
+	} finally {
+		normalCursor();
+	}
 
 
 
@@ -522,12 +537,10 @@ async function initTrades( listener ) {
 		}
 
 
-
 		// init TRADES struct
 		// initialize the spectrum of colors
 		createTradesAndColors( trades );  
 		
-
 
 		initTradesTable( trades, listener );
   
@@ -535,10 +548,9 @@ async function initTrades( listener ) {
 		
 		// DO NOT FAIL -- show error modal dialog and print error to console
 		var msg = "Cannot load trades.<BR>Please refresh page."
-		msg = error.message + "<BR>" + msg;
-		
-		printError("Init Trades Column", error);
-		errorModal( msg , true );
+		msg = error.message + "<BR>" + msg;		
+		printError("Init Trades Column", msg);
+		throw error;
 	
 	} finally {
 		normalCursor();
@@ -670,7 +682,7 @@ function initTradesTable( all_trades, tradeListener ) {
 	 
 		   
 	   } catch (error) {
-		 errorModal(error, false);
+		 printError("tradeListener", error.message);
 		 return false;
 	   }
 		

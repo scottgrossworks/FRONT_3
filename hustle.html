@@ -1554,9 +1554,6 @@ async function mainPageLoad( current_user ) {
       }
   
 
-
-      
-
       /**
       * 
       */
@@ -1593,54 +1590,36 @@ window.onload = async function() {
 
     getUserLogin( userLogin );
 
-    // un - USERNAMR
-    // em - EMAIL
-    if (! userLogin['un']) {
-        // 
-        // !! REDIRECT TO LOGIN URL
-        //
-        window.open(URL_LOGIN, "_self");
-        return;
-    }
+    console.log("GOT USER LOGIN");
+    console.log(userLogin);
 
+    // ARE THERE COGNITO LOGIN CREDENTIALS IN URL?
+    // load the leedz user profile matching the cognito login creds
+    if (userLogin) {
 
-  } catch (err) {
-      var msg = "Cannot log into the Leedz.";
-      msg = err.message + "<BR>" + msg + "<BR>Using guest account.";
-      printError("Leedz Login", msg);
-      errorModal( msg , false );
-      
-      // DO NOT FAIL
-      // ! USE GUEST USER
-      current_user = guestUser();   
-  }
-
-
-
-  if (isGuestUser(false)) {
-    try {
       await initUser( userLogin['un'] ); // will throw error
 
       // return newly-loaded user
       current_user = getCurrentUser( false );
 
+    } else {
 
-    } catch (error) {
-
-      var msg = "Cannot load user data.<BR>Using guest account.";
-      msg = error + "<BR>" + msg;
-      printError("Leedz Login", msg);
-      errorModal( msg , false );
-
-      // DO NOT FAIL
-      // ! USE GUEST USER
-      current_user = guestUser();   
+      // might throw Exception
+      current_user = reloadCurrentUser();
 
     }
+
+  } catch (err) {
+      // 
+      // !! REDIRECT TO LOGIN URL
+      //
+      window.open(URL_LOGIN, "_self");
+      return;  
   }
 
-  // LOAD the page with the current user info
-  mainPageLoad( current_user );
+    // no errors?
+    // LOAD the page with the current user info
+    mainPageLoad( current_user );
 }
 
 

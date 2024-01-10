@@ -12,6 +12,49 @@ import { printError, throwError } from "./error.js";
 
 
 /**
+ * create an empty JSON-compatible user object
+ * 
+ * 
+ * 
+ *  "cr": "dave.reyes",
+    "sb": [ "airbrush", "caricatures", "martial arts"],
+    "zp": "93551",
+    "zr": "50", 
+    "ab": "I am a caricature artist in LA",
+    "ws": "http://doctorreyes.com",
+    "id": "0",
+    "lp": ["2005", "1005", "3001"],
+    "bg":["1", "2", "4"],
+    "em": "wizzardblitz@netzero.net", 
+    "tn": "user#dave.reyes"
+    }
+ *
+ */
+    export function blankUserObject() {
+  
+      const BLANK_USER = new Object();
+      
+      BLANK_USER.un = null;
+      BLANK_USER.em = null;
+      BLANK_USER.ws = null;
+      BLANK_USER.ab = null
+    
+      BLANK_USER.zp = 0;
+      BLANK_USER.zr = 0;
+    
+      BLANK_USER.sb = [];
+      BLANK_USER.bg = [];
+    
+      // 1/2024 SQUARE STATUS
+      BLANK_USER.sq_st = null;
+    
+      return BLANK_USER;
+    }
+
+
+
+    
+/**
  * 
  * DOES this window contain AWS auth tokens?
  * break out all individual tokens into key-value pairs
@@ -33,6 +76,7 @@ export function getUserLogin( userLogin ) {
     if ("id_token" in loginTokens) {
       
       decodeJWT(loginTokens["id_token"], userLogin);
+
 
 
     } else {
@@ -78,6 +122,7 @@ function parseWindowURL() {
 
 
   fragment = window.location.href.substring(index + 1);
+  if (! fragment) return null;
 
   // Split the fragment into key-value pairs
   const keyValuePairs = fragment.split("&");
@@ -189,6 +234,20 @@ export async function deleteCurrentUser() {
 
 
 /**
+ * 
+ * @returns true if we are using the GUEST account
+ */
+export function isGuestUser( guest_user ) {
+
+  if ( guest_user )
+    return CURRENT_USER === GUEST_USER;
+  else 
+    return CURRENT_USER !== GUEST_USER;
+}
+
+
+
+/**
  * return the current user object
  * refresh from cache if requested
  */
@@ -214,16 +273,28 @@ export function getCurrentUser( useCache ) {
 
 
 
-/**
- * 
- * @returns true if we are using the GUEST account
- */
-export function isGuestUser( guest_user ) {
 
-  if ( guest_user )
-    return CURRENT_USER === GUEST_USER;
-  else 
-    return CURRENT_USER !== GUEST_USER;
+/**
+ * Do a force reload of the current user profile from DB
+ */
+export async function reloadCurrentUser() {
+
+  try {
+
+    let the_user = getCurrentUser( false );
+    console.log(the_user);
+
+    await initUser( the_user.un ).then(data => {
+    
+      return getCurrentUser(false);
+
+    }).catch (error => {
+        throw error;
+    });
+    
+  } catch (error) {
+    throw error;
+  }
 }
 
 
@@ -242,132 +313,84 @@ export function isGuestUser( guest_user ) {
  */
 export async function initUser( login ) {
 
-    const cacheUser = getCurrentUser(true);
-    if (cacheUser.un == login) {
-      // this is the same user from another browser window -- do NOT go back to server
-      CURRENT_USER == cacheUser;
+    //   client <---> API Gateway <===> DB
+    //
+    // GET the user JSON data from the server
+    // UPDATE CURRENT_USER with new values from DB
+    //
+    let resObj = null;
+
+    try {
+      // get the user object
+      await db_getUser( login )
+      .then(data => {
+
+        if (data == null) throw new Error("Server Error: Cannot Get User");
+
+        resObj = data;
+
+      })
+      .catch(error => {
+
+        if (error.status == 204) {
+          var msg = "User " + login + " not found.";
+          throwError("Get User", msg);
+
+        } else {
+          var msg =  "Error initializing user [ " + login + " ]: " + error.message;
+          printError("db_getUser", msg);
+          throwError('Init User', error);
+        }
+
+      });
 
 
-    } else {
-
-      //   client <---> API Gateway <===> DB
+      // THIS MUST MATCH DYNAMO DB SCHEMA
       //
-      // GET the user JSON data from the server
-      // UPDATE CURRENT_USER with new values from DB
-      //
-      let resObj = null;
+      // copy the new values into CURRENT_USER
 
-      try {
-        // get the user object
-        await db_getUser( login )
-        .then(data => {
-  
-          if (data == null) throw new Error("Server Error: Cannot Get User");
+      // some fields are mandatory and will always contain values
+      // some are optional and may be null
+      // if statements are in case cache v  ersion is more recent
+      // 
+      CURRENT_USER.un = resObj['sk'];
+      if (! resObj['em'])
+        throwError("No email set for username: " + resObj['sk']);
 
-          resObj = data;
-  
-        })
-        .catch(error => {
+      CURRENT_USER.em = resObj['em'];
 
-          if (error.status == 204) {
-            var msg = "User " + login + " not found.";
-            throwError("Get User", msg);
+      CURRENT_USER.ws = (resObj['ws']) ? resObj['ws'] : null;
+      CURRENT_USER.ab = (resObj['ab']) ? resObj['ab'] : null;
 
-          } else {
-            var msg =  "Error initializing user [ " + login + " ]: " + error.message;
-            printError("db_getUser", msg);
-            throwError('Init User', error);
-          }
+      CURRENT_USER.zp = (resObj['zp'] && resObj['zp'] != '0') ? resObj['zp'] : 0;
+      CURRENT_USER.zr = (resObj['zr'] && resObj['zr'] != '0') ? resObj['zr'] : 0;
 
-        });
+      // TRADES SUBSCRIPTIONS
+      CURRENT_USER.sb =  (resObj['sb']) ? resObj['sb'].split(',').map(element=>element.trim()) : [];
 
+      // USER BADGES
+      CURRENT_USER.bg =  (resObj['bg']) ? resObj['bg'].split(',').map(element=>parseInt(element.trim())) : [];
 
-        // THIS MUST MATCH DYNAMO DB SCHEMA
-        //
-        // copy the new values into CURRENT_USER
+      // 1/2024
+      // SQUARE STATUS
+      CURRENT_USER.sq_st = (resObj['sq_st']) ? resObj['sq_st'] : null;
 
-        // some fields are mandatory and will always contain values
-        // some are optional and may be null
-        // if statements are in case cache v  ersion is more recent
-        // 
-        CURRENT_USER.un = resObj['sk'];
-        if (! resObj['em'])
-          throwError("No email set for username: " + resObj['sk']);
+    } catch (error) {
 
-        CURRENT_USER.em = resObj['em'];
-
-        CURRENT_USER.ws = (resObj['ws']) ? resObj['ws']: null;
-        CURRENT_USER.ab = (resObj['ab']) ? resObj['ab'] : null;
-
-        CURRENT_USER.zp = (resObj['zp'] && resObj['zp'] != '0') ? resObj['zp'] : 0;
-        CURRENT_USER.zr = (resObj['zr'] && resObj['zr'] != '0') ? resObj['zr'] : 0;
-
-        // TRADES SUBSCRIPTIONS
-        CURRENT_USER.sb =  (resObj['sb']) ? resObj['sb'].split(',').map(element=>element.trim()) : [];
-
-        // USER BADGES
-        CURRENT_USER.bg =  (resObj['bg']) ? resObj['bg'].split(',').map(element=>parseInt(element.trim())) : [];
-
-        // 1/2024
-        // SQUARE STATUS
-        CURRENT_USER.sq_st = (resObj['sq_st']) ? resObj['sq_st'] : null;
-
-      } catch (error) {
-
-        printError( "getUser", error.message );
-        throwError( "initUser", error); // !!!
-      }
-
-      // save modified CURRENT_USER to session storage
-      saveCacheUser( CURRENT_USER );
+      printError( "getUser", error.message );
+      throwError( "initUser", error); // !!!
     }
-    
-    // console.log("%cuser.initUser(): " + CURRENT_USER.un, "color:darkorange");
+
+    // save modified CURRENT_USER to session storage
+    saveCacheUser( CURRENT_USER );
+
+  
+   // console.log("%cuser.initUser(): " + CURRENT_USER.un, "color:darkorange");
+
   }
 
 
 
-
-
-/**
- * create an empty JSON-compatible user object
- * 
- * 
- * 
- *  "cr": "dave.reyes",
-    "sb": [ "airbrush", "caricatures", "martial arts"],
-    "zp": "93551",
-    "zr": "50", 
-    "ab": "I am a caricature artist in LA",
-    "ws": "http://doctorreyes.com",
-    "id": "0",
-    "lp": ["2005", "1005", "3001"],
-    "bg":["1", "2", "4"],
-    "em": "wizzardblitz@netzero.net", 
-    "tn": "user#dave.reyes"
-    }
- *
- */
-export function blankUserObject() {
-  
-  const BLANK_USER = new Object();
-  
-  BLANK_USER.un = null;
-  BLANK_USER.em = null;
-  BLANK_USER.ws = null;
-  BLANK_USER.ab = null
-
-  BLANK_USER.zp = 0;
-  BLANK_USER.zr = 0;
-
-  BLANK_USER.sb = [];
-  BLANK_USER.bg = [];
-
-  // 1/2024 SQUARE STATUS
-  BLANK_USER.sq_st = null;
-
-  return BLANK_USER;
-}
 
 
 

@@ -257,6 +257,13 @@ def lambda_handler(event, context):
         # generated in authorization link sent during sign-up
         state = validateParam(event, 'state', TRUE)
 
+
+        # connect to DynamoDB
+        #
+        dynamodb_client = boto3.resource("dynamodb")
+        table = dynamodb_client.Table('Leedz_DB')
+        
+        
         # LEEDZ_USER
         # reverse-lookup from state-->Leedz username
         the_user = getLeedzUser( table, state )
@@ -274,12 +281,6 @@ def lambda_handler(event, context):
         # will throw exception
         checkForCookie(event, state, FALSE)
         
-        
-    
-        # connect to DynamoDB
-        #
-        dynamodb_client = boto3.resource("dynamodb")
-        table = dynamodb_client.Table('Leedz_DB')
     
             
     

@@ -285,14 +285,10 @@ export async function reloadCurrentUser() {
       let the_user = getCurrentUser( true );
       if (! the_user.un) throwError("reloadCurrentUser", "No current user found");
 
-      await initUser( the_user.un ).then(data => {
-      
-        return getCurrentUser(false);
+      await initUser( the_user.un );
 
-    }).catch (error => {
-        throw error;
-    });
-    
+      return getCurrentUser(false);
+
   } catch (error) {
     throw error;
   }

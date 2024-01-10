@@ -315,13 +315,11 @@
 
 			waitCursor();
 
-
 			await reloadCurrentUser()
             .then(data => {
     
-			
               CURRENT_USER = data;
-			  console.log(CURRENT_USER);
+			  console.log(CURRENT_USER)
     
             })
             .catch(error => {

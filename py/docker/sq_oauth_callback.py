@@ -449,16 +449,16 @@ def getLeedzUser( table, sq_st ) :
         )
 
     
-        # logger.info("GOT RESPONSE!")
-        # logger.info(response['Item'])
+        logger.info("GET LEEDZ USER GOT RESPONSE!")
+        logger.info(response)
         
     
-        if ('Item' not in response):
+        if (('Items' not in response) or len(response['Items'] == 0):
             msg = "OAuth Error. Leedz user not found: " + sq_st
             raise ValueError(msg)
             
         else:
-            the_user = response['Item']
+            the_user = response['Items'][0]
             return the_user
     
     

@@ -299,7 +299,7 @@
 		import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
 		import { inlineEdit } from "./js/inline-edit.js";
 		import { clearCurrentLeed } from "./js/leed.js";
-		import { isSubscribed, saveUserChanges, reloadCurrentUser, deleteCurrentUser } from "./js/user.js";
+		import { isSubscribed, saveUserChanges, getCurrentUser, reloadCurrentUser, deleteCurrentUser } from "./js/user.js";
 		import { printError, errorModal, throwError } from "./js/error.js";
 		import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 		import { turnTrade_On, turnTrade_Off, getAllTrades, createTradesAndColors } from "./js/trades.js";
@@ -315,10 +315,13 @@
 
 			waitCursor();
 
+
 			await reloadCurrentUser()
             .then(data => {
     
+			
               CURRENT_USER = data;
+			  console.log(CURRENT_USER);
     
             })
             .catch(error => {

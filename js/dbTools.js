@@ -513,7 +513,8 @@ export async function db_getDeetz( user_name, trade_name, leed_id, leed_op ) {
         searchParams.append( USERNAME_URL_PARAM, user_name );
         searchParams.append( TRADE_NAME_URL_PARAM, trade_name );
         searchParams.append( LEED_ID_URL_PARAM, leed_id );
-        
+        theURL.search = searchParams.toString();
+
         // options go in headers
         const headers = { OPTIONS_URL_PARAM: leed_op };
 
@@ -647,7 +648,8 @@ async function doGet(theUrl) {
  *
  */
 async function doGetHeaders(theUrl, new_headers) {
-    const headers = {
+    
+    let headers = {
         'Content-Type': 'application/json',
         'Connection': 'close'
     };
@@ -659,7 +661,7 @@ async function doGetHeaders(theUrl, new_headers) {
     return fetch(theUrl, {
         method: 'GET',
         headers: headers,
-        timeout: "8000"
+        timeout: "10000"
     }).then(response => {
         if (!response.ok) {
             console.log(response);

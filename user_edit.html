@@ -315,8 +315,16 @@
 
 			waitCursor();
 
-			CURRENT_USER = reloadCurrentUser();
-			console.log(CURRENT_USER)
+			await reloadCurrentUser()
+            .then(data => {
+    
+              CURRENT_USER = data;
+    
+            })
+            .catch(error => {
+				throwError("Reload current user", error.message);
+            });
+
 		
 			if ( ! CURRENT_USER.un ) {
 				printError("User Edit", "No user currently logged in");

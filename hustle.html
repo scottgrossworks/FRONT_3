@@ -492,7 +492,7 @@
 
   <script type="module" charset=”utf-8″>
 
-    import { getUserLogin,initUser, guestUser, getCurrentUser, saveCurrentUser, isGuestUser, isSubscribed } from "./js/user.js";      
+    import { getUserLogin,initUser, guestUser, getCurrentUser, saveCurrentUser, reloadCurrentUser, isGuestUser, isSubscribed } from "./js/user.js";      
     import { initTrades } from "./js/trades.js";   
     import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
@@ -1583,20 +1583,36 @@ async function mainPageLoad( current_user ) {
 // <body onload=" window.open(...)">
 window.onload = async function() {
 
+  
   let current_user; 
   const userLogin = {};
-  
-  try {
-
-    getUserLogin( userLogin );
-
-    console.log("GOT NEW USER LOGIN");
-    console.log(userLogin);
-
     
-    // ARE THERE COGNITO LOGIN CREDENTIALS IN URL?
-    // load the leedz user profile matching the cognito login creds
-    if (userLogin['un']) {
+    try {
+
+      getUserLogin( userLogin );
+
+      console.log("GOT NEW USER LOGIN");
+      console.log(userLogin);
+
+      if (! userLogin['un']) {
+          // 
+          // !! REDIRECT TO LOGIN URL
+          //
+          window.open(URL_LOGIN, "_self");
+          return;
+      }
+
+
+    } catch (err) {
+        var msg = "Cannot log into the Leedz.";
+        msg = err.message + "<BR>" + msg + "<BR>Using guest account.";
+        printError("Leedz Login", msg);
+        errorModal( msg , false );
+        
+        // DO NOT FAIL
+        // ! USE GUEST USER
+        current_user = guestUser();   
+    }
 
 
       // is this a reload of the current user?  
@@ -1605,37 +1621,34 @@ window.onload = async function() {
       // window.localStorage.getItem(COGNITO_KEY);
       // window.localStorage.setItem(COGNITO_KEY, loginTokens["access_token"]);
 
-      // init a new user
-      await initUser( userLogin['un'] ); // will throw error
 
-      // return newly-loaded user
-      current_user = getCurrentUser( false );
-
-    } else {
-
-      // 
-      // !! REDIRECT TO LOGIN URL
-      //
-      window.open(URL_LOGIN, "_self");
-      return;  
-      // might throw Exception
-      // current_user = reloadCurrentUser();
-
+      if (isGuestUser(false)) {
+        try {
+          await initUser( userLogin['un'] ); // will throw error
+    
+          // return newly-loaded user
+          current_user = getCurrentUser( false );
+    
+    
+        } catch (error) {
+    
+          var msg = "Cannot load user data.<BR>Using guest account.";
+          msg = error + "<BR>" + msg;
+          printError("Leedz Login", msg);
+          errorModal( msg , false );
+    
+          // DO NOT FAIL
+          // ! USE GUEST USER
+          current_user = guestUser();   
+    
+        }
+      }
+    
+      // LOAD the page with the current user info
+      mainPageLoad( current_user );
     }
-
-  } catch (err) {
-      // 
-      // !! REDIRECT TO LOGIN URL
-      //
-      window.open(URL_LOGIN, "_self");
-      return;  
-  }
-
-    // no errors?
-    // LOAD the page with the current user info
-    mainPageLoad( current_user );
-}
-
+    
+    
 
 
   /**

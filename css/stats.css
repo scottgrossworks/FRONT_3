@@ -51,6 +51,8 @@ body {
 
 
 #page_title {
+  
+  line-height:150%;
   width: auto;
   max-width: 0%;
   white-space: nowrap;
@@ -74,11 +76,27 @@ body {
   color:white;
 }
 
+
+
+
+
+@media screen and (min-width: 650px) {
+
+
+  #links_header a {
+    font-size: large;
+  }
+
+}
+
+
+
+
 .login_col {
     display: flex;
     justify-content: left;
     margin: auto;
-    padding-right:25px;
+    padding-right:30px;
     
 }
 
@@ -118,7 +136,7 @@ body {
   flex-basis: 180px;
   min-width: 300px;
   height:fit-content;
-  min-height: 130px;
+  min-height: 150px;
 
 
   box-sizing: border-box; /* Add box-sizing property */
@@ -205,12 +223,16 @@ a {
 }
 
 
+
 #leedz_live table {
 
   margin-left:1vw;
   padding:1vw 2vw 1vw 2vw;
-  line-height: 3vh;
+  line-height: 175%;
 }
+
+
+
 
 
 #loginButton {
@@ -267,14 +289,11 @@ a#date_bought_3 {
 }
 
 
-.item #last_sale {
-  max-height:fit-content;
-}
 
 #last_sale table {
   font-size:medium;
   padding: 1vw 2vw 2vw 2vw;
-  line-height: 3.25vh;
+  line-height: 175%;
 }
 
 
@@ -388,6 +407,8 @@ a#date_bought_3 {
 
 
 #leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span {
+      vertical-align: middle;
+      margin:auto 0;
       font-size:medium;
       line-height: 115%;
     }

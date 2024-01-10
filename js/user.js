@@ -76,8 +76,7 @@ export function getUserLogin( userLogin ) {
     if ("id_token" in loginTokens) {
       
       decodeJWT(loginTokens["id_token"], userLogin);
-
-
+      userLogin['id_token'] = loginTokens['id_token'];
 
     } else {
       var msg = "Cannot decode JWT ID token";
@@ -90,7 +89,7 @@ export function getUserLogin( userLogin ) {
     // will not get here if there is no ID token validation
     //
     if ("access_token" in loginTokens) {
-      window.localStorage.setItem(COGNITO_KEY, loginTokens["access_token"]);
+      userLogin['access_token'] = loginTokens['access_token']; 
     }
 
 

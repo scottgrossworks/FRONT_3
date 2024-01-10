@@ -1590,13 +1590,21 @@ window.onload = async function() {
 
     getUserLogin( userLogin );
 
-    console.log("GOT USER LOGIN");
+    console.log("GOT NEW USER LOGIN");
     console.log(userLogin);
 
+    
     // ARE THERE COGNITO LOGIN CREDENTIALS IN URL?
     // load the leedz user profile matching the cognito login creds
     if (userLogin) {
 
+
+      // is this a reload of the current user?  
+      // FIXME 
+      // window.localStorage.getItem(COGNITO_KEY);
+      // window.localStorage.setItem(COGNITO_KEY, loginTokens["access_token"]);
+
+      // init a new user
       await initUser( userLogin['un'] ); // will throw error
 
       // return newly-loaded user
@@ -1604,8 +1612,13 @@ window.onload = async function() {
 
     } else {
 
+      // 
+      // !! REDIRECT TO LOGIN URL
+      //
+      window.open(URL_LOGIN, "_self");
+      return;  
       // might throw Exception
-      current_user = reloadCurrentUser();
+      // current_user = reloadCurrentUser();
 
     }
 

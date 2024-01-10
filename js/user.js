@@ -287,7 +287,7 @@ export async function reloadCurrentUser() {
 
       await initUser( the_user.un ).then(data => {
       
-      return getCurrentUser(false);
+        return getCurrentUser(false);
 
     }).catch (error => {
         throw error;
@@ -385,7 +385,7 @@ export async function initUser( login ) {
     // save modified CURRENT_USER to session storage
     saveCacheUser( CURRENT_USER );
 
-  
+    return CURRENT_USER;
    // console.log("%cuser.initUser(): " + CURRENT_USER.un, "color:darkorange");
 
   }

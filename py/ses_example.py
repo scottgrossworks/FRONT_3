@@ -15,8 +15,8 @@ def seller_ReceiptEmail( the_leed, the_buyer, the_seller ):
 
 
     # The email body for recipients with non-HTML email clients
-    BODY_TEXT = ("Congratulations, you sold a Leed!" +
-                "\r\n" + 
+    BODY_TEXT = ("Congratulations, you sold a Leed!"
+                + "\r\n" + 
                 leed_info
                 + "\r\n" + 
                 "Buyer: " + the_buyer['sk'] + " - " + the_buyer['em']

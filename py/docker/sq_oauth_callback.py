@@ -92,6 +92,29 @@ def validateHeader( event, header, required ):
 
 
 
+
+
+
+#
+# 
+# 
+def handle_success( msg, un, expires_at ) :
+    
+    result = {  
+        "cd" : 1,
+        "msg" : msg,
+        "un":un,
+        "sq_ex": expires_at
+        }
+
+    logger.info(result)
+    
+    the_json = json.dumps( result )
+    return createHttpResponse( the_json )
+    
+
+
+
     
     
 #
@@ -106,11 +129,39 @@ def handle_error( err ):
     
     long_msg = "Error receiving Square authorization.  " + err_msg + ".  Please report this error at theleedz.com@gmail.com"
 
-    ret_obj = { "cd" : 0,
+    result = { "cd" : 0,
                 "er" : long_msg }
 
-    return ret_obj
     
+    the_json = json.dumps( result )
+    return createHttpResponse( the_json )
+    
+
+
+
+
+
+
+
+#
+# Create the HTTP response object
+#
+#
+def createHttpResponse( result ):
+   
+    response = {
+        'statusCode': 200,
+        'body': result,
+        'headers': {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+            },
+    }
+    # logger.info("RETURNING RESPONSE")
+    # logger.info(response)
+    
+    return response
 
 
 
@@ -145,6 +196,9 @@ def convert( src ):
 def generateFernetKey( txt_src ) :
     seed = convert( txt_src )        
     return base64.urlsafe_b64encode( seed )
+
+
+
 
 
 
@@ -185,7 +239,6 @@ def generateFernetKey( txt_src ) :
 
 def lambda_handler(event, context):
 
-    result = ""
     TRUE = 1
     FALSE = 0
     
@@ -204,127 +257,123 @@ def lambda_handler(event, context):
         # generated in authorization link sent during sign-up
         state = validateParam(event, 'state', TRUE)
 
+        # LEEDZ_USER
+        # reverse-lookup from state-->Leedz username
+        the_user = getLeedzUser( table, state )
+
+
+        # QUICK CHECK -- are we already authorized?
+        # Is this a quick-duplicate call?
+        if (the_user['sq_st'] == 'authorized'):
+            return handle_success( 'authorized', the_user['sk'], the_user['sq_ex'])
+            
 
         # COOKIE
-        # 
-        # get the auth state cookie to compare with the state that is in the callback
-        cookie_state = ''
-        cookie = validateHeader(event, 'cookie', FALSE)
-
-        if cookie:
-            c = cookies.SimpleCookie(cookie)
-            cookie_state = c['OAuthState'].value
+        # FIXME FIXME FIXME -- are we ever going to get that cookie?
+        # 1/9 not getting the cookie at all
+        # will throw exception
+        checkForCookie(event, state, FALSE)
+        
+        
+    
+        # connect to DynamoDB
+        #
+        dynamodb_client = boto3.resource("dynamodb")
+        table = dynamodb_client.Table('Leedz_DB')
+    
             
-            # ERROR
-            # cookie state fron web client either NULL or doesn't match param state
-            if (not cookie_state) or (state != cookie_state):
-                raise ValueError("Authorization failed: invalid auth state")
-        else:
-            logger.info("NO COOKIE RECEIVED")
-            
-            #
-            # FIXME FIXME FIXME -- are we ever going to get that cookie?
-            #
-                
     
         # RESPONSE TYPE
         # 
         # look for 'code' indicating refresh/access tokens
         #
         response_type = validateParam(event, "response_type", TRUE)
-  
         if (response_type == 'code'):
-            # authorization to trade for tokens
-            auth_code = validateParam(event, "code", TRUE)   
-
-            # TOKEN EXCHANGE
-            #
-            app_ID = validateEnviron('sq_app_id', TRUE)
-            app_secret = validateEnviron('sq_app_secret', TRUE)
-            environment = validateEnviron('sq_environ', FALSE)
-            if not environment:
-                environment = "sandbox"
-            
-            # calls Square client to make special POST req to Square
-            the_response = exchange_oauth_tokens( environment, auth_code, app_ID, app_secret )
-
-            # DEBUG
-            logger.info(the_response)
-            
-            
-            
-            
-            #
-            # ERROR
-            #
-            if (the_response['errors']):
-               
-                err_type = the_response['errors']['category'] + ':' + the_response['errors']['code']
-                err_msg = err_type + ' -- ' + the_response.body['detail']
-                logger.error( err_msg )
-                raise ValueError( err_msg )
-  
-                
-            else :
-                
-                access_token = the_response.body['access_token'].encode('ASCII')
-                refresh_token = the_response.body['refresh_token'].encode('ASCII')
-                expires_at = the_response.body['expires_at']
-                merchant_id = the_response.body['merchant_id']
-                
-                
-                # connect to DynamoDB
-                #
-                dynamodb_client = boto3.resource("dynamodb")
-                table = dynamodb_client.Table('Leedz_DB')
-                
-                # reverse-lookup from state-->Leedz username
-                un = getLeedzUser( table, state )
-                
-                
-                # 1/2024 TODO FERNET ENCRYPT TOKENS 
-                # encrypt the refresh_token and access_token before save to db
-                # TOKEN ENCRYPT KEY WILL BE USERNAME
-                # 
-                # sq_rt = encrypted_refresh_token = encryptToken( un, refresh_token )
-                # sq_at = encrypted_access_token = encryptToken( un, access_token )
-
-                if not expires_at:
-                    expires_at = '0'
-                
-                saveTokensToDB( table, un, access_token, merchant_id, refresh_token, 'authorized', int(expires_at) )
-
-                result = {  
-                            "cd" : 1,
-                            "msg" : "authorized",
-                            "sq_ex": expires_at,
-                            "merchant_id" : merchant_id
-                          }
-
-            
          
-  
+            return doTokenExchange(table, event, the_user)
+        
+         
         # ERROR
         #
         else:
-            err_param = validateParam(event, 'error', 0)
-            if (err_param):
-                err_type = "Authorization Error [" + err_param + "]: "
-                err_desc = validateParam(event, 'error_description', 0)
-                raise ValueError( err_type + err_desc )
+            logger.error("RESPONSE_TYPE=" + response_type)
+            
+            if (event['errors']):
+                err_type = event['errors']['category'] + ':' + event['errors']['code']
+                err_msg = err_type + ' -- ' + event['errors']['detail']
+                logger.error( err_msg )
+                raise ValueError( err_msg )
+  
+            else:
+                err_msg = "Unknown Square OAuth response: " + response_type
+                logger.error( err_msg )
+                raise ValueError( err_msg ) 
             
   
-  
+    # CATCH EVERYTHING
     except Exception as e:
+        return handle_error( str(e) )
         
-        result = handle_error( str(e) )
-        
-        
-    finally:    
-        
-        the_json = json.dumps( result )
-        return createHttpResponse( the_json )
 
+
+
+
+
+
+#
+# SQUARE TOKEN EXCHANGE
+# ---> auth code 
+# access/refresh tokens <---
+#
+def doTokenExchange(table, event, the_user):
+    
+    TRUE = 1
+    FALSE = 0
+    
+    # authorization to trade for tokens
+    auth_code = validateParam(event, "code", TRUE)   
+
+    # TOKEN EXCHANGE
+    #
+    app_ID = validateEnviron('sq_app_id', TRUE)
+    app_secret = validateEnviron('sq_app_secret', TRUE)
+    environment = validateEnviron('sq_environ', FALSE)
+    if not environment:
+        environment = "sandbox"
+    
+    #
+    # calls Square client to make special POST req to Square
+    #
+    the_response = exchange_oauth_tokens( environment, auth_code, app_ID, app_secret )
+
+    # DEBUG
+    logger.info(the_response)
+    
+
+    access_token = the_response.body['access_token'].encode('ASCII')
+    refresh_token = the_response.body['refresh_token'].encode('ASCII')
+    expires_at = the_response.body['expires_at']
+    merchant_id = the_response.body['merchant_id']
+    
+    
+    
+    # 1/2024 TODO FERNET ENCRYPT TOKENS 
+    # encrypt the refresh_token and access_token before save to db
+    # TOKEN ENCRYPT KEY WILL BE USERNAME
+    # 
+    # sq_rt = encrypted_refresh_token = encryptToken( un, refresh_token )
+    # sq_at = encrypted_access_token = encryptToken( un, access_token )
+
+    if not expires_at:
+        expires_at = '0'
+    
+    saveTokensToDB( table, the_user['sk'], access_token, merchant_id, refresh_token, 'authorized', int(expires_at) )
+
+    return handle_success( 'authorized', the_user['sk'], the_user['sq_ex'])
+        
+        
+        
+        
 
 
 
@@ -362,8 +411,33 @@ def exchange_oauth_tokens(env, code, id, secret):
 
 
 
+
+
+# COOKIE
+# 
+# get the auth state cookie to compare with the state that is in the callback
+# will throw Exception on error
 #
+def checkForCookie( event, state, required ) :
+ 
+    cookie_state = ''
+    cookie = validateHeader(event, 'cookie', required)
+
+    if cookie:
+        c = cookies.SimpleCookie(cookie)
+        cookie_state = c['OAuthState'].value
+        
+        # ERROR
+        # cookie state fron web client either NULL or doesn't match param state
+        if (not cookie_state) or (state != cookie_state):
+            raise ValueError("Authorization failed: invalid auth state")
+    else:
+        logger.info("NO COOKIE RECEIVED")
+    
+            
+
 #
+# return entire user object
 #
 def getLeedzUser( table, sq_st ) :
     
@@ -383,9 +457,8 @@ def getLeedzUser( table, sq_st ) :
             raise ValueError(msg)
             
         else:
-            result = response['Item']
-            # sort key of GSI will be Leedz username
-            return result['sk']
+            the_user = response['Item']
+            return the_user
     
     
     except Exception as err:
@@ -466,26 +539,3 @@ def saveTokensToDB( table, un, sq_at, sq_id, sq_rt, sq_st, sq_ex ) :
 
 
 
-
-
-
-
-#
-# Create the HTTP response object
-#
-#
-def createHttpResponse( result ):
-   
-    response = {
-        'statusCode': 200,
-        'body': result,
-        'headers': {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-            },
-    }
-    # logger.info("RETURNING RESPONSE")
-    # logger.info(response)
-    
-    return response

@@ -1596,11 +1596,12 @@ window.onload = async function() {
     
     // ARE THERE COGNITO LOGIN CREDENTIALS IN URL?
     // load the leedz user profile matching the cognito login creds
-    if (userLogin) {
+    if (userLogin['un']) {
 
 
       // is this a reload of the current user?  
       // FIXME 
+      // userLogin['access_token']
       // window.localStorage.getItem(COGNITO_KEY);
       // window.localStorage.setItem(COGNITO_KEY, loginTokens["access_token"]);
 

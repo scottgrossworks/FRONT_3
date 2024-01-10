@@ -66,7 +66,9 @@ export function getUserLogin( userLogin ) {
 
     const loginTokens = parseWindowURL();
 
-    if (! loginTokens) return;
+    if (! loginTokens) {
+      return;
+    }
 
     console.log("GOT TOKENS!!!");
     console.log(loginTokens);

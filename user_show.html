@@ -445,7 +445,7 @@ function showUserBadges( element, badges ) {
     try {
     // get the user object
         await db_getUser( username )
-        .then(data => {
+        .then((data) => {
     
             if (data == null) throw new Error("null response from GET");
             
@@ -486,9 +486,8 @@ function showUserBadges( element, badges ) {
     
     } catch (error) {
 
-        printError( "db_getUser", error.message );
-        throwError( "initShowUser", error); 
-        return false;
+        printError( "showUser", error.message );
+        throw error;
     }
 
     return true;

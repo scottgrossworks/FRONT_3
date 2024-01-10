@@ -338,7 +338,7 @@
             try {
         
                 await db_getDeetz( CURRENT_USER.un, leed_preview.tn, leed_preview.id, SHOW_ALL_OPTS )
-                    .then(data => {
+                    .then((data) => {
         
                         if (! data) throw new Error("null response from GET");
                         const leed_details = data;

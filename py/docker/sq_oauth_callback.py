@@ -280,6 +280,9 @@ def lambda_handler(event, context):
         verifyUserState(state, the_user)
         
         
+        logger.info("VERIFIED!")
+        logger.info(event)
+        
         # COOKIE
         # FIXME FIXME FIXME -- are we ever going to get that cookie in header?
         # 1/9 not getting the cookie at all
@@ -423,6 +426,8 @@ def exchange_oauth_tokens(env, code, id, secret):
 # does state == the_user['sq_st']
 #
 def verifyUserState(state, the_user) :
+    
+    print("VERIFY USER STATE=" + state)
     
     if (the_user['sq_st'] != state) :
         msg = "Cannot validate OAuth request state.  " + the_user['sq_st'] + " != " + state

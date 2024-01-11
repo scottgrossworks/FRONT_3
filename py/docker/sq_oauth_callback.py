@@ -47,7 +47,7 @@ def validateEnviron( var, required ):
     
     
     
-    
+
         
 
 #   
@@ -56,7 +56,7 @@ def validateEnviron( var, required ):
 #
 def validateParam( event, param, required ):
     
-    if (required and 'queryStringParameters' not in event):
+    if ('queryStringParameters' not in event):
         raise ValueError("Http Request error.  No query string parameters found")
     
     value = ""
@@ -78,10 +78,17 @@ def validateParam( event, param, required ):
 #
 def validateHeader( event, header, required ):
     
+    
     value = ""
     
-    if ('headers' not in event) or (header not in event['headers']):
-        logger.info("CANNOT FIND HEADERS!")
+    if ('headers' not in event):
+        if (required):
+            raise ValueError("Http Request error.  No headers found")
+    else:
+        return value
+    
+    
+    if (header not in event['headers']):
         if required:
             raise ValueError("HTTP Request error.  No '" + header + "' header")
     else:
@@ -118,16 +125,18 @@ def handle_success( msg, un, expires_at ) :
     
     
 #
-#
-#
+# return 200 respone with leedz error code to Square server
+# log error
 #
 def handle_error( err ):
     
-    err_msg = str( err )
+    err_type = type(err)
+    err_args = err.args
+    err_msg = "[ " + err_type + " ] ( " + err_args + " ) : " + str(err)
     
     logger.error(err_msg)
     
-    long_msg = "Error receiving Square authorization.  " + err_msg + ".  Please report this error at theleedz.com@gmail.com"
+    long_msg = "Error receiving Square seller authorization.  " + err_msg + ".  Please report this error at theleedz.com@gmail.com"
 
     result = { "cd" : 0,
                 "er" : long_msg }
@@ -272,6 +281,7 @@ def lambda_handler(event, context):
         # QUICK CHECK -- are we already authorized?
         # Is this a quick-duplicate call?
         if (the_user['sq_st'] == 'authorized'):
+            # RETURN
             return handle_success( 'authorized', the_user['sk'], the_user['sq_ex'])
             
 
@@ -284,7 +294,7 @@ def lambda_handler(event, context):
         logger.info(event)
         
         # COOKIE
-        # FIXME FIXME FIXME -- are we ever going to get that cookie in header?
+        # 
         # 1/9 not getting the cookie at all
         # will throw exception
         # checkForCookie(event, state, FALSE)
@@ -295,16 +305,15 @@ def lambda_handler(event, context):
         # look for 'code' indicating refresh/access tokens
         #
         response_type = validateParam(event, "response_type", TRUE)
+        logger.info("RESPONSE_TYPE=" + response_type)
         if (response_type == 'code'):
-         
-            return doTokenExchange(table, event, the_user)
-        
+            doTokenExchange(table, event, the_user)
+            return handle_success( 'authorized', the_user['sk'], the_user['sq_ex'])
+
          
         # ERROR
         #
         else:
-            logger.error("RESPONSE_TYPE=" + response_type)
-            
             if (event['errors']):
                 err_type = event['errors']['category'] + ':' + event['errors']['code']
                 err_msg = err_type + ' -- ' + event['errors']['detail']
@@ -319,7 +328,7 @@ def lambda_handler(event, context):
   
     # CATCH EVERYTHING
     except Exception as e:
-        return handle_error( str(e) )
+        return handle_error( e )
         
 
 
@@ -353,33 +362,42 @@ def doTokenExchange(table, event, the_user):
     #
     the_response = exchange_oauth_tokens( environment, auth_code, app_ID, app_secret )
 
+
     # DEBUG
+    logger.info(" !!! GOT AUTH TOKENS !!!! ")
     logger.info(the_response)
-    
 
-    access_token = the_response.body['access_token'].encode('ASCII')
-    refresh_token = the_response.body['refresh_token'].encode('ASCII')
-    expires_at = the_response.body['expires_at']
-    merchant_id = the_response.body['merchant_id']
-    
-    
-    
-    # 1/2024 TODO FERNET ENCRYPT TOKENS 
-    # encrypt the refresh_token and access_token before save to db
-    # TOKEN ENCRYPT KEY WILL BE USERNAME
-    # 
-    # sq_rt = encrypted_refresh_token = encryptToken( un, refresh_token )
-    # sq_at = encrypted_access_token = encryptToken( un, access_token )
 
-    if not expires_at:
-        expires_at = '0'
-    
-    saveTokensToDB( table, the_user['sk'], access_token, merchant_id, refresh_token, 'authorized', int(expires_at) )
+    #
+    # Contains access_token or it's an ERROR
+    #
+    if ('token_type' in the_response.body and the_response.body['token_type'] == 'bearer') :
 
-    return handle_success( 'authorized', the_user['sk'], the_user['sq_ex'])
+        logger.info("GOT ACCESS TOKEN!!!")
         
+        access_token = the_response.body['access_token']
+        refresh_token = the_response.body['refresh_token']
+        expires_at = the_response.body['expires_at']
+        merchant_id = the_response.body['merchant_id']
         
+        # 1/2024 TODO FERNET ENCRYPT TOKENS 
+        # encrypt the refresh_token and access_token before save to db
+        # TOKEN ENCRYPT KEY WILL BE USERNAME
+        # 
+        # sq_rt = encrypted_refresh_token = encryptToken( un, refresh_token )
+        # sq_at = encrypted_access_token = encryptToken( un, access_token )
+
+        if not expires_at:
+            expires_at = '0'
         
+        # will throw exception on failure
+        saveTokensToDB( table, the_user['sk'], access_token, merchant_id, refresh_token, 'authorized', int(expires_at) )
+
+    
+    else :
+        err_msg = "Error in OAuth token exchange.  Callback did not receive bearer token"
+        logger.error(err_msg)
+        raise Exception(err_msg)
         
 
 
@@ -394,27 +412,43 @@ def doTokenExchange(table, event, the_user):
 #
 def exchange_oauth_tokens(env, code, id, secret):
    
+    logger.info("STARTING OAUTH EXCHANGE....")
+    
     response = ""
     try:
         # initialize square oauth client
         square_client = Client(
             environment=env,
-            user_agent_detail='sq_oauth_callback'
+            user_agent_detail='sq_oauth_callback',
+            max_retries=3,
+            timeout=600
         )
         oauth_api = square_client.o_auth
+    
+        scopes = [ "ORDERS_WRITE", "ORDERS_READ", "PAYMENTS_WRITE" ]
     
         request_body = {}
         request_body['client_id'] = id
         request_body['client_secret'] = secret
+        request_body['scopes'] = scopes
         request_body['code'] = code
+        request_body['redirect_uri'] = "http://theleedz.com/hustle.html"
         request_body['grant_type'] = 'authorization_code'
         response = oauth_api.obtain_token( request_body )
 
-    except Exception as e:
-        response = handle_error( str(e) )
-
-    finally:    
+        logger.info("GOT OAUTH EXCHANGE")
+        logger.info( response )
+        
         return response
+    
+
+    except Exception as e:
+        err_str = str(e)
+        logger.error("Exception in exchange_oauth_tokens: "  + err_str)    
+        raise e
+
+
+
 
 
 
@@ -426,9 +460,6 @@ def exchange_oauth_tokens(env, code, id, secret):
 # does state == the_user['sq_st']
 #
 def verifyUserState(state, the_user) :
-    
-    print("VERIFY USER STATE=" + state)
-    
     if (the_user['sq_st'] != state) :
         msg = "Cannot validate OAuth request state.  " + the_user['sq_st'] + " != " + state
         logger.error( msg )
@@ -461,6 +492,10 @@ def checkForCookie( event, state, required ) :
     
             
 
+
+
+
+
 #
 # return entire user object
 # reverse lookuo in GSI_sq_st
@@ -473,8 +508,8 @@ def getLeedzUser(table, sq_st):
             KeyConditionExpression=Key('sq_st').eq(sq_st)
         )
 
-        logger.info("GET LEEDZ USER GOT RESPONSE!")
-        logger.info(response)
+        # logger.info("GET LEEDZ USER GOT RESPONSE!")
+        # logger.info(response)
 
         if 'Items' not in response or len(response['Items']) == 0:
             msg = "OAuth Error. Leedz user not found: " + sq_st
@@ -503,6 +538,7 @@ def getLeedzUser(table, sq_st):
 #
 def saveTokensToDB( table, un, sq_at, sq_id, sq_rt, sq_st, sq_ex ) :
    
+    logger.info("IN SAVE TOKENS!!!")
   
     expr = 'SET sq_at=:sq_at,sq_rt=:sq_rt,sq_st=:sq_st,sq_ex=:sq_ex'
     vals = {
@@ -541,20 +577,19 @@ def saveTokensToDB( table, un, sq_at, sq_id, sq_rt, sq_st, sq_ex ) :
     
         if err.response['Error']['Code'] == 'ConditionalCheckFailedException':
             msg = 'Token Save Error.  User not found: ' + un + ' merchant ID: ' + sq_id
-            response = handle_error( msg )
+            logger.error(msg)
+            raise Exception(msg)
             
         else:
             msg = "Token save error: " + str(err) + ' merchant ID: ' + sq_id
-            response = handle_error( msg )
+            logger.error(msg)
+            raise Exception(msg)
     
     except Exception as error:
         
         msg = "Token Save Error: " + str(error) + ' merchant ID: ' + sq_id
-        response = handle_error( msg )
-  
-  
-    return response
-  
+        logger.error(msg)
+        raise Exception(error)
   
 
 

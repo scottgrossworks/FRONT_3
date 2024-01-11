@@ -311,6 +311,12 @@
 		var EDITING = false;
 		let CURRENT_USER;
 
+
+		// FIXME FIXME FIXME
+		// onload from Square -- some sort of indication that user is authorized
+		// either modal or green alert bar
+		//
+
 		try {
 
 			waitCursor();
@@ -446,7 +452,7 @@ async function initSquareButton() {
 				// ALL GOOD!
 				// show AUTHORIZED
 				//
-				sq_msg.innerText = "Authorized! Click to change";
+				sq_msg.innerText = "Authorized to sell!";
 				
 				// REVOKE Square Authorization
 				// requires AUTH token -- must be done by AWS Lambda
@@ -455,7 +461,7 @@ async function initSquareButton() {
 				let sq_button = document.getElementById("sq_auth_auth_button");
 				sq_button.addEventListener("click", function( event ) {
 					// takes user --> Square to authorize account
-					window.open( "./user_delete_confirm.html", "_self ");
+					window.open( "./user_delete_confirm.html", "_top");
 			
 				});
   
@@ -473,7 +479,7 @@ async function initSquareButton() {
 				let sq_button = document.getElementById("sq_auth_url_button");
 				sq_button.addEventListener("click", function( event ) {
 					// takes user --> Square to authorize account
-					window.open( CURRENT_USER.sq_st, "_self ");
+					window.open( CURRENT_USER.sq_st, "_top");
 			
 				});
   
@@ -493,7 +499,7 @@ async function initSquareButton() {
 			}
 
 		
-			// ERROR
+		// ERROR
 		//
 		} catch (error) {
 		

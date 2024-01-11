@@ -126,12 +126,18 @@ def handle_success( msg, un, expires_at ) :
     
 #
 # return 200 respone with leedz error code to Square server
+# copy all the Exception fields and args into the message
 # log error
 #
 def handle_error( err ):
     
-    err_type = type(err)
-    err_args = err.args
+    err_type = str(type(err))
+    
+    if isinstance(err.args, tuple):
+        err_args = ', '.join(map(str, err.args))
+    else:
+        err_args = str(err.args)
+        
     err_msg = "[ " + err_type + " ] ( " + err_args + " ) : " + str(err)
     
     logger.error(err_msg)
@@ -361,38 +367,44 @@ def doTokenExchange(table, event, the_user):
     # calls Square client to make special POST req to Square
     #
     the_response = exchange_oauth_tokens( environment, auth_code, app_ID, app_secret )
+    if ('errors' in the_response.body) :
 
-
-    # DEBUG
-    logger.info(" !!! GOT AUTH TOKENS !!!! ")
-    logger.info(the_response)
+        err_cat = the_response.body['category']
+        err_code = the_response.body['code']
+        err_det = the_response.body['detail']               
+        err_msg = "Error in OAuth token exchange - " + err_cat + " (" + err_code + ") : " + err_det
+        logger.error(err_msg)
+        raise Exception(err_msg)
 
 
     #
     # Contains access_token or it's an ERROR
     #
-    if ('token_type' in the_response.body and the_response.body['token_type'] == 'bearer') :
+    elif ('token_type' in the_response.body and the_response.body['token_type'] == 'bearer') :
 
-        logger.info("GOT ACCESS TOKEN!!!")
-        
-        access_token = the_response.body['access_token']
-        refresh_token = the_response.body['refresh_token']
-        expires_at = the_response.body['expires_at']
-        merchant_id = the_response.body['merchant_id']
-        
-        # 1/2024 TODO FERNET ENCRYPT TOKENS 
-        # encrypt the refresh_token and access_token before save to db
-        # TOKEN ENCRYPT KEY WILL BE USERNAME
-        # 
-        # sq_rt = encrypted_refresh_token = encryptToken( un, refresh_token )
-        # sq_at = encrypted_access_token = encryptToken( un, access_token )
+        try: 
+            access_token = the_response.body['access_token']
+            refresh_token = the_response.body['refresh_token']
+            expires_at = the_response.body['expires_at']
+            merchant_id = the_response.body['merchant_id']
+            
+            # 1/2024 TODO FERNET ENCRYPT TOKENS 
+            # encrypt the refresh_token and access_token before save to db
+            # TOKEN ENCRYPT KEY WILL BE USERNAME
+            # 
+            # sq_rt = encrypted_refresh_token = encryptToken( un, refresh_token )
+            # sq_at = encrypted_access_token = encryptToken( un, access_token )
 
-        if not expires_at:
-            expires_at = '0'
+            if not expires_at:
+                expires_at = '0'
+            
+            # will throw exception on failure
+            saveTokensToDB( table, the_user['sk'], access_token, merchant_id, refresh_token, 'authorized', expires_at )
         
-        # will throw exception on failure
-        saveTokensToDB( table, the_user['sk'], access_token, merchant_id, refresh_token, 'authorized', int(expires_at) )
-
+        except Exception as e:
+            err_str = str(e)
+            logger.error("Error extracting tokens from response body: "  + err_str)    
+            raise e
     
     else :
         err_msg = "Error in OAuth token exchange.  Callback did not receive bearer token"
@@ -432,7 +444,7 @@ def exchange_oauth_tokens(env, code, id, secret):
         request_body['client_secret'] = secret
         request_body['scopes'] = scopes
         request_body['code'] = code
-        request_body['redirect_uri'] = "http://theleedz.com/hustle.html"
+        request_body['redirect_uri'] = "http://theleedz.com/user_edit.html"
         request_body['grant_type'] = 'authorization_code'
         response = oauth_api.obtain_token( request_body )
 

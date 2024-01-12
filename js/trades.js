@@ -184,27 +184,32 @@ function initTradesColumn( tradeListener ) {
     // clone a new node
     const newNode = theTemplate.content.cloneNode(true).querySelector(".each_trade");
   
+    // TRADES
+    // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
+    let the_trade = window.localStorage.getObj[sub];
+    
+    if (the_trade) {  // failsafe to avoid errors if a trade has been removed 
+
+      var num_leedz = the_trade[1];
+      // add num_leedz as an attribute
+      newNode.setAttribute("nl", num_leedz);
+      // set the leed count as a superscript
+      newNode.querySelector("sup").textContent = num_leedz;
+
+    } else {
+        return; // continue from top
+    }
+
+     
     // set the label
     let theLabel = newNode.querySelector("label");
     theLabel.textContent = sub;
 
 
-    // TRADES
-    // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
-    let num_leedz = window.localStorage.getObj(sub)[1];
-
-    // add num_leedz as an attribute
-    newNode.setAttribute("nl", num_leedz);
-
-    // set the leed count as a superscript
-    newNode.querySelector("sup").textContent = num_leedz;
-
-    
     let checkBox = newNode.querySelector(".trade_checkbox");
     let radioButton = newNode.querySelector(".trade_radio");
 
-    
-  
+     
     //
     // CHECKBOX CLICK LISTENER
     //
@@ -244,7 +249,6 @@ function initTradesColumn( tradeListener ) {
     // in a position sorted by num_leedz
     addTradeSorted( theList, newNode );
   });
-
 
 
 }

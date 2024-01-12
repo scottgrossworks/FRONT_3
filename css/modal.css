@@ -123,6 +123,12 @@
 }
 
 
+  #error_modal {
+
+    z-index:900;
+    border: 6px solid #f44336;
+
+  }
 
 
  
@@ -144,6 +150,13 @@
     font-size:medium;
   }
 
+  #error_modal {
+    top:5vh;    
+    height:70%!important;
+  }
+    
+
+
   #error_modal h1 {
     font-size: medium;
   }
@@ -156,12 +169,6 @@
 }
 
 
-#error_modal {
-
-  
-  z-index:900;
-  border: 6px solid #f44336;
-}
 
 
 

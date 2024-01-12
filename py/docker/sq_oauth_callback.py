@@ -107,7 +107,7 @@ def validateHeader( event, header, required ):
 # 
 def handle_success( msg, un ) :
     
-    result = "<!DOCTYPE html><html><head><meta http-equiv='refresh' content='0; URL=https://theleedz.com/user_edit.html'></head></html>"
+    result = "<!DOCTYPE html><html><head><meta http-equiv='refresh' content='0; URL=https://theleedz.com/user_edit.html?square=authorized'></head></html>"
     
     log_result = {  
         "cd" : 1,
@@ -287,8 +287,6 @@ def lambda_handler(event, context):
         # QUICK CHECK -- are we already authorized?
         # Is this a quick-duplicate call?
         if (the_user['sq_st'] == 'authorized'):
-            # RETURN
-            logger.info("USER IS AUTHORIZED")
             return handle_success( 'authorized', the_user['sk'])
             
 
@@ -296,9 +294,6 @@ def lambda_handler(event, context):
         # check state against user state
         verifyUserState(state, the_user)
         
-        
-        logger.info("VERIFIED!")
-        logger.info(event)
         
         # COOKIE
         # 
@@ -313,7 +308,7 @@ def lambda_handler(event, context):
         # will not appear on error
         #
         response_type = validateParam(event, "response_type", FALSE)
-        logger.info("RESPONSE_TYPE=" + response_type)
+        
         if (response_type == 'code'):
             doTokenExchange(table, event, the_user)
             return handle_success( 'authorized', the_user['sk'])
@@ -427,8 +422,6 @@ def doTokenExchange(table, event, the_user):
 #
 def exchange_oauth_tokens(env, code, id, secret):
    
-    logger.info("STARTING OAUTH EXCHANGE....")
-    
     response = ""
     try:
         # initialize square oauth client
@@ -451,7 +444,6 @@ def exchange_oauth_tokens(env, code, id, secret):
         request_body['grant_type'] = 'authorization_code'
         response = oauth_api.obtain_token( request_body )
 
-        logger.info("GOT OAUTH EXCHANGE")
         # logger.info( response )
         
         return response
@@ -523,7 +515,6 @@ def getLeedzUser(table, sq_st):
             KeyConditionExpression=Key('sq_st').eq(sq_st)
         )
 
-        # logger.info("GET LEEDZ USER GOT RESPONSE!")
         # logger.info(response)
 
         if 'Items' not in response or len(response['Items']) == 0:
@@ -552,8 +543,6 @@ def getLeedzUser(table, sq_st):
 # sq_ex = expires_at
 #
 def saveTokensToDB( table, the_user, sq_at, sq_id, sq_rt, sq_st, sq_ex ) :
-   
-    logger.info("IN SAVE TOKENS!!!")
   
     un = the_user['sk']
 

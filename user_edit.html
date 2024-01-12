@@ -59,12 +59,13 @@
 			</div>
 
 
+			<!-- SUCCES ALERT -->
 			<div id="alert_success" class="alert" style="display:none">
 				<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-				Account changes saved.
 			</div>
 
-			
+
+
 <section>
 
 	<BR>	
@@ -90,7 +91,7 @@
 
 					<tr id="row_login">
 					
-						<TD class="labelTD">Login &amp; Password: </TD>
+						<TD class="labelTD">Login: </TD>
 						
 						<td data-inlineType="text" data-inlineName="login"></td>
 		
@@ -112,7 +113,7 @@
 					-->
 					<tr id="row_payment">
 						
-						<TD class="labelTD">Payment Info: </TD>
+						<TD class="labelTD">Payment: </TD>
 
 						<TD style="width:80%"><div id="sq_msg"></div></TD>
 						
@@ -312,11 +313,6 @@
 		let CURRENT_USER;
 
 
-		// FIXME FIXME FIXME
-		// onload from Square -- some sort of indication that user is authorized
-		// either modal or green alert bar
-		//
-
 		try {
 
 			waitCursor();
@@ -340,6 +336,12 @@
 			}	
 
 
+			// coming from the Square OAuth?  Show success alert
+			if ( from_square_oauth() && (CURRENT_USER.sq_st == 'authorized') ) {
+				showSquareAuthorizedAlert();
+			}
+
+			
 			// this will take on any changes the user makes on the form
 			const USER_CHANGES = CURRENT_USER;
 
@@ -407,6 +409,26 @@
 
 
 
+/**
+ * Are we coming from the lambda function?
+ * look for the url param
+ */
+ function from_square_oauth() {
+	// Get the query string from the URL
+	const queryString = window.location.search;
+
+	// Create a new instance of URLSearchParams with the query string
+	const params = new URLSearchParams(queryString);
+
+	const from_square = params.get('square');
+	if (from_square) {
+		return (from_square == 'authorized');
+	} 
+	return false;
+}
+
+
+
 
 
 /**
@@ -423,6 +445,17 @@ function normalCursor() {
     document.body.style.cursor = 'default';
 }
 
+
+/**
+* SHOW THE SUCCESS ALERT
+*
+*/
+function showSquareAuthorizedAlert() {
+
+	let theAlert = document.getElementById("alert_success");
+	theAlert.innerHTML = "&iexcl; Success - ready to sell leedz !";
+	theAlert.style.display = "block";
+}
 
 
 /**
@@ -452,7 +485,7 @@ async function initSquareButton() {
 				// ALL GOOD!
 				// show AUTHORIZED
 				//
-				sq_msg.innerText = "Authorized to sell!";
+				sq_msg.innerText = "Account Authorized";
 				
 				// REVOKE Square Authorization
 				// requires AUTH token -- must be done by AWS Lambda
@@ -474,7 +507,7 @@ async function initSquareButton() {
 				// NEW USER
 				// show AUTHORIZATION LINK
 				//
-				sq_msg.innerText = "Authorize the Leedz";
+				sq_msg.innerText = "Get paid using Square";
 			
 				let sq_button = document.getElementById("sq_auth_url_button");
 				sq_button.addEventListener("click", function( event ) {
@@ -522,6 +555,8 @@ async function initSquareButton() {
 			normalCursor();
 		}
   }
+
+
 
 
 
@@ -821,6 +856,7 @@ function initTradesTable( all_trades, tradeListener ) {
 				saveUserChanges( USER_CHANGES );		
 		
 				let theAlert = document.getElementById("alert_success");
+				theAlert.innerHTML = "Account changes saved.";
 				theAlert.style.display = "block";
 
 			} catch ( error ) {

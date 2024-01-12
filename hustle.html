@@ -1317,7 +1317,7 @@ function initUserPanel(current_user) {
 
     if (isGuestUser(true)) {
       dot.style.backgroundColor = "darkorange";
-      user_href.style.backgroundColor = "darkorange";
+      user_href.style.color = "darkorange";
 
       dot.addEventListener( "click", (event) => {    
         openGuestWelcome();
@@ -1332,7 +1332,7 @@ function initUserPanel(current_user) {
     } else if (current_user.sq_st != 'authorized') {
 
       dot.style.backgroundColor = "coral";
-      user_href.style.backgroundColor = "var(--LEEDZ_GREEN)";
+      user_href.style.color = "var(--LEEDZ_GREEN)";
 
 
       dot.addEventListener( "click", (event) => {    
@@ -1348,7 +1348,7 @@ function initUserPanel(current_user) {
 
     } else { // authorized
       dot.style.backgroundColor = "var(--LEEDZ_GREEN)";
-      user_href.style.backgroundColor = "var(--LEEDZ_GREEN)";
+      user_href.style.color = "var(--LEEDZ_GREEN)";
 
 
       dot.addEventListener( "click", (event) => {    

@@ -570,7 +570,7 @@ def saveTokensToDB( table, the_user, sq_at, sq_id, sq_rt, sq_st, sq_ex ) :
         # new badges string
         expr += ',bg=:bg'
         new_bg = the_user['bg'] + ',5'
-        vals[':bg'] = new_bg
+        vals[':bg'] = new_bg    
         
 
     

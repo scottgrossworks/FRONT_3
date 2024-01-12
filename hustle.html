@@ -195,7 +195,7 @@
         -- NEW USER WELCOME MODAL 
         -- 
         -->
-        <div class="row modal info_modal modal_noclose" id="newUser_modal" style="display:none">
+        <div class="row modal info_modal modal_noclose" id="newUser_modal">
     
           <center><img class="info_logo" src="img/logo_2.png"></center> 
           <h1>
@@ -1282,7 +1282,7 @@ function trimAndRemoveSpaces(inputString) {
  */
   function modalClose( force ) {
 
-    // if (! force) errorModalClose();
+    if (! force) errorModalClose();
 
     // close all modal dialogs
     var modals = document.getElementsByClassName("info_modal");

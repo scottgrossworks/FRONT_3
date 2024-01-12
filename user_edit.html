@@ -494,6 +494,7 @@ async function initSquareButton() {
 				let sq_button = document.getElementById("sq_auth_auth_button");
 				sq_button.addEventListener("click", function( event ) {
 					// takes user --> Square to authorize account
+					waitCursor();
 					window.open( "./user_delete_confirm.html", "_top");
 			
 				});
@@ -512,6 +513,7 @@ async function initSquareButton() {
 				let sq_button = document.getElementById("sq_auth_url_button");
 				sq_button.addEventListener("click", function( event ) {
 					// takes user --> Square to authorize account
+					waitCursor();
 					window.open( CURRENT_USER.sq_st, "_top");
 			
 				});

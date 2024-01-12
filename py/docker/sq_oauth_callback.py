@@ -282,7 +282,9 @@ def lambda_handler(event, context):
         # LEEDZ_USER
         # reverse-lookup from state-->Leedz username
         the_user = getLeedzUser( table, state )
-
+        logger.info("GOT LEEDZ USER")
+        logger.info(the_user)
+        
 
         # QUICK CHECK -- are we already authorized?
         # Is this a quick-duplicate call?
@@ -332,6 +334,7 @@ def lambda_handler(event, context):
   
     # CATCH EVERYTHING
     except Exception as e:
+        logger.error("OAuth callback Exception: " + str(e))
         return handle_error( e )
         
 
@@ -365,6 +368,9 @@ def doTokenExchange(table, event, the_user):
     # calls Square client to make special POST req to Square
     #
     the_response = exchange_oauth_tokens( environment, auth_code, app_ID, app_secret )
+    
+    logger.info("BACK FROM TOKEN EXCHANGE")
+    
     if ('errors' in the_response.body) :
 
         err_cat = the_response.body['category']

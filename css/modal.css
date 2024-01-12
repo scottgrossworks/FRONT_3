@@ -102,6 +102,7 @@
 
   display: block;
   
+  flex-direction: column;
   z-index:500;
 
   top: 2vh!important;;

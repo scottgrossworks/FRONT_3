@@ -1332,8 +1332,7 @@ function initUserPanel(current_user) {
     } else if (current_user.sq_st != 'authorized') {
 
       dot.style.backgroundColor = "coral";
-      user_href.style.color = "var(--LEEDZ_GREEN)";
-
+      // user_href.style.color = "var(--LEEDZ_GREEN)";
 
       dot.addEventListener( "click", (event) => {    
         openNewUserWelcome();
@@ -1348,7 +1347,7 @@ function initUserPanel(current_user) {
 
     } else { // authorized
       dot.style.backgroundColor = "var(--LEEDZ_GREEN)";
-      user_href.style.color = "var(--LEEDZ_GREEN)";
+      // user_href.style.color = "var(--LEEDZ_GREEN)";
 
 
       dot.addEventListener( "click", (event) => {    

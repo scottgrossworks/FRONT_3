@@ -60,13 +60,14 @@
     height: 16px;
     width: 16px;
     
-    background-color:var(--LEEDZ_GREEN);
+    background-color:darkorange;
     
     border: 0px solid var(--LEEDZ_DARKGRAY);
     border-radius: 50%;
 
     outline:none;
 }
+
 
 
 

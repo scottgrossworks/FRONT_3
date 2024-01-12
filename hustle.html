@@ -1306,76 +1306,138 @@ function trimAndRemoveSpaces(inputString) {
     * USER
     *
     */
-    function initUserPanel(current_user) {
+function initUserPanel(current_user) {
 
-      // whatever the current user identity -- continue ....
-      // UPDATE the UI with the current user info
-      // user clicks on username --> user edit account page
+    // UPDATE the UI with the current user info
+    // depending on guestUser/Square status
 
-      let dot = document.getElementById("up_dot");
+    let dot = document.getElementById("up_dot");
+    let user_href = document.getElementById("user_href");
+
+
+    if (isGuestUser(true)) {
+      dot.style.backgroundColor = "darkorange";
+      user_href.style.backgroundColor = "darkorange";
+
+      dot.addEventListener( "click", (event) => {    
+        openGuestWelcome();
+      });
+
+      user_href.addEventListener( "click", (event) => {    
+        openGuestWelcome();
+      });
+
+
+
+    } else if (current_user.sq_st != 'authorized') {
+
+      dot.style.backgroundColor = "coral";
+      user_href.style.backgroundColor = "var(--LEEDZ_GREEN)";
+
+
+      dot.addEventListener( "click", (event) => {    
+        openNewUserWelcome();
+      });
+
+      user_href.innerHTML = "./user_edit.html";
+      user_href.addEventListener( "click", (event) => {    
+        openUserEdit();
+      });
+
+
+
+    } else { // authorized
+      dot.style.backgroundColor = "var(--LEEDZ_GREEN)";
+      user_href.style.backgroundColor = "var(--LEEDZ_GREEN)";
+
+
       dot.addEventListener( "click", (event) => {    
         openUserEdit();
       });
-      
-      let user_href = document.getElementById("user_href");
+
       user_href.innerHTML = current_user.un;
-      // user_href.setAttribute("href", "#");
       user_href.addEventListener( "click", (event) => {    
           openUserEdit();
       });
 
-      // force style the dot color in case of multiple login/refreshes
-      dot.style.backgroundColor = "var(--LEEDZ_GREEN)";
+
+    }
+
+    showUserBadges(current_user);
       
-      if (isGuestUser( true )) {
-        user_href.style.color = "darkorange";
-        dot.style.backgroundColor = "darkorange";
-        //
-        // FIXME FIXME FIXME
-        // send guest.user to info/intro/sign-up page
-        //
-        user_href.setAttribute("href", "#");
-        // user_href.addEventListener( "click", (event) => { });
-        
+}
 
-      // BADGES
-      } else if (current_user.bg.length != 0) {
-          
-          // clone a new node
-          //
-          //
-          //  <div class="each_badge">
-          //    <a href="#" class="badge_href"><img class="badge_img"></a>
-          //  </div>
-          //  
-          const theList = document.querySelector("#up_center_column");          
-          // start with a fresh list
-          while (theList.childElementCount > 1) {
-            theList.removeChild( theList.lastElementChild );
+
+
+
+
+/**
+ * Show the user badges next to the profile name
+ */
+ function showUserBadges(current_user) {
+    
+    // start with a fresh list
+    const theList = document.querySelector("#up_center_column");          
+
+    while (theList.childElementCount > 1) {
+      theList.removeChild( theList.lastElementChild );
+    }
+
+    if (current_user.bg.length == 0) return;
+
+    // clone a new node
+    //  <div class="each_badge">
+    //    <a href="#" class="badge_href"><img class="badge_img"></a>
+    //  </div>
+    //  
+    const theTemplate = document.querySelector("#template_badge");
+
+    total_badges = Object.keys( ALL_BADGES ).length;
+
+    for (var i = 1; i < current_user.bg.length; i++) {
+
+      if (i >= total_badges) break; // failsafe in case two are not in sync
+
+      switch(i) {
+        case 0:
+          // badge 0 will either be the shield or Square icon
+          if (current_user.sq_st == 'authorized') {
+            addBadge( theList, theTemplate, current_user, "5");
+          } else {
+            addBadge( theList, theTemplate, current_user, "0");
           }
+          break;
 
-          const theTemplate = document.querySelector("#template_badge");
-          
-          for (var i = 0; i < current_user.bg.length; i++) {
+        case 5: // do not add the Square badge again
+          break;
 
-            if (i >= ALL_BADGES.length) break; // failsafe in case two are not in sync
-
-            var the_badge = current_user.bg[i];
-
-            var newNode = theTemplate.content.cloneNode(true).querySelector(".each_badge");
-
-            var theImg = newNode.querySelector(".badge_img");
-            theImg.src = "./img/badge_" + the_badge + ".png";
-
-            var theHref = newNode.querySelector(".badge_href");
-            theHref.setAttribute("href", "./leedz_about.html#badges");   // FIXME explain badge in About section #
-            theHref.setAttribute("title", ALL_BADGES[ the_badge ].tit);
-
-            theList.appendChild(newNode);
-          } // for  
-
+        default: // all other cases
+          addBadge( theList, theTemplate, current_user, String(i))
+          break;
       }
+    }
   }
+
+  
+  //
+  //
+  //
+  function addBadge( theList, theTemplate, current_user, badge_name) {
+
+    var newNode = theTemplate.content.cloneNode(true).querySelector(".each_badge");
+
+    var theImg = newNode.querySelector(".badge_img");
+    theImg.src = "./img/badge_" + badge_name + ".png";
+
+    var theHref = newNode.querySelector(".badge_href");
+    theHref.setAttribute("href", "./leedz_about.html#badges");   
+    theHref.setAttribute("title", ALL_BADGES[ badge_name ].tit);
+
+    theList.appendChild(newNode);
+
+  }
+
+
 
 
 

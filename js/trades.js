@@ -39,7 +39,7 @@ export async function initTrades() {
   let no_subs = isGuestUser(true) || (currentUser.sb.length == 0);
 
   try {
-    await getAllTrades().then((response) => trades = response ); 
+      await getAllTrades().then((response) => trades = response ); 
 
    
       if ((! trades) || trades.length == 0) {
@@ -66,9 +66,10 @@ export async function initTrades() {
     } catch (error) {
       
       // DO NOT FAIL -- show error modal dialog and print error to console
-      var msg = error.message + ".  Cannot load trades, please refresh page. "
+      var msg = error.message + ".  Cannot load trades, please refresh page "
       printError("Init Trades Column", msg);
       errorModal( msg , true );
+      throw error;
   }
 
 }
@@ -84,26 +85,21 @@ export async function getAllTrades() {
 
     try {
 
-      retJSON = await db_getTrades();
+      await db_getTrades().then((response) => retJSON = response ); 
 
       // if it stays null or there's any problem, report it but do not fail
       if (retJSON == null) throw new Error("NO trades received from server");
 
       // SHOULD be sorted by num_leedz 
+      return retJSON;
 
     } catch (error) {
 
       printError("db_getTrades()", error );
       printError("getAllTrades()", "Using EMPTY trades list");
-      retJSON = [];
-
-      // show error modal dialog
-      errorModal("Error getting trades: " + error.message, false);
+      throw error;
       
     }
-
-
-    return retJSON;
   }
 
 

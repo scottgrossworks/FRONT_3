@@ -9,7 +9,7 @@
 const badge_0 = {
 
     'tit': 'Account Secured',
-    'cap': '<a href="../leedz_about.html">Privacy for Password and Payment Info</a>',
+    'cap': '<a href="../leedz_about.html">Your Privacy Secured</a>',
     'url': '../img/badge_0.png'
 };
 
@@ -47,4 +47,19 @@ const badge_4 = {
 };
 
 
-export const ALL_BADGES = [ badge_0, badge_1, badge_2, badge_3, badge_4 ];
+const badge_5 = {
+
+    'tit': 'Square Seller',
+    'cap': 'Authorized to sell Leedz using Square',
+    'url': '../img/badge_5.png'
+};
+
+
+export const ALL_BADGES = {
+    '0':badge_0,
+    '1':badge_1,
+    '2':badge_2,
+    '3':badge_3,
+    '4':badge_4,
+    '5':badge_5      
+};

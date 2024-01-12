@@ -411,11 +411,11 @@ function showUserBadges( element, badges ) {
     
         
     let the_html = "<table id='badges_list'>";
-
+    
     for (let i = 0; i < badges.length; i++) {
 
-        var the_badge = badges[i];
-        the_html += "<TR><td class='badge_icon'><img src='" + ALL_BADGES[ the_badge ].url + "'></td><td><B>" + ALL_BADGES[i].tit + "</B><BR>" + ALL_BADGES[i].cap + "</td></TR>";
+        var the_badge = ALL_BADGES( String(badges[i]) );
+        the_html += "<TR><td class='badge_icon'><img src='" + the_badge.url + "'></td><td><B>" + the_badge.tit + "</B><BR>" + the_badge.cap + "</td></TR>";
             
     }
     

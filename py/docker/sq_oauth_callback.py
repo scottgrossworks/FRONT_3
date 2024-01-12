@@ -105,19 +105,19 @@ def validateHeader( event, header, required ):
 #
 # 
 # 
-def handle_success( msg, un, expires_at ) :
+def handle_success( msg, un ) :
     
-    result = {  
+    result = "<!DOCTYPE html><html><head><meta http-equiv='refresh' content='0; URL=https://theleedz.com/user_edit.html'></head></html>"
+    
+    log_result = {  
         "cd" : 1,
         "msg" : msg,
-        "un":un,
-        "sq_ex": expires_at
+        "un":un
         }
 
-    logger.info(result)
+    logger.info(log_result)
     
-    the_json = json.dumps( result )
-    return createHttpResponse( the_json )
+    return createHttpResponse( result )
     
 
 
@@ -168,7 +168,7 @@ def createHttpResponse( result ):
         'statusCode': 200,
         'body': result,
         'headers': {
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/html',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*',
             },
@@ -288,7 +288,8 @@ def lambda_handler(event, context):
         # Is this a quick-duplicate call?
         if (the_user['sq_st'] == 'authorized'):
             # RETURN
-            return handle_success( 'authorized', the_user['sk'], the_user['sq_ex'])
+            logger.info("USER IS AUTHORIZED")
+            return handle_success( 'authorized', the_user['sk'])
             
 
         # does user profile contain a state key generated in getUser()
@@ -309,27 +310,29 @@ def lambda_handler(event, context):
         # RESPONSE TYPE
         # 
         # look for 'code' indicating refresh/access tokens
+        # will not appear on error
         #
-        response_type = validateParam(event, "response_type", TRUE)
+        response_type = validateParam(event, "response_type", FALSE)
         logger.info("RESPONSE_TYPE=" + response_type)
         if (response_type == 'code'):
             doTokenExchange(table, event, the_user)
-            return handle_success( 'authorized', the_user['sk'], the_user['sq_ex'])
+            return handle_success( 'authorized', the_user['sk'])
 
          
         # ERROR
         #
         else:
-            if (event['errors']):
-                err_type = event['errors']['category'] + ':' + event['errors']['code']
-                err_msg = err_type + ' -- ' + event['errors']['detail']
-                logger.error( err_msg )
-                raise ValueError( err_msg )
-  
+            is_error = validateParam(event, "error", FALSE)
+            if (is_error) :
+                err_desc = validateParam(event, "description", FALSE)
+                err_msg = "Error obtaining Square seller authorization [" + is_error + "]: " + err_desc
+                raise Exception(err_msg)
+            
+
             else:
                 err_msg = "Unknown Square OAuth response: " + response_type
-                logger.error( err_msg )
-                raise ValueError( err_msg ) 
+                logger.error( event )
+                raise Exception( err_msg ) 
             
   
     # CATCH EVERYTHING
@@ -399,7 +402,7 @@ def doTokenExchange(table, event, the_user):
                 expires_at = '0'
             
             # will throw exception on failure
-            saveTokensToDB( table, the_user['sk'], access_token, merchant_id, refresh_token, 'authorized', expires_at )
+            saveTokensToDB( table, the_user, access_token, merchant_id, refresh_token, 'authorized', expires_at )
         
         except Exception as e:
             err_str = str(e)
@@ -444,12 +447,12 @@ def exchange_oauth_tokens(env, code, id, secret):
         request_body['client_secret'] = secret
         request_body['scopes'] = scopes
         request_body['code'] = code
-        request_body['redirect_uri'] = "http://theleedz.com/user_edit.html"
+        # request_body['redirect_uri'] = "http://theleedz.com/user_edit.html"
         request_body['grant_type'] = 'authorization_code'
         response = oauth_api.obtain_token( request_body )
 
         logger.info("GOT OAUTH EXCHANGE")
-        logger.info( response )
+        # logger.info( response )
         
         return response
     
@@ -548,10 +551,12 @@ def getLeedzUser(table, sq_st):
 # sq_st = state --> authorized
 # sq_ex = expires_at
 #
-def saveTokensToDB( table, un, sq_at, sq_id, sq_rt, sq_st, sq_ex ) :
+def saveTokensToDB( table, the_user, sq_at, sq_id, sq_rt, sq_st, sq_ex ) :
    
     logger.info("IN SAVE TOKENS!!!")
   
+    un = the_user['sk']
+
     expr = 'SET sq_at=:sq_at,sq_rt=:sq_rt,sq_st=:sq_st,sq_ex=:sq_ex'
     vals = {
             ':sq_at' : sq_at,
@@ -559,6 +564,15 @@ def saveTokensToDB( table, un, sq_at, sq_id, sq_rt, sq_st, sq_ex ) :
             ':sq_st' : sq_st,
             ':sq_ex' : sq_ex                
     }
+
+    # award badge 5 if necessary
+    if ('5' not in the_user['bg']) :   
+        # new badges string
+        expr += ',bg=:bg'
+        new_bg = the_user['bg'] + ',5'
+        vals[':bg'] = new_bg
+        
+
     
     response = []
     

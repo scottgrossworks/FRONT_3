@@ -192,6 +192,7 @@ function initTradesColumn( tradeListener ) {
     // TRADES
     // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
     let the_trade = window.localStorage.getObj[sub];
+    console.log("TRADE=" + the_trade);
     
     if (the_trade) {  // failsafe to avoid errors if a trade has been removed 
 

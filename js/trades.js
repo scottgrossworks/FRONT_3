@@ -184,16 +184,13 @@ function initTradesColumn( tradeListener ) {
   // for each subscription
   current_user.sb.forEach(( sub ) => {
   
-    console.log("SUB=" + sub);
-
     // clone a new node
     const newNode = theTemplate.content.cloneNode(true).querySelector(".each_trade");
   
     // TRADES
     // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
-    let the_trade = window.localStorage.getObj[sub];
-    console.log("TRADE=" + the_trade);
-    
+    let the_trade = window.localStorage.getObj(sub);
+ 
     if (the_trade) {  // failsafe to avoid errors if a trade has been removed 
 
       var num_leedz = the_trade[1];

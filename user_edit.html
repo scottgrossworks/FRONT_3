@@ -311,6 +311,7 @@
 
 		var EDITING = false;
 		let CURRENT_USER;
+		let USER_CHANGES;
 
 
 		try {
@@ -343,7 +344,7 @@
 
 			
 			// this will take on any changes the user makes on the form
-			const USER_CHANGES = CURRENT_USER;
+			USER_CHANGES = CURRENT_USER;
 
 
 			// INITIALIZE UI
@@ -453,7 +454,7 @@ function normalCursor() {
 function showSquareAuthorizedAlert() {
 
 	let theAlert = document.getElementById("alert_success");
-	theAlert.innerHTML = "&iexcl; Success - ready to sell leedz !";
+	theAlert.innerHTML = "Success!  Ready to sell leedz";
 	theAlert.style.display = "block";
 }
 

@@ -176,11 +176,16 @@ function initTradesColumn( tradeListener ) {
     theList.removeChild( theList.lastElementChild );
   }
 
+  if (current_user.sb.length == 0)
+    return;
+
   const theTemplate = document.querySelector("#template_each_trade");
 
   // for each subscription
   current_user.sb.forEach(( sub ) => {
   
+    console.log("SUB=" + sub);
+
     // clone a new node
     const newNode = theTemplate.content.cloneNode(true).querySelector(".each_trade");
   

@@ -606,7 +606,7 @@
             } else if (event.target.matches('a')) {
               
               // event.target will be http link
-              window.open( event.target , "_top");
+              window.open( event.target , "_self");
             
 
 
@@ -808,7 +808,7 @@ function trimAndRemoveSpaces(inputString) {
           openGuestWelcome();
 
         } else {
-          window.open( URL_LEED_CREATE , "_top");
+          window.open( URL_LEED_CREATE , "_self");
         }
       }
 
@@ -829,7 +829,7 @@ function trimAndRemoveSpaces(inputString) {
           openGuestWelcome();
 
         } else {
-          window.open( URL_USER_EDIT , "_top");
+          window.open( URL_USER_EDIT , "_self");
         }
       }
 
@@ -855,7 +855,7 @@ function trimAndRemoveSpaces(inputString) {
 
         } else {
 
-          window.open( URL_LEED_EDIT , "_top");
+          window.open( URL_LEED_EDIT , "_self");
         }
       }
       window.openLeedEdit = openLeedEdit;
@@ -879,7 +879,7 @@ function trimAndRemoveSpaces(inputString) {
 
         // GOTO report leed confirmation
         // with link to get back to main page
-        window.open( URL_REPORT_LEED , "_top");
+        window.open( URL_REPORT_LEED , "_self");
 
 
       }
@@ -1331,7 +1331,7 @@ function initUserPanel(current_user) {
 
     } else if (current_user.sq_st != 'authorized') {
 
-      dot.style.backgroundColor = "coral";
+      dot.style.backgroundColor = "dodgerblue";
       // user_href.style.color = "var(--LEEDZ_GREEN)";
 
       dot.addEventListener( "click", (event) => {    

@@ -428,6 +428,7 @@ def doTokenExchange(table, event, the_user):
 #
 def exchange_oauth_tokens(env, code, id, secret):
    
+    logger.info("EXCHANGING OAUTH TOKENS")
     response = ""
     try:
         # initialize square oauth client
@@ -446,7 +447,7 @@ def exchange_oauth_tokens(env, code, id, secret):
         request_body['client_secret'] = secret
         request_body['scopes'] = scopes
         request_body['code'] = code
-        # request_body['redirect_uri'] = "http://theleedz.com/user_edit.html"
+        request_body['redirect_uri'] = "http://theleedz.com/user_edit.html?square=authorized"
         request_body['grant_type'] = 'authorization_code'
         response = oauth_api.obtain_token( request_body )
 

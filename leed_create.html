@@ -92,7 +92,7 @@
     -- DB -- WAITING.... --DB
     -- 
     -->
-    <div class="modal info_modal" id="waiting_modal">
+    <div class="modal info_modal" id="waiting_modal" style="display:none">
 
         <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
             <table>
@@ -217,7 +217,7 @@
             -->
             <tr id="row_loc">
                         
-                <TD class="labelTD">Address: </TD>
+                <TD id="label_loc" class="labelTD" style="color:dodgerblue;">Address: </TD>
                 
                 <td id="td_loc" data-inlineType="text" data-inlineName="loc" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
@@ -226,7 +226,7 @@
                 </td>
 
                 
-               <TD class="eyeballTD"><img src="./img/eye_show.png" id="5_eye" data-eyeball="show" onclick="toggleEyeball( 'td_loc', 5 )"></TD>
+               <TD class="eyeballTD"><img src="./img/eye_hide.png" id="5_eye" data-eyeball="hide" onclick="toggleEyeball( 'label_loc', 'td_loc', 5 )"></TD>
             </tr>
 
 
@@ -238,7 +238,7 @@
             <!-- 8 -- EMAIL  -->
             <tr id="row_em">
                             
-                <TD class="labelTD">Client Email: </TD>
+                <TD id='label_em' class="labelTD" style="color:dodgerblue;">Client Email: </TD>
                 
                 <td id="td_em" data-inlineType="email" data-inlineName="em" data-inlineRequired="0"></td>
 
@@ -246,7 +246,7 @@
                     <input type="button" value="Edit" onclick="editField('row_em', createOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="8_eye" data-eyeball="show" onclick="toggleEyeball( 'td_em', 8 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_hide.png" id="8_eye" data-eyeball="hide" onclick="toggleEyeball( 'label_em', 'td_em', 8 )"></TD>
             </tr>
 
 
@@ -255,7 +255,7 @@
             <!-- 9 -- PHONE -->
             <tr id="row_ph">
                             
-                <TD class="labelTD">Client Phone: </TD>
+                <TD id='label_ph' class="labelTD" style="color:dodgerblue;">Client Phone: </TD>
                 
                 <td id="td_ph" data-inlineType="tel" data-inlineName="ph" data-inlineRequired="0"></td>
 
@@ -264,7 +264,7 @@
                 </td>
 
                 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="9_eye" data-eyeball="show" onclick="toggleEyeball( 'td_ph', 9 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_hide.png" id="9_eye" data-eyeball="hide" onclick="toggleEyeball( 'label_ph', 'td_ph', 9 )"></TD>
             </tr>
 
 
@@ -274,7 +274,7 @@
             <!-- 10 -- LEED DETAILS -->
             <tr id="row_det">
                         
-                <TD class="labelTD">Details: </TD>
+                <TD id='label_det' class="labelTD" style="color:dodgerblue;">Details: </TD>
                 
                 <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
@@ -282,7 +282,7 @@
                     <input type="button" value="Edit" onclick="editField('row_det', createOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="10_eye" data-eyeball="show" onclick="toggleEyeball( 'td_det', 10 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_hide.png" id="10_eye" data-eyeball="hide" onclick="toggleEyeball( 'label_det', 'td_det', 10 )"></TD>
             </tr>
 
 
@@ -292,7 +292,7 @@
             <!-- 11 -- LEED REQUIREMENTS -->
             <tr id="row_reqs">
                         
-                <TD class="labelTD">Requirements: </TD>
+                <TD id='label_reqs' class="labelTD" style="color:dodgerblue;">Requirements: </TD>
                 
                 <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0"></td>
 
@@ -300,7 +300,7 @@
                     <input type="button" value="Edit" onclick="editField('row_reqs', createOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_show.png" id="11_eye" data-eyeball="show" onclick="toggleEyeball( 'td_reqs', 11 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_hide.png" id="11_eye" data-eyeball="hide" onclick="toggleEyeball( 'label_reqs', 'td_reqs', 11 )"></TD>
             </tr>
 
 
@@ -370,12 +370,10 @@
         import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } from "./js/dates.js";
         import { getShortDateString, DTfromPretty, getMonthIndex } from "./js/dates.js";
 		
-        import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
-		import { inlineEdit } from "./js/inline-edit.js";
+        import { inlineEmailFinishCell, inlineURLFinishCell, inlineEdit } from "./js/inline-edit.js";
         import { getCurrentUser } from "./js/user.js";
-        import { blankLeedObject, clearCurrentLeed, createDBLeed  } from "./js/leed.js";
         import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
-		
+        import { blankLeedObject, clearCurrentLeed, createDBLeed  } from "./js/leed.js";
         import { OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
         import { db_updateLeed, ADD_LEED, USERNAME_URL_PARAM, DB_FAIL, DB_SUCCESS } from "./js/dbTools.js";
 
@@ -743,7 +741,7 @@
                 *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
                 */
                 var theAlert = document.getElementById("alert_success");
-                var msg = from_DB.tn + ' Leed created:  ' + from_DB.ti;
+                var msg = 'Leed created [' + from_DB.tn + '] <u>' + from_DB.ti + '</u>';
                 var newChild = document.createElement("span");
                 newChild.textContent = msg;
 
@@ -767,19 +765,21 @@
         //
         //
         //
-        function toggleEyeball( textField, fieldName ) {
+        function toggleEyeball( label, textField, fieldName ) {
             
+            let the_label = document.getElementById(label);
             let theImg = document.getElementById(fieldName + "_eye");
+
             if (theImg.dataset.eyeball == "hide") {
                 theImg.src = "./img/eye_show.png";
                 theImg.dataset.eyeball = "show";
+                the_label.style.color = 'dodgerblue';
 
                 changeLeedOpts( LEED_CHANGES, fieldName, OPTS_SHOWING );
 
             } else {
 
                 // CANNOT HIDE EMPTY FIELD
-                //
                 let theText = document.getElementById(textField);
                 if ( noValue(theText.innerText) ) {
                     var msg = "Cannot hide empty field.";
@@ -791,6 +791,7 @@
 
                 theImg.src = "./img/eye_hide.png";
                 theImg.dataset.eyeball = "hide";
+                the_label.style.color = 'darkgreen';
 
                 changeLeedOpts( LEED_CHANGES, fieldName, OPTS_HIDDEN );
             }

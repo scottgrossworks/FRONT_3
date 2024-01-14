@@ -87,7 +87,7 @@ export async function db_updateUser( code, user_obj ) {
 
             theURL.search = params.toString();
             
-            await doGet( theURL )
+            await doGetHeaders( theURL, {} )
             .then(data => {
     
               json_obj = data;
@@ -173,7 +173,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
             theURL.search = params.toString();
 
             
-            await doGet( theURL )
+            await doGetHeaders( theURL, {} )
             .then(data => {
 
                 json_obj = data;
@@ -206,7 +206,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
             theURL.search = params.toString();
 
-            await doGet( theURL )
+            await doGetHeaders( theURL, {} )
             .then(data => {
 
                 json_obj = data;
@@ -237,7 +237,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
             theURL.search = params.toString();
 
-            await doGet( theURL )
+            await doGetHeaders( theURL, {} )
             .then(data => {
 
                 json_obj = data;
@@ -297,7 +297,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
             console.log("CHANGE LEED URL=" + theURL);
 
-            await doGet( theURL )
+            await doGetHeaders( theURL,{} )
             .then(data => {
 
                 json_obj = data;
@@ -333,7 +333,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
             console.log("THEURL=" + theURL);
 
-            await doGet( theURL )
+            await doGetHeaders( theURL, {} )
             .then(data => {
 
                 json_obj = data;
@@ -377,7 +377,7 @@ export async function db_getTrades() {
         const theURL = new URL(API_GATEWAY + "getTrades");
         let json_obj= null;
           
-        await doGet( theURL )
+        await doGetHeaders( theURL, {} )
         .then(data => {
 
           json_obj = data;
@@ -421,7 +421,7 @@ export async function db_getStats() {
         const theURL = new URL(API_GATEWAY + "getStats");
        
           
-        await doGet( theURL )
+        await doGetHeaders( theURL, {} )
         .then(data => {
 
           json_obj = data;
@@ -463,7 +463,7 @@ export async function db_getUser( username ) {
         const params = new URLSearchParams({ [USERNAME_URL_PARAM]: username });
         theURL.search = params.toString();
         
-        await doGet( theURL )
+        await doGetHeaders( theURL, {} )
         .then(data => {
 
           json_obj = data;
@@ -502,7 +502,6 @@ export async function db_getUser( username ) {
 export async function db_getDeetz( user_name, trade_name, leed_id, leed_op ) {
     
     // GET JSON from http server
-
     // console.log("GET DEETZ: " + trade_name + " ID=" + leed_id);
 
     let json_obj = null;
@@ -537,7 +536,7 @@ export async function db_getDeetz( user_name, trade_name, leed_id, leed_op ) {
 
 
     // console.log("GOT --- DETAILS --- JSON!!!");
-    // console.log(json_obj);
+    console.log(json_obj);
 
 
     return json_obj;  // SHOULD NOT BE NULL
@@ -610,7 +609,7 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
 
     
  //    console.log("GOT --- PREVIEW --- JSON!!!");
- //    console.log(json_obj);
+        console.log(json_obj);
 
 
     return json_obj;  // SHOULD NOT BE NULL
@@ -664,7 +663,7 @@ async function doGetHeaders(theUrl, new_headers) {
         timeout: "10000"
     }).then(response => {
         if (!response.ok) {
-            console.log(response);
+            console.error(response);
             throw new Error('Network response was not OK: [' + response.status + "] :" + response.message);
         }
 

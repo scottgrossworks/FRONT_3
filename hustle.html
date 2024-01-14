@@ -195,7 +195,7 @@
         -- NEW USER WELCOME MODAL 
         -- 
         -->
-        <div class="modal info_modal modal_noclose" id="newUser_modal">
+        <div class="modal info_modal modal_noclose" id="newUser_modal" style="display:none">
     
           <center><img class="info_logo" src="img/logo_2.png"></center> 
           <h1>
@@ -701,11 +701,9 @@
         current_user.zr = theMiles.valueOf();
         current_user.zp = theZip.valueOf();
         
-
         // this is an async call
         // will return immediately - data shows up later
         loadDBLeedz();
-
 
         // this is an async call
         // will return immediately - data shows up later        
@@ -798,7 +796,7 @@ function trimAndRemoveSpaces(inputString) {
       
 
       // do NOT open leed create for guest account
-      //
+      // do NOT open leed create if user is not authorized
       //
       function openCreateLeed() {
 
@@ -806,10 +804,17 @@ function trimAndRemoveSpaces(inputString) {
         if (isGuestUser( true )) {
           printError("openCreateLeed", "Guest user cannot create leedz");
           openGuestWelcome();
+          return;
+        } 
 
-        } else {
-          window.open( URL_LEED_CREATE , "_self");
+        const current_user = getCurrentUser(false);
+        if (current_user.sq_st != 'authorized') {
+          printError("openCreateLeed", "Cannot post leed until seller's Square account authorized");
+          openNewUserWelcome();
+          return;
         }
+        
+        window.open( URL_LEED_CREATE , "_self");
       }
 
       window.openCreateLeed = openCreateLeed;

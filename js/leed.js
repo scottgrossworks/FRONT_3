@@ -124,7 +124,7 @@ export async function loadLeedzFromDB( subs, firstDay, lastDay, zip_home, zip_ra
   // API request --> DB 
   // load leedz for this trade and date range showing
   //
-
+  let results = null;
   try {
       // 
       //  client <---> API Gateway <===> DB

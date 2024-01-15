@@ -62,8 +62,6 @@ export async function initTrades() {
   	
       initTradesColumn( tradeListener );
 
-	    // printColors();
-    
     
     } catch (error) {
       
@@ -72,8 +70,11 @@ export async function initTrades() {
       printError("Init Trades Column", msg);
       errorModal( msg , true );
       throw error;
-  }
 
+    }
+
+    
+	  printColors();
 }
 
 

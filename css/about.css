@@ -1,0 +1,133 @@
+* {
+	padding: 0;
+	margin: 0;
+	max-width:1200px;
+}
+
+:root {
+
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+body {
+	display: block;
+	margin:0 auto;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background-color: white;
+}
+
+
+
+
+
+
+
+
+@media screen and (min-width: 600px) and (max-width: 949px) {
+
+
+
+
+@media screen and (max-width:599px) {
+	
+
+}
+
+
+
+
+table {
+
+	float:left;
+	border-spacing: 0;
+
+	height:fit-content;
+	width:100%;
+
+	margin: 0 auto;
+	padding: 2vh 2vw;
+
+}
+
+
+
+
+table tbody td {
+	
+	text-align: left;
+
+}
+
+
+
+td.badge_icon {
+	width:60px;	
+	max-width: 60px;
+	margin: 0 5vw;
+
+}
+
+table#badges_list {
+
+	padding:1vh 0.5vw;
+	margin: auto 0;
+}
+
+td#td_badges {
+	width: min-content;
+	height:fit-content;
+	background-color: white;
+	margin: 0 auto;
+
+}
+
+
+table#badges_list tbody td {
+	border:0;
+	padding:1vh 0.5vw;
+}
+
+
+
+
+
+.labelTD {
+	
+	display:block;
+
+	min-width: 20px;
+	max-width: 150px;
+	
+	padding: 2vh 1vw;
+
+	font-family: var(--FONT_3);
+	font-weight: 600;
+}
+
+
+
+
+
+.back_button {
+
+	z-index: 900;
+ 
+	transform: rotate(180deg);
+	
+	font-size: 20px;
+	font-weight:600;
+	cursor: pointer;
+	background-color: var(--LEEDZ_DARKGREEN);
+	color: white;
+	padding: 10px 15px;
+	border: none;
+}
+
+.back_button a {
+
+	  
+	text-decoration:none;
+	color:white;
+}

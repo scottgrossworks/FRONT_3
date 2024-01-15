@@ -71,8 +71,7 @@ export async function initTrades() {
 
     }
 
-    
-	  printColors();
+	  // printColors();
 }
 
 

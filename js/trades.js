@@ -379,12 +379,12 @@ function createColorTable(numSteps) {
 let retries = 0;
 function getUniqueColor() {
 
-  const numKeys = Object.keys(MASTER_COLORS).length;
+  const numKeys = Object.keys(COLOR_TABLE).length;
   const randomIndex = Math.floor(Math.random() * numKeys);
 
   let the_color = createColor( numKeys, randomIndex );
 
-  while (( retries < numKeys) && (! MASTER_COLORS[ the_color ])) {
+  while (( retries < numKeys) && (! COLOR_TABLE[ the_color ])) {
     // if we hit a used color, call recursively
     the_color = getUniqueColor();
     retries++;

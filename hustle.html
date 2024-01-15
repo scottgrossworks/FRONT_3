@@ -37,7 +37,7 @@
 
 
         <script src="./js/dbTools.js" type="module" defer></script>
-
+        <script src="./js/badges.js" type="module" defer></script>
         <script src="./js/user.js" type="module" defer></script>
         <script src="./js/dates.js" type="module" defer></script>
         <script src="./js/trades.js" type="module" defer></script>
@@ -500,13 +500,10 @@
     import { initMonthChooser } from "./js/months.js";
     import { getCurrentLeed, setCurrentLeed, clearCurrentLeed, buyCurrentLeed, deleteCurrentLeed, reportCurrentLeed  }  from "./js/leed.js";
     import { CURRENT_LEED_KEY } from "./js/leed.js";
-    import { ALL_BADGES } from "./js/badges.js";
     import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
 
     import { USERNAME_URL_PARAM, DB_FAIL, DB_SUCCESS } from "./js/dbTools.js";
 
-
-    window.ALL_BADGES = ALL_BADGES;
 
     const BUG_EMAIL = "<a href='mailto:scottgrossworks@gmail.com'>Report Error</a>"
     window.printError = printError;

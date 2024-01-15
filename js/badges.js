@@ -53,7 +53,7 @@ const badge_5 = {
 };
 
 
-export const ALL_BADGES = {
+window.ALL_BADGES = {
     '0':badge_0,
     '1':badge_1,
     '2':badge_2,

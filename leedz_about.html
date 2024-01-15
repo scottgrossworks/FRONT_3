@@ -63,49 +63,52 @@
 			
 
 
-            <section>
+    <section>
 
-                <BR>
+		<table>
+			<TR><TD>About the Leedz About the Leedz</TD></TR>
 
-               About the Leedz About the Leedz
-                <BR>
-               
-                <BR>
-              	<a name="badges"></a>
-                About the badge system About the badge system About the badge system.
+			<TR><TD>
+			<a name="badges"></a>
+			About the badge system About the badge system About the badge system.
 
+			<BR>
+			Badges:
+			</TD></TR>
+
+			<TR><TD id="div_badges">
+
+			</TD></TR>
+
+			<TR><TD>
+
+				Here's a back button
 				<BR>
-				Badges:
+				<button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="history.back()">Back</button>
 
-				<BR>
-				<div id="div_badges"></div>
-
-				<BR>
-
-                <BR>
-
-                Here's a back button
-
-                <button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="history.back()">Back</button>
-
-		
-			
-              
+			</TD></TR>
+		</table>
 
     </section>  
         
 
-    
-  
-  </body>
+
+    <div class="row" id="copyright_footer">
+        <span>
+        All content is &copy;2024 The Leedz, all rights reserved, and may not be reproduced for 
+        commercial purposes without written permission.
+        </span>
+    </div>
+
+</body>
+
   
   <script src="./js/badges.js"></script>
 
   <script type="module">
 
-	import { ALL_BADGES } from "./js/badges.js";
-	window.ALL_BADGES = ALL_BADGES;
-
+	import { getBadges } from "./js/badges.js";
+	
 	let element = document.getElementById("div_badges");
 	showBadges(element);
 

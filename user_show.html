@@ -200,8 +200,7 @@
 
 	</body>
 
-    <script src="./js/badges.js">
-    </script>
+    <script src="./js/badges.js"></script>
 
 
 	<script type="module">
@@ -211,13 +210,10 @@
 		import { printError, throwError, errorModalClose } from "./js/error.js";
 		import { getTradeInfo } from "./js/trades.js";
 		import { db_getUser, USERNAME_URL_PARAM } from "./js/dbTools.js";
-        import { ALL_BADGES } from "./js/badges.js";
-
 
 
         window.errorModalClose = errorModalClose;
         
-        window.ALL_BADGES = ALL_BADGES;
 
         const urlParams = new URLSearchParams(window.location.search);
         const url_username = urlParams.get( USERNAME_URL_PARAM );

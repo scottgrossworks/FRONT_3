@@ -12,6 +12,8 @@ import { hideActionWindow } from "./action.js";
 
 import { MAX_USER_SUBS } from "./user.js";
 
+const COLOR_TABLE = {} 
+
 
 
 // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
@@ -124,7 +126,7 @@ export function getColorForTrade(trade_name) {
 
     // create new color using random index into create_color algo
     let num_keys = window.localStorage.length;
-    const the_color = createColor( num_keys, Math.floor(Math.random() * num_keys));
+    const the_color = getUniqueColor();
 
     // create new entry in session cache
     window.localStorage.setObj(trade_name, [ the_color, 0, false ]);
@@ -355,6 +357,41 @@ function createColor(numOfSteps, step) {
 //  var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
 
 
+/**
+ * create the master color table in initTrades()
+ * set all colors to true
+ */
+function createColorTable(numSteps) {
+
+  for (let i = 0; i < numSteps; i++) {
+    let color = createColor( numSteps, i );
+    COLOR_TABLE[color] = true;
+  }
+}
+
+/*
+ * random index into the COLOR_TABLE
+ * if color is available it will still be true
+ * if color is used it will be false
+ * 
+ */
+function getUniqueColor() {
+
+  const numKeys = Object.keys(MASTER_COLORS).length;
+  const randomIndex = Math.floor(Math.random() * numKeys);
+
+  let the_color = createColor( numKeys, randomIndex );
+
+  while ( ! MASTER_COLORS[ the_color ] ) {
+    // if we hit a used color, call recursively
+    the_color = getUniqueColor();
+  }
+
+  COLOR_TABLE[ the_color ] = false; // mark it as used
+  
+  return the_color;
+}
+
 
 /*
  * Seed the colors in TRADES
@@ -375,6 +412,10 @@ function createColor(numOfSteps, step) {
 export function createTradesAndColors( all_trades ) {
 
     var num_trades = all_trades.length;
+
+
+    createColorTable( num_trades );
+
     
     // for each trade....
     for (let i = 0; i < num_trades; i++ ) {
@@ -404,7 +445,7 @@ export function createTradesAndColors( all_trades ) {
       var cache_trade = window.localStorage.getObj( trade_name );
       if (cache_trade == null) {
          // create a new color and assign it to trade_name
-        var theColor = createColor( num_trades, i );
+        var theColor = getUniqueColor();
         window.localStorage.setObj(trade_name, [ theColor, num_leedz, false ]); 
         
       

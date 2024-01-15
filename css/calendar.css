@@ -15,7 +15,7 @@
   background-color: white;
  }
  
- .trades_calendar {
+ .calendar {
 
     position:relative;
 
@@ -27,7 +27,7 @@
 
 
  
-.trades_calendar > * {
+.calendar > * {
 
     display:grid;
     position:absolute;

@@ -303,7 +303,7 @@
         </div>
     
         <!-- CALENDAR PANEL -->
-        <div id="calendar_panel" class="row trades_calendar">
+        <div id="calendar_panel" class="row calendar">
             <ul id="calendar_list">
 
               <template id="template_each_day">
@@ -485,6 +485,8 @@
 
       
     </div>
+
+
 
 
   </body>
@@ -1727,12 +1729,14 @@ window.onload = async function() {
   };
 
 
+
+
   /**
    * BACK BUTTON
    * called when user comes back to main page from edit/view html pages
    */
 
-  window.addEventListener("popstate", () => {
+  window.addEventListener("popstate", (event) => {
 
     let storageChanged = false;
 
@@ -1759,6 +1763,8 @@ window.onload = async function() {
       // console.log(current_user);
 
       // LOAD the page with the current user info
+      console.log("POPSTATE REFRESH")
+      console.log(current_user);
       mainPageLoad( current_user );
     }
   });

@@ -8,15 +8,17 @@
 <html lang="en">
 	
 
-
 <head>
-
     
         <link rel="stylesheet" href="css/globals.css" type="text/css" />
-        <link rel="stylesheet" href="css/modal.css" type="text/css" />
+		<link rel="stylesheet" href="css/styles_sm.css" type="text/css" />
+		<link rel="stylesheet" href="css/styles_med.css" type="text/css" />
+		<link rel="stylesheet" href="css/styles_lg.css" type="text/css" />
 
+		<link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
 		<link rel="stylesheet" href="./css/user_edit.css" tyep="text/css"/>
 
+		<link rel="stylesheet" href="css/modal.css" type="text/css" />
    
 		 <meta charset="UTF-8">
 		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,11 +29,7 @@
 		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
 		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
  
- 
-		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
-		 <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
 
-		 <script src="./js/inline-edit.js" type="module" defer></script> 
 	</head>
 
 
@@ -76,12 +74,11 @@
               	<a name="badges"></a>
                 About the badge system About the badge system About the badge system.
 
-				<table name="table_badges">
-				<tr id="row_badges">
-					<TD class="labelTD">Badges: </TD>
-					<td id="td_badges" data-inlineType="textarea" data-inlineName="badges"></td>
-				</tr></table>
+				<BR>
+				Badges:
 
+				<BR>
+				<div id="div_badges"></div>
 
 				<BR>
 
@@ -109,7 +106,7 @@
 	import { ALL_BADGES } from "./js/badges.js";
 	window.ALL_BADGES = ALL_BADGES;
 
-	let element = document.getElementById("td_badges");
+	let element = document.getElementById("div_badges");
 	showBadges(element);
 
 

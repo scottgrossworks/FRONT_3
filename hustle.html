@@ -1409,7 +1409,7 @@ function initUserPanel(current_user) {
 
     const total_badges = Object.keys( ALL_BADGES ).length;
 
-    for (var i = 1; i < current_user.bg.length; i++) {
+    for (var i = 0; i < current_user.bg.length; i++) {
 
       if (i >= total_badges) break; // failsafe in case two are not in sync
 

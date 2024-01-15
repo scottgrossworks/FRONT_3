@@ -180,6 +180,32 @@ table tbody td {
 }
 
 
+#label_loc {
+	color:dodgerblue;
+}
+
+
+#label_em {
+	color:dodgerblue;
+}
+
+
+#label_ph {
+	color:dodgerblue;
+}
+
+
+
+#label_det {
+	color:darkgreen;
+}
+
+
+#label_reqs {
+	color:darkgreen;
+}
+
+
 
 @media screen and (max-width:499px) {
 

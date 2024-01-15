@@ -49,10 +49,15 @@ table {
 	margin: 0 auto;
 	padding: 2vh 2vw;
 
+    line-height: 140%;
 }
 
 
 
+
+table a {
+    color:green;
+}
 
 table tbody td {
 	

@@ -12,8 +12,6 @@ import { hideActionWindow } from "./action.js";
 
 import { MAX_USER_SUBS } from "./user.js";
 
-const COLOR_TABLE = {} 
-
 
 
 // { ( trade_name: [ color, num_leedz, showing ] ), (), ()... }
@@ -125,10 +123,7 @@ export function getColorForTrade(trade_name) {
   
   } else {
 
-    // create new color using random index into create_color algo
-    let num_keys = window.localStorage.length;
     const the_color = getUniqueColor();
-
     // create new entry in session cache
     window.localStorage.setObj(trade_name, [ the_color, 0, false ]);
     
@@ -358,39 +353,17 @@ function createColor(numOfSteps, step) {
 //  var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
 
 
-/**
- * create the master color table in initTrades()
- * set all colors to true
- */
-function createColorTable(numSteps) {
 
-  for (let i = 0; i < numSteps; i++) {
-    let color = createColor( numSteps, i );
-    COLOR_TABLE[color] = true;
-  }
-}
 
 /*
- * random index into the COLOR_TABLE
- * if color is available it will still be true
- * if color is used it will be false
  * 
  */
-let retries = 0;
 function getUniqueColor() {
 
   const numKeys = Object.keys(COLOR_TABLE).length;
   const randomIndex = Math.floor(Math.random() * numKeys);
 
   let the_color = createColor( numKeys, randomIndex );
-
-  while (( retries < numKeys) && (! COLOR_TABLE[ the_color ])) {
-    // if we hit a used color, call recursively
-    the_color = getUniqueColor();
-    retries++;
-  }
-
-  COLOR_TABLE[ the_color ] = false; // mark it as used
   
   return the_color;
 }
@@ -413,15 +386,9 @@ function getUniqueColor() {
  * 
  */
 export function createTradesAndColors( all_trades ) {
-
-    var num_trades = all_trades.length;
-
-
-    createColorTable( num_trades );
-
     
     // for each trade....
-    for (let i = 0; i < num_trades; i++ ) {
+    for (let i = 0; i < all_trades.length; i++ ) {
  
 
       //  THIS MUST MATCH DYNAMODB SCHEMA
@@ -464,7 +431,7 @@ export function createTradesAndColors( all_trades ) {
 
 
 /*
- *
+ * 
  */
 export function printColors() {
   
@@ -472,7 +439,7 @@ export function printColors() {
     
     let theKey = window.localStorage.getObj(trade);
 
-    if (theKey[0] != undefined) {
+    if (theKey[0] != undefined && theKey.length == 3) {
       var theColor = theKey[0];
       var numLeedz = theKey[1];
       console.log("%c" + trade + ": " + theColor  + " numLeedz: " + numLeedz, "color:" + theColor + ";");

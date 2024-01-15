@@ -1747,35 +1747,11 @@ window.onload = async function() {
 
   window.addEventListener("popstate", (event) => {
 
-    let storageChanged = false;
-
-    // Define the storage event listener
-    const storageEventListener = function (e) {
-      storageChanged = true;
-      window.removeEventListener("storage", storageEventListener);
-   
-      const current_user = getCurrentUser(true);
-      // console.log(current_user);
-
-      // LOAD the page with the current user info
-      mainPageLoad( current_user );
-    };
-  
-
-    // Add the storage event listener
-    window.addEventListener("storage", storageEventListener);
-  
-    // Check if the storage event has already occurred
-    if (storageChanged) {
-
-      const current_user = getCurrentUser(true);
-      // console.log(current_user);
-
       // LOAD the page with the current user info
       console.log("POPSTATE REFRESH")
+      const current_user = getCurrentUser(true);
       console.log(current_user);
       mainPageLoad( current_user );
-    }
   });
 
 

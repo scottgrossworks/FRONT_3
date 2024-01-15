@@ -136,3 +136,34 @@ table#badges_list tbody td {
 	text-decoration:none;
 	color:white;
 }
+
+
+
+.save_button {
+
+    position:relative;
+
+    background-color: var(--LEEDZ_GREEN);
+    border: none;
+    color:black;
+    
+    text-decoration: none;
+    display: flex;
+
+    font-size:1.2em;
+    font-weight: bolder;
+
+    width:fit-content;
+    height:max-content;
+
+    margin: 25px 0px;
+
+    padding-top:20px;
+    padding-bottom:18px;
+    padding-left:30px;
+    padding-right:30px;
+ 
+    border-radius: 12px;
+
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
+}

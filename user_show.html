@@ -414,7 +414,7 @@ function showUserBadges( element, badges ) {
     
     for (let i = 0; i < badges.length; i++) {
 
-        var the_badge = ALL_BADGES( String(badges[i]) );
+        var the_badge = ALL_BADGES[ String(badges[i]) ];
         the_html += "<TR><td class='badge_icon'><img src='" + the_badge.url + "'></td><td><B>" + the_badge.tit + "</B><BR>" + the_badge.cap + "</td></TR>";
             
     }

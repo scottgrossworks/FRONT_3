@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="css/globals.css" type="text/css" />
         <link rel="stylesheet" href="css/modal.css" type="text/css" />
 
+		<link rel="stylesheet" href="./css/user_edit.css" tyep="text/css"/>
 
    
 		 <meta charset="UTF-8">
@@ -72,9 +73,17 @@
                 <BR>
                
                 <BR>
-              <a name="badges"></a>
-                About the badge system
-                <BR>
+              	<a name="badges"></a>
+                About the badge system About the badge system About the badge system.
+
+				<table name="table_badges">
+				<tr id="row_badges">
+					<TD class="labelTD">Badges: </TD>
+					<td id="td_badges" data-inlineType="textarea" data-inlineName="badges"></td>
+				</tr></table>
+
+
+				<BR>
 
                 <BR>
 
@@ -93,5 +102,40 @@
   
   </body>
   
+  <script src="./js/badges.js"></script>
+
+  <script type="module">
+
+	import { ALL_BADGES } from "./js/badges.js";
+	window.ALL_BADGES = ALL_BADGES;
+
+	let element = document.getElementById("td_badges");
+	showBadges(element);
+
+
+	/**
+	*
+	*
+	*/
+	function showBadges( element ) {
+		
+		
+		let the_html = "<table id='badges_list'>";
+		let numBadges = Object.keys(ALL_BADGES).length;
+
+		for (let i = 0; i < numBadges; i++) {
+
+			var the_badge = ALL_BADGES[ String(i) ];
+			the_html += "<TR><td class='badge_icon'><img src='" + the_badge.url + "'></td><td><B>" + the_badge.tit + "</B><BR>" + the_badge.cap + "</td></TR>";
+				
+		}
+		
+		
+		the_html += "</table>";
+
+		element.innerHTML = the_html;
+	}
+
+  </script>
 
 </html>

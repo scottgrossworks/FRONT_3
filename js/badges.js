@@ -4,8 +4,6 @@
  * 
  */
 
-
-
 const badge_0 = {
 
     'tit': 'Account Secured',

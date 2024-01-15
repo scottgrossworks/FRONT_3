@@ -1,5 +1,23 @@
 
+* {
+	padding: 0;
+	margin: 0;
+	max-width:1200px;
+}
 
+:root {
+
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+body {
+	display: block;
+	margin:0 auto;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background-color: white;
+}
 
 
 

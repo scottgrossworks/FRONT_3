@@ -45,7 +45,7 @@ export async function initTrades() {
 
    
       if ((! trades) || trades.length == 0) {
-        throw new Error("server returned no trades.");
+        throw new Error("server returned no trades. ");
       }
 
       // init TRADES struct
@@ -375,6 +375,7 @@ function createColorTable(numSteps) {
  * if color is used it will be false
  * 
  */
+let retries = 0;
 function getUniqueColor() {
 
   const numKeys = Object.keys(MASTER_COLORS).length;
@@ -382,9 +383,10 @@ function getUniqueColor() {
 
   let the_color = createColor( numKeys, randomIndex );
 
-  while ( ! MASTER_COLORS[ the_color ] ) {
+  while (( retries < numKeys) && (! MASTER_COLORS[ the_color ])) {
     // if we hit a used color, call recursively
     the_color = getUniqueColor();
+    retries++;
   }
 
   COLOR_TABLE[ the_color ] = false; // mark it as used

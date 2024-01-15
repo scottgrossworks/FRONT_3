@@ -356,11 +356,11 @@ function createColor(numOfSteps, step) {
 
 
 /*
- * 
+ *  
  */
 function getUniqueColor() {
 
-  const numKeys = Object.keys(COLOR_TABLE).length;
+  const numKeys = Object.keys(localStorage).length;
   const randomIndex = Math.floor(Math.random() * numKeys);
 
   let the_color = createColor( numKeys, randomIndex );

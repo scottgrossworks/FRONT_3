@@ -15,7 +15,7 @@
 		<link rel="stylesheet" href="css/styles_med.css" type="text/css" />
 		<link rel="stylesheet" href="css/styles_lg.css" type="text/css" />
 
-		<link rel="stylesheet" href="./css/user_edit.css" tyep="text/css"/>
+		<link rel="stylesheet" href="./css/about.css" tyep="text/css"/>
 
 		<link rel="stylesheet" href="css/modal.css" type="text/css" />
    
@@ -64,28 +64,28 @@
 
     <section>
 
-		<table cellpadding="1vw">
+		<table style="padding:2vw">
 
 			<TR><TD>
-				<table>
+				<center><table>
+					<TR><TD><a href="#badges">First Topic</a></TD></TR>
 					<TR><TD><a href="#badges">Badge System</a></TD></TR>
-					<TR><TD><a href="#badges">Badge System</a></TD></TR>
-					<TR><TD><a href="#badges">Badge System</a></TD></TR>
-					<TR><TD><a href="#badges">Badge System</a></TD></TR>
-				</table>
+					<TR><TD><a href="#badges">Third Topic</a></TD></TR>
+					<TR><TD><a href="#badges">Fourth Topic</a></TD></TR>
+				</center></table>
 			</TD></TR>
 
 			<TR><TD>
 				About the About the Leedz About the Leedz About the Leedz About the Leedz Leedz About the Leedz About the Leedz About the Leedz About the Leedz About the Leedz About the Leedz About the Leedz About the Leedz About the Leedz
 			</TD></TR>
 
-			<TR><TD style="border:none">
+			<TR><TD class="labelTD">
 				<a name="badges"></a>
 				About the badge system About the badge system About the badge system:
 				<BR>
 			</TD></TR>
 
-			<TR><TD id="div_badges" style="align-items:center"></TD></TR>
+			<TR><TD id="div_badges"></TD></TR>
 
 			<TR><TD>
 				About the About the Leedz About the Leedz About the Leedz About the Leedz Leedz About the Leedz About the Leedz About the Leedz About the Leedz About the Leedz About the Leedz About the Leedz About the Leedz About the Leedz
@@ -127,7 +127,7 @@
 	function showBadges( element ) {
 		
 		
-		let the_html = "<table id='badges_list'>";
+		let the_html = "<center><table id='badges_list'>";
 		let numBadges = Object.keys(ALL_BADGES).length;
 
 		for (let i = 0; i < numBadges; i++) {
@@ -137,8 +137,7 @@
 				
 		}
 		
-		
-		the_html += "</table>";
+		the_html += "</table></center>";
 
 		element.innerHTML = the_html;
 	}

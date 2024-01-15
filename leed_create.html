@@ -111,6 +111,7 @@
 
 
 
+
     
       <!-- 
         -- ERROR MODAL 
@@ -121,7 +122,6 @@
         <h1></h1>
         <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
       </div>
-
 
 
 
@@ -274,7 +274,7 @@
             <!-- 10 -- LEED DETAILS -->
             <tr id="row_det">
                         
-                <TD id='label_det' class="labelTD" style="color:dodgerblue;">Details: </TD>
+                <TD id='label_det' class="labelTD" style="color:darkgreen;">Details: </TD>
                 
                 <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
 
@@ -282,7 +282,7 @@
                     <input type="button" value="Edit" onclick="editField('row_det', createOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_hide.png" id="10_eye" data-eyeball="hide" onclick="toggleEyeball( 'label_det', 'td_det', 10 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="10_eye" data-eyeball="show" onclick="toggleEyeball( 'label_det', 'td_det', 10 )"></TD>
             </tr>
 
 
@@ -292,7 +292,7 @@
             <!-- 11 -- LEED REQUIREMENTS -->
             <tr id="row_reqs">
                         
-                <TD id='label_reqs' class="labelTD" style="color:dodgerblue;">Requirements: </TD>
+                <TD id='label_reqs' class="labelTD" style="color:darkgreen;">Requirements: </TD>
                 
                 <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0"></td>
 
@@ -300,7 +300,7 @@
                     <input type="button" value="Edit" onclick="editField('row_reqs', createOptions)"/>
                 </td>
 
-                <TD class="eyeballTD"><img src="./img/eye_hide.png" id="11_eye" data-eyeball="hide" onclick="toggleEyeball( 'label_reqs', 'td_reqs', 11 )"></TD>
+                <TD class="eyeballTD"><img src="./img/eye_show.png" id="11_eye" data-eyeball="show" onclick="toggleEyeball( 'label_reqs', 'td_reqs', 11 )"></TD>
             </tr>
 
 
@@ -592,11 +592,11 @@
     */
     function noValue( theVal ) {
 
-        // null or 0?
+        // null or undefined?
         if (! theVal) return true;
 
         // there IS a value but it may be '0' or "" string
-        if (theVal == 0 || theVal == '0') return true;
+        if (theVal == 0 || theVal == '0' || theVal == "") return true;
         
         return false;
     }

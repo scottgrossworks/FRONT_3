@@ -1,39 +1,4 @@
-* {
-	padding: 0;
-	margin: 0;
-	max-width:1200px;
-}
 
-:root {
-
-	overflow-x: hidden;
-	overflow-y: scroll;
-}
-
-body {
-	display: block;
-	margin:0 auto;
-	overflow-x: hidden;
-	overflow-y: auto;
-	background-color: white;
-}
-
-
-
-
-
-
-
-
-@media screen and (min-width: 600px) and (max-width: 949px) {
-
-
-
-
-@media screen and (max-width:599px) {
-	
-
-}
 
 
 

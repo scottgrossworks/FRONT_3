@@ -103,7 +103,7 @@
   display: block;
   
   flex-direction: column;
-  z-index:500;
+  z-index:600;
 
   top: 2vh!important;
   margin: 5vh 5vw;

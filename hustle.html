@@ -936,12 +936,12 @@ function trimAndRemoveSpaces(inputString) {
         try {
 
             waitCursor();
-            showWaitingModal("Buying your leed . . .");
+            // showWaitingModal("Buying your leed . . .");
 
           // STEP 1 -- buyLeed() AWS lambda
           try {
 
-                await buyLeed().then(( fromDB ) => the_leed = fromDB );
+                the_leed = await buyLeed();
 
                 if (the_leed == null) {
                   throw new Error("Error buying current leed: null server response");
@@ -984,7 +984,7 @@ function trimAndRemoveSpaces(inputString) {
 
         } finally {
           normalCursor();
-          modalClose(false);
+          // modalClose(false);
         }
 
 
@@ -1015,40 +1015,35 @@ function trimAndRemoveSpaces(inputString) {
        * associate BUYER username with this Leed
        * GET BACK Square QuickPay Checkout Link and Square Order ID
        *
-       * responsible for showing modal on error
        */
       async function buyLeed() {
         
 
         let response = null;
         try {
-            await buyCurrentLeed().then(( fromDB ) => response = fromDB );
+            response = await buyCurrentLeed();
 
-            if (response == null) {
-              throw new Error("Error reporting current leed: null server response");
+            if (! response) {
+              throw new Error("Error buying current leed: null server response");
             }
 
 
-          } catch (error) {
-            
-            // DO NOT FAIL -- show error modal dialog and print error to console
-            var msg = "Cannot buy current leed.<BR>Please refresh page."
-            msg = error.message + "<BR>" + msg;
-            
-            printError("Buy Leed", error);
-            errorModal( msg , true );
+        } catch (error) {
           
-          } finally {
-            normalCursor();
-          }
+          // DO NOT FAIL -- show error modal dialog and print error to console
+          var msg = "Cannot buy current leed.<BR>Please refresh page."
+          msg = error.message + "<BR>" + msg;
+          printError("Buy Leed", msg);
+          throwError("buyCurrentLeed", error);
+        }
 
-          if (response.cd == 0) {
-            var msg = "Error received from server: " + response.er;
-            printError("Buy Leed", msg);
-            errorModal(msg, true);
-          }
+        if (response.cd == 0) {
+          var msg = "Error received from server: " + response.er;
+          printError("Buy Leed", msg);
+          throwError("Buy Leed", msg);
+        }
 
-          return response;
+        return response;
       }
 
 

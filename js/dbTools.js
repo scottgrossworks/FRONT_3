@@ -200,7 +200,6 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
             // from user obj
             params.append( USERNAME_URL_PARAM, user_obj.un );
-
             params.append( TRADE_NAME_URL_PARAM, leed_obj.tn);
             params.append( ID_URL_PARAM, leed_obj.id );
 

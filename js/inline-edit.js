@@ -565,9 +565,16 @@ function inlineDefaultFinish(rowName, options) {
                     }
 
                     // 1/2024
-                    // MAXIMUM leed price : $250
+                    // MAX PRICE
+                    // MAXIMUM leed price : $200
                     const the_price = parseInt( safeVal );
-                    if (the_price > MAX_LEED_PRICE) {
+                    if (the_price == 0) {
+                        let errMsg = "Leed price must be $1 or more";
+                        printError("inlineDefaultFinish", errMsg );
+                        alert(errMsg);
+                       return;
+                
+                    } else if (the_price > MAX_LEED_PRICE) {
                         let errMsg = "Maxiumum leed price: " + MAX_LEED_PRICE;
                         printError("inlineDefaultFinish", errMsg );
                         alert(errMsg);

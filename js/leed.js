@@ -87,7 +87,7 @@ export const OPTS_LOCKED  = 0;
 export const OPTS_SHOWING = 1;
 export const OPTS_HIDDEN  = 2;
 
-export const MAX_LEED_PRICE = 250;
+export const MAX_LEED_PRICE = 200;
 
 export const CURRENT_LEED_KEY ="CL";
 export const LEEDZ_CAL_KEY = "LC";

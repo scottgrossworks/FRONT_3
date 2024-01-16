@@ -334,7 +334,7 @@ def createPaymentLink(the_seller, the_leed, bn) :
     payment_note = the_leed['sk'] + '|' + tn + '|' + bn
 
     # displayed in checkout
-    long_title = '[' + tn + '] ' + the_leed['ti'] + ' (' + Str(the_leed['zp']) + ')'        
+    long_title = '[' + tn + '] ' + the_leed['ti'] + ' (' + str(the_leed['zp']) + ')'        
 
     # PRICE
     # must be expressed in cents

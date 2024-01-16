@@ -61,6 +61,11 @@ body {
 }
 
 
+@media screen and (min-width: 950px) {
+    #page_title {
+      margin-left:-4vw;
+    }
+}
 
 
 #links_header {

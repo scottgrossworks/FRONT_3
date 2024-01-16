@@ -128,7 +128,7 @@
 
     z-index:900;
     border: 6px solid #f44336;
-    height:65%;
+    height:fit-content;
     width:fit-content;
     justify-content: left;
 

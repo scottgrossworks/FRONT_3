@@ -917,7 +917,6 @@ function trimAndRemoveSpaces(inputString) {
           return;
         }
 
-        waitCursor();
 
 
         const current_leed = getCurrentLeed();
@@ -935,42 +934,45 @@ function trimAndRemoveSpaces(inputString) {
         */
         let the_leed = null;
         try {
+
+            waitCursor();
+            showWaitingModal("Buying your leed . . .");
+
           // STEP 1 -- buyLeed() AWS lambda
           try {
-            await buyLeed().then(( fromDB ) => the_leed = fromDB );
 
-            if (the_leed == null) {
-              throw new Error("Error buying current leed: null server response");
+                await buyLeed().then(( fromDB ) => the_leed = fromDB );
+
+                if (the_leed == null) {
+                  throw new Error("Error buying current leed: null server response");
+                }
+
+
+            } catch (error) {
+              
+              // DO NOT FAIL -- show error modal dialog and print error to console
+              var msg = "Cannot buy current leed.<BR>Please refresh page."
+              msg = error.message + "<BR>" + msg;
+              
+              printError("Buy Leed", error);
+              errorModal( msg , true );
+              return;
+              
+
             }
 
 
-          } catch (error) {
-            
-            // DO NOT FAIL -- show error modal dialog and print error to console
-            var msg = "Cannot buy current leed.<BR>Please refresh page."
-            msg = error.message + "<BR>" + msg;
-            
-            printError("Buy Leed", error);
-            errorModal( msg , true );
-            return;
-            
+            // STEP 2 -- GOTO Square QuickCheckout Payment page
+            //
+            if (! the_leed['id'])
+                throw new Error("Server did not return leed id");
+    
+            if (! the_leed['sq_url'])
+              throw new Error("Server did not return Square payment url");
 
-          } finally {
-            normalCursor();
-          }
-
-
-          // STEP 2 -- GOTO Square QuickCheckout Payment page
-          //
-          if (! the_leed['id'])
-              throw new Error("Server did not return leed id");
-  
-          if (! the_leed['sq_url'])
-            throw new Error("Server did not return Square payment url");
-
-          // IS THE LEED WE CLICKED ON THE SAME AS THE ONE WE ARE SUPPOSED TO BE BUYING?!
-          if (the_leed['id'] != current_leed.id)
-            throw new Error("Leed being bought does not match leed requested: " + current_leed.id + " != " + the_leed['id'])
+            // IS THE LEED WE CLICKED ON THE SAME AS THE ONE WE ARE SUPPOSED TO BE BUYING?!
+            if (the_leed['id'] != current_leed.id)
+              throw new Error("Leed being bought does not match leed requested: " + current_leed.id + " != " + the_leed['id'])
 
        
         } catch (error) {
@@ -978,7 +980,13 @@ function trimAndRemoveSpaces(inputString) {
           printError("Buy Leed", msg);
           errorModal(msg, true);
           return;
+
+
+        } finally {
+          normalCursor();
+          modalClose(false);
         }
+
 
         // save to current_leed and wait for callback...
         current_leed.sq_oid = the_leed['sq_oid'];

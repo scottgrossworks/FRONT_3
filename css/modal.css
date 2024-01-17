@@ -109,7 +109,7 @@
   margin: 5vh 5vw;
 
   width:60vw!important;
-  height:min-content!important;
+  height:max-content!important;
 
   text-decoration: none;
 
@@ -129,6 +129,7 @@
     z-index:900;
     border: 6px solid #f44336;
     height:fit-content;
+    min-height:70%;
     width:fit-content;
     justify-content: left;
 

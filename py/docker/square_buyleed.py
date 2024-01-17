@@ -253,6 +253,9 @@ def lambda_handler(event, context):
         # 1/2024
         # DO NOT store the_leed.bn until callback lambda AFTER Square payment authorized
         
+        logger.info("GOT PAYMENT LINK")
+        logger.info( sq_pay_link )
+        
         # SUCCESS
         sq_order_id = sq_pay_link['order_id']
         sq_long_url = sq_pay_link['long_url']
@@ -383,6 +386,14 @@ def createPaymentLink(the_seller, the_leed, bn) :
         'Content-Type': 'application/json'
     }
     
+    
+    logger.info("SENDING PAYMENT LINK REQ")
+    logger.info(SQUARE_URL)
+    logger.info(headers)
+    logger.info(json_payload)
+
+
+    
     #
     # POST request to Square API
     #
@@ -422,10 +433,20 @@ def decodeSquareResponse(sq_url, res):
     response = res.read().decode('utf-8')
     response_json = json.loads(response)
     
-    if 'payment_link' not in response_json or 'long_url' not in response_json['payment_link']:
+    if 'errors' in response_json :
+    
+        category = response_json['category']
+        code = response_json['code']
+        detail = response_json['detail']
+        
+        error_message = category + " [ " + code + " ] : " + detail
+        logger.error(error_message)
+        raise Exception(error_message)
+        
+    elif 'payment_link' not in response_json or 'long_url' not in response_json['payment_link']:
         url_msg = "Invalid response from " + sq_url
         error_message = url_msg + ". Quick Checkout payment_link / long_url not found"
-        logging.error(error_message)
+        logger.error(error_message)
         raise Exception(error_message)
     
     # else -- extract and return just the quick-pay link dictionary containing long_url and order_id

@@ -42,8 +42,8 @@
 			<div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
 
 			<div class="column _1">
-
-				<a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+			<!-- back to hustle -->
+				<a id="history_back_buton" onclick="history.go(-1)"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
 				</div>
 
 				<div class="column" style="margin:auto 0;transform:translateY(6px)">
@@ -117,8 +117,8 @@
 
 						<TD style="width:80%"><div id="sq_msg"></div></TD>
 						
-						<TD style="border:none">
-							<div class="button-container">
+						<TD class='buttonTD' style="border:none">
+					
 								<button id="sq_auth_url_button" class="button sq_button sq_url" style="display:none">
 									<div class="button-label">
 										<img id="sq_auth_img" src="img/sq_logo.png">
@@ -137,7 +137,7 @@
 										<a>Square</a>
 									</div>
 								</button>
-							</div>
+							
 						</TD>
 					</tr>
 					
@@ -337,9 +337,16 @@
 			}	
 
 
-			// coming from the Square OAuth?  Show success alert
-			if ( from_square_oauth() && (CURRENT_USER.sq_st == 'authorized') ) {
-				showSquareAuthorizedAlert();
+			// coming from the Square OAuth?
+			// change back button
+			// Show success alert
+			if (from_square_oauth()) {
+				
+				changeBackButton();
+
+				if (CURRENT_USER.sq_st == 'authorized') {
+					showSquareAuthorizedAlert();
+				}
 			}
 
 			
@@ -410,6 +417,10 @@
 
 
 
+
+
+	
+
 /**
  * Are we coming from the lambda function?
  * look for the url param
@@ -422,14 +433,23 @@
 	const params = new URLSearchParams(queryString);
 
 	const from_square = params.get('square');
-	if (from_square) {
-		return (from_square == 'authorized');
-	} 
-	return false;
+	
+	return ((from_square != null) && (from_square != ""));
 }
 
 
+/**
+ * if we are coming from Square the hustle.html is 2 steps away
+ *
+ * <a id="history_back_buton" onclick="history.go(-1)">
+ */ 
+function changeBackButton() {
 
+	let back_button = document.getElementById("history_back_button");
+	back_button.onclick = function() {
+		history.go(-2);
+	  };
+ }
 
 
 /**
@@ -479,7 +499,6 @@ async function initSquareButton() {
 
 				throwError("Square status not found", "The Leedz is not authorized");
 
-				
 
 			} else if (CURRENT_USER.sq_st == 'authorized') {
 				
@@ -501,7 +520,7 @@ async function initSquareButton() {
 				});
   
 				sq_button.style.display = "block";
-
+	
 
 
 			} else if (CURRENT_USER.sq_st.startsWith("http")) {

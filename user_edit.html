@@ -80,10 +80,11 @@
 					<tr id="row_username">
 					
 						<TD class="labelTD">Username: </TD>
-						
-						<td colspan=2 id="td_username" data-inlineType="text" data-inlineName="username" 
-						data-inlineRequired="true" data-inlinePlaceholder="(Required)" style="color:green;font-weight:600;font-size:1.5em;"></td>
+							
+						<td id="td_username"></td>
 		
+						<TD class='buttonTD'></TD>
+				
 					</tr>
 
 
@@ -91,16 +92,14 @@
 
 					<tr id="row_login">
 					
-						<TD colspan=2 class="labelTD">Leedz and Square Account: </TD>
-						
-		
-						<!-- 
-						DELETE ACCOUNT confirmation page
-						-->
-						<td data-inlineType="doneButton" class="buttonTD">
-							<input id="del_button" type="button" value="Remove" onclick="window.open('./user_delete_confirm.html', '_self')">
-						</td>
+						<TD class="labelTD">Account: </TD>
 
+						<TD><div>Cancel <b style="color:green">Leedz</b> and <b style="color:green">Square</b> authorizations</div></TD>
+						
+						<!-- GOTO DELETE ACCOUNT confirmation page 	-->
+						<td colspan='2' class="buttonTD">
+							<input id="del_button" type="button" value="Remove" onclick=""/>
+						</td>
 
 
 					</tr>

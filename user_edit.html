@@ -91,17 +91,18 @@
 
 					<tr id="row_login">
 					
-						<TD class="labelTD">Login: </TD>
+						<TD colspan=2 class="labelTD">Leedz and Square Account: </TD>
 						
-						<td data-inlineType="text" data-inlineName="login"></td>
 		
-						<!-- FIXME FIXME FIXME 
+						<!-- 
 						DELETE ACCOUNT confirmation page
 						-->
-
 						<td data-inlineType="doneButton" class="buttonTD">
-							<input type="button" value="Edit" onclick=""/>
+							<input id="del_button" type="button" value="Remove" onclick="window.open('./user_delete_confirm.html', '_self')">
 						</td>
+
+
+
 					</tr>
 
 
@@ -308,6 +309,7 @@
 		import { MAX_USER_SUBS } from "./js/user.js";
 
 		const URL_USER_DELETED = "./user_deleted.html";
+		const URL_DEL_USER = "./user_delete_confirm.html";
 
 		var EDITING = false;
 		let CURRENT_USER;
@@ -515,7 +517,7 @@ async function initSquareButton() {
 				sq_button.addEventListener("click", function( event ) {
 					// takes user --> Square to authorize account
 					waitCursor();
-					window.open( "./user_delete_confirm.html", "_top");
+					window.open( URL_DEL_USER, "_top");
 			
 				});
   

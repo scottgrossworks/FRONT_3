@@ -108,6 +108,13 @@ table#badges_list tbody td {
 	padding:2px;
 }
 
+
+#del_button {
+	background-color: coral;
+	color:white;
+}
+
+
 .sq_button {
 	
     display: flex;

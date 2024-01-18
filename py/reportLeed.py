@@ -1,23 +1,33 @@
 #
 # REPORT LEED
 #
-#
+# 1/2024 - added email
 #
 
 import boto3
-from boto3.dynamodb.conditions import Attr
 from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
-
-import random
-
+import _datetime
 from decimal import Decimal
-
 import json
 
 import logging
+
+
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+
+        
+
+        
+#
+# current time since epoch GMT (hopefully)
+#
+def getToday():
+    today = str( _datetime.date.today() )
+    return today
+
 
 
 
@@ -67,10 +77,10 @@ class DecimalJsonEncoder(json.encoder.JSONEncoder):
 # {'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1} 
 # {'er': " + err_str + ",'cd': 0} 
 #
-def handle_error(err_str):
+def handle_error( the_error ):
        
+    err_str = str( the_error )
     logger.error(err_str)
-
     result = "{'er': " + err_str + ",'cd': 0}" 
     
     return result
@@ -106,21 +116,14 @@ def validateParam( event, param, required ):
         
         
 #   
-# will throw ValueError
+# will throw Error
 #
 #
 def reportLeed( table, tn, id, un ):
     
     pk = "leed#" + tn
     
-    
-    #
-    #
-    # FIXME 11/2023
-    # do not just get_item here
-    # update_item to include tagging that this leed has been
-    # reported, when, and by whom
-    #
+    the_leed = ""
     try:
         response = table.get_item(
             Key={'pk': pk, 'sk': id}
@@ -132,22 +135,98 @@ def reportLeed( table, tn, id, un ):
         
         if ('Item' not in response):
             msg = "Leed not found [" + tn + "] " + id
-            raise ValueError( msg )
+            raise Exception( msg )
         
         else:
-            result = response['Item']
+            the_leed = response['Item']
         
+        
+        sendReportEmail( the_leed, tn, un )
     
-    except ClientError as err:
+    
+    except Exception as err:
         
-        msg = "Couldn't get details [" + tn + "] " + id
+        msg = "Error reporting leed [" + tn + "] " + id + ": " + str(err)
         logger.error(msg)
-        throw
+        raise err
     
     
-    return result
+    return the_leed
         
-  
+
+
+
+
+#
+#
+#
+def sendReportEmail( the_leed, tn, un ):
+    
+    SENDER = "theleedz.com@gmail.com" # must be verified in AWS SES Email
+    RECIPIENT = SENDER
+    SUBJECT = "Leed reported: " + the_leed['sk']
+    
+    PRICE = str( the_leed['pr'] )
+    
+    
+    un_leed_report = "Leedz user " + un + " reported a leed"   
+    the_date = "Date: " + getToday()
+    leed_summary = "[" + tn + "] " + the_leed['ti'] + " (" + PRICE + ")"
+    leed_detail = str(the_leed)
+
+    # The email body for recipients with non-HTML email clients
+    BODY_TEXT = (
+        un_leed_report + "\r\n" +
+        the_date + "\r\n" +
+        leed_summary + "\r\n\r\n" + 
+        leed_detail
+    )
+               
+                
+    # The HTML body of the email
+    BODY_START = "<html><head></head><body><h1>" + un_leed_report + "</h1><BR>" + the_date + "<BR>"
+    BODY_MID = leed_summary + "<BR><BR>" + leed_detail
+    BODY_END = "</body></html>"
+    
+
+    try:
+        
+        # Create a new SES resource and specify a region.
+        client = boto3.client('ses',region_name="us-west-2")
+        
+        response = client.send_email(
+            Destination={
+                'ToAddresses': [
+                    RECIPIENT,
+                ],
+            },
+            Message={
+                'Body': {
+                    'Html': {
+                        'Charset': 'UTF-8',
+                        'Data': BODY_START + BODY_MID + BODY_END
+                    },
+                    'Text': {
+                        'Charset': 'UTF-8',
+                        'Data': BODY_TEXT
+                    },
+                },
+                'Subject': {
+
+                    'Data': SUBJECT
+                },
+            },
+            Source=SENDER
+        )
+        
+        logger.info("EMAIL SENT to " + RECIPIENT + " ID: " + response['MessageId'])
+        
+    # Display an error if something goes wrong.	
+    except Exception as error:
+        raise
+    
+    
+    
         
     
     
@@ -155,8 +234,7 @@ def reportLeed( table, tn, id, un ):
 # 
 #
 #
-#
-        
+#  
 def lambda_handler(event, context):
 
     result = ""
@@ -203,12 +281,8 @@ def lambda_handler(event, context):
     #
     # ERROR HANDLING
     #
-    except ClientError as error:
+    except Exception as error:
         result = handle_error(error)
-    
-    except BaseException as error:
-        result = handle_error(error)
-
 
     #
     # JSON-encode the result
@@ -223,10 +297,6 @@ def lambda_handler(event, context):
 
 
 
-
-
-# json.dumps(some_object, cls=DecimalJsonEncoder)
-    
 #
 # Create the HTTP response object
 #
@@ -242,8 +312,7 @@ def createHttpResponse( result ):
         },
         'body': result,
     }
-
-    #logger.info("RETURNING JSON")
+    
     logger.info(result)
     
     return response

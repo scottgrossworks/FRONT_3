@@ -494,7 +494,7 @@
 
   <script type="module" charset=”utf-8″>
 
-    import { getUserLogin,initUser, guestUser, getCurrentUser, saveCurrentUser, isGuestUser, isSubscribed } from "./js/user.js";      
+    import { getUserLogin,reloadCurrentUser, guestUser, getCurrentUser, saveCurrentUser, isGuestUser, isSubscribed } from "./js/user.js";      
     import { initTrades } from "./js/trades.js";   
     import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
@@ -1656,11 +1656,9 @@ async function mainPageLoad( current_user ) {
 // START FROM HERE ON PAGE LOAD.....
 //
 //
-//
 // <body onload=" window.open(...)">
 window.onload = async function() {
 
-  
   let current_user; 
   const userLogin = {};
     
@@ -1668,7 +1666,6 @@ window.onload = async function() {
 
       getUserLogin( userLogin );
 
-      console.log("GOT NEW USER LOGIN");
       console.log(userLogin);
 
       if (! userLogin['un']) {
@@ -1701,11 +1698,8 @@ window.onload = async function() {
 
       if (isGuestUser(false)) {
         try {
-          await initUser( userLogin['un'] ); // will throw error
-    
-          // return newly-loaded user
-          current_user = getCurrentUser( false );
-    
+          
+          current_user = await reloadCurrentUser();
     
         } catch (error) {
     
@@ -1747,10 +1741,11 @@ window.onload = async function() {
 
   window.addEventListener("popstate", (event) => {
 
+      console.log("IN POPSTATE EVENT");
       // LOAD the page with the current user info
-      const current_user = getCurrentUser(true);
-      console.log(current_user);
-      mainPageLoad( current_user );
+      // const current_user = getCurrentUser(true);
+      // console.log(current_user);
+      // mainPageLoad( current_user );
   });
 
 

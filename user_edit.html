@@ -319,38 +319,36 @@
 
 			waitCursor();
 
-			await reloadCurrentUser()
-            .then((data) => {
-    
-              CURRENT_USER = data;
-			  console.log(CURRENT_USER)
-    
-            })
-            .catch(error => {
-				throwError("Reload current user", error.message);
-            });
-
 		
+			// coming from the Square OAuth?
+			// change back button
+			// Show success alert
+			if (from_square_oauth()) {
+				
+				await reloadCurrentUser()
+				.then((data) => {
+				  CURRENT_USER = data;
+				})
+				.catch(error => {
+					throwError("Reload current user", error.message);
+				});
+	
+				changeBackButton();
+
+				if (CURRENT_USER.sq_st == 'authorized') {
+					showSquareAuthorizedAlert();
+				}
+			} else {
+				CURRENT_USER = getCurrentUser(true);
+			}
+
+			
 			if ( ! CURRENT_USER.un ) {
 				printError("User Edit", "No user currently logged in");
 				errorModal("Cannot Edit User<BR>Not currently logged in.", true);
 				throwError("User Edit", "Not logged in");
 			}	
 
-
-			// coming from the Square OAuth?
-			// change back button
-			// Show success alert
-			if (from_square_oauth()) {
-				
-				changeBackButton();
-
-				if (CURRENT_USER.sq_st == 'authorized') {
-					showSquareAuthorizedAlert();
-				}
-			}
-
-			
 			// this will take on any changes the user makes on the form
 			USER_CHANGES = CURRENT_USER;
 

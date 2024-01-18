@@ -54,6 +54,7 @@
    html, body {
       
     overflow-x: hidden;
+    overflow-y: hidden;
 
     color:black;
     background-color: white;

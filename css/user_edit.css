@@ -134,6 +134,8 @@ table#badges_list tbody td {
     font-family: var(--FONT_3);
     font-size: medium;
     font-weight: 600;
+
+	box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2); 
 }
 
 #sq_auth_img {

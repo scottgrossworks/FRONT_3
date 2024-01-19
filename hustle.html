@@ -1657,10 +1657,7 @@ async function mainPageLoad( current_user ) {
 //
 //
 // <body onload=" window.open(...)">
-let LOAD_COUNTER = 0;
 window.onload = async function() {
-
-  console.log("ON LOAD=" + LOAD_COUNTER++);
 
   let current_user; 
   const userLogin = {};
@@ -1740,24 +1737,18 @@ window.onload = async function() {
   /**
    * BACK BUTTON
    * called when user comes back to main page from edit/view html pages
-
-  let POP_COUNTER = 0;
+  */
   window.addEventListener("popstate", (event) => {
 
-      console.log("IN POPSTATE EVENT=" + POP_COUNTER++);
       // LOAD the page with the current user info
-      // const current_user = getCurrentUser(true);
+      const current_user = reloadCurrentUser();
       // console.log(current_user);
-      // mainPageLoad( current_user );
+      mainPageLoad( current_user );
   });
-   */
+
 
 </script>
 
-  
- 
-   
-   
-   
-   </body>
-  </html>
+
+</body>
+</html>

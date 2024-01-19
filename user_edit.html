@@ -43,7 +43,7 @@
 
 			<div class="column _1">
 			<!-- back to hustle -->
-				<a id="history_back_buton" onclick="history.go(-1)"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+				<a id="history_back_buton" onclick=""><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
 				</div>
 
 				<div class="column" style="margin:auto 0;transform:translateY(6px)">
@@ -333,13 +333,16 @@
 					throwError("Reload current user", error.message);
 				});
 	
-				changeBackButton();
+				square_backButton();
 
 				if (CURRENT_USER.sq_st == 'authorized') {
 					showSquareAuthorizedAlert();
 				}
+			
+			
 			} else {
 				CURRENT_USER = getCurrentUser(true);
+				user_backButton();
 			}
 
 			
@@ -438,15 +441,26 @@
 
 
 /**
- * if we are coming from Square the hustle.html is 2 steps away
+ * coming from hustle?  -- -1 takes you back
+ * coming from Square? -- -2 takes you back
  *
  * <a id="history_back_buton" onclick="history.go(-1)">
  */ 
-function changeBackButton() {
+ 
+function user_backButton() {
+	let back_button = document.getElementById("history_back_button");
+	back_button.onclick = function() {
+		history.go(-1);
+		window.dispatchEvent(new Event('popstate'));
+	  };
+}
+
+function square_backButton() {
 
 	let back_button = document.getElementById("history_back_button");
 	back_button.onclick = function() {
 		history.go(-2);
+		window.dispatchEvent(new Event('popstate'));
 	  };
  }
 
@@ -829,7 +843,6 @@ function initTradesTable( all_trades, tradeListener ) {
 
 			// console.log(USER_CHANGES);
 		}
-
 
 
 

@@ -1741,7 +1741,7 @@ window.onload = async function() {
   window.addEventListener("popstate", (event) => {
 
       // LOAD the page with the current user info
-      const current_user = reloadCurrentUser();
+      const current_user = getCurrentUser(true);
       // console.log(current_user);
       mainPageLoad( current_user );
   });

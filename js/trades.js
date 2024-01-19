@@ -35,8 +35,8 @@ export async function initTrades() {
 
   let trades = [];
 
-  const currentUser = getCurrentUser(true);
-  
+  const currentUser = getCurrentUser(false);
+
   let no_subs = isGuestUser(true) || (currentUser.sb.length == 0);
 
   try {
@@ -161,9 +161,7 @@ export function getTradeInfo(trade_name) {
 */
 function initTradesColumn( tradeListener ) {
 
-  const current_user = getCurrentUser(false);
-  if (current_user == null || current_user.sb == null)
-      throwError("InitTrades", "Current User not initialized");
+  const current_user = getCurrentUser( true );
 
   // current_user may be guest user
   console.log("INIT TRADES COLUMN");

@@ -1738,10 +1738,10 @@ window.onload = async function() {
    * BACK BUTTON
    * called when user comes back to main page from edit/view html pages
    */
-
+  let POP_COUNTER = 0;
   window.addEventListener("popstate", (event) => {
 
-      console.log("IN POPSTATE EVENT");
+      console.log("IN POPSTATE EVENT=" + POP_COUNTER++);
       // LOAD the page with the current user info
       // const current_user = getCurrentUser(true);
       // console.log(current_user);

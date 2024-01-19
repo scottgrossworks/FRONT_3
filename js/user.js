@@ -266,7 +266,7 @@ export function getCurrentUser( useCache ) {
     }
   }
 
-  console.log("GOT USER==" + useCache + "==" + new Date().getTime());
+  // console.log("GOT USER==" + useCache + "==" + new Date().getTime());
   console.log(CURRENT_USER);
 
   // may be blank - won't be null
@@ -376,7 +376,6 @@ export async function initUser( login ) {
     }
 
     // save modified CURRENT_USER to session storage
-    console.log("INIT USER SAVE CACHE USER");
     saveCacheUser( CURRENT_USER );
 
     return CURRENT_USER;
@@ -494,11 +493,13 @@ function loadCacheUser() {
     }
 
     
-    console.log("LOAD USER CACHE=" + new Date().getTime());
-    console.log(userObj);
+    // console.log("LOAD USER CACHE=" + new Date().getTime());
+    // console.log(userObj);
 
     return userObj;
 }
+
+
 
 
 
@@ -514,9 +515,6 @@ function saveCacheUser( userObj ) {
       printError("saveCacheUser()", "attempt to save empty user object");
       return;
     }
-
-    console.error("SAVE CACHE USER!");
-    console.log(userObj);
 
     try { 
       let userJSON = JSON.stringify (userObj);
@@ -568,142 +566,3 @@ export function isSubscribed( trade_name ) {
   }
 
   
-
-/**
- * 
-
-export async function saveSubscription( trade_name ) {
-
-    if (CURRENT_USER.sb.length == MAX_USER_SUBS) {
-      var error = "MAX subscriptions reached: " + MAX_USER_SUBS;
-      printError("saveSubscription", error);
-      throwError("Save Subscription", error);
-    }
-
-    if (CURRENT_USER.sb.indexOf(trade_name) == -1) { // not in list already
-      CURRENT_USER.sb.push( trade_name );
-    }
-
-    console.log("SAVE SUBSCRIPTION");
-    saveCacheUser( CURRENT_USER );
-
-    // GUEST_USER can save / remove subscriptions from the current session cache user but
-    // no subscription added to DB
-    if ( isGuestUser( true ) ) return;
-
-    // if not guest user
-    // Trade Subscribe to DB
-      
-    //   client <---> API Gateway <===> DB
-    //
-    let resObj = [];   
-    try {
-      
-        await db_updateUser( CHG_USER, CURRENT_USER )
-        .then(data => {
-
-        if (data == null) throw new Error("null response from GET");
-        
-        resObj = data[0];
-        if (resObj.res == DB_FAIL) {
-          // ERROR CODE
-          throwError("Trade Subscribe", resObj.msg);
-        }
-        
-        // else -- SUCCESS! subscription saved
-
-        })
-        .catch(error => {
-          printError("db_updateUser", error);
-          throwError('Trade Subscribe',  + error);
-        });
-
-    } catch (error) {
-      let msg = 'Error subscribing to trade [ ' + trade_name + ' ]:' + error.message;
-      throwError('Trade Subscribe', msg);
-    }
-    
-}
-            
-
-   */
-
-
-
-
-
-  
-  /**
-   *  
- 
-  export async function removeSubscription( trade_name ) {
-     
-    if (CURRENT_USER.sb.length == 0) {
-      printError("removeSubscription", "Empty list for: " + trade_name);
-      return;
-    }
-
-    CURRENT_USER.sb.splice( CURRENT_USER.sb.indexOf(trade_name), 1);
-
-    saveCacheUser( CURRENT_USER );
-
-
-    // GUEST_USER can save / remove subscriptions from the current session cache user but
-    // no subscription added to DB
-    if ( isGuestUser( true ) ) return;
-
-    // if not guest user
-    // remove subscription from DB
-    //
-    // console.log("user.removeSubscription() " + trade_name + " ......");
-
-
-        //   client <---> API Gateway <===> DB
-      //
-      //
-      let resObj = [];   
-      try {
-        // get the user object
-          await db_updateUser( REM_SUB, CURRENT_USER )
-          .then(data => {
-  
-          if (data == null) throw new Error("null response from GET");
-          
-          resObj = data[0];
-          if (resObj.res == 0) {
-            // ERROR CODE
-            throwError("db_updateUser", resObj.msg);
-          }
-          
-          // else -- SUCCESS! subscription removed
-  
-          })
-          .catch(error => {
-            printError("db_updateUser", error);
-            throwError('Remove Subscription',  + error);
-          });
-
-      } catch (error) {
-        let msg = 'Error removing subscription to trade [ ' + trade_name + ' ]:' + error.message;
-        throwError('Remove Subscription', msg);
-      }
-
-}
-
-  */
-
-
-
-/**
- * return the list of subscriptions for the current user
-
-export function getSubscriptions() {
-  
-  if (! CURRENT_USER)
-    throwError("getSubscriptions()", new Error("CURRENT_USER is null"));
-
-    // probably would be better to make a copy and return that
-    return CURRENT_USER.sb;
-  } 
-
-   */

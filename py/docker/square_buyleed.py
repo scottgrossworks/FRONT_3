@@ -348,7 +348,7 @@ def createPaymentLink(the_seller, the_leed, bn) :
     # FIXME 1/2024
     # MUST fernet dencrypt token using seller username
     # acc_token = 'Bearer ' + decryptToken( the_seller['sk'] , the_seller['sq_at'] )
-    acc_token = 'Bearer ' + the_seller['sq_at']
+    acc_token = the_seller['sq_at']
     # FIXME DO WE NEED?
     # txt_key = base64.urlsafe_b64decode(string.encode())[:32]
     
@@ -383,7 +383,8 @@ def createPaymentLink(the_seller, the_leed, bn) :
         'Accept': 'application/json',
         'Square-Version': '2023-12-13',
         'Authorization': acc_token,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'User-Agent': 'Leedz/1.0'
     }
     
     

@@ -706,7 +706,6 @@
             
             // this is an async call
             // will return immediately - data shows up later
-            console.error("findLeedz.loadDBLeedz()");
             loadDBLeedz();
 
             // this is an async call
@@ -1083,7 +1082,7 @@ function trimAndRemoveSpaces(inputString) {
             normalCursor();
         }
 
-        console.log(from_DB)
+        // console.log(from_DB)
 
 
         /**
@@ -1618,7 +1617,6 @@ async function mainPageLoad( current_user ) {
       */
 
       try {
-        console.error("mainPageLoad.loadDBLeedz()");
         loadDBLeedz();
 
       } catch (error) {
@@ -1660,15 +1658,13 @@ async function mainPageLoad( current_user ) {
 // <body onload=" window.open(...)">
 window.onload = async function() {
 
-  console.error("    !!!!!!   WINDOW LOAD !!!!!!!   ");
-
   let current_user; 
   const userLogin = {};
     
     try {
 
         getUserLogin( userLogin );
-        console.log(userLogin);
+        // console.log(userLogin);
 
         if (! userLogin['un']) {
             // 
@@ -1736,13 +1732,13 @@ window.onload = async function() {
    * BACK BUTTON
    * called when user comes back to main page from edit/view html pages
   */
-  let pop_counter = 0;
+  // let pop_counter = 0;
   window.addEventListener("popstate", (event) => {
 
       // LOAD the page with the current user info
-      console.log("POPSTATE=" + pop_counter++);
+      // console.log("POPSTATE=" + pop_counter++);
       const current_user = getCurrentUser(true);
-      console.log(current_user);
+      // console.log(current_user);
       mainPageLoad( current_user );
   });
 

@@ -1743,8 +1743,8 @@ window.onload = async function() {
   window.addEventListener("popstate", (event) => {
 
       // LOAD the page with the current user info
-      const current_user = getCurrentUser(true);
       console.log("POPSTATE=" + pop_counter++);
+      const current_user = getCurrentUser(true);
       console.log(current_user);
       mainPageLoad( current_user );
   });

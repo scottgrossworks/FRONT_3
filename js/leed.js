@@ -103,7 +103,7 @@ const CURRENT_LEED = blankLeedObject();
  */
 export function changeLeedOpts( theLeed, index, newVal ) {
   
-  if (theLeed == null) {
+  if (! theLeed) {
     throwError("changeLeedOpts", "null Leed object");
   }
 
@@ -209,7 +209,7 @@ export function blankLeedObject() {
  */
 export function getCurrentLeed() {
 
-    if (CURRENT_LEED == null)
+    if (! CURRENT_LEED)
         throwError("getCurrentLeed", "CURRENT_LEED is null");
 
     if (CURRENT_LEED.id == null) {
@@ -320,7 +320,7 @@ export function clearCurrentLeed() {
  */
 export function isLeedActive() {
     
-    if (CURRENT_LEED == null)
+    if (! CURRENT_LEED)
         throwError("isLeedActive", "CURRENT_LEED is null");
 
     return (CURRENT_LEED.id != null);
@@ -336,7 +336,7 @@ export function isLeedActive() {
  */
 export function cacheCurrentLeed( theLeed ) {
 
-    if (theLeed == null)
+    if (! theLeed)
         throwError("cacheLeed", "Cannot cache null leed");
 
     let leedJSON = null;
@@ -364,7 +364,7 @@ export function cacheCurrentLeed( theLeed ) {
  function loadCacheLeed() {
 
     const leedJSON = window.localStorage.getItem( CURRENT_LEED_KEY );
-    if (leedJSON == null) {
+    if (! leedJSON) {
       // this is not an error -- will happen any time program starts with empty cache  
       // printError("loadCacheLeed", "No value in cache for key: " + CURRENT_LEED_KEY);
         CURRENT_LEED = blankLeedObject();
@@ -417,36 +417,6 @@ export function cacheCurrentLeed( theLeed ) {
 
 
 
-function JSON_to_Array(jsonString) {
-  
-  if (jsonString == null || jsonString == "" || jsonString == CACHE_DELIM)
-      return [];
-  
-  try {
-    // split the string into an array of JSON strings
-    var jsonStrings = jsonString.split('|');
-    var jsonArray = [];
-
-    for (var i = 0; i < jsonStrings.length; i++) {
-      
-      if (jsonStrings[i] == "") continue;
-      
-      try {
-        jsonArray.push(JSON.parse(jsonStrings[i]));
-      } catch (error) {
-        printError("JSON.parse", jsonStrings[i]);
-      }
-
-    }
-    return jsonArray;
-  
-  } catch (error) {
-    printError("JSON_to_Array", "JSON Error: " + jsonString);
-    return [];
-  }
-}
-
-
 
 /**
  *
@@ -491,7 +461,7 @@ export function loadLeedzFromCache( the_month, the_year ) {
 
     let JSON_leedz = window.localStorage.getItem( cache_key );
 
-    if (JSON_leedz == null || JSON_leedz == "" || JSON_leedz == CACHE_DELIM) {
+    if ( (! JSON_leedz) || JSON_leedz == "" || JSON_leedz == CACHE_DELIM) {
       // there may be nothing in the cache -- this is not an eror 
       return [];
     }
@@ -507,7 +477,7 @@ export function loadLeedzFromCache( the_month, the_year ) {
     for (var i = 0; i < cacheLeedz.length; i++) {
   
         var theJSON = cacheLeedz[i];
-        if ((theJSON == null) || (theJSON == "") || (theJSON == CACHE_DELIM)) continue; // just be safe
+        if ((! theJSON) || (theJSON == "") || (theJSON == CACHE_DELIM)) continue; // just be safe
 
         // (re)create leed node using cache data
         var theLeed = JSON.parse( theJSON );
@@ -554,7 +524,7 @@ export function loadLeedzFromCache( the_month, the_year ) {
 export async function saveLeedChanges( leedObj ) {
 
   
-  if (leedObj == null)
+  if (! leedObj)
     throwError("saveLeedChanges", "null leed object");
 
   if (CURRENT_LEED == null)
@@ -666,7 +636,7 @@ export async function saveLeedChanges( leedObj ) {
  */
 export async function createDBLeed( current_user, leedObj ) {
 
-  if (leedObj == null)
+  if (! leedObj)
     throwError("saveLeedChanges", "null leed object");
 
     // console.log("----------> ******** POSTING NEW LEED TO SERVER ******* ");
@@ -732,7 +702,7 @@ export async function createDBLeed( current_user, leedObj ) {
  */
 export async function buyCurrentLeed() {
 
-  if (CURRENT_LEED == null)
+  if (! CURRENT_LEED)
     throwError("buyCurrentLeed", "CURRENT_LEED is null");
 
     const current_user = getCurrentUser(false);
@@ -779,36 +749,16 @@ export async function buyCurrentLeed() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /** 
  *
  * DELETE the Leed
  */
 export async function deleteCurrentLeed() {
 
-  if (CURRENT_LEED == null)
+  if (! CURRENT_LEED)
     throwError("deleteCurrentLeed", "CURRENT_LEED is null");
 
-
     const current_user = getCurrentUser(false);
-
  
     // API request --> DB 
     // delete leed to DB
@@ -856,7 +806,7 @@ export async function deleteCurrentLeed() {
  */
 export async function reportCurrentLeed() {
 
-  if (CURRENT_LEED == null)
+  if (! CURRENT_LEED)
     throwError("reportCurrentLeed", "CURRENT_LEED is null");
  
     console.log("----------> ******** REPORTING CURRENT LEED TO SERVER ******* ");
@@ -896,5 +846,4 @@ export async function reportCurrentLeed() {
     console.log("BACK FROM DB REPORT RESULTS=" + results);
     return results;
 }
-
 

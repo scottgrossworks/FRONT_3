@@ -182,7 +182,7 @@ let CURRENT_USER = blankUserObject();
  */
 export async function deleteCurrentUser() {
 
-  if (CURRENT_USER == null)
+  if (! CURRENT_USER)
     throwError("deleteCurrentUser", "CURRENT_USER should never be null");
 
 
@@ -254,7 +254,7 @@ export function isGuestUser( guest_user ) {
  */
 export function getCurrentUser( useCache ) {
 
-  if (CURRENT_USER == null)
+  if (! CURRENT_USER)
     throwError("getCurrentUser", "CURRENT_USER should never be null");
 
   if (isGuestUser( true )) return GUEST_USER;
@@ -399,7 +399,7 @@ export async function initUser( login ) {
 
 export async function saveCurrentUser() {
 
-  if (CURRENT_USER == null)
+  if (! CURRENT_USER)
     throwError("saveCurrentUser", "No CURRENT_USER initialized");
 
   if (isGuestUser( true )) return;
@@ -429,10 +429,10 @@ export async function saveCurrentUser() {
 export async function saveUserChanges( userObj ) {
 
 
-  if (userObj == null)
+  if (! userObj)
     throwError("saveUserChanges", "null user object");
 
-  if (CURRENT_USER == null)
+  if (! CURRENT_USER)
     throwError("saveUserChanges", "No CURRENT_USER initialized");
 
   // will not change
@@ -481,7 +481,7 @@ function loadCacheUser() {
 
     let userJSON = window.localStorage.getItem( CACHE_USER_KEY );
     let userObj = null;
-    if (userJSON == undefined || userJSON == null) {
+    if (! userJSON) {
       // NOT an error -- will happen any time app started with fresh cache and new user
       // printError("loadCacheUser", "No value for cache key=" + CACHE_USER_KEY);
       return null; // return NULL and be done
@@ -514,7 +514,7 @@ function saveCacheUser( userObj ) {
     // console.log("SAVE CACHE USER=" + new Date().getTime());  
     // console.log(userObj);
 
-    if (userObj == undefined || userObj == null) {
+    if (! userObj) {
       printError("saveCacheUser()", "attempt to save empty user object");
       return;
     }
@@ -698,7 +698,7 @@ export async function saveSubscription( trade_name ) {
  */
 export function getSubscriptions() {
   
-  if (CURRENT_USER == null)
+  if (! CURRENT_USER)
     throwError("getSubscriptions()", new Error("CURRENT_USER is null"));
 
     // probably would be better to make a copy and return that

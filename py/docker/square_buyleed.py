@@ -22,6 +22,7 @@ import base64
 import hashlib
 
 import urllib.request
+import urllib.error
 
 import boto3
 from botocore.exceptions import ClientError
@@ -383,8 +384,7 @@ def createPaymentLink(the_seller, the_leed, bn) :
         'Accept': 'application/json',
         'Square-Version': '2023-12-13',
         'Authorization': acc_token,
-        'Content-Type': 'application/json',
-        'User-Agent': 'Leedz/1.0'
+        'Content-Type': 'application/json'
     }
     
     
@@ -411,11 +411,36 @@ def createPaymentLink(the_seller, the_leed, bn) :
         ),
             timeout=10)
 
+
+
+    except urllib.error.HTTPError as err:
+
+        err_code = ""
+        if err.code == 401:
+            err_code = '[401] Unauthorized'
+        
+        elif err.code == 403:
+            err_code = '[403] Forbidden'
+        
+        elif err.code == 500:
+            err_code = '[500] Server Error'
+
+        else:
+            err_code = '[' + str(err.code) + '] Unknown'
+
+        msg = "HTTP Error making POST request to Square create-payment-link: " + SQUARE_URL
+        logger.error(msg + "  " + err_code + ": " + str(err))
+        raise
+    
+
     except Exception as err:
         
         msg = "Error making POST request to Square create-payment-link: " + SQUARE_URL
         logger.error(msg + ": " + str(err))
         raise
+        
+        
+        # SUCCESS!  We have a response from Square
         
     try:
         # RETURN payment_link dict -- will throw Exception

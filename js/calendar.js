@@ -212,6 +212,7 @@ export function loadDBLeedz() {
 
     waitCursor();
 
+    console.log("loadDBLeedz()");
 
     // ASYNC CALL
     //

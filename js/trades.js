@@ -35,7 +35,8 @@ export async function initTrades() {
 
   let trades = [];
 
-  const currentUser = getCurrentUser(false);
+  const currentUser = getCurrentUser(true);
+  
   let no_subs = isGuestUser(true) || (currentUser.sb.length == 0);
 
   try {

@@ -266,7 +266,7 @@ export function getCurrentUser( useCache ) {
     }
   }
 
-  console.log("GOT CACHE USER=" + new Date().toString());
+  console.log("GOT CACHE USER=" + new Date().getTime());
   console.log(CURRENT_USER);
 
   // may be blank - won't be null

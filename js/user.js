@@ -501,8 +501,8 @@ function loadCacheUser() {
     }
 
     
-    // console.log("LOAD USER CACHE=" + new Date().getTime());
-    // console.log(userObj);
+    console.log("LOAD USER CACHE=" + new Date().getTime());
+    console.log(userObj);
 
     return userObj;
 }
@@ -534,6 +534,7 @@ function saveCacheUser( userObj ) {
       printError("saveCacheUser()", error.message);
       window.localStorage.setItem( CACHE_USER_KEY , null);
     }
+
 }
 
 

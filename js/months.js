@@ -100,6 +100,7 @@ function showPrevMonth() {
 
     // this is an async call
     // will return immediately - data shows up later
+    console.error("showPrevMonth.loadDBLeedz()");
     loadDBLeedz();
 
     
@@ -137,6 +138,7 @@ function showNextMonth() {
 
     // this is an async call
     // will return immediately - data shows up later
+    console.error("showNextMonth.loadDBLeedz()");
     loadDBLeedz();
 
    

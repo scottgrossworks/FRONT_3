@@ -397,6 +397,7 @@ def createPaymentLink(the_seller, the_leed, bn) :
     #
     # POST request to Square API
     #
+    res = ""
     try :
     
         # Send the HTTP POST request
@@ -407,16 +408,21 @@ def createPaymentLink(the_seller, the_leed, bn) :
             data = json_payload,
             method = 'POST'
         ),
-            timeout=8)
+            timeout=10)
 
+    except Exception as err:
         
+        msg = "Error making POST request to Square create-payment-link: " + SQUARE_URL
+        logger.error(msg + ": " + str(err))
+        raise
+        
+    try:
         # RETURN payment_link dict -- will throw Exception
         return decodeSquareResponse( SQUARE_URL, res )
-        
     
     except Exception as err:
         
-        msg = "Cannot create Square Payment Link.  Error in POST request to: " + SQUARE_URL
+        msg = "Cannot create Square Payment Link.  Error in response from: " + SQUARE_URL
         logger.error(msg + ": " + str(err))
         raise
     

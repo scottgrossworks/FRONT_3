@@ -706,6 +706,7 @@
             
             // this is an async call
             // will return immediately - data shows up later
+            console.error("findLeedz.loadDBLeedz()");
             loadDBLeedz();
 
             // this is an async call
@@ -1617,7 +1618,7 @@ async function mainPageLoad( current_user ) {
       */
 
       try {
-
+        console.error("mainPageLoad.loadDBLeedz()");
         loadDBLeedz();
 
       } catch (error) {
@@ -1738,11 +1739,13 @@ window.onload = async function() {
    * BACK BUTTON
    * called when user comes back to main page from edit/view html pages
   */
+  let pop_counter = 0;
   window.addEventListener("popstate", (event) => {
 
       // LOAD the page with the current user info
       const current_user = getCurrentUser(true);
-      // console.log(current_user);
+      console.log("POPSTATE=" + pop_counter++);
+      console.log(current_user);
       mainPageLoad( current_user );
   });
 

@@ -8,7 +8,15 @@ import { db_getUser, db_updateUser, DEL_USER, CHG_USER, DB_FAIL } from "./dbTool
 import { printError, throwError } from "./error.js";
 
 
- const COGNITO_KEY = "CT";
+
+export const CACHE_USER_KEY = "U";
+export const MAX_USER_SUBS = 6;
+
+const GUEST_USER = blankUserObject();
+GUEST_USER.un = "guest.user";
+GUEST_USER.em = "scottgrossworks@gmail.com";
+
+let CURRENT_USER = blankUserObject();
 
 
 /**
@@ -53,7 +61,7 @@ import { printError, throwError } from "./error.js";
 
 
 
-    
+
 /**
  * 
  * DOES this window contain AWS auth tokens?
@@ -163,16 +171,6 @@ function decodeJWT(jwt, userInfo) {
 
 
 
-export const CACHE_USER_KEY = "U";
-export const MAX_USER_SUBS = 6;
-
-const GUEST_USER = blankUserObject();
-GUEST_USER.un = "guest.user";
-GUEST_USER.em = "scottgrossworks@gmail.com";
-
-let CURRENT_USER = blankUserObject();
-
-
 
 
 
@@ -279,18 +277,19 @@ export function getCurrentUser( useCache ) {
 
 
 /**
- * Do a force reload of the current user profile from DB
+ * Do a force reload of the current (cached) user profile from DB
  */
-export async function reloadCurrentUser() {
+export async function reloadCurrentUser( useCache ) {
 
   try {
 
-      let the_user = getCurrentUser( true );
-      if (! the_user.un) throwError("reloadCurrentUser", "No current user found");
+      getCurrentUser(true);
 
-      await initUser( the_user.un );
+      if (! CURRENT_USER.un) throwError("reloadCurrentUser", "No current user found");
 
-      return getCurrentUser(false);
+      await initUser( CURRENT_USER.un );
+
+      return CURRENT_USER;
 
   } catch (error) {
     throw error;
@@ -303,12 +302,7 @@ export async function reloadCurrentUser() {
 /**
  * @param username then user login
  * 
- * If this is the same as the cache user - load the cache user
- * If this is a new username, go back to the DB for a new user object
- * 
- * CREATE and CACHE a fully-formed JSON user object CURRENT_USER
- * [ { username: "value", email, "value", ... } ] 
- * 
+ * go back to DB to get fresh user json for login
  * or throw Error
  */
 export async function initUser( login ) {

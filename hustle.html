@@ -1660,65 +1660,62 @@ async function mainPageLoad( current_user ) {
 // <body onload=" window.open(...)">
 window.onload = async function() {
 
+  console.error("    !!!!!!   WINDOW LOAD !!!!!!!   ");
+
   let current_user; 
   const userLogin = {};
     
     try {
 
-      getUserLogin( userLogin );
+        getUserLogin( userLogin );
+        console.log(userLogin);
 
-      console.log(userLogin);
-
-      if (! userLogin['un']) {
-          // 
-          // !! REDIRECT TO LOGIN URL
-          //
-          window.open(URL_LOGIN, "_top");
-          return;
-      }
+        if (! userLogin['un']) {
+            // 
+            // !! REDIRECT TO LOGIN URL
+            //
+            window.open(URL_LOGIN, "_top");
+            return;
+        }
 
 
     } catch (err) {
-        var msg = "Cannot log into the Leedz.";
-        msg = err.message + "<BR>" + msg + "<BR>Using guest account.";
-        printError("Leedz Login", msg);
-        errorModal( msg , false );
-        
-        // DO NOT FAIL
-        // ! USE GUEST USER
-        current_user = guestUser();   
-    }
-
-
-      // is this a reload of the current user?  
-      // FIXME 
-      // userLogin['access_token']
-      // window.localStorage.getItem(COGNITO_KEY);
-      // window.localStorage.setItem(COGNITO_KEY, loginTokens["access_token"]);
-
-
-      if (isGuestUser(false)) {
-        try {
-          
-          current_user = await reloadCurrentUser();
-    
-        } catch (error) {
-    
-          var msg = "Cannot load user data.<BR>Using guest account.";
-          msg = error + "<BR>" + msg;
+          var msg = "Cannot log into the Leedz.";
+          msg = err.message + "<BR>" + msg + "<BR>Using guest account.";
           printError("Leedz Login", msg);
-          errorModal( msg , false );
-    
+          errorModal( msg , true );
+          
           // DO NOT FAIL
           // ! USE GUEST USER
           current_user = guestUser();   
-    
+    }
+
+
+    if (isGuestUser(false)) {
+        try {
+
+            // re-initialize current user with login credentials from AWS  
+            // FIXME what to do with
+            //  userLogin['access_token'], userLogin['id_token']
+            current_user = await initUser( userLogin['un'] );
+
+        } catch (error) {
+
+            var msg = "Cannot load user data for " + userLogin['un'] + " [" + userLogin['em'] + "].<BR>Using guest account.";
+            msg = error.message + "<BR>" + msg;
+            printError("Leedz Login", msg);
+            errorModal( msg , false );
+
+            // DO NOT FAIL
+            // ! USE GUEST USER
+            current_user = guestUser();   
+
         }
-      }
+    }
     
       // LOAD the page with the current user info
       mainPageLoad( current_user );
-    }
+}
     
     
 
@@ -1744,7 +1741,7 @@ window.onload = async function() {
 
       // LOAD the page with the current user info
       console.log("POPSTATE=" + pop_counter++);
-      const current_user = getCurrentUser(true);
+      const current_user = getCurrentUser(false);
       console.log(current_user);
       mainPageLoad( current_user );
   });

@@ -268,7 +268,7 @@ export function getCurrentUser( useCache ) {
     }
   }
 
-  console.log("GOT CACHE USER");
+  console.log("GOT CACHE USER=" + new Date().toString());
   console.log(CURRENT_USER);
 
   // may be blank - won't be null
@@ -382,11 +382,10 @@ export async function initUser( login ) {
     }
 
     // save modified CURRENT_USER to session storage
+    console.log("INIT USER SAVE CACHE USER");
     saveCacheUser( CURRENT_USER );
 
     return CURRENT_USER;
-   // console.log("%cuser.initUser(): " + CURRENT_USER.un, "color:darkorange");
-
   }
 
 
@@ -522,7 +521,7 @@ function saveCacheUser( userObj ) {
       return;
     }
 
-    console.error("CACHING USER!");
+    console.error("SAVE CACHE USER!");
     console.log(userObj);
 
     try { 
@@ -531,7 +530,7 @@ function saveCacheUser( userObj ) {
 
 
     } catch (error) {
-      printError("saveCacheUser()", error.message);
+      printError("Save cache user", error.message);
       window.localStorage.setItem( CACHE_USER_KEY , null);
     }
 
@@ -578,7 +577,7 @@ export function isSubscribed( trade_name ) {
 
 /**
  * 
- */
+
 export async function saveSubscription( trade_name ) {
 
     if (CURRENT_USER.sb.length == MAX_USER_SUBS) {
@@ -591,6 +590,7 @@ export async function saveSubscription( trade_name ) {
       CURRENT_USER.sb.push( trade_name );
     }
 
+    console.log("SAVE SUBSCRIPTION");
     saveCacheUser( CURRENT_USER );
 
     // GUEST_USER can save / remove subscriptions from the current session cache user but
@@ -632,7 +632,7 @@ export async function saveSubscription( trade_name ) {
 }
             
 
-  
+   */
 
 
 
@@ -640,8 +640,8 @@ export async function saveSubscription( trade_name ) {
 
   
   /**
-   * @param String trade_name 
-   */
+   *  
+ 
   export async function removeSubscription( trade_name ) {
      
     if (CURRENT_USER.sb.length == 0) {
@@ -696,13 +696,13 @@ export async function saveSubscription( trade_name ) {
 
 }
 
-
+  */
 
 
 
 /**
  * return the list of subscriptions for the current user
- */
+
 export function getSubscriptions() {
   
   if (! CURRENT_USER)
@@ -711,3 +711,5 @@ export function getSubscriptions() {
     // probably would be better to make a copy and return that
     return CURRENT_USER.sb;
   } 
+
+   */

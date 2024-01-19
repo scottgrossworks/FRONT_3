@@ -268,6 +268,9 @@ export function getCurrentUser( useCache ) {
     }
   }
 
+  console.log("GOT CACHE USER");
+  console.log(CURRENT_USER);
+
   // may be blank - won't be null
   return CURRENT_USER;
 }
@@ -483,7 +486,7 @@ function loadCacheUser() {
     let userObj = null;
     if (! userJSON) {
       // NOT an error -- will happen any time app started with fresh cache and new user
-      // printError("loadCacheUser", "No value for cache key=" + CACHE_USER_KEY);
+      console.log("Leedz user cache", "No value for cache key=" + CACHE_USER_KEY);
       return null; // return NULL and be done
     }
 
@@ -518,6 +521,9 @@ function saveCacheUser( userObj ) {
       printError("saveCacheUser()", "attempt to save empty user object");
       return;
     }
+
+    console.error("CACHING USER!");
+    console.log(userObj);
 
     try { 
       let userJSON = JSON.stringify (userObj);

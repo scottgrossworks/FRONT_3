@@ -470,7 +470,7 @@
 function user_backButton() {
 	let back_button = document.getElementById("history_back_button");
 	back_button.onclick = function() {
-		backButton(-1);
+		history.pushState({}, '');
 	  };
 }
 function square_backButton() {
@@ -486,16 +486,6 @@ function square_backButton() {
  window.backButton = backButton;
 
 
-
-	/**
-	* BACK BUTTON
-	* called when user comes back to main page from edit/view html pages
-	*/
-	// let pop_counter = 0;
-	window.addEventListener("popstate", (event) => {
-
-		console.error("!!!!!!!!!!!!!!!!!!!!!!!   IN THE POPSTATE   !!!!!!!!!!!!!!!!!!!!!!!!!!!");
-	});
 
 
 

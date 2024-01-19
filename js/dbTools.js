@@ -606,11 +606,7 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
         throwError("Get Leedz", error.message);
     }
 
-
-    
- //    console.log("GOT --- PREVIEW --- JSON!!!");
-        console.log(json_obj);
-
+    // console.log(json_obj);
 
     return json_obj;  // SHOULD NOT BE NULL
 }

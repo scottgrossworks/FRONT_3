@@ -1298,7 +1298,7 @@ function trimAndRemoveSpaces(inputString) {
  */
   function modalClose( force ) {
 
-    if (! force) errorModalClose();
+    if (force) errorModalClose();
 
     // close all modal dialogs
     var modals = document.getElementsByClassName("info_modal");
@@ -1727,20 +1727,6 @@ window.onload = async function() {
 
 
 
-
-  /**
-   * BACK BUTTON
-   * called when user comes back to main page from edit/view html pages
-  */
-  // let pop_counter = 0;
-  window.addEventListener("popstate", (event) => {
-
-      // LOAD the page with the current user info
-      // console.log("POPSTATE=" + pop_counter++);
-      const current_user = getCurrentUser(true);
-      // console.log(current_user);
-      mainPageLoad( current_user );
-  });
 
 
 </script>

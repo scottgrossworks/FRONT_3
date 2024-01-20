@@ -1650,10 +1650,8 @@ async function mainPageLoad( current_user ) {
 //
 //
 // <body onload=" window.open(...)">
-  let LOAD_FINISHED = false;
+let LOAD_FINISHED = false;
 window.onload = async function() {
-
-  console.log("LOAD STARTED=" + new Date().getTime());
 
   let current_user; 
   const userLogin = {};
@@ -1709,7 +1707,6 @@ window.onload = async function() {
       // LOAD the page with the current user info
       mainPageLoad( current_user );
 
-      console.log("LOAD FINISHED!!! =" + new Date().getTime());
       LOAD_FINISHED = true;
 }
     
@@ -1725,9 +1722,11 @@ window.onload = async function() {
     cssScreenSize();
   };
 
-  addEventListener("pageshow", (event) => {
-    console.log("SHOW SHOW SHOW===" + LOAD_FINISHED + "=====" + new Date().getTime());
 
+  
+  addEventListener("pageshow", (event) => {
+    if (LOAD_FINISHED)
+      getCurrentUser(true);
   });
 
 

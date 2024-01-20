@@ -481,7 +481,6 @@ function square_backButton() {
  }
  function backButton( how_far ) {
 	history.go( how_far );
-	window.dispatchEvent(new Event('popstate'));
  }
  window.backButton = backButton;
 

@@ -1719,6 +1719,11 @@ window.onload = async function() {
     cssScreenSize();
   };
 
+  addEventListener("pageshow", (event) => {
+    console.log("SHOW SHOW SHOW=" + new Date().getTime());
+
+  });
+
 
   window.addEventListener("DOMContentLoaded", () => {
     console.error("DOM DOM DOM DOM=" + new Date().getTime());

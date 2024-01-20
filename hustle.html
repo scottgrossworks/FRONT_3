@@ -1721,7 +1721,6 @@ window.onload = async function() {
 
   addEventListener("pageshow", (event) => {
     console.log("SHOW SHOW SHOW=" + new Date().getTime());
-
   });
 
 
@@ -1729,10 +1728,7 @@ window.onload = async function() {
     console.error("DOM DOM DOM DOM=" + new Date().getTime());
   });
 
-	/**
-	* BACK BUTTON
-	* called when user comes back to main page from edit/view html pages
-	*/
+
 	window.addEventListener("popstate", (event) => {
     console.error("POPSTATE=" + new Date().getTime());
   });

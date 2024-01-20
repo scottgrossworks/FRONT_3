@@ -269,7 +269,7 @@ export function getCurrentUser( useCache ) {
   }
 
   // console.log("GOT USER==" + useCache + "==" + new Date().getTime());
-  // console.log(CURRENT_USER);
+  if (useCache) console.log(CURRENT_USER);
 
   // may be blank - won't be null
   return CURRENT_USER;

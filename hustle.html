@@ -1725,6 +1725,7 @@ window.onload = async function() {
 
   
   addEventListener("pageshow", (event) => {
+    console.log("PAGE SHOW!");
     if (LOAD_FINISHED)
       getCurrentUser(true);
   });

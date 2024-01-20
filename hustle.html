@@ -1211,7 +1211,6 @@ function trimAndRemoveSpaces(inputString) {
 
           if (screen == 'L') {
 
-            //console.log("LARGE!!!!");
             action.setAttribute("screen", 2);  
             SIDE_OPEN = true;
             openNav();
@@ -1221,8 +1220,6 @@ function trimAndRemoveSpaces(inputString) {
 
           } else if (screen == 'M') {
 
-            //console.log("MEDIUM!!!!");
-
             action.setAttribute("screen", 1);
             SIDE_OPEN = false;
             closeNav();
@@ -1231,9 +1228,6 @@ function trimAndRemoveSpaces(inputString) {
 
 
           } else {
-
-            // USE SMALL
-            //console.log("SMALL!!!!");
 
             action.setAttribute("screen", 0);
             SIDE_OPEN = false;
@@ -1726,13 +1720,14 @@ window.onload = async function() {
   };
 
 
-
+  window.addEventListener("DOMContentLoaded", () => {
+    console.error("DOM DOM DOM DOM=" + new Date().getTime());
+  });
 
 	/**
 	* BACK BUTTON
 	* called when user comes back to main page from edit/view html pages
 	*/
-	// let pop_counter = 0;
 	window.addEventListener("popstate", (event) => {
     console.error("POPSTATE=" + new Date().getTime());
   });

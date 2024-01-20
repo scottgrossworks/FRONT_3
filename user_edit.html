@@ -470,7 +470,7 @@
 function user_backButton() {
 	let back_button = document.getElementById("history_back_button");
 	back_button.onclick = function() {
-		history.pushState({}, '');
+		backButton(-1);
 	  };
 }
 function square_backButton() {

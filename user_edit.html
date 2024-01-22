@@ -118,7 +118,7 @@
 						
 						<!-- GOTO DELETE ACCOUNT confirmation page 	-->
 						<td colspan='2' class="buttonTD">
-							<input id="del_button" type="button" value="Remove" onclick=""/>
+							<input id="del_button" type="button" value="Remove" onclick="deleteAccount()"/>
 						</td>
 
 
@@ -959,7 +959,7 @@ function initTradesTable( all_trades, tradeListener ) {
 		function deleteAccount() {
 
 			try {
-				window.open( "./leedz_how-to.html" , "_top");
+				window.open( "./user_delete_confirm.html" , "_top");
 
 			} catch ( error ) {
 

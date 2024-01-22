@@ -162,10 +162,7 @@ export function getTradeInfo(trade_name) {
 function initTradesColumn( tradeListener ) {
 
   const current_user = getCurrentUser( false );
-
   // current_user may be guest user
-  console.log("INIT TRADES COLUMN");
-  console.log( current_user );
 
   // import DOM elements from html
   const theList = document.querySelector("#trades_list");

@@ -1722,11 +1722,6 @@ window.onload = async function() {
 
 
   
-  let EVENT_RECV = false;
-  addEventListener("pageshow", (event) => {
-    console.log("PAGE SHOW! EVENT=" + EVENT_RECV);
-  });
-
   
 
   // Listen for messages from helper.html
@@ -1734,7 +1729,6 @@ window.onload = async function() {
     if (event.data.type === 'user_update') {
     // Handle the new data event from helper.html
     var source = event.data.data;
-    EVENT_RECV = true;
     console.log("GOT USER UPDATE FROM=" + source + "==" + new Date().getTime());
     }
     });

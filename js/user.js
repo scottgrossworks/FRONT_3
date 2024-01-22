@@ -252,7 +252,7 @@ export function isGuestUser( guest_user ) {
  */
 export function getCurrentUser( useCache ) {
 
-  console.log("getCurrentUser(" + useCache + ")");
+  // console.log("getCurrentUser(" + useCache + ")");
 
   if (! CURRENT_USER)
     throwError("getCurrentUser", "CURRENT_USER should never be null");

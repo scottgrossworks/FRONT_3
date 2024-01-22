@@ -254,7 +254,7 @@ def lambda_handler(event, context):
         # 1/2024
         # DO NOT store the_leed.bn until callback lambda AFTER Square payment authorized
         
-        logger.info("GOT PAYMENT LINK")
+        # logger.info("GOT PAYMENT LINK")
         logger.info( sq_pay_link )
         
         # SUCCESS
@@ -350,8 +350,6 @@ def createPaymentLink(the_seller, the_leed, bn) :
     # MUST fernet dencrypt token using seller username
     # acc_token = 'Bearer ' + decryptToken( the_seller['sk'] , the_seller['sq_at'] )
     acc_token = 'Bearer ' + the_seller['sq_at']
-    # FIXME DO WE NEED?
-    # txt_key = base64.urlsafe_b64decode(string.encode())[:32]
     
     # Define the payload as a Python dictionary
     payload = {
@@ -388,10 +386,10 @@ def createPaymentLink(the_seller, the_leed, bn) :
     }
     
     
-    logger.info("SENDING PAYMENT LINK REQ")
-    logger.info(SQUARE_URL)
-    logger.info(headers)
-    logger.info(json_payload)
+    # logger.info("SENDING PAYMENT LINK REQ")
+    # logger.info(SQUARE_URL)
+    # logger.info(headers)
+    # logger.info(json_payload)
 
 
     
@@ -591,8 +589,6 @@ def getSellerInfo(table, cr, tn, id):
 #
 def createHttpResponse( code, result ):
    
-    logger.info(result)
-    
     response = {
         'statusCode': code,
         'body': result,

@@ -1731,15 +1731,21 @@ window.onload = async function() {
     var source = event.data.data;
     console.log("GOT USER UPDATE FROM=" + source + "==" + new Date().getTime());
     }
-    });
+  });
 
-    //
-    window.addEventListener('pageshow', function(event) {
-        console.log("PAGE SHOW!");
-        if (event.persisted) {
-          console.log("GOT EVENT!=" + event);
+  //
+  addEventListener('pageshow', function(event) {
+    console.log("PAGE SHOW!");
+    if (event.persisted) {
+      console.log("GOT EVENT!=" + event);
+
+      if (event.data.type === 'user_update') {
+        // Handle the new data event from helper.html
+        var source = event.data.data;
+        console.log("GOT USER UPDATE FROM=" + source + "==" + new Date().getTime());
         }
-    });
+    }
+  });
 
 
 

@@ -1457,9 +1457,6 @@ function initUserPanel(current_user) {
  */
 async function mainPageLoad() {
     
-
-      console.log("MAIN PAGE LOAD ****");
-
       if (! CURRENT_USER ) CURRENT_USER = getCurrentUser(true);
 
       // LOADING MODALS...
@@ -1650,12 +1647,12 @@ async function mainPageLoad() {
   let CURRENT_USER = null;
 
   /**
-  * HAPPENS BEFORE LOAD -- before main DOM elements are loaded
-  */
+    * If we are coming here from a back button, refresh with the latest 
+    * user data
+    */
   addEventListener('pageshow', function(event) {
-     console.log("**** PAGE SHOW CURRERNT USER=" + CURRENT_USER);
-      
      if (CURRENT_USER) { // are we coming BACK to this page?
+        console.error("FROM A BACK BUTTON");
         CURRENT_USER = getCurrentUser(true);
         mainPageLoad();
       }
@@ -1673,7 +1670,6 @@ async function mainPageLoad() {
 
 window.onload = async function() {
 
-  console.log("!!!!! ON LOAD !!!!!");
   const userLogin = {};
     
     try {

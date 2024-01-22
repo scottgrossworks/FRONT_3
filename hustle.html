@@ -494,7 +494,7 @@
 
   <script type="module" charset=”utf-8″>
 
-    import { initUser, getUserLogin, guestUser, getCurrentUser, saveCurrentUser, isGuestUser, isSubscribed } from "./js/user.js";      
+    import { initUser, getUserLogin, guestUser, getCurrentUser, saveUserChanges, isGuestUser, isSubscribed } from "./js/user.js";      
     import { initTrades } from "./js/trades.js";   
     import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
@@ -1460,6 +1460,8 @@ async function mainPageLoad() {
 
       console.log("MAIN PAGE LOAD ****");
 
+      if (! CURRENT_USER ) CURRENT_USER = getCurrentUser(true);
+
       // LOADING MODALS...
       //
       // Is user a guest.user or a NEW user with NO trade subscriptions
@@ -1645,15 +1647,33 @@ async function mainPageLoad() {
 
 
 
+  let CURRENT_USER = null;
+
+  /**
+  * HAPPENS BEFORE LOAD -- before main DOM elements are loaded
+  */
+  addEventListener('pageshow', function(event) {
+     console.log("**** PAGE SHOW CURRERNT USER=" + CURRENT_USER);
+      
+     if (CURRENT_USER) { // are we coming BACK to this page?
+        CURRENT_USER = getCurrentUser(true);
+        mainPageLoad();
+      }
+  });
+
+
+
+
 //
 // ONLOAD
 // START FROM HERE ON PAGE LOAD.....
 //
 //
 // <body onload=" window.open(...)">
-let CURRENT_USER = null;
+
 window.onload = async function() {
 
+  console.log("!!!!! ON LOAD !!!!!");
   const userLogin = {};
     
     try {
@@ -1722,18 +1742,6 @@ window.onload = async function() {
 
 
   
-
-  /**
-   *
-   */
-  addEventListener('pageshow', function(event) {
-      console.log("**** PAGE SHOW");
-      if (CURRENT_USER) {
-          CURRENT_USER = getCurrentUser(true);
-          mainPageLoad();
-      }
-  });
-
 
 
 

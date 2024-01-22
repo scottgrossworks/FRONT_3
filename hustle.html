@@ -1650,7 +1650,7 @@ async function mainPageLoad( current_user ) {
 //
 //
 // <body onload=" window.open(...)">
-let LOAD_FINISHED = false;
+
 window.onload = async function() {
 
   let current_user; 
@@ -1703,23 +1703,9 @@ window.onload = async function() {
 
         }
     }
-
-
-      // Listen for messages from helper.html
-      addEventListener('message', function(event) {
-      if (event.data.type === 'user_update') {
-      // Handle the new data event from helper.html
-      var source = event.data.data;
-      console.log("GOT USER UPDATE FROM=" + source + "==" + new Date().getTime());
-      }
-      });
-
-
-    
       // LOAD the page with the current user info
       mainPageLoad( current_user );
 
-      LOAD_FINISHED = true;
 }
     
     
@@ -1736,11 +1722,22 @@ window.onload = async function() {
 
 
   
+  let EVENT_RECV = false;
   addEventListener("pageshow", (event) => {
-    console.log("PAGE SHOW!=" + LOAD_FINISHED);
-    // if (LOAD_FINISHED) getCurrentUser(true);
+    console.log("PAGE SHOW! EVENT=" + EVENT_RECV);
   });
 
+  
+
+  // Listen for messages from helper.html
+  addEventListener('message', function(event) {
+    if (event.data.type === 'user_update') {
+    // Handle the new data event from helper.html
+    var source = event.data.data;
+    EVENT_RECV = true;
+    console.log("GOT USER UPDATE FROM=" + source + "==" + new Date().getTime());
+    }
+    });
 
 
 

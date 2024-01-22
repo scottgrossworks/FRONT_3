@@ -1706,7 +1706,7 @@ window.onload = async function() {
 
 
       // Listen for messages from helper.html
-      window.addEventListener('message', function(event) {
+      addEventListener('message', function(event) {
       if (event.data.type === 'user_update') {
       // Handle the new data event from helper.html
       var source = event.data.data;

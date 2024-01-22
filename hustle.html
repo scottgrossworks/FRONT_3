@@ -1725,11 +1725,19 @@ window.onload = async function() {
 
   
   addEventListener("pageshow", (event) => {
-    console.log("PAGE SHOW!");
-    if (LOAD_FINISHED)
-      getCurrentUser(true);
+    console.log("PAGE SHOW!=" + LOAD_FINISHED);
+    // if (LOAD_FINISHED) getCurrentUser(true);
   });
 
+
+  // Listen for messages from helper.html
+window.addEventListener('message', function(event) {
+  if (event.data.type === 'user_update') {
+    // Handle the new data event from helper.html
+    var source = event.data.data;
+    console.log("GOT USER UPDATE FROM=" + source + "==" + new Date().getTime());
+  }
+});
 
 
 

@@ -346,7 +346,7 @@
 			// Show success alert
 			if (from_square_oauth()) {
 				
-				await reloadCurrentUser()
+				await reloadCurrentUser(true)
 				.then((data) => {
 				  CURRENT_USER = data;
 				})
@@ -926,17 +926,21 @@ function initTradesTable( all_trades, tradeListener ) {
 		/**
 		 * EDIT the current user account and save changes to DB
 		 */
-		function saveChanges() {
+		async function saveChanges() {
 
 			if (! EDITING) return;
 
 
 			try {
-				saveUserChanges( USER_CHANGES );		
+				await saveUserChanges( USER_CHANGES );		
 		
 				let theAlert = document.getElementById("alert_success");
 				theAlert.innerHTML = "Account changes saved.";
 				theAlert.style.display = "block";
+
+				// Dispatch a message to hustle.html
+				window.parent.postMessage({ type: 'user_update', data: "user_edit.html" }, '*');
+
 
 			} catch ( error ) {
 

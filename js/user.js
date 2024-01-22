@@ -285,7 +285,7 @@ export async function reloadCurrentUser( useCache ) {
 
   try {
 
-      getCurrentUser(true);
+      getCurrentUser( useCache );
 
       if (! CURRENT_USER.un) throwError("reloadCurrentUser", "No current user found");
 

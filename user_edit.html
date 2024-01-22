@@ -938,11 +938,6 @@ function initTradesTable( all_trades, tradeListener ) {
 				theAlert.innerHTML = "Account changes saved.";
 				theAlert.style.display = "block";
 
-				// Dispatch a message to hustle.html
-				console.log("POSTING user_update EVENT");
-				window.parent.postMessage({ type: 'user_update', data: "user_edit.html" }, '*');
-
-
 			} catch ( error ) {
 
 				printError("saveChanges", error);

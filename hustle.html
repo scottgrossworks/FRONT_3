@@ -1459,7 +1459,7 @@ async function mainPageLoad() {
     
 
       console.log("MAIN PAGE LOAD ****");
-      
+
       // LOADING MODALS...
       //
       // Is user a guest.user or a NEW user with NO trade subscriptions
@@ -1728,7 +1728,10 @@ window.onload = async function() {
    */
   addEventListener('pageshow', function(event) {
       console.log("**** PAGE SHOW");
-      if (! CURRENT_USER) CURRENT_USER = getCurrentUser(true);
+      if (CURRENT_USER) {
+          CURRENT_USER = getCurrentUser(true);
+          mainPageLoad();
+      }
   });
 
 

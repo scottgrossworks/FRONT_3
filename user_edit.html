@@ -939,6 +939,7 @@ function initTradesTable( all_trades, tradeListener ) {
 				theAlert.style.display = "block";
 
 				// Dispatch a message to hustle.html
+				console.log("POSTING user_update EVENT");
 				window.parent.postMessage({ type: 'user_update', data: "user_edit.html" }, '*');
 
 

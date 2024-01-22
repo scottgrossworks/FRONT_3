@@ -556,8 +556,6 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
         throwError("db_getLeedz()", "null / undefined args");
     }
 
-    console.log("db_getLeedz()");
-
     // SUBS
     // trades subscriptions will be a comma,delimited,string
     //

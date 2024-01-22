@@ -700,9 +700,8 @@
             
             // these values are inserted into the current user profile
             //
-            const current_user = getCurrentUser(false);
-            current_user.zr = theMiles.valueOf();
-            current_user.zp = theZip.valueOf();
+            CURRENT_USER.zr = theMiles.valueOf();
+            CURRENT_USER.zp = theZip.valueOf();
             
             // this is an async call
             // will return immediately - data shows up later
@@ -710,7 +709,7 @@
 
             // this is an async call
             // will return immediately - data shows up later        
-            saveCurrentUser();
+            saveUserChanges( CURRENT_USER );
           
           
           } finally {
@@ -1456,15 +1455,17 @@ function initUserPanel(current_user) {
  *
  *
  */
-async function mainPageLoad( current_user ) {
+async function mainPageLoad() {
     
 
+      console.log("MAIN PAGE LOAD ****");
+      
       // LOADING MODALS...
       //
       // Is user a guest.user or a NEW user with NO trade subscriptions
       // will be given default top (MAX_TRADE_SUBSCRIPTIONS) like guest
       //
-      const newUser = (isGuestUser(true) || current_user.sb.length == 0);
+      const newUser = (isGuestUser(true) || CURRENT_USER.sb.length == 0);
       if (newUser) {
         openNewUserWelcome();
       } else {
@@ -1483,7 +1484,7 @@ async function mainPageLoad( current_user ) {
       //
       try {
 
-        initUserPanel( current_user );
+        initUserPanel( CURRENT_USER );
 
       } catch (error) {
         var msg = "Cannot create user panel.<BR>Please refresh page."
@@ -1502,14 +1503,14 @@ async function mainPageLoad( current_user ) {
       //
       try {
 
-        if (current_user.zr) {
+        if (CURRENT_USER.zr) {
           let miles = document.getElementById("distance_miles");
-          miles.value = current_user.zr;
+          miles.value = CURRENT_USER.zr;
         }
         
-        if (current_user.zp) {
+        if (CURRENT_USER.zp) {
           let zip = document.getElementById("distance_from");
-          zip.value = current_user.zp;
+          zip.value = CURRENT_USER.zp;
         }
 
       } catch (error) {
@@ -1650,10 +1651,9 @@ async function mainPageLoad( current_user ) {
 //
 //
 // <body onload=" window.open(...)">
-
+let CURRENT_USER = null;
 window.onload = async function() {
 
-  let current_user; 
   const userLogin = {};
     
     try {
@@ -1678,7 +1678,7 @@ window.onload = async function() {
           
           // DO NOT FAIL
           // ! USE GUEST USER
-          current_user = guestUser();   
+          CURRENT_USER = guestUser();   
     }
 
 
@@ -1688,7 +1688,7 @@ window.onload = async function() {
             // re-initialize current user with login credentials from AWS  
             // FIXME what to do with
             //  userLogin['access_token'], userLogin['id_token']
-            current_user = await initUser( userLogin['un'] );
+            CURRENT_USER = await initUser( userLogin['un'] );
 
         } catch (error) {
 
@@ -1699,12 +1699,12 @@ window.onload = async function() {
 
             // DO NOT FAIL
             // ! USE GUEST USER
-            current_user = guestUser();   
+            CURRENT_USER = guestUser();   
 
         }
     }
       // LOAD the page with the current user info
-      mainPageLoad( current_user );
+      mainPageLoad();
 
 }
     
@@ -1722,29 +1722,13 @@ window.onload = async function() {
 
 
   
-  
 
-  // Listen for messages from helper.html
-  addEventListener('message', function(event) {
-    if (event.data.type === 'user_update') {
-    // Handle the new data event from helper.html
-    var source = event.data.data;
-    console.log("GOT USER UPDATE FROM=" + source + "==" + new Date().getTime());
-    }
-  });
-
-  //
+  /**
+   *
+   */
   addEventListener('pageshow', function(event) {
-    console.log("PAGE SHOW!");
-    if (event.persisted) {
-      console.log("GOT EVENT!=" + event);
-
-      if (event.data.type === 'user_update') {
-        // Handle the new data event from helper.html
-        var source = event.data.data;
-        console.log("GOT USER UPDATE FROM=" + source + "==" + new Date().getTime());
-        }
-    }
+      console.log("**** PAGE SHOW");
+      if (! CURRENT_USER) CURRENT_USER = getCurrentUser(true);
   });
 
 

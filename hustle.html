@@ -1739,6 +1739,14 @@ window.onload = async function() {
     }
     });
 
+    //
+    window.addEventListener('pageshow', function(event) {
+        console.log("PAGE SHOW!");
+        if (event.persisted) {
+          console.log("GOT EVENT!=" + event);
+        }
+    }
+
 
 
 

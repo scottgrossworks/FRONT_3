@@ -316,8 +316,8 @@ a {
 
 
 #square_item table {
-  margin:0 auto;
-  max-width: 80%;
+  margin:0 2vw;
+  width: 100%;
   max-height: 100%;
 }
 

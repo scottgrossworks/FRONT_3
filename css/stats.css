@@ -201,18 +201,17 @@ a {
 
 
 
-#leedz_text_1, #leedz_text_2, #leedz_text_3 {
+.leedz_text {
   background-color: white;
 }
 
 
-
-#leedz_text_1 a, #leedz_text_2 a, #leedz_text_3 a  {
+.leedz_text a  {
  text-decoration: none;
 }
 
 
-#leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span {
+.leedz_text span {
   font-family: var(--FONT_1);
   font-size:medium;
   line-height: 115%;
@@ -284,9 +283,7 @@ a {
 
 
 #square_item {
-  
   min-height:fit-content;
- 
 }
 
 
@@ -297,9 +294,7 @@ a {
 }
 
 #square_item .item_title {
-  
   background: linear-gradient(to right, black, white);
- 
 }
 
 #square_item span {

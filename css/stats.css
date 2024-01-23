@@ -298,7 +298,8 @@ a {
 }
 
 #square_item .item_title {
-  background: black;
+  
+  background: linear-gradient(to right, black, white);
  
 }
 
@@ -464,7 +465,7 @@ a#date_bought_3 {
 
 
 
-#leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span {
+#leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span, #leedz_text_4 span {
       vertical-align: middle;
       margin:auto 0;
       font-size:medium;
@@ -529,7 +530,7 @@ a#date_bought_3 {
 
     
 
-  #leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span   {
+  #leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span, #leedz_text_4 span {
       font-size:large;
       line-height: 125%;
     }

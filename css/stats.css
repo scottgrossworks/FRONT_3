@@ -291,8 +291,8 @@ a {
 
 
 #sq_logo_invert {
-  width: 80px;
-  height: 80px;
+  width: 80px !important;
+  height: 80px !important;
   padding:10px;
   -webkit-filter: invert(1);
   filter: invert(1);

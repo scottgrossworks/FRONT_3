@@ -1,8 +1,8 @@
 @import "./globals.css";
 
 
-body {
-  overflow-y: scroll;
+html, body {
+  overflow-y: scroll !important;
 }
 
 .container {
@@ -297,7 +297,7 @@ a {
 
 }
 
-#login_square .item_title {
+#square_item .item_title {
   background: black;
  
 }
@@ -308,8 +308,8 @@ a {
 }
 
 #square_item img {
-  max-width: 100px;
-  width:min-content;
+  width: 90px;
+  height:90px;
   padding:10px;
 }
 
@@ -323,8 +323,10 @@ a {
 
 
 #square_item table td {
-  padding:0;
-  align-self: center;
+
+  font-family: var(--FONT_1);
+  font-size:medium;
+  line-height: 115%;
 }
 
 

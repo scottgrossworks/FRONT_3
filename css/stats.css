@@ -288,10 +288,14 @@ div.item.leedz_text span {
 
 
 #sq_logo_invert {
+  max-width: 80px;
+  max-height: 80px;
   padding:10px;
   -webkit-filter: invert(1);
   filter: invert(1);
 }
+
+
 
 #square_item .item_title {
   background: linear-gradient(to right, black, white);

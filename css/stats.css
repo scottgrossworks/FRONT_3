@@ -291,12 +291,9 @@ a {
 
 
 #sq_logo_invert {
-  width: 80px !important;
-  height: 80px !important;
   padding:10px;
   -webkit-filter: invert(1);
   filter: invert(1);
-
 }
 
 #square_item .item_title {
@@ -315,7 +312,7 @@ a {
 
 #square_item table {
   margin:0 2vw;
-  width: 80%;
+  width: 85%;
   max-height: 100%;
 }
 

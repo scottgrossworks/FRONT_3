@@ -1,7 +1,7 @@
 @import "./globals.css";
 
 
-html, body {
+html {
   overflow-y: scroll !important;
 }
 
@@ -308,8 +308,8 @@ a {
 }
 
 #square_item img {
-  width: 90px;
-  height:90px;
+  max-width: 80px;
+  max-height: 80px;
   padding:10px;
 }
 
@@ -324,7 +324,6 @@ a {
 
 #square_item table td {
 
-  font-family: var(--FONT_1);
   font-size:medium;
   line-height: 115%;
 }

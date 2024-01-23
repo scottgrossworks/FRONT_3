@@ -460,7 +460,7 @@ a#date_bought_3 {
 
 
 
-#leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span {
+.leedz_text span {
       vertical-align: middle;
       margin:auto 0;
       font-size:medium;
@@ -468,13 +468,6 @@ a#date_bought_3 {
     }
 
     
- #leedz_text_4 span {
-      vertical-align: middle;
-      margin:auto 0;
-      font-size:medium;
-      line-height: 115%;
-    }
-
 
     
   #stats_footer{
@@ -531,17 +524,13 @@ a#date_bought_3 {
 
     
 
-  #leedz_text_1 span, #leedz_text_2 span, #leedz_text_3 span {
+.leedz_text span {
       font-size:large;
       line-height: 125%;
     }
 
 
 
-    #leedz_text_4 span {
-    font-size:large;
-    line-height: 125%;
-  }
 
 
     

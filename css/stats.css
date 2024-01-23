@@ -201,17 +201,17 @@ a {
 
 
 
-.leedz_text {
+div.item.leedz_text {
   background-color: white;
 }
 
 
-.leedz_text a  {
+.div.item.leedz_text a  {
  text-decoration: none;
 }
 
 
-.leedz_text span {
+div.item.leedz_text span {
   font-family: var(--FONT_1);
   font-size:medium;
   line-height: 115%;
@@ -455,7 +455,7 @@ a#date_bought_3 {
 
 
 
-.leedz_text span {
+div.item.leedz_text span {
       vertical-align: middle;
       margin:auto 0;
       font-size:medium;
@@ -519,7 +519,7 @@ a#date_bought_3 {
 
     
 
-.leedz_text span {
+div.item.leedz_text span {
       font-size:large;
       line-height: 125%;
     }

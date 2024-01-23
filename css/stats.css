@@ -2,6 +2,7 @@
 
 
 body {
+  overflow-y: scroll;
 }
 
 .container {
@@ -279,6 +280,57 @@ a {
   padding:0;
   align-self: center;
 }
+
+
+
+#square_item {
+  
+  min-height:fit-content;
+ 
+}
+
+
+#sq_logo_invert {
+
+  -webkit-filter: invert(1);
+  filter: invert(1);
+
+}
+
+#login_square .item_title {
+  background: black;
+ 
+}
+
+#square_item span {
+  margin: 20px 2vw 0px 2vw;
+  font-size:medium;
+}
+
+#square_item img {
+  max-width: 100px;
+  width:min-content;
+  padding:10px;
+}
+
+
+#square_item table {
+  margin:0 auto;
+  max-width: 80%;
+  max-height: 100%;
+}
+
+
+
+#square_item table td {
+  padding:0;
+  align-self: center;
+}
+
+
+
+
+
 
 
 a#date_posted {

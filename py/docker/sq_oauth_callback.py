@@ -193,13 +193,6 @@ def encryptToken( key_txt, token_txt):
 
 
 
-def decryptToken( key_txt , encrypted_token):
-    fernet_key = generateFernetKey( key_txt )
-    f = Fernet(fernet_key)
-    decrypted_token = f.decrypt(encrypted_token).decode()
-    return decrypted_token
-
-
 # take a string as input and converts it into a string of 32 bytes suitable for cryptographic use
 #
 def convert( src ):
@@ -222,8 +215,6 @@ def generateFernetKey( txt_src ) :
 
 # sandbox_app_ID = "sandbox-sq0idb-phu8jRWJjN1ysnWqGMsBMA"
 # sandbox_access_token = "EAAAEM-qAHvj9qqGJ3wle3yx5iKeaK2h4fvF8yofv_ycuckMuCl7mxhnAK2wgSLq"
-# token_encrypt_key = "GBUsOzobKYCsKC2s-nKrXfQeO03B170-LhYZInaFhik="
-
 
 # endpoint that handles Square authorization callback
 # @app.route('/authorize-callback', methods=['GET'])
@@ -392,18 +383,17 @@ def doTokenExchange(table, event, the_user):
             expires_at = the_response.body['expires_at']
             merchant_id = the_response.body['merchant_id']
             
-            # 1/2024 TODO FERNET ENCRYPT TOKENS 
             # encrypt the refresh_token and access_token before save to db
             # TOKEN ENCRYPT KEY WILL BE USERNAME
             # 
-            # sq_rt = encrypted_refresh_token = encryptToken( un, refresh_token )
-            # sq_at = encrypted_access_token = encryptToken( un, access_token )
+            sq_at = encryptToken( the_user['sk'], access_token )
+            sq_rt = encryptToken( the_user['sk'], refresh_token )
 
             if not expires_at:
                 expires_at = '0'
             
             # will throw exception on failure
-            saveTokensToDB( table, the_user, access_token, merchant_id, refresh_token, 'authorized', expires_at )
+            saveTokensToDB( table, the_user, sq_at, merchant_id, sq_rt, 'authorized', expires_at )
         
         except Exception as e:
             err_str = str(e)
@@ -439,8 +429,8 @@ def exchange_oauth_tokens(env, code, id, secret):
             timeout=600
         )
         oauth_api = square_client.o_auth
-    
-        scopes = [ "ORDERS_WRITE", "ORDERS_READ", "PAYMENTS_WRITE" ]
+   
+        scopes = [ "ORDERS_WRITE", "ORDERS_READ", "PAYMENTS_WRITE", "PAYMENTS_READ", "PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS" ]
     
         request_body = {}
         request_body['client_id'] = id

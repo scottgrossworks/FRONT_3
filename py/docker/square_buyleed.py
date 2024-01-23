@@ -348,8 +348,8 @@ def createPaymentLink(the_seller, the_leed, bn) :
     # Square Access Token
     # FIXME 1/2024
     # MUST fernet dencrypt token using seller username
-    # acc_token = 'Bearer ' + decryptToken( the_seller['sk'] , the_seller['sq_at'] )
-    acc_token = 'Bearer ' + the_seller['sq_at']
+    acc_token = 'Bearer ' + decryptToken( the_seller['sk'] , the_seller['sq_at'] )
+    # acc_token = 'Bearer ' + the_seller['sq_at']
     
     # Define the payload as a Python dictionary
     payload = {

@@ -3,7 +3,9 @@
 html, body {
     font-size: 16px;
     line-height: 1.5;
- 
+	height: 100%;
+	margin: 0;
+	padding: 0;
     font-family: var(--FONT_3);
 }
 
@@ -15,9 +17,13 @@ html, body {
       font-size: 14px;
       line-height: 1.2;
     }   
+
+	h1 {
+		font-size:1.5em;
+	}
 }
 
-
+  
 
 
 table {
@@ -25,11 +31,7 @@ table {
 	float:left;
 	border-spacing: 0;
 
-	width:fit-content;
-
-	margin: 0 auto;
 	padding: 2vh 3vw;
-
     line-height: 140%;
 }
 

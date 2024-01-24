@@ -198,7 +198,7 @@ a {
 
 #trades_table {
   padding-top:2px;
-  line-height: 165%;
+  line-height: 150%;
 }
 
 
@@ -367,14 +367,14 @@ a#date_bought_3 {
 #contact_item ul {
     margin:2vh auto;
     font-weight:600;
-    padding:6px;
+    padding:8px;
 }
 
 
 #contact_item table {
-  line-height: 165%;
+  line-height: 150%;
   margin:0 auto;
-  max-width: 80%;
+  max-width: 85%;
 }
 
 

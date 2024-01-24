@@ -144,7 +144,7 @@ html {
   height:fit-content;
   min-height: 150px;
 
-  line-height: 115%;
+  line-height: 165%;
 
   box-sizing: border-box; /* Add box-sizing property */
 }
@@ -471,7 +471,7 @@ div.item.leedz_text span {
       vertical-align: middle;
       margin:auto 0;
       font-size:medium;
-      line-height: 115%;
+      line-height: 165%;
     }
 
     

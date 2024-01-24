@@ -291,7 +291,7 @@ div.item.leedz_text span {
   max-width: 80px;
   max-height: 80px;
   padding:10px;
-  background-color: white;
+  background-color: black;
   -webkit-filter: invert(1);
   filter: invert(1);
 }
@@ -352,21 +352,28 @@ a#date_bought_3 {
 
 
 #contact_item {
-  min-height:220px;
+  min-height:230px;
+  font-family: var(--FONT_1);
+  font-size:medium;
+  font-weight: normal;
 }
+
 
 #contact_item .item_title {
   background: gold;
   color:black;
 }
 
+
+#contact_item span {
+  margin: 20px 2vw 0px 2vw;
+}
+
+
+
 #contact_item ul {
     margin-left:20%;
     margin-bottom:1vh;
-
-    font-family: var(--FONT_1);
-
-    font-size:medium;
     width:75%;
     font-weight:600;
 }

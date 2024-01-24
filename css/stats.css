@@ -352,7 +352,7 @@ a#date_bought_3 {
 
 
 #contact_item {
-  min-height:230px;
+  min-height:fit-content;
   font-family: var(--FONT_1);
   font-size:medium;
   font-weight: 400;
@@ -475,6 +475,9 @@ div.item.leedz_text span {
     }
 
     
+#contact_item {
+  min-height:260px;
+}
 
     
   #stats_footer{

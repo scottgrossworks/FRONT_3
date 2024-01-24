@@ -372,8 +372,7 @@ a#date_bought_3 {
 
 
 #contact_item ul {
-    margin-left:20%;
-    margin-bottom:2vh;
+    margin:2vh auto;
     width:75%;
     font-weight:600;
     padding:6px;

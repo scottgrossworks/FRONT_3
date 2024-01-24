@@ -197,7 +197,8 @@ a {
 }
 
 #trades_table {
-  padding-top:6px;
+  padding-top:2px;
+  line-height: 165%;
 }
 
 

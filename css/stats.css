@@ -144,6 +144,7 @@ html {
   height:fit-content;
   min-height: 150px;
 
+  line-height: 115%;
 
   box-sizing: border-box; /* Add box-sizing property */
 }
@@ -291,7 +292,6 @@ div.item.leedz_text span {
   max-width: 80px;
   max-height: 80px;
   padding:10px;
-  background-color: black;
   -webkit-filter: invert(1);
   filter: invert(1);
 }
@@ -355,7 +355,7 @@ a#date_bought_3 {
   min-height:230px;
   font-family: var(--FONT_1);
   font-size:medium;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 
@@ -373,9 +373,10 @@ a#date_bought_3 {
 
 #contact_item ul {
     margin-left:20%;
-    margin-bottom:1vh;
+    margin-bottom:2vh;
     width:75%;
     font-weight:600;
+    padding:6px;
 }
 
 

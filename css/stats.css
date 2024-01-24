@@ -291,6 +291,7 @@ div.item.leedz_text span {
   max-width: 80px;
   max-height: 80px;
   padding:10px;
+  background-color: white;
   -webkit-filter: invert(1);
   filter: invert(1);
 }

@@ -222,21 +222,12 @@ div.item.leedz_text span {
 
 
 
-#leedz_leaders table {
-  font-size:medium;
-  padding:2vw;
-  line-height: 4vh;
-}
-
-
-
 #leedz_live table {
-
+  font-size:medium;
   margin-left:1vw;
   padding:1vw 2vw 1vw 2vw;
   line-height: 175%;
 }
-
 
 
 
@@ -314,6 +305,7 @@ div.item.leedz_text span {
   margin:0 2vw;
   width: 85%;
   max-height: 100%;
+  line-height: 165%;
 }
 
 

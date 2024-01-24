@@ -378,8 +378,15 @@ a#date_bought_3 {
 }
 
 
+#contact_item table {
+  line-height: 165%;
+  margin:0 auto;
+  max-width: 80%;
+}
+
+
 #contact_item #contactButton {
-  margin:1vh auto 1vh auto;
+  margin:1vh auto;
   background-color: coral;
   color:white;
   font-family: var(--FONT_3);

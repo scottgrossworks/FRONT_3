@@ -192,6 +192,10 @@ a {
 }
 
 
+#top_trades {
+  min-height:220px;
+}
+
 #top_trades table {
   padding: 1vw 2vw 1vw 2vw;
 }
@@ -222,6 +226,14 @@ div.item.leedz_text span {
 }
 
 
+#intro_text {
+  min-height:200px;
+}
+
+
+#leedz_live {
+  min-height:200px;
+}
 
 #leedz_live table {
   font-size:medium;
@@ -367,7 +379,7 @@ a#date_bought_3 {
 #contact_item ul {
     margin:2vh auto;
     font-weight:600;
-    padding:8px;
+    padding:8px 2vw 8px 0;
 }
 
 
@@ -376,6 +388,7 @@ a#date_bought_3 {
   margin:0 auto;
   max-width: 85%;
 }
+
 
 
 #contact_item #contactButton {

@@ -546,10 +546,11 @@ def saveTokensToDB( table, the_user, sq_at, sq_id, sq_rt, sq_st, sq_ex ) :
     expr = 'SET sq_at=:sq_at,sq_rt=:sq_rt,sq_st=:sq_st,sq_ex=:sq_ex'
     vals = {
             ':sq_at' : sq_at,
+            ':sq_ex' : sq_ex,
+            ':sq_id' : sq_id,    
             ':sq_rt' : sq_rt,
-            ':sq_st' : sq_st,
-            ':sq_ex' : sq_ex                
-    }
+            ':sq_st' : sq_st
+            }
 
     # award badge 5 if necessary
     if ('5' not in the_user['bg']) :   

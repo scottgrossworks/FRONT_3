@@ -1,4 +1,6 @@
-
+body {
+	overflow-y: scroll !important;
+}
 
 html, body {
     font-size: 16px;
@@ -8,6 +10,7 @@ html, body {
 	padding: 0;
     font-family: var(--FONT_3);
 }
+
 
 
  
@@ -21,20 +24,51 @@ html, body {
 	h1 {
 		font-size:1.5em;
 	}
-}
 
+}
   
 
 
 table {
 
-	float:left;
 	border-spacing: 0;
-
-	padding: 2vh 3vw;
+	padding: 2vh 2vw;
     line-height: 140%;
 }
 
+
+#contact_table {
+	float:none;
+	position: relative;
+	margin:0 auto;
+
+	width:fit-content;
+	background-color: var(--LEEDZ_GRAY);
+	border-radius: 10px;
+	font-size:larger;
+	font-weight:600;
+}
+
+#contact_table a {
+	text-decoration:none;
+}
+
+
+
+
+
+@media screen and (max-width: 900px) {
+
+	#contact_table {
+		font-size:medium;
+		padding:6px;
+	}
+
+	#td_links {
+		font-size:small;
+	}
+
+}
 
 
 
@@ -49,6 +83,9 @@ table tbody td {
 
 }
 
+#td_links {
+	font-size:medium;
+}
 
 
 td.badge_icon {
@@ -146,3 +183,5 @@ table#badges_list tbody td {
 
     box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
 }
+
+

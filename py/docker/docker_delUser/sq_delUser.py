@@ -104,6 +104,7 @@ def delete_CognitoUser( un ):
         return response
     
     except Exception as err:
+        logger.error("Error deleting Cognito user " + un + " : " + str(err))
         raise
     
     
@@ -117,7 +118,6 @@ def delete_CognitoUser( un ):
 #
 def delete_LeedzUser( table, un ):
     
-    result = None
     try:
         
         response = table.delete_item(
@@ -132,14 +132,20 @@ def delete_LeedzUser( table, un ):
             logger.error("User not found: %s", un)
             raise ValueError("User not found: " + un)
 
+
     except ClientError as err:
-        logger.error("Couldn't delete user %s: %s: %s", un, err.response['Error']['Code'], err.response['Error']['Message'])
+        logger.error("Could not delete user %s: %s: %s", un, err.response['Error']['Code'], err.response['Error']['Message'])
+        raise
+    
+    except Exception as err:
+        logger.error("Error deleting Leedz user " + un + " : " + str(err))
         raise
 
     else:
         result = response['Attributes']
+        return result
             
-    return result
+
             
             
 
@@ -149,19 +155,117 @@ def delete_LeedzUser( table, un ):
 # 
 def handle_error(error):
     
+    err_msg = str(error)
+    logger.error(err_msg)
+    
     # create a dictionary with error details
     error_dict = {  'cd': 0,
-                    'er': str(error) }
+                    'er': err_msg }
     
     # Convert the dictionary to a JSON string
     error_json = json.dumps(error_dict)
-  
-    print(error_json)
-      
-    return error_json
+
+    return createHttpResponse( error_json )
+
+
+
+
+
+
+
+#
+#
+# 
+def handle_success( the_dict ):
     
+    msg = str( the_dict )
+    logger.error( msg )
+    
+    # Convert the dictionary to a JSON string
+    the_json = json.dumps( the_dict )
+
+    return createHttpResponse( the_json )
+
+
+
+
+
+
+# SEND user account delete confirmation RECEIPT EMAIL
+# use SES service
+#
+def send_userEmail( the_user ):
+    
+    SENDER = "theleedz.com@gmail.com" # must be verified in AWS SES Email
+    RECIPIENT = the_user['em']
+    SUBJECT = "Leedz User Deleted: " + the_user['un']
+    
+    user_info = "[" + the_user['un'] + "] " + the_user['em']
+
+
+    # The email body for recipients with non-HTML email clients
+    BODY_TEXT = ("Leedz user has been deleted."
+                + "\r\n" + 
+                user_info
+                + "\r\n" + 
+                "Square authorization revoked for: " + the_user['id'] 
+                + "\r\n" + 
+                "You will need to create a new account and re-auhtorize Square to use the Leedz again."
+                + "\r\n" + 
+                "Thank you,"
+                + "\r\n" + 
+                "The Leedz"
+                )
+
+                
+    # The HTML body of the email
+    BODY_START = "<html><head></head><body><h1>Leedz user has been deleted. " + user_info + "</h1><BR><BR>Square authorization revoked for: " + the_user['id']
+    BODY_MID = "You will need to create a new account and re-auhtorize Square to use the Leedz again."
+    BODY_END = "<BR><BR>Thank you,<BR>The Leedz</body></html>"
     
 
+    try:
+        
+        # Create a new SES resource and specify a region.
+        client = boto3.client('ses',region_name="us-west-2")
+        
+        response = client.send_email(
+            Destination={
+                'ToAddresses': [
+                    RECIPIENT,
+                ],
+            },
+            Message={
+                'Body': {
+                    'Html': {
+                        'Charset': 'UTF-8',
+                        'Data': BODY_START + BODY_MID + BODY_END
+                    },
+                    'Text': {
+                        'Charset': 'UTF-8',
+                        'Data': BODY_TEXT
+                    },
+                },
+                'Subject': {
+
+                    'Data': SUBJECT
+                },
+            },
+            Source=SENDER
+        )
+        
+        logger.info("EMAIL SENT to " + RECIPIENT + " ID: " + response['MessageId'])
+        
+    # Display an error if something goes wrong BUT DO NOT FAIL
+    except Exception as error:
+        logger.error("Error sending user deleted receipt email to " + user_info)
+    
+    
+    
+    
+    
+    
+    
 
     
 #   
@@ -171,7 +275,6 @@ def handle_error(error):
 #
 def lambda_handler(event, context):
 
-    result = ""
     TRUE = 1
     FALSE = None
     
@@ -232,8 +335,9 @@ def lambda_handler(event, context):
                 revoke_Square( square_client, client_id, client_secret, merchant_id )
 
             except Exception as err:
-                logger.error("Error revoking Square authorization [" + merchant_id + "] : " + str(err))
-                raise err
+                user_info = un + " [" + merchant_id + "] : "
+                logger.error("Error revoking Square authorization for " + user_info + str(err))
+                # DO NOT FAIL -- still continue deleting
 
         
         #
@@ -247,19 +351,28 @@ def lambda_handler(event, context):
         # 
         delete_LeedzUser(table, un)
   
+    
+        result = {}
+        result['cd'] = 1
+        result['un'] = un
+        result['em'] = the_user['em']
+        result['id'] = merchant_id
+        result['dt'] = "User has been removed from the Leedz and Square authorization revoked"
+        
+        
+        # SEND CONFIRMATION EMAIL
+        send_userEmail( result )
+        
+        return handle_success(result)
+  
   
   
     #
     # ERROR HANDLING
     #
     except Exception as error:
-        result = handle_error(error)
+        return handle_error(error)
     
-    
-    return createHttpResponse( result )
-
-
-
 
 
 

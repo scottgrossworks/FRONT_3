@@ -17,7 +17,7 @@ from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
 from decimal import Decimal
 
-from datetime import datetime, timezone
+from datetime import datetime as dt, timezone
 
 import random
 import logging
@@ -30,20 +30,34 @@ logger.setLevel(logging.INFO)
 
 
         
-        
-        
-
-        
 #
 # current time since epoch GMT (hopefully)
 #
 def now_milliseconds():
-    current_time = datetime.now(timezone.utc)
-    epoch = datetime(1970, 1, 1, tzinfo=timezone.utc)
+    current_time = dt.now(timezone.utc)
+    epoch = dt(1970, 1, 1, tzinfo=timezone.utc)
     milliseconds_since_epoch = int((current_time - epoch).total_seconds() * 1000)
     return milliseconds_since_epoch
 
 
+#
+# convert a long date from now_milliseconds() into a pretty date
+# January 05, 2024 - 11:29
+#
+def prettyDate( the_date ):
+    
+    if (not the_date) :
+        return ""
+    
+    int_date = int(the_date)
+    timestamp = dt.fromtimestamp( int_date / 1000)  # Convert milliseconds to seconds
+    formatted_date = timestamp.strftime("%B %d, %Y - %H:%M")
+    return formatted_date
+
+ 
+ 
+ 
+ 
 
 
  
@@ -104,36 +118,7 @@ def handle_error(error):
     
     
  
-#
-# return int value or zero if val is ""
-#
-def intOrZero( val ):
 
-    try:
-        if (val):
-            return int(val)
-        else:
-            return 0
-    
-
-    except error:
-        logger.error("Cannot convert value to int: " + val)
-        throw
-
-
-
-
-
-#
-# flatten a list to a comma-delimited string
-#
-def listToString(lst):
-    return ', '.join(str(x) for x in lst)
-
-
-     
-      
-    
     
     
     
@@ -160,28 +145,25 @@ def validateParam( event, param, required ):
 
 
 
-
-
-
 # SEND BUYER RECEIPT EMAIL
 # use SES service
 # Send a receipt with the full leed details to the buyer
 # will throw Exception on error
 #
-def buyer_ReceiptEmail( the_leed, the_buyer, the_seller ):
+def buyer_receiptEmail( the_leed, the_buyer, the_seller ):
+    
+    leed_info = the_leed['ti'] + " ($" + str(the_leed['pr']) + ")"
     
     SENDER = "theleedz.com@gmail.com" # must be verified in AWS SES Email
     RECIPIENT = the_buyer['em']
-    SUBJECT = "Receipt from The Leedz: " + the_leed['id']
+    SUBJECT = "Leedz Receipt: " + the_leed['ti']
     
-    leed_info = "[" + the_leed['tn'] + "] " + the_leed['ti'] + " (" + the_leed['pr'] + ")"
-
 
     # The email body for recipients with non-HTML email clients
     BODY_TEXT = ("You bought a leed! " + leed_info + 
-                "\r\n" + 
-                str(the_leed)
-                + "\r\n" + 
+                "\r\n\r\n" + 
+                str(the_leed) +
+                "\r\n\r\n" + 
                 "Seller " + the_seller['sk'] + " - " + the_seller['em']
                 + "\r\n" + 
                 "Thank you,"
@@ -189,11 +171,25 @@ def buyer_ReceiptEmail( the_leed, the_buyer, the_seller ):
                 "The Leedz"
                 )
 
-                
+    TITLE = "Title:  " + the_leed['ti'] + "<BR>"
+    TRADE = "Trade:  " + the_leed['pk'][5:] + "<BR>"
+    START_DATE = "Start:  " + prettyDate( int(the_leed['st']) ) + "<BR>"
+    END_DATE = "End:  " + prettyDate( int(the_leed['et']) ) + "<BR>"
+    LOC = "Address:  " + the_leed['lc'] + "<BR>"
+    PHONE = "Phone:  " + str(the_leed['ph']) + "<BR>"
+    EMAIL = "Email:  " + the_leed['em'] + "<BR>"
+    DETAILS = "Details:  " + the_leed['dt'] + "<BR>"
+    REQS = "Requirements:  " + the_leed['rq'] + "<BR>"
+    
+    SELLER = "<BR>Seller:  " + the_leed['cr'] + " -- " + the_seller['em'] + "<BR>"
+    
+    PRICE = "<BR><b style='font-size:large'>Price:  $" + str(the_leed['pr']) + "</b><BR>"
+    
+    DISCLAIMER = "<BR><b>*</b> This leed is not a confirmed booking.  You must use the contact information provided to sell your service to the client.  The Leedz guarantees you exclusive access to this information, which will now be removed from the calendar.  For more information, please refer to our <a href='http://theleedz.com/leedz_tos.html'>Terms of Service</a>."
+
     # The HTML body of the email
-    BODY_START = "<html><head></head><body><h1>You bought a leed! " + leed_info + "</h1><BR><BR>" + str(the_leed) + "<BR><BR>Seller: "
-    BODY_MID_1 = the_seller['sk'] + " - " + the_seller['em'] + "<BR><BR>"
-    BODY_MID_2 = "Square will debit your account shortly.  For any questions, please contact The Leedz - <a href='mailto:theleedz.com@gmail.com'>theleedz.com@gmail.com</a>"
+    BODY_START = "<html><head></head><body><h1>You bought a leed! " + leed_info + "</h1><BR>"
+    CONTACT = "<BR>Square will debit your account shortly.  For any questions, please contact The Leedz - <a href='mailto:theleedz.com@gmail.com'>theleedz.com@gmail.com</a>"
     BODY_END = "<BR><BR>Thank you,<BR>The Leedz</body></html>"
     
 
@@ -212,7 +208,7 @@ def buyer_ReceiptEmail( the_leed, the_buyer, the_seller ):
                 'Body': {
                     'Html': {
                         'Charset': 'UTF-8',
-                        'Data': BODY_START + BODY_MID_1 + BODY_MID_2 + BODY_END
+                        'Data': BODY_START + TITLE + TRADE + START_DATE + END_DATE + LOC + PHONE + EMAIL + DETAILS + REQS + SELLER + PRICE + DISCLAIMER + CONTACT + BODY_END
                     },
                     'Text': {
                         'Charset': 'UTF-8',
@@ -243,14 +239,14 @@ def buyer_ReceiptEmail( the_leed, the_buyer, the_seller ):
 # Send a receipt with the full leed details to the buyer
 # will throw Exception on error
 #
-def seller_ReceiptEmail( the_leed, the_buyer, the_seller ):
+def seller_receiptEmail( the_leed, the_buyer, the_seller ):
+    
+    leed_info = the_leed['ti'] + " ($" + str(the_leed['pr']) + ")"
     
     SENDER = "theleedz.com@gmail.com" # must be verified in AWS SES Email
     RECIPIENT = the_seller['em']
-    SUBJECT = "Leed Sold! " + the_leed['id']
+    SUBJECT = "Leed Sold! " + leed_info
     
-    leed_info = "[" + the_leed['tn'] + "] " + the_leed['ti'] + " (" + the_leed['pr'] + ")"
-
 
     # The email body for recipients with non-HTML email clients
     BODY_TEXT = ("Congratulations, you sold a Leed!"
@@ -258,9 +254,9 @@ def seller_ReceiptEmail( the_leed, the_buyer, the_seller ):
                 leed_info
                 + "\r\n" + 
                 "Buyer: " + the_buyer['sk'] + " - " + the_buyer['em']
-                + "\r\n" + 
+                + "\r\n" + "\r\n" + 
                 "Square will credit your account shortly.  For any questions, please contact The Leedz - theleedz.com@gmail.com"
-                + "\r\n" + 
+                + "\r\n" + "\r\n" +  
                 "Thank you,"
                 + "\r\n" + 
                 "The Leedz"
@@ -268,8 +264,8 @@ def seller_ReceiptEmail( the_leed, the_buyer, the_seller ):
 
                 
     # The HTML body of the email
-    BODY_START = "<html><head></head><body><h1>Congratulations, you sold a Leed! " + leed_info + "</h1><BR><BR>Buyer: " + the_buyer['sk'] + " - " + the_buyer['em']
-    BODY_MID = "Square will credit your account shortly.  For any questions, please contact The Leedz - <a href='mailto:theleedz.com@gmail.com'>theleedz.com@gmail.com</a>"
+    BODY_START = "<html><head></head><body><h1>Congratulations, you sold a Leed!<BR>" + leed_info + "</h1><BR><BR>Buyer: " + the_buyer['sk'] + " - " + the_buyer['em']
+    BODY_MID = "<BR><BR>Square will credit your account shortly.  For any questions, please contact The Leedz - <a href='mailto:theleedz.com@gmail.com'>theleedz.com@gmail.com</a>"
     BODY_END = "<BR><BR>Thank you,<BR>The Leedz</body></html>"
     
 
@@ -399,7 +395,8 @@ def buyer_incrementLeedzBought(table, un):
         logger.error("Couldn't increment leedz bought for buyer %s: %s: %s", un, err.response['Error']['Code'], err.response['Error']['Message'])
         raise
 
-
+    except Exception :
+        raise
 
    
    
@@ -698,7 +695,7 @@ def lambda_handler(event, context):
 
     the_json = ""
     TRUE = 1
-    id = "leed_id"
+    leed_id = "leed_id"
     tn = "trade"
     un = "buyer"
     
@@ -716,7 +713,7 @@ def lambda_handler(event, context):
             
             # will throw Exception if body is missing Leedz 'note'
             leedz_info = getLeedzInfo(body)
-            id = leedz_info[0]
+            leed_id = leedz_info[0]
             tn = leedz_info[1]
             un = leedz_info[2]
         
@@ -737,7 +734,7 @@ def lambda_handler(event, context):
             # LEED
             # id
             # ID - REQUIRED
-            id = validateParam(event, 'id', TRUE)
+            leed_id = validateParam(event, 'id', TRUE)
 
         
         
@@ -749,7 +746,7 @@ def lambda_handler(event, context):
         # increment leed bought date and buyer name
         # the_leed = checkForExistingLeed(table, tn, id)
         #
-        the_leed = leed_updatePurchaseInfo( table, tn, id, un ) 
+        the_leed = leed_updatePurchaseInfo( table, tn, leed_id, un ) 
         
         
         # increment buyer and seller counters
@@ -772,12 +769,12 @@ def lambda_handler(event, context):
         
         # SEND RECEIPT TO BUYER
         #
-        buyer_receiptEmail( the_leed, the_buyer, the_seller ):
+        buyer_receiptEmail( the_leed, the_buyer, the_seller )
         
         
         # SEND RECEIPT TO SELLER
         #
-        seller_receiptEmail( the_leed, the_buyer, the_seller ):
+        seller_receiptEmail( the_leed, the_buyer, the_seller )
             
             
         
@@ -801,7 +798,7 @@ def lambda_handler(event, context):
         if error.response['Error']['Code'] == 'ValidationException' or error.response['Error']['Code'] == 'ConditionalCheckFailedException':
             # one or more attribute fields doesn't match DB config
             buyer_msg = " Buyer: " + un
-            msg = "Error buying leed [" + tn + "] id: " + id + buyer_msg
+            msg = "Error buying leed [" + tn + "] id: " + leed_id + buyer_msg
             result = handle_error(msg)
             
         else :

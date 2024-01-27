@@ -174,7 +174,7 @@ def createHttpResponse( result ):
             },
     }
     # logger.info("RETURNING RESPONSE")
-    # logger.info(response)
+    logger.info(response)
     
     return response
 
@@ -273,8 +273,7 @@ def lambda_handler(event, context):
         # LEEDZ_USER
         # reverse-lookup from state-->Leedz username
         the_user = getLeedzUser( table, state )
-        logger.info("GOT LEEDZ USER")
-        logger.info(the_user)
+        # logger.info(the_user)
         
 
         # QUICK CHECK -- are we already authorized?
@@ -286,13 +285,6 @@ def lambda_handler(event, context):
         # does user profile contain a state key generated in getUser()
         # check state against user state
         verifyUserState(state, the_user)
-        
-        
-        # COOKIE
-        # 
-        # 1/9 not getting the cookie at all
-        # will throw exception
-        # checkForCookie(event, state, FALSE)
         
     
         # RESPONSE TYPE
@@ -360,8 +352,6 @@ def doTokenExchange(table, event, the_user):
     #
     the_response = exchange_oauth_tokens( environment, auth_code, app_ID, app_secret )
     
-    logger.info("BACK FROM TOKEN EXCHANGE")
-    
     if ('errors' in the_response.body) :
 
         err_cat = the_response.body['category']
@@ -418,7 +408,7 @@ def doTokenExchange(table, event, the_user):
 #
 def exchange_oauth_tokens(env, code, id, secret):
    
-    logger.info("EXCHANGING OAUTH TOKENS")
+    # logger.info("EXCHANGING OAUTH TOKENS")
     response = ""
     try:
         # initialize square oauth client
@@ -469,32 +459,6 @@ def verifyUserState(state, the_user) :
         logger.error( msg )
         raise ValueError(msg)
         
-
-
-
-
-# COOKIE
-# 
-# get the auth state cookie to compare with the state that is in the callback
-# will throw Exception on error
-#
-def checkForCookie( event, state, required ) :
- 
-    cookie_state = ''
-    cookie = validateHeader(event, 'cookie', required)
-
-    if cookie:
-        c = cookies.SimpleCookie(cookie)
-        cookie_state = c['OAuthState'].value
-        
-        # ERROR
-        # cookie state fron web client either NULL or doesn't match param state
-        if (not cookie_state) or (state != cookie_state):
-            raise ValueError("Authorization failed: invalid auth state")
-    else:
-        logger.info("NO COOKIE RECEIVED")
-    
-            
 
 
 

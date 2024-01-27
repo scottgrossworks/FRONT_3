@@ -383,8 +383,8 @@ def doTokenExchange(table, event, the_user):
                 expires_at = '0'
             
             # will throw exception on failure
-            saveTokensToDB( table, the_user, sq_at, merchant_id, sq_rt, 'authorized', expires_at )
-        
+            saveTokensToDB( table, the_user, sq_at, expires_at, merchant_id, sq_rt, 'authorized' )
+
         except Exception as e:
             err_str = str(e)
             logger.error("Error extracting tokens from response body: "  + err_str)    
@@ -503,11 +503,13 @@ def getLeedzUser(table, sq_st):
 # sq_st = state --> authorized
 # sq_ex = expires_at
 #
-def saveTokensToDB( table, the_user, sq_at, sq_id, sq_rt, sq_st, sq_ex ) :
-  
+# saveTokensToDB( table, the_user, sq_at, expires_at, merchant_id, sq_rt, 'authorized' )
+#
+def saveTokensToDB( table, the_user, sq_at, sq_ex, sq_id, sq_rt, sq_st ) :
+    
     un = the_user['sk']
 
-    expr = 'SET sq_at=:sq_at,sq_rt=:sq_rt,sq_st=:sq_st,sq_ex=:sq_ex'
+    expr = 'SET sq_at=:sq_at,sq_ex=:sq_ex,sq_id=:sq_id,sq_rt=:sq_rt,sq_st=:sq_st'
     vals = {
             ':sq_at' : sq_at,
             ':sq_ex' : sq_ex,

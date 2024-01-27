@@ -91,13 +91,13 @@ def revoke_Square( square_client, client_id, client_secret, merchant_id ):
 # remove user from Cognito user pool
 # will throw Exception
 #
-def delete_CognitoUser( un ):
+def delete_CognitoUser( user_pool_ID, un ):
     
     try:
         client = boto3.client('cognito-idp')
 
         response = client.admin_delete_user(
-            UserPoolId='leedz_users',
+            UserPoolId=user_pool_ID,
             Username=un
         )
 
@@ -132,6 +132,10 @@ def delete_LeedzUser( table, un ):
             logger.error("User not found: %s", un)
             raise ValueError("User not found: " + un)
 
+        else:
+            result = response['Attributes']
+            return result
+        
 
     except ClientError as err:
         logger.error("Could not delete user %s: %s: %s", un, err.response['Error']['Code'], err.response['Error']['Message'])
@@ -141,10 +145,7 @@ def delete_LeedzUser( table, un ):
         logger.error("Error deleting Leedz user " + un + " : " + str(err))
         raise
 
-    else:
-        result = response['Attributes']
-        return result
-            
+   
 
             
             
@@ -287,6 +288,10 @@ def lambda_handler(event, context):
         #
         un = validateParam(event, 'un', TRUE)
 
+        # COGNITO USER POOL - REQUIRED
+        #
+        cognito_pool = validateEnviron("user_pool_ID", TRUE)
+
 
         # LEEDZ USER
         #
@@ -342,14 +347,14 @@ def lambda_handler(event, context):
         
         #
         # DELETE COGNITO USER from leedz_users userpool
-        #
-        delete_CognitoUser(un)
+        # will throw Exception before returning
+        delete_CognitoUser( cognito_pool, un )
         
         
         #
         # DELETE LEEDZ USER
-        # 
-        delete_LeedzUser(table, un)
+        # will throw Exception before returning
+        delete_LeedzUser( table, un )
   
     
         result = {}

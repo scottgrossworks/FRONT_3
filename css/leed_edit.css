@@ -242,7 +242,7 @@ table tbody td {
 
 .lock {
 	cursor:not-allowed;
-	filter: opacity(.8) brightness(.5) saturate(.7);
+	filter: opacity(.9) brightness(.4) saturate(.5);
 
 }
 

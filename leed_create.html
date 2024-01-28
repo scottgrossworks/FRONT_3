@@ -11,13 +11,6 @@
 
 
 <head>
-
-    
-        <link rel="stylesheet" href="css/globals.css" type="text/css" />
-        <link rel="stylesheet" href="css/modal.css" type="text/css" />
-
-
-   
 		 <meta charset="UTF-8">
 		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	 
@@ -27,8 +20,11 @@
 		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
 		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
  
+         
+        <link rel="stylesheet" href="css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="css/modal.css" type="text/css" />
+
          <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
-		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
 		 <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
 
 		 <script src="./js/inline-edit.js" type="module" defer></script> 
@@ -740,18 +736,9 @@
                 *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
                 *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
                 */
-                var theAlert = document.getElementById("alert_success");
-                var msg = 'Leed created [' + from_DB.tn + '] <u>' + from_DB.ti + '</u>';
-                var newChild = document.createElement("span");
-                newChild.textContent = msg;
-
-                if (theAlert.children.length <= 1) {
-                    theAlert.appendChild(newChild);
-                } else {
-                    theAlert.replaceChild(newChild, theAlert.children[1]);
-                }
-
-                theAlert.style.display = "block";
+                var msg = 'Leed created [ ' + from_DB.tn + ' ] ' + from_DB.ti;
+                console.log(msg);
+                successAlert(msg);
 
             }
 
@@ -760,6 +747,24 @@
 
 
 
+
+        //
+        //
+        function successAlert( msg ) {
+
+            var theAlert = document.getElementById("alert_success");
+            var newChild = document.createElement("span");
+            newChild.textContent = msg;
+
+            if (theAlert.children.length <= 1) {
+                theAlert.appendChild(newChild);
+            } else {
+                theAlert.replaceChild(newChild, theAlert.children[1]);
+            }
+
+            theAlert.style.display = "block";
+
+        }
 
 
         //

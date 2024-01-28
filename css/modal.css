@@ -135,7 +135,9 @@
 
   }
 
-
+#alert_success {
+  font-size:medium;
+}
  
 @media screen and (max-width: 799px) {
 
@@ -171,6 +173,9 @@
   }
 
 
+  #alert_success {
+    font-size:small;
+  }
 }
 
 

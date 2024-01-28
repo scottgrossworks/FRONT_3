@@ -724,19 +724,35 @@
             *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
             *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
             */
-            var theAlert = document.getElementById("alert_success");
-            var msg = 'Leed Updated: ' + from_DB.ti + '  ($ ' + from_DB.pr +' )';
-            var newChild = document.createElement("span");
-            newChild.textContent = msg;
-            theAlert.appendChild(newChild);
-            theAlert.style.display = "block";
-        }   
-
-
-
-
+            var msg = 'Leed Updated: ' + from_DB.ti + '  ( $ ' + from_DB.pr +' )';
+            console.log(msg);
+            successAlert( msg );
+        }
     }
     window.saveChanges = saveChanges;
+
+
+
+
+
+
+        //
+        //
+        function successAlert( msg ) {
+
+            var theAlert = document.getElementById("alert_success");
+            var newChild = document.createElement("span");
+            newChild.textContent = msg;
+
+            if (theAlert.children.length <= 1) {
+                theAlert.appendChild(newChild);
+            } else {
+                theAlert.replaceChild(newChild, theAlert.children[1]);
+            }
+
+            theAlert.style.display = "block";
+
+        }
 
 
 

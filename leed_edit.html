@@ -387,7 +387,7 @@
 
         // START DATE
         // 
-        const startDate = new Date( CURRENT_LEED.st );
+        const startDate = new Date( parseInt(CURRENT_LEED.st) );
         const isoStart = startDate.toISOString();
 
         const start_weekday = getWeekday( getShortDateString( isoStart ) );
@@ -409,7 +409,7 @@
         // END DATE/TIME 
         // END TIME IS REQUIRED AND CANNOT BE HIDDEN
         //
-        const endDate = new Date( CURRENT_LEED.et );
+        const endDate = new Date( parseInt(CURRENT_LEED.et) );
         const isoEnd = endDate.toISOString();
     
         // FOOBAR

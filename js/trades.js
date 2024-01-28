@@ -161,8 +161,10 @@ export function getTradeInfo(trade_name) {
 */
 function initTradesColumn( tradeListener ) {
 
-  const current_user = getCurrentUser( false );
-  // current_user may be guest user
+  // 1/2024
+  // go back to cache here as a failsafe because sometimes we are not refreshing trades when
+  // we return to this page from a helper .html
+  const current_user = getCurrentUser( true );
 
   // import DOM elements from html
   const theList = document.querySelector("#trades_list");

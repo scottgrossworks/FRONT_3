@@ -53,7 +53,7 @@ body {
 	height:70%;
 	max-height:1000px;
 	
-	overflow-y:scroll;
+	overflow-y:hidden;
 	overflow-x: auto;
 
 	background-color: var(--LEEDZ_LIGHTGREEN);
@@ -149,13 +149,23 @@ section > img {
 @media screen and (max-width:499px) {
 
 	#leed_info_table {
-		position:absolute;
 		width:100%;
 		left:0;
 		margin: 3vh 0;
 		padding:0;
 		font-size: small;
 	}
+
+		
+
+
+	.buttonTD {
+		
+		width:80px;
+		padding:6px;
+
+	}
+
 
 }
 
@@ -448,6 +458,13 @@ select {
 	select {
 		max-width:160px;
 	}
+
+	
+input#finish_button {
+	color:black;
+	width:80px;
+	background-color: var(--LEEDZ_GREEN);
+}
 
 }
 

@@ -83,6 +83,29 @@
 }
 
 
+
+
+
+#newUser_modal table {
+
+	border-spacing: 0;
+	padding: 2vh 2vw;
+
+	float:none;
+	position: relative;
+	margin:0 auto;
+
+	width:fit-content;
+	background-color: var(--LEEDZ_GRAY);
+	border-radius: 10px;
+
+}
+
+
+
+
+
+
 #guest_modal {
   
   margin: 10vh 10vw;

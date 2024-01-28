@@ -514,7 +514,8 @@ export async function db_getDeetz( user_name, trade_name, leed_id, leed_op ) {
         theURL.search = searchParams.toString();
 
         // options go in headers
-        const headers = { OPTIONS_URL_PARAM: leed_op };
+        const headers = {};
+        headers[ OPTIONS_URL_PARAM ] =  leed_op;
 
         await doGetHeaders( theURL, headers )
         .then(data => {

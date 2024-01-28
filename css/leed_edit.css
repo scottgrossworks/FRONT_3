@@ -149,6 +149,7 @@ section > img {
 @media screen and (max-width:499px) {
 
 	#leed_info_table {
+		position:absolute;
 		width:100%;
 		left:0;
 		margin: 3vh 0;

@@ -133,14 +133,13 @@ section > img {
 
 
 
-table {
+#leed_info_table {
 
 
 	border-spacing: 0;
 
 	height:fit-content;
-	width:80%;
-	max-width:800px;
+	width: fit-content;
 
 	margin: 0 auto;
 	padding: 5vh 2vw;
@@ -148,10 +147,13 @@ table {
 }
 
 @media screen and (max-width:499px) {
-	table {
-		
+
+	#leed_info_table {
+		width:100%;
+		left:0;
 		margin: 3vh 0;
 		padding:0;
+		font-size: small;
 	}
 
 }

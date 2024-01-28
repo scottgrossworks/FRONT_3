@@ -47,7 +47,7 @@
                 </div>
     
                 <div class="column" style="margin:auto 0;transform:translateY(6px)">
-                    <h1 class="user_title">Report Leed</h1>
+                    <h1 class="user_title">Report</h1>
                 </div>
                     
                 <div class="column _3" style="padding:6px;text-align:center">
@@ -579,7 +579,7 @@
                 const CURRENT_USER = getCurrentUser(true);
         
                 let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
-                window.open(href, "_self");
+                window.open(href, "_top");
     
                 clearCurrentLeed();
                 self.close();

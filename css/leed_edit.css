@@ -139,10 +139,10 @@ section > img {
 	border-spacing: 0;
 
 	height:fit-content;
-	width: fit-content;
-
-	margin: 0 auto;
+	width: 96%;
 	padding: 5vh 2vw;
+	margin: 0 auto;
+
 
 }
 

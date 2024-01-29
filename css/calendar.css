@@ -17,7 +17,6 @@
     text-align:left;
     
     margin: 0;
-    padding-bottom:2vh;
     
     background-color: white;
  }
@@ -29,7 +28,7 @@
 
     list-style-type: none;
 
-    height:105vh;    
+    height:100vh;    
   }
 
 
@@ -58,12 +57,12 @@
   #calendar_list {
     
     position:absolute;
-    
+    height:80%;
     width:100%;
  
     left:0px;
-    height:86%;
 
+    margin-bottom:5vh;
     overflow-y: scroll;    
 
   }

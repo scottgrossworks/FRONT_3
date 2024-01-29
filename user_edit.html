@@ -389,13 +389,13 @@
 
 			if (CURRENT_USER.ws) {
 				element = document.getElementById("td_website");
-				element.innerHTML = CURRENT_USER.ws;
+				element.innerHTML = (CURRENT_USER.ws) ? CURRENT_USER.ws : "";
 			}
 
 
 			if (CURRENT_USER.ab) {
 				element = document.getElementById("td_about");
-				element.innerHTML = CURRENT_USER.ab;
+				element.innerHTML = (CURRENT_USER.ab) ? CURRENT_USER.ab : "";
 			}
 
 			if (CURRENT_USER.zp) {

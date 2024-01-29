@@ -235,33 +235,6 @@ table tbody td {
 
 
 
-.eyeballTD {
-	cursor: pointer;
-	padding-right:10px;
-	padding-left:2px;
-}
-
-
-.eyeballTD img {
-
-	width: 30px;
-	height:30px;
-	padding-left:0px;
-	padding-right:0px;
-	margin:0 auto;
-
-}
-
-.lock {
-	cursor:not-allowed;
-	filter: opacity(.7) brightness(.4) saturate(.5);
-
-}
-
-
-
-
-
 
 .buttonTD {
 	

@@ -9,7 +9,7 @@ import { isValidTrade } from "./trades.js";
 import { prettyFormatDT, formatDTforInput, DTfromPretty, getTodayUTC } from "./dates.js";
 
 
-
+import { changeLeedOpts } from "./leed.js";
 
 
 
@@ -75,7 +75,7 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
     
     switch (cell.dataset.inlinetype) {
         
-    
+
         //
         // ZIP CODE
         //
@@ -119,13 +119,13 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
         //
         // FINISH BUTTON
-        //
+        // 
+
         //  
         case "doneButton":
             cellContent += `<input type='submit' id="finish_button" value='Finish' form='${rowName}Form'/>`;
             break;
         case "button":
-
             cellContent += inlineEditRowContents[rowName][i];
             break;
         case "link":
@@ -304,7 +304,7 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
                   
                 }
             }
-        };
+        }
     }
 }
 
@@ -394,17 +394,13 @@ function inlineDefaultFinish(rowName, options) {
    
 
     var tableRow = document.getElementById(rowName);
+
     var rowData = {};
     for (var i = 0; i < tableRow.childElementCount; i++) {
         var cell = tableRow.children[i];
         var getFromChildren = (i === 0) ? 1 : 0;
 
-
-
         switch (cell.dataset.inlinetype) {
-
-
-
 
             case "zip":
 
@@ -480,12 +476,45 @@ function inlineDefaultFinish(rowName, options) {
 
 
 
-
+// TODO
+// define combobutton case
+// locked buttons use old doneButton
+// new buttons use comboButton
+/**
 
             case "doneButton":
                 break;
             case "button":
                 break;
+
+
+ */
+
+                //
+                // INLINE TYPE
+                //
+            case "doneButton":
+                
+                var the_button = cell.children[0];
+                the_button.value = "Hidden";
+                the_button.style.color = 'white';
+                the_button.style.backgroundColor = "var(--LEEDZ_DARKGREEN)";
+                var the_label = tableRow.children[0];
+                the_label.style.color = "var(--LEEDZ_DARKGREEN)";
+
+                // Call appropriate callback for this row
+                if (options.hasOwnProperty("hideCallback")) {
+                    var row_index = cell.getAttribute('data-index');
+                    options.hideCallback( parseInt( row_index ));
+                }
+
+                break;
+
+
+
+
+
+
             case "link":
 
                 var theVal = cell.children[getFromChildren].value;
@@ -604,26 +633,6 @@ function inlineDefaultFinish(rowName, options) {
 
                 var theVal = cell.children[getFromChildren].value;
 
-                // 11/2023
-                // using local date/time here
-                // var today = new Date().getTime();
-
-                // var str = prettyFormatDT( theVal );
-                // var dt = DTfromPretty(str);
-                
-                // theVal = 2023-10-04T00:00
-                // check that the date is not before today's date
-                // FIXME -- not working 11/7
-                /**
-                if (dt <= today) {
-                    const errMsg =  rowName.substring(4) + " date must be in the future";
-                    printError("inlineDefaultFinish()", errMsg );
-                    alert(errMsg);
-                    return;
-                }
-                */
-                
-                
                 var trimVal = prettyFormatDT( theVal.trim() );
 
                 rowData[cell.dataset.inlinename] = trimVal;
@@ -680,6 +689,8 @@ function inlineDefaultFinish(rowName, options) {
                 inlineEditRowContents[rowName][i] = safeVal;;
 
                 break;
+
+
             default:
                 break;
         }
@@ -707,6 +718,7 @@ function inlineDefaultFinish(rowName, options) {
 
 
             } else {
+
                 inlineDefaultFinishCell(cell, i, rowName);
             }
         }

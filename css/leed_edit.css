@@ -49,6 +49,7 @@ body {
 
 
 	width:100%;
+	max-width: 1000px;
 	
 	height:70%;
 	max-height:1000px;
@@ -137,9 +138,8 @@ section > img {
 
 
 	border-spacing: 0;
-
+	width:100%;
 	height:fit-content;
-	width: 96%;
 	padding: 5vh 2vw;
 	margin: 0 auto;
 
@@ -149,25 +149,35 @@ section > img {
 @media screen and (max-width:499px) {
 
 	#leed_info_table {
-		width:100%;
+		
 		left:0;
 		margin: 3vh 0;
 		padding:0;
 		font-size: small;
 	}
 
-		
 
-
-	.buttonTD {
-		
-		padding:6px;
-
+	.labelTD {
+	
+		max-width:80px;
+		margin: auto 0 auto 1vw;
 	}
 
+	.buttonTD {
+		max-width:75px;
+	}
 
 }
 
+
+
+
+
+
+.buttonTD {
+	width:100px;
+
+}
 
 
 
@@ -183,69 +193,39 @@ table tbody td {
 
 .labelTD {
 	
-	width:150px;
+	width:100px;
 
-	padding: 2vh 0;
-	margin:0;
+	padding: 2vh 1vw;
+	margin:0 1vw;
 
 	font-weight: 600;
 }
 
 
 #label_loc {
-	color:dodgerblue;
+	color:var(--LEEDZ_DARKGREEN);
 }
 
 
 #label_em {
-	color:dodgerblue;
+	color:var(--LEEDZ_DARKGREEN);
 }
 
 
 #label_ph {
-	color:dodgerblue;
+	color:var(--LEEDZ_DARKGREEN);
 }
 
 
 
 #label_det {
-	color:darkgreen;
+	color:var(--LEEDZ_DARKGREEN);
 }
 
 
 #label_reqs {
-	color:darkgreen;
+	color:var(--LEEDZ_DARKGREEN);
 }
-
-
-
-@media screen and (max-width:499px) {
-
-	.labelTD {
-	
-		width:fit-content;
-		max-width: 80px;
-		padding: 2vh 1vw;
-	
-		font-weight: 600;
-	}
-
-}
-
-
-
-
-
-.buttonTD {
-	
-	width:80px;
-	padding:10px;
-
-}
-
-
-
-
 
 
 
@@ -407,8 +387,6 @@ table tbody td {
 input,
 textarea,
 select {
-
-	width:93%;
 	
 	border: none;
 	background-color: var(--LEEDZ_GRAY);
@@ -428,33 +406,23 @@ select {
 	input,
 	textarea,
 	select {
-		max-width:160px;
+		width: 100%;
+		margin: 0;
 	}
 
-	
-input#finish_button {
-	color:black;
-	width:80px;
-	background-color: var(--LEEDZ_GREEN);
 }
-
-}
-
-
-
 
 
 
 input,
 textarea {
-	appearance: none;
-	-webkit-appearance: none;
+	width: 92%;
+    margin: 0 1vw;
 }
 
 
 input#finish_button {
 	color:black;
-	width:fit-content;
 	background-color: var(--LEEDZ_GREEN);
 }
 
@@ -462,7 +430,6 @@ input#finish_button {
 
 input[type="button"],
 input[type="submit"] {
-	padding: 0.5rem 1rem;
 	background-color: var(--LEEDZ_DARKGREEN);
 	border-radius: 5px;
 
@@ -471,20 +438,11 @@ input[type="submit"] {
 
 	color: white;
 
-	
     box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
 
-	
-	transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 input[type="button"]:hover,
 input[type="submit"]:hover {
-	background-color: var(--LEEDZ_DARKGREEN);
 	box-shadow: 0 3px 3px #ccc;
-}
-
-input[type="button"]:active,
-input[type="submit"]:active {
-	background-color: var(--LEEDZ_DARKGREEN);
 }

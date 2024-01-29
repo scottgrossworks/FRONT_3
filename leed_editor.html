@@ -132,12 +132,12 @@
                 -->
                 <tr id="row_creator">
                                 
-                    <TD class="labelTD">Creator: </TD>
+                    <TD  class="labelTD">Creator: </TD>
                     
                     <td id="td_creator"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD">
-                        <input type="button" value="Locked"/>
+                        <input type="button" value="Locked" style="background-color:darkgreen"/>
                     </td>
                 </tr>
     
@@ -150,7 +150,7 @@
                  -->
                 <tr id="row_trade">
                                 
-                    <TD class="labelTD">Trade Name: </TD>
+                    <TD class="labelTD">Trade: </TD>
                     
                     <td id="td_trade" data-inlineType="trade_name" data-inlineName="trade" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
@@ -228,7 +228,7 @@
                     
                     <td id="td_loc" data-inlineType="text" data-inlineName="loc" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
-                    <td data-inlineType="doneButton" class="buttonTD">
+                    <td data-inlineType="doneButton" class="buttonTD" data-index="5">
                         <input type="button" value="Edit" onclick="comboButton(this, 'row_loc', 5, createOptions)"/>
                     </td>
 
@@ -247,12 +247,12 @@
                 -->
                 <tr id="row_em">
                                 
-                    <TD id='label_em' class="labelTD">Client Email: </TD>
+                    <TD id='label_em' class="labelTD">Email: </TD>
                     
                     <td id="td_em" data-inlineType="email" data-inlineName="em" data-inlineRequired="0"></td>
     
-                    <td data-inlineType="doneButton" class="buttonTD">
-                        <input type="button" value="Edit"  onclick="comboButton(this, 'row_em', 8, createOptions)"/>
+                    <td data-inlineType="doneButton" class="buttonTD" data-index="8">
+                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_em', 8, createOptions)"/>
                     </td>
     
                 </tr>
@@ -267,12 +267,12 @@
                 -->
                 <tr id="row_ph">
                                 
-                    <TD id='label_ph' class="labelTD">Client Phone: </TD>
+                    <TD id='label_ph' class="labelTD">Phone: </TD>
                     
                     <td id="td_ph" data-inlineType="tel" data-inlineName="ph" data-inlineRequired="0"></td>
     
-                    <td data-inlineType="doneButton" class="buttonTD">
-                        <input type="button" value="Edit"  onclick="comboButton(this, 'row_ph', 9, createOptions)"/>
+                    <td data-inlineType="doneButton" class="buttonTD" data-index="9">
+                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_ph', 9, createOptions)"/>
                     </td>
     
                 </tr>
@@ -292,8 +292,8 @@
                     
                     <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
-                    <td data-inlineType="doneButton" class="buttonTD">
-                        <input type="button" value="Edit"  onclick="comboButton(this, 'row_det', 10, createOptions)"/>
+                    <td data-inlineType="doneButton" class="buttonTD" data-index="10">
+                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_det', 10, createOptions)"/>
                     </td>
     
                 </tr>
@@ -309,12 +309,12 @@
                 -->
                 <tr id="row_reqs">
                             
-                    <TD id='label_reqs' class="labelTD">Requirements: </TD>
+                    <TD id='label_reqs' class="labelTD">Requires: </TD>
                     
                     <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0"></td>
     
-                    <td data-inlineType="doneButton" class="buttonTD">
-                        <input type="button" value="Edit"  onclick="comboButton(this, 'row_reqs', 11, createOptions)"/>
+                    <td data-inlineType="doneButton" class="buttonTD" data-index="11">
+                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_reqs', 11, createOptions)"/>
                     </td>
     
                 </tr>
@@ -796,10 +796,11 @@
                 try {
                     inlineEdit( row_name, options );
                 } catch (error) {
-                    printError("Error editing " + row_name, error.message);
-                    errorModal("Error Posting Leed: Trade must be set.", true);
+                    var msg = "Error editing " + row_name + ": " + error.message;
+                    printError("editField", msg);
+                    errorModal(msg, true);
                     return;
-                }
+                }   
             }
             window.editField = editField;
             
@@ -807,39 +808,79 @@
 
             /**
              *
+             *
+             */
+             export function hideField( row_index ) {
+                // console.log("HIDING FIELD: " + row_index);
+                changeLeedOpts( LEED_CHANGES, row_index, OPTS_HIDDEN );
+             }
+             window.hideField = hideField;
+
+
+            /**
+             *
              */
             function comboButton( the_button, row_name, row_index, options ) {
+       
+                let the_row = document.getElementById(row_name);
+                let the_label = the_row.children[0];
 
                 beginEditing();
                 if (the_button.value == 'Edit') {
 
-                    the_button.value = "Finish";
-                    the_button.style.backgroundColor = var(--LEEDZ_GREEN);
+                    // this little hack ensures that we cycle correctly
+                    the_button.value = "Hidden";
+                    the_button.style.color = 'white';
+                    the_button.style.backgroundColor ="var(--LEEDZ_DARKGREEN)";
 
                     editField( row_name, options );
+               
+     
+                    the_button.value = "Finish";
+                    the_button.style.color = 'black';
+                    the_button.style.backgroundColor = "var(--LEEDZ_GREEN)";
 
 
                 } else if (the_button.value == 'Finish') {
 
-                    changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
-                    the_button.value = "Show";
-                    the_button.style.backgroundColor = 'green';
+                    the_button.value = "Hidden";
+                    the_button.style.color = 'white';
+                    the_button.style.backgroundColor = "var(--LEEDZ_DARKGREEN)";
+                    the_label.style.color = "var(--LEEDZ_DARKGREEN)";
 
-
-                } else if (the_button.value == 'Show') {
-
+                    // console.log("HIDING LEED OPS");
                     changeLeedOpts( LEED_CHANGES, row_index, OPTS_HIDDEN );
-                    the_button.value = "Hide";
-                    the_button.style.backgroundColor = 'dodgerblue';
 
-                } else if (the_button.value == 'Hide')
+
+
+                } else if (the_button.value == 'Showing') {
+
+                  // this little hack ensures that we cycle correctly
+                    the_button.value = "Hidden";
+                    the_button.style.color = 'white';
+                    the_button.style.backgroundColor ="var(--LEEDZ_DARKGREEN)";
+
+                 
+                    editField( row_name, options );
 
                     the_button.value = "Edit";
-                    the_button.style.backgroundColor = 'green';
+                    the_button.style.color = 'white';
+
+
+                } else if (the_button.value == 'Hidden') {
+
+                    the_button.value = "Showing";
+                    the_button.style.color = 'white';
+                    the_button.style.backgroundColor = 'dodgerblue';
+                    the_label.style.color = 'dodgerblue';
+
+                    // console.log("SHOWING LEED OPS");
+                    changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
+
                 
                 
                 } else {
-                    var msg = "Invalid button state.  value=" + the_button.value;
+                    var msg = "Invalid button state: value=" + the_button.value;
                     printError("comboButton", msg);
                     throwError(msg);
                 }
@@ -881,7 +922,8 @@
     
     
             var createOptions = {   "origin": "create",
-                                    "finishCallback": defaultCallback };
+                                    "finishCallback": defaultCallback,
+                                    "hideCallback":hideField };
             window.createOptions = createOptions;
     
     

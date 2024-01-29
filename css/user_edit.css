@@ -288,15 +288,6 @@ section {
 
 	}
 
-		
-
-	.buttonTD {
-		padding:6px;
-	}
-
-
-
-
 }
 
 
@@ -362,14 +353,11 @@ table tbody td {
 }
 
 
-.buttonTD {
-	display:block;
-	max-width:100px;
-	padding:10px;
-	border:none;
-	margin:10px auto 0px 2px;
-}
 
+.buttonTD {
+	width:100px;
+
+}
 
 
 

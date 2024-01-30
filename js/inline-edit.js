@@ -9,8 +9,6 @@ import { isValidTrade } from "./trades.js";
 import { prettyFormatDT, formatDTforInput, DTfromPretty, getTodayUTC } from "./dates.js";
 
 
-import { changeLeedOpts } from "./leed.js";
-
 
 
 
@@ -476,38 +474,39 @@ function inlineDefaultFinish(rowName, options) {
 
 
 
-// TODO
-// define combobutton case
-// locked buttons use old doneButton
-// new buttons use comboButton
-/**
 
-            case "doneButton":
+
+                //
+                // INLINE TYPE
+                //
+                case "doneButton":
+                
+                var the_button = cell.children[0];
+                the_button.value = "Hidden";
+                the_button.style.color = 'white';
+                the_button.style.backgroundColor = "var(--LEEDZ_DARKGREEN)";
+                
+                var the_label = tableRow.children[0];
+                the_label.style.color = "var(--LEEDZ_DARKGREEN)";
+
+                var the_text = tableRow.children[1];
+                the_text.style.color = "var(--LEEDZ_DARKGREEN)";
+
+                // Call appropriate callback for this row
+                var row_index = cell.getAttribute('data-index');
+                options.hideCallback( parseInt( row_index ));
+         
+
                 break;
-            case "button":
-                break;
 
 
- */
+
 
                 //
                 // INLINE TYPE
                 //
             case "doneButton":
                 
-                var the_button = cell.children[0];
-                the_button.value = "Hidden";
-                the_button.style.color = 'white';
-                the_button.style.backgroundColor = "var(--LEEDZ_DARKGREEN)";
-                var the_label = tableRow.children[0];
-                the_label.style.color = "var(--LEEDZ_DARKGREEN)";
-
-                // Call appropriate callback for this row
-                if (options.hasOwnProperty("hideCallback")) {
-                    var row_index = cell.getAttribute('data-index');
-                    options.hideCallback( parseInt( row_index ));
-                }
-
                 break;
 
 

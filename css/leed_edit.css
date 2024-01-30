@@ -1,7 +1,6 @@
 * {
 	padding: 0;
 	margin: 0;
-	max-width:1200px;
 }
 
 
@@ -140,7 +139,7 @@ section > img {
 	border-spacing: 0;
 	width:100%;
 	height:fit-content;
-	padding: 5vh 2vw;
+	padding: 1vh 2vw 1vh 2vw;
 	margin: 0 auto;
 
 
@@ -219,16 +218,24 @@ table tbody td {
 
 
 #label_det {
-	color:var(--LEEDZ_DARKGREEN);
+	color:dodgerblue;
 }
 
 
 #label_reqs {
-	color:var(--LEEDZ_DARKGREEN);
+	color:dodgerblue;
 }
 
+#editor_notes {
+	padding:2vh 1vw;
+	font-size:small;
+	color:green;
+}
 
-
+#editor_notes b {
+	font-size:large;
+	vertical-align: text-top;
+}
 
 
 .editSpecial {
@@ -384,9 +391,13 @@ table tbody td {
 
 
 
+
+
 input,
 textarea,
 select {
+
+	width:93%;
 	
 	border: none;
 	background-color: var(--LEEDZ_GRAY);
@@ -406,19 +417,14 @@ select {
 	input,
 	textarea,
 	select {
-		width: 100%;
-		margin: 0;
+		max-width:160px;
 	}
 
 }
 
 
 
-input,
-textarea {
-	width: 92%;
-    margin: 0 1vw;
-}
+
 
 
 input#finish_button {
@@ -428,8 +434,11 @@ input#finish_button {
 
 
 
+
+
 input[type="button"],
 input[type="submit"] {
+	padding: 0.5rem 1rem;
 	background-color: var(--LEEDZ_DARKGREEN);
 	border-radius: 5px;
 
@@ -440,9 +449,25 @@ input[type="submit"] {
 
     box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
 
+	transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 input[type="button"]:hover,
 input[type="submit"]:hover {
+	background-color: var(--LEEDZ_DARKGREEN);
 	box-shadow: 0 3px 3px #ccc;
+}
+
+input[type="button"]:active,
+input[type="submit"]:active {
+	background-color: var(--LEEDZ_DARKGREEN);
+}
+
+
+input[type="button"][value="Showing"] {
+	background-color: dodgerblue;
+}
+
+input[type="button"][value="Edit"] {
+	background-color: var(--LEEDZ_DARKGREEN);
 }

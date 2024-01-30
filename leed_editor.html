@@ -229,7 +229,7 @@
                     <td id="td_loc" data-inlineType="text" data-inlineName="loc" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="5">
-                        <input type="button" value="Edit" onclick="comboButton(this, 'row_loc', 5, createOptions)"/>
+                        <input type="button" value="Edit" onclick="comboButton(this, 'row_loc', 5, comboOptions)"/>
                     </td>
 
                 </tr>
@@ -252,7 +252,7 @@
                     <td id="td_em" data-inlineType="email" data-inlineName="em" data-inlineRequired="0"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="8">
-                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_em', 8, createOptions)"/>
+                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_em', 8, comboOptions)"/>
                     </td>
     
                 </tr>
@@ -272,7 +272,7 @@
                     <td id="td_ph" data-inlineType="tel" data-inlineName="ph" data-inlineRequired="0"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="9">
-                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_ph', 9, createOptions)"/>
+                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_ph', 9, comboOptions)"/>
                     </td>
     
                 </tr>
@@ -293,7 +293,7 @@
                     <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="10">
-                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_det', 10, createOptions)"/>
+                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_det', 10, comboOptions)"/>
                     </td>
     
                 </tr>
@@ -314,7 +314,7 @@
                     <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="11">
-                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_reqs', 11, createOptions)"/>
+                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_reqs', 11, comboOptions)"/>
                     </td>
     
                 </tr>
@@ -340,16 +340,21 @@
     
                 </tr>
     
-    
-    
-                     
-    
-    
+
+                <TR>
+                    <TD colspan=3 id="editor_notes"><b>*</b> For questions about posting leedz and getting paid, read our 
+                            <a href="./leedz_how-to.html" targe="_self">How-To</a> page and 
+                            the Leedz <a href="./leedz_tos.html" targe="_self">terms of service</a>.
+                    </TD>
+                </TR>
             </table>	
-    
+
+       
+        
         </div>
-    
-    
+
+
+        
         
     <!--
     --
@@ -403,6 +408,25 @@
             window.errorModalClose = errorModalClose;
             window.inlineEdit = inlineEdit;
     
+
+    
+    
+            const cancelOptions = {   "origin": "cancel",
+                                    "finishCallback": defaultCallback };
+            window.cancelOptions = cancelOptions;
+    
+            const createOptions = {   "origin": "create",
+                                    "finishCallback": defaultCallback };
+            window.createOptions = createOptions;
+    
+
+            const comboOptions = {    "origin": "combo",
+                                    "finishCallback": defaultCallback,
+                                    "hideCallback":hideField };
+            window.comboOptions = comboOptions;
+
+
+        
     
               // flag indicates edits are in progress
               //
@@ -824,6 +848,7 @@
        
                 let the_row = document.getElementById(row_name);
                 let the_label = the_row.children[0];
+                let the_text = the_row.children[1];
 
                 beginEditing();
                 if (the_button.value == 'Edit') {
@@ -839,6 +864,8 @@
                     the_button.value = "Finish";
                     the_button.style.color = 'black';
                     the_button.style.backgroundColor = "var(--LEEDZ_GREEN)";
+                    
+                    the_text.style.color = 'black';
 
 
                 } else if (the_button.value == 'Finish') {
@@ -847,6 +874,8 @@
                     the_button.style.color = 'white';
                     the_button.style.backgroundColor = "var(--LEEDZ_DARKGREEN)";
                     the_label.style.color = "var(--LEEDZ_DARKGREEN)";
+
+                    the_text.style.color = "var(--LEEDZ_DARKGREEN)";
 
                     // console.log("HIDING LEED OPS");
                     changeLeedOpts( LEED_CHANGES, row_index, OPTS_HIDDEN );
@@ -867,12 +896,16 @@
                     the_button.style.color = 'white';
 
 
+
+
                 } else if (the_button.value == 'Hidden') {
 
                     the_button.value = "Showing";
                     the_button.style.color = 'white';
                     the_button.style.backgroundColor = 'dodgerblue';
                     the_label.style.color = 'dodgerblue';
+
+                    the_text.style.color = "dodgerblue";
 
                     // console.log("SHOWING LEED OPS");
                     changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
@@ -889,18 +922,14 @@
             window.comboButton = comboButton;
             
 
-
-            
-    
-    
-    
+        
     
     
             /**
              * Clear all fields and start over
              *
              */
-            function cancelCreate() {
+             function cancelCreate() {
                
                 inlineEdit('row_trade', cancelOptions);            
                 inlineEdit('row_title', cancelOptions);
@@ -914,21 +943,9 @@
                 inlineEdit('row_pr', cancelOptions);
             }
             window.cancelCreate = cancelCreate;
-    
-    
-            var cancelOptions = {   "origin": "cancel",
-                                    "finishCallback": defaultCallback };
-            window.cancelOptions = cancelOptions;
-    
-    
-            var createOptions = {   "origin": "create",
-                                    "finishCallback": defaultCallback,
-                                    "hideCallback":hideField };
-            window.createOptions = createOptions;
-    
-    
-        
-    
+
+
+
             /**
              * On page load 
              * call inlineEdit for every editable field 
@@ -946,11 +963,13 @@
                 inlineEdit('row_title', createOptions);
                 inlineEdit('row_start', createOptions);
                 inlineEdit('row_end', createOptions);
-                inlineEdit('row_loc', createOptions);
-                inlineEdit('row_em', createOptions);
-                inlineEdit('row_ph', createOptions);
-                inlineEdit('row_det', createOptions);
-                inlineEdit('row_reqs', createOptions);
+
+                inlineEdit('row_loc', comboOptions);
+                inlineEdit('row_em', comboOptions);
+                inlineEdit('row_ph', comboOptions);
+                inlineEdit('row_det', comboOptions);
+                inlineEdit('row_reqs', comboOptions);
+
                 inlineEdit('row_pr', createOptions);
             };
     

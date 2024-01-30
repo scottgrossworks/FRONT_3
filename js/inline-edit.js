@@ -493,9 +493,10 @@ function inlineDefaultFinish(rowName, options) {
                 the_text.style.color = "var(--LEEDZ_DARKGREEN)";
 
                 // Call appropriate callback for this row
-                var row_index = cell.getAttribute('data-index');
-                options.hideCallback( parseInt( row_index ));
-         
+                if (options['hideCallback']) {
+                    var row_index = cell.getAttribute('data-index');
+                    options.hideCallback( parseInt( row_index ));
+                } 
 
                 break;
 

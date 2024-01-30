@@ -142,7 +142,6 @@ section > img {
 	padding: 1vh 2vw 1vh 2vw;
 	margin: 0 auto;
 
-
 }
 
 @media screen and (max-width:499px) {
@@ -408,6 +407,7 @@ select {
 	border-radius: 8px;
 
 	font-family: var(--FONT_2);
+
 	border-bottom: 1px solid var(--LEEDZ_DARKGREEN);
 }
 

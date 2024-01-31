@@ -435,6 +435,75 @@
 
 
 
+    
+    
+            /**
+            *
+            */
+            function defaultCallback(rowData, rowName) {
+   
+                beginEditing();
+    
+                switch(rowName) {
+    
+                    /** CANNOT CHANGE
+                    case "row_trade":
+                        LEED_CHANGES.tn = rowData["trade"];
+                        break;
+                    */
+
+                    case "row_title":
+                        LEED_CHANGES.ti = rowData["title"];
+                        break;
+    
+                    case "row_start":
+                        var dateTime = DTfromPretty( rowData["start"] );
+                        LEED_CHANGES.st = dateTime;
+                        break;
+    
+                    case "row_end":
+                        var dateTime = DTfromPretty( rowData["end"] );
+                        LEED_CHANGES.et = dateTime;
+                        break;
+    
+    
+                    case "row_em":
+                        LEED_CHANGES.em = rowData["em"];
+                        break;
+    
+                    case "row_ph":
+                        LEED_CHANGES.ph = rowData["ph"];
+                        break;
+    
+    
+                    case "row_loc":
+                        LEED_CHANGES.lc = rowData["loc"];
+                        break;
+    
+                    case "row_det":
+                        LEED_CHANGES.dt = rowData["det"];
+                        break; 
+                        
+                    case "row_reqs":
+                        LEED_CHANGES.rq = rowData["reqs"];
+                        break; 
+    
+    
+                    case "row_pr":
+                        LEED_CHANGES.pr = rowData["pr"];
+                        break; 
+    
+                    default:
+                        printError("defaultCallback()", "received unknown form field: " + rowName);
+                        break;
+    
+                }
+            }
+    
+
+   
+            
+
         /**
         * DROP DOWN MENU
         */

@@ -12,7 +12,7 @@
  .modal {
   left: 14%;
   position: fixed;
-  width: 70%;
+
   height: 70%;
 }
 
@@ -141,6 +141,8 @@
 
   #error_modal {
 
+    width:70%;
+
     z-index:900;
     background-color: white;
     border: 6px solid #f44336;
@@ -158,7 +160,7 @@
 @media screen and (max-width: 799px) {
 
   .info_modal {
-    width:75vw !important;
+    width:70%;
 
     margin: 0;
     font-size:medium;
@@ -262,31 +264,24 @@
 
 
 
-
 #error_modal_close {
-
-    display:block;
-    position:relative;
-
+  display: block;
+  position: relative;
   font-family: var(--FONT_3);
-  background-color:var(--LEEDZ_DARKGREEN);
-
-  color:white;
-
+  background-color: var(--LEEDZ_DARKGREEN);
+  color: white;
   top: 20px;
-  left:5px;
+  left: 5px;
+  padding: 10px;
+  width: 5%;
+  max-height: 4%;
 
-  padding:10px;
-  width:30px;
   border-radius: 10px;
-
   transform: rotate(180deg);
   font-size: x-large;
-  font-weight: bolder;
-  text-decoration: none;
+
   text-align: center;
 }
-
 
 
 

@@ -137,7 +137,7 @@
                     <td id="td_creator"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD">
-                        <input type="button" value="Locked" style="background-color:darkgreen"/>
+                        <input type="button" value="Locked" />
                     </td>
                 </tr>
     
@@ -870,8 +870,8 @@
                         the_button.value = "Showing";
                         the_button.style.color = 'white';
                         the_button.style.backgroundColor = 'dodgerblue';
-                        // the_label.style.color = 'dodgerblue';
-                        // the_text.style.color = "dodgerblue";
+                        the_label.style.color = 'dodgerblue';
+                        the_text.style.color = "dodgerblue";
 
                         changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
 
@@ -880,13 +880,6 @@
 
                         editField( row_name, options );
 
-                        /**
-                        the_button.value = "Finish";
-                        the_button.style.color = 'black';
-                        the_button.style.backgroundColor = "var(--LEEDZ_GREEN)";
-                        the_label.style.color = "var(--LEEDZ_DARKGREEN)";
-                        the_text.style.color = 'black';
-                    */
                         break;
 
 

@@ -469,10 +469,14 @@ input[type="submit"]:active {
 }
 
 
+input[type="button"][value="Locked"] {
+	visibility: hidden;
+}
+
 input[type="button"][value="Showing"] {
 	background-color: dodgerblue;
 }
 
 input[type="button"][value="Edit"] {
-	background-color: var(--LEEDZ_DARKGREEN);
+	background-color: darkgreen;
 }

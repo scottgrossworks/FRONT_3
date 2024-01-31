@@ -148,7 +148,7 @@
                     TRADE NAME
                     LOCKED
                  -->
-                <tr id="row_trade" data-status="Edit">
+                <tr id="row_trade" data-status="Locked">
                                 
                     <TD class="labelTD">Trade: </TD>
                     
@@ -166,7 +166,7 @@
                     TITLE
                     LOCKED
                  -->
-                <tr id="row_title" data-status="Edit">
+                <tr id="row_title" data-status="Locked">
                             
                     <TD class="labelTD">Title: </TD>
                     
@@ -184,7 +184,7 @@
                     START TIME
                     LOCKED
                  -->
-                <tr id="row_start" data-status="Edit">
+                <tr id="row_start" data-status="Locked">
                             
                     <TD class="labelTD">Start Time: </TD>
                     
@@ -202,7 +202,7 @@
                     END TIME
                     LOCKED 
                 -->
-                <tr id="row_end" data-status="Edit">
+                <tr id="row_end" data-status="Locked">
                             
                     <TD class="labelTD">End Time: </TD>
                     
@@ -222,14 +222,14 @@
 
                     HIDE
                 -->
-                <tr id="row_loc" data-status="Edit">
+                <tr id="row_loc" data-status="Hidden">
                             
                     <TD id="label_loc" class="labelTD">Address: </TD>
                     
                     <td id="td_loc" data-inlineType="text" data-inlineName="loc" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="5">
-                        <input type="button" value="Edit" onclick="comboButton(this, 'row_loc', 5, createOptions)"/>
+                        <input type="button" value="Hidden" onclick="comboButton(this, 'row_loc', 5, createOptions)"/>
                     </td>
 
                 </tr>
@@ -328,7 +328,7 @@
                 
                     LOCKED
                 -->
-                <tr id="row_pr" data-status="Edit">
+                <tr id="row_pr" data-status="Locked">
                             
                     <TD class="labelTD">Price $: </TD>
                     
@@ -817,11 +817,9 @@
                 let the_label = the_row.children[0];
                 let the_text = the_row.children[1];
 
-                let status = the_row.getAttribute('data-status');
-
                 beginEditing();
 
-                switch (status) {
+                switch ( the_button.value ) {
 
                     case 'Edit':
 
@@ -865,21 +863,30 @@
                         changeLeedOpts( LEED_CHANGES, row_index, OPTS_HIDDEN );
 
                         break;
+
                     
                     case 'Hidden': 
                         
-
                         the_button.value = "Showing";
                         the_button.style.color = 'white';
                         the_button.style.backgroundColor = 'dodgerblue';
-                        the_label.style.color = 'dodgerblue';
-                        the_text.style.color = "dodgerblue";
+                        // the_label.style.color = 'dodgerblue';
+                        // the_text.style.color = "dodgerblue";
 
                         changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
 
                         the_row.setAttribute('data-status', 'Showing');
 
-                        break;
+
+                        editField( row_name, options );
+
+                        /**
+                        the_button.value = "Finish";
+                        the_button.style.color = 'black';
+                        the_button.style.backgroundColor = "var(--LEEDZ_GREEN)";
+                        the_label.style.color = "var(--LEEDZ_DARKGREEN)";
+                        the_text.style.color = 'black';
+                    */
 
 
                     default: 

@@ -499,10 +499,6 @@ function inlineDefaultFinish(rowName, options) {
                         options.hideCallback(rowName);
                         break;
 
-                    case 'Finish':
-                        console.log("FINISH!");
-                        break;
-
 
                     default:
                         break;

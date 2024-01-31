@@ -283,14 +283,12 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
     if (i === 0) {
         // set the onsubmit function of the form of this row
         document.getElementById(rowName + "Form").onsubmit = function() {
-            event.preventDefault();
+           event.preventDefault();
             if (this.reportValidity()) {
-                if (options.hasOwnProperty("finish"))
-                    options.finish(rowName, options);
-                else {
-
+     
                     try {
                         inlineDefaultFinish(rowName, options);
+
                     } catch (error) {
 
                         // CAN'T THROW ERROR OUT OF THIS FILE
@@ -299,7 +297,6 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
                         printError("inlineDefaultFinish", error);
                     }
                   
-                }
             }
         }
     }

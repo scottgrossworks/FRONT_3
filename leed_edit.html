@@ -337,17 +337,24 @@
 
 		window.inlineEdit = inlineEdit;
         window.errorModalClose = errorModalClose;
-       
+
         const URL_LEED_DELETED = "./leed_delete.html";
 
+
+function initEditor() {
+
+    try {
         const CURRENT_USER = getCurrentUser(true);
 
-		var EDITING = false;
+        var EDITING = false;
 
-		const CURRENT_LEED = getCurrentLeed(); 
-        if (CURRENT_LEED == null)
-            throwError("Cannot initialize leed editor: CURRENT_LEED is null");
-    
+        const CURRENT_LEED = getCurrentLeed(); 
+        if ((! CURRENT_LEED) || (! CURRENT_LEED.un)) {
+        var msg = "Cannot initialize leed editor: CURRENT_LEED is null";
+        console.error(msg);
+        throwError(msg);
+        }
+
         const LEED_CHANGES = blankLeedObject();
 
         // VERY IMPORTANT
@@ -355,20 +362,20 @@
         // so the ids must match
         LEED_CHANGES.id = CURRENT_LEED.id;
 
-        
+
         var element = null;
-        
+
         // CREATOR
         //
         element = document.getElementById("td_creator");
         element.innerHTML = '<B>' + CURRENT_USER.un + '</B>';
 
 
-        
+
         // FIXME
         console.log("CURRENT LEED")
         console.log(CURRENT_LEED);
-        
+
 
 
         // TRADE
@@ -405,30 +412,27 @@
         element.innerHTML = fullStartDate + " at " + start_time;
 
 
-        
+
         // END DATE/TIME 
         // END TIME IS REQUIRED AND CANNOT BE HIDDEN
         //
         const endDate = new Date( parseInt(CURRENT_LEED.et) );
         const isoEnd = endDate.toISOString();
-    
-        // FOOBAR
-
 
         const end_weekday = getWeekday( getShortDateString( isoEnd ) );
         const end_monthname = getShortMonthname( isoEnd.substring(5, 7) ); 
-        
+
         // remove '0' at front if any
         let end_date = isoStart.substring(8, 10);
         if (end_date.startsWith('0')) { end_date = end_date.substring(1) };
-        
+
         const hours_end = getHours(isoEnd);
 
         const fullEndDate = end_weekday + " " + end_monthname + " " + end_date + ", " + leed_year; 
 
         const end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
 
-      
+
         element = document.getElementById("td_end");
         element.innerHTML = fullEndDate + " at " + end_time;
 
@@ -438,15 +442,15 @@
         element = document.getElementById("td_loc");
         element.innerHTML = CURRENT_LEED.lc;
         if (CURRENT_LEED.op[ LEED_KEYS.LC ] == OPTS_HIDDEN )
-            hideEyeball( LEED_KEYS.LC );
-            
+        hideEyeball( LEED_KEYS.LC );
+
 
         // EMAIL
         // 
         element = document.getElementById("td_em");
         if ( goodValue(CURRENT_LEED.em) ) element.innerHTML = CURRENT_LEED.em;
         if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN )
-            hideEyeball( LEED_KEYS.EM );
+        hideEyeball( LEED_KEYS.EM );
 
 
         // PHONE
@@ -454,7 +458,7 @@
         element = document.getElementById("td_ph");
         if ( goodValue(CURRENT_LEED.ph) ) element.innerHTML = CURRENT_LEED.ph;
         if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN )
-            hideEyeball( LEED_KEYS.PH );
+        hideEyeball( LEED_KEYS.PH );
 
 
         // DETAILS
@@ -462,7 +466,7 @@
         element = document.getElementById("td_det");
         if ( goodValue(CURRENT_LEED.dt) ) element.innerHTML = CURRENT_LEED.dt;
         if (CURRENT_LEED.op[ LEED_KEYS.DT ] == OPTS_HIDDEN )
-            hideEyeball( LEED_KEYS.DT );
+        hideEyeball( LEED_KEYS.DT );
 
 
         // REQS
@@ -470,7 +474,7 @@
         element = document.getElementById("td_reqs");
         if ( goodValue(CURRENT_LEED.rq) ) element.innerHTML = CURRENT_LEED.rq;
         if (CURRENT_LEED.op[ LEED_KEYS.RQ ] == OPTS_HIDDEN )
-            hideEyeball( LEED_KEYS.RQ );
+        hideEyeball( LEED_KEYS.RQ );
 
 
         // PRICE
@@ -478,33 +482,20 @@
         element = document.getElementById("td_pr");
         element.innerHTML = CURRENT_LEED.pr;
 
-
-
         //
         //        
         // console.log("GOT CURRENT LEED");
         // console.log(CURRENT_LEED);
 
-
-
-
-
-
-
-    /**
-    * RETURN TRUE IF VALUE IS NOT EMPTY (IS VALID)
-    * Failure-resistant way to handle different NO-VALUE values returned from DDB
-    */
-    function goodValue( theVal ) {
-
-        // null or 0?
-        if (! theVal) return false;
-
-        // there IS a value but it may be '0' or "" string
-        if (theVal == '0' || theVal.trim() == "") return false;
-
-        return true;
+    } catch (error) {
+    const msg = "Cannot load leed editor: " + error.message;
+    printError("Load leed editor", msg);
+    errorModal(msg, true);
     }
+
+}
+
+
 
 
 
@@ -681,211 +672,11 @@
         
 
 
-    /**
-    *
-    *
-    */
-    async function saveChanges() {
-
-        if (! EDITING) return;
-
-        waitCursor();
-
-        //   client <---> API Gateway <===> DB
-        //
-        //
-        let from_DB = null;
-        try {
-            await saveLeedChanges(LEED_CHANGES).then((response) => from_DB = response ); 
-
-        } catch ( error ) {
-            errorModal("Error saving changes: " + error.message, false);
-
-        } finally {
-            endEditing();
-            normalCursor();
-        }
-
-        console.log("GOT RESULTS!!!");
-        console.log(from_DB)
-
-            /**
-             * SHOW THE ERROR ALERT
-             */
-        if (from_DB.er) {
-            var msg = "Error adding leed: " + LEED_CHANGES.ti + " : " + from_DB.er;
-            printError("Save Leed Changes", msg);
-            errorModal(msg, true);
-
-        } else {
-           /**
-            * SHOW THE SUCCESS ALERT
-            *
-            *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
-            *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
-            */
-            var msg = 'Leed Updated: ' + from_DB.ti + '  ( $ ' + from_DB.pr +' )';
-            console.log(msg);
-            successAlert( msg );
-        }
-    }
-    window.saveChanges = saveChanges;
 
 
-
-
-
-
-        //
-        //
-        function successAlert( msg ) {
-
-            var theAlert = document.getElementById("alert_success");
-            var newChild = document.createElement("span");
-            newChild.textContent = msg;
-
-            if (theAlert.children.length <= 1) {
-                theAlert.appendChild(newChild);
-            } else {
-                theAlert.replaceChild(newChild, theAlert.children[1]);
-            }
-
-            theAlert.style.display = "block";
-
-        }
-
-
-
-
-    /**
-    *
-    *
-    */
-    async function deleteLeed() {
-
-        endEditing();
-
-        waitCursor();
-
-        let from_DB = null;
-        try {
-
-            // GO BACK to server and delete leed
-            // compliment of add leed
-
-            from_DB = await deleteCurrentLeed();
-
-        } catch ( error ) {
-            printError("Delete Leed", error.message);
-            errorModal("Error deleting leed: " + error.message, false);
-
-        } finally {
-            
-            normalCursor();
-            clearFields();
-        }
-
-        
-        // success or failure
-        console.log("GOT RESULTS!!!");
-        console.log(from_DB)
-        if (! from_DB) return;
-
-
-        /**
-        * SHOW THE ERROR ALERT
-        * will not get here if create throws exception above
-        * This is a catch-all for null responses and
-        * HTTP 200 codes that contain error messages 
-        */
-        if (from_DB.er) {
-            var msg = "Error deleting leed: " + from_DB.er;
-            printError("Delete Leed", msg);
-            errorModal(msg, false);
-
-        } else {
-
-          /**
-            * SHOW THE SUCCESS ALERT
-            *
-            *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
-            *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
-            */
-            var theAlert = document.getElementById("alert_success");
-            var msg = 'Deleted leed:  ' + from_DB.ti + '  ($ ' + from_DB.pr +' )';
-            var newChild = document.createElement("span");
-            newChild.textContent = msg;
-
-            if (theAlert.children.length <= 1) {
-                theAlert.appendChild(newChild);
-            } else {
-                theAlert.replaceChild(newChild, theAlert.children[1]);
-            }
-
-            theAlert.style.display = "block";
-
-        }   
-
-    }
-    window.deleteLeed = deleteLeed;
-
-
-
-
-        /**
-         * Clear all fields and start over
-         *
-         */
-         function clearFields() {
-           
-            inlineEdit('row_trade', cancelOptions);            
-            inlineEdit('row_title', cancelOptions);
-            inlineEdit('row_start', cancelOptions);
-            inlineEdit('row_end', cancelOptions);
-            inlineEdit('row_loc', cancelOptions);
-            inlineEdit('row_em', cancelOptions);
-            inlineEdit('row_ph', cancelOptions);
-            inlineEdit('row_det', cancelOptions);
-            inlineEdit('row_reqs', cancelOptions);
-            inlineEdit('row_pr', cancelOptions);
-		}
-		window.clearFields = clearFields;
-
-
-		var cancelOptions = {   "origin": "cancel",
-                                "finishCallback": defaultCallback };
-		window.cancelOptions = cancelOptions;
-
-
-        /**
-         *
-         *
-         */
-		var editOptions = { "origin" : "edit",
-                            "finishCallback": defaultCallback 
-                            };
-		window.editOptions = editOptions;
-
+     
 
 	
-
-
-
-        /**
-        * Change to a wait cursor
-        */
-        function waitCursor() {
-            document.body.style.cursor = 'wait';
-        }
-        window.waitCursor = waitCursor;
-
-        /**
-        * Change back to normal cursor
-        */
-        function normalCursor() {
-            document.body.style.cursor = 'default';
-        }
-        window.normalCursor = normalCursor;
 
 	
 	</script>

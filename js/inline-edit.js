@@ -11,7 +11,6 @@ import { prettyFormatDT, formatDTforInput, DTfromPretty, getTodayUTC } from "./d
 
 
 
-
 const MAX_TEXT_CHARS = 300;
 
 var inlineEditRowContents = {};
@@ -38,7 +37,7 @@ export function inlineEdit(rowName, options) {
                 inlineEditRowContents[rowName][i] = "";
             else
                 inlineEditRowContents[rowName][i] = cell.innerHTML.trim();
-            
+
             inlineDefaultUpdateCell(cell, i, rowName, options);   
         }
     } catch (error) {
@@ -383,6 +382,10 @@ function trimAndRemoveSpaces(s) {
 
 
 
+
+
+
+
 /**
  * 
  * 
@@ -475,41 +478,48 @@ function inlineDefaultFinish(rowName, options) {
 
 
 
+            //
+            // INLINE TYPE
+            // Call appropriate callback for this row
+            case "doneButton":
+            
+            if (options['showCallback']) {
+                    
+                var the_button = cell.children[0];
+                the_button.value = "Showing";
+                the_button.style.color = 'white';
 
-                //
-                // INLINE TYPE
-                //
-                case "doneButton":
+                the_button.style.backgroundColor = "dodgerblue";
+            
+                var the_label = tableRow.children[0];
+                the_label.style.color =  "dodgerblue";
+
+                var the_text = tableRow.children[1];
+                the_text.style.color =  "dodgerblue";
+
+                var row_index = cell.getAttribute('data-index');
+                options.showCallback( parseInt( row_index ));
+
+
+            } else if (options['hideCallback']) {
                 
                 var the_button = cell.children[0];
                 the_button.value = "Hidden";
                 the_button.style.color = 'white';
+
                 the_button.style.backgroundColor = "var(--LEEDZ_DARKGREEN)";
-                
+            
                 var the_label = tableRow.children[0];
                 the_label.style.color = "var(--LEEDZ_DARKGREEN)";
-
+    
                 var the_text = tableRow.children[1];
                 the_text.style.color = "var(--LEEDZ_DARKGREEN)";
 
-                // Call appropriate callback for this row
-                if (options['hideCallback']) {
-                    var row_index = cell.getAttribute('data-index');
-                    options.hideCallback( parseInt( row_index ));
-                } 
+                var row_index = cell.getAttribute('data-index');
+                options.hideCallback( parseInt( row_index ));
+            } 
 
                 break;
-
-
-
-
-                //
-                // INLINE TYPE
-                //
-            case "doneButton":
-                
-                break;
-
 
 
 

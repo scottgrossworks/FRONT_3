@@ -1,7 +1,7 @@
 <!--
     --
-    -- LEED CREATE / EDIT
-    -- 1/24 using new button scheme
+    -- LEED EDIT
+    -- 
     -- the current user is the creator of the leed
     --    
     -->
@@ -27,7 +27,9 @@
     
              <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
              <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
-    
+
+
+             <script src="./js/leed_edit.js" type="module" defer></script> 
              <script src="./js/inline-edit.js" type="module" defer></script> 
         </head>
     
@@ -52,7 +54,7 @@
     
     
                 <div class="column _8" style="margin:auto 0;transform:translateY(6px)">
-                    <h1 class="user_title">Create</h1>
+                    <h1 class="user_title">Edit Leed</h1>
                 </div>
                 
                 
@@ -229,7 +231,7 @@
                     <td id="td_loc" data-inlineType="text" data-inlineName="loc" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="5">
-                        <input type="button" value="Edit" onclick="comboButton(this, 'row_loc', 5, comboOptions)"/>
+                        <input type="button" value="Edit" onclick="comboButton(this, 'row_loc', 5, hideOptions)"/>
                     </td>
 
                 </tr>
@@ -252,7 +254,7 @@
                     <td id="td_em" data-inlineType="email" data-inlineName="em" data-inlineRequired="0"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="8">
-                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_em', 8, comboOptions)"/>
+                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_em', 8, hideOptions)"/>
                     </td>
     
                 </tr>
@@ -272,7 +274,7 @@
                     <td id="td_ph" data-inlineType="tel" data-inlineName="ph" data-inlineRequired="0"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="9">
-                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_ph', 9, comboOptions)"/>
+                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_ph', 9, hideOptions)"/>
                     </td>
     
                 </tr>
@@ -284,7 +286,7 @@
                 <!-- 10 -- 
                     LEED DETAILS
                     
-                    HIDE
+                    SHOW
                 -->
                 <tr id="row_det">
                             
@@ -293,7 +295,7 @@
                     <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="10">
-                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_det', 10, comboOptions)"/>
+                        <input type="button" value="Showing"  onclick="comboButton(this, 'row_det', 10, showOptions)"/>
                     </td>
     
                 </tr>
@@ -305,7 +307,7 @@
                 <!-- 11 -- 
                     LEED REQUIREMENTS
                 
-                    HIDE
+                    SHOW
                 -->
                 <tr id="row_reqs">
                             
@@ -314,7 +316,7 @@
                     <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="11">
-                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_reqs', 11, comboOptions)"/>
+                        <input type="button" value="Showing"  onclick="comboButton(this, 'row_reqs', 11, showOptions)"/>
                     </td>
     
                 </tr>
@@ -365,643 +367,467 @@
     -->
     
     
-    
+        
+
     <div class="row">
-            <!-- POST LEED -->
-            <button id="saveButton" class="button save_button" value="save" style="opacity:0.5" onclick="postLeed()">Post Leed</button>
+        <!-- SAVE CHANGES BUTTON -->
+        <button id="saveButton" class="button save_button" value="save" style="opacity:0.5" onclick="saveChanges()">Save Changes</button>
     </div>
-            
-    
-    
+
+
+
     <div class="row">
-            <!-- CANCEL -->
-            <button id="cancelButton" class="button cancel_button" value="cancel" style="opacity:1.0" onclick="cancelCreate()">Start Over</button>
+        <!-- DELETE BUTTON -->
+        <button id="delButton" class="button del_button" value="del" style="opacity:1.0" onclick="deleteLeed()">Delete Leed</button>
     </div>
+
+
+    <BR>
     
-    
-        <BR>
-    
-    
-    
-        </section>  
-            
+    </section>  
     
     </body>
     
-    
         <script type="module">
                 
-            import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } from "./js/dates.js";
-            import { getShortDateString, DTfromPretty, getMonthIndex } from "./js/dates.js";
-            
-            import { inlineEmailFinishCell, inlineURLFinishCell, inlineEdit } from "./js/inline-edit.js";
-            import { getCurrentUser } from "./js/user.js";
-            import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
-            import { blankLeedObject, clearCurrentLeed, createDBLeed  } from "./js/leed.js";
-            import { OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
-            import { db_updateLeed, ADD_LEED, USERNAME_URL_PARAM, DB_FAIL, DB_SUCCESS } from "./js/dbTools.js";
-    
-    
-    
-            const LEED_POSTED_LANDING_URL = "./leed_posted.html";
-    
-            window.errorModalClose = errorModalClose;
-            window.inlineEdit = inlineEdit;
-    
-
-    
-    
-            const cancelOptions = {   "origin": "cancel",
-                                    "finishCallback": defaultCallback };
-            window.cancelOptions = cancelOptions;
-    
-            const createOptions = {   "origin": "create",
-                                    "finishCallback": defaultCallback };
-            window.createOptions = createOptions;
-    
-
-            const comboOptions = {    "origin": "combo",
-                                    "finishCallback": defaultCallback,
-                                    "hideCallback":hideField };
-            window.comboOptions = comboOptions;
-
-
+        import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } from "./js/dates.js";
+        import { getShortDateString, DTfromPretty } from "./js/dates.js";
         
-    
-              // flag indicates edits are in progress
-              //
-              var EDITING = false;
-    
-              // struct to hold form data
-              //
-              const LEED_CHANGES = blankLeedObject();
-    
-              // the currently logged-in user
-              //
-              const CURRENT_USER = getCurrentUser(true);
-    
-    
-    
-    
-                //
-                // open NEW USER welcome modal
-                // new account -- no subs / search
-                //
-                function showWaitingModal(msg) {
-                    let wait_msg = document.getElementById("waiting_label");
-                    wait_msg.innerText = msg;
-                    let waiting = document.getElementById("waiting_modal");
-                    waiting.style.display = "block";
-                }
-                window.showWaitingModal = showWaitingModal;
-    
-    
-    
-    
-                /**
-                * CLOSE (ANY) MODAL DIALOG
-                */
-                function modalClose() {
-    
-                    // close all modal dialogs
-                    var modals = document.getElementsByClassName("info_modal");
-                    for (var i = 0; i < modals.length; i++) {
-                    modals[i].style.display = "none";
-                    }
-    
-                    errorModalClose();
-    
-                }
-                window.modalClose = modalClose;
-    
-    
-    
-    
-    
-            /**
-            * DROP DOWN MENU
-            */
-             let DROP_DOWN = false;
-    
-             /* When the user clicks on the button,
-             toggle between hiding and showing the dropdown content */
-             export function dropdownMenu() {
-               
-                const menu = document.getElementById("dropdown_menu");
-                menu.classList.toggle("show");
-    
-               DROP_DOWN ^= 1; // flip flag
-             }
-             window.dropdownMenu = dropdownMenu;
-    
-              //
-              // ANY window click registers here
-              //
-              window.addEventListener( "click", (event) => {
-    
-                 if (! (event.target.matches('img'))) {
-                  
-                  // click -- not on a link and not on the dropdown image
-                  // Close the dropdown menu if the user clicks outside of it
+        import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
+        import { inlineEdit } from "./js/inline-edit.js";
+        import { getCurrentUser } from "./js/user.js";
+        import { clearCurrentLeed, getCurrentLeed, blankLeedObject, saveLeedChanges, deleteCurrentLeed } from "./js/leed.js";
+        import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
+        
+        import { LEED_KEYS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
+        import { USERNAME_URL_PARAM } from "./js/dbTools.js";
+
+        import { cancelOptions, createOptions, editOptions, hideOptions, showOptions } from "./js/leed_edit.js";
+        import { noValue, goodValue, successAlert, leed_edit_Save, leed_edit_Delete } from "./js/leed_edit.js";
+        import { waitCursor, normalCursor, showWaitingModal, modalClose  } from "./js/leed_edit.js";
+        import { editField, hideField, showField, clearFields } from "./js/leed_edit.js";
             
-                  var dropdown = document.getElementById("dropdown_menu");
-                  dropdown.classList.remove("show");
+
+
+
+        window.errorModalClose = errorModalClose;
+        window.inlineEdit = inlineEdit;
+
+        window.cancelOptions = cancelOptions;
+        window.createOptions = createOptions;
+
+        window.editOptions = editOptions;
+
+        window.hideOptions = hideOptions;
+
+        window.showOptions = showOptions;
+
+
     
-                }
-               
-    
-              }, true);
-    
-    
-    
-    
-    
-    
-    
-            /**
-             *
-             */
-            function defaultCallback(rowData, rowName) {
-    
-                beginEditing();
-    
-                switch(rowName) {
-    
-                    case "row_trade":
-                        LEED_CHANGES.tn = rowData["trade"];
-                        break;
-    
-                    case "row_title":
-                        LEED_CHANGES.ti = rowData["title"];
-                        break;
-    
-                    case "row_start":
-                        var dateTime = DTfromPretty( rowData["start"] );
-                        LEED_CHANGES.st = dateTime;
-                        break;
-    
-                    case "row_end":
-                        var dateTime = DTfromPretty( rowData["end"] );
-                        LEED_CHANGES.et = dateTime;
-                        break;
-    
-    
-                    case "row_em":
-                        LEED_CHANGES.em = rowData["em"];
-                        break;
-    
-                    case "row_ph":
-                        LEED_CHANGES.ph = rowData["ph"];
-                        break;
-    
-    
-                    /**
-                        // set later on submit
-                        case "row_zip":
-                        LEED_CHANGES.zp = rowData["zip"];
-                        break;
-                    */
-    
-                    case "row_loc":
-                        LEED_CHANGES.lc = rowData["loc"];
-                        break;
-    
-                    case "row_det":
-                        LEED_CHANGES.dt = rowData["det"];
-                        break; 
-                        
-                    case "row_reqs":
-                        LEED_CHANGES.rq = rowData["reqs"];
-                        break; 
-    
-    
-                    case "row_pr":
-                        LEED_CHANGES.pr = rowData["pr"];
-                        break; 
-    
-                    default:
-                        printError("defaultCallback()", "received unknown form field: " + rowName);
-                        break;
-    
-                }
-            }
-    
-    
-    
-    
-    
-    
-            //
-            //
-            //
-            function beginEditing() {
-                var element = document.getElementById("saveButton");
-                element.innerHTML = "Post Leed";
-                element.style.backgroundColor = "var(--LEEDZ_GREEN)";
-                element.style.opacity = 1;
-    
-                element = document.getElementById("cancelButton");
-                element.style.backgroundColor = "dodgerblue";
-    
-                EDITING = true;
-    
-    
-            }
-    
-    
-            //
-            //
-            //
-            function endEditing() {
-                var element = document.getElementById("saveButton");
-                element.innerHTML = "Saved!";
-                element.style.backgroundColor = "darkorange";
-                element.style.opacity = 0.5;
-     
-                element = document.getElementById("cancelButton");
-                element.style.backgroundColor = "cornflowerblue";
-    
-                EDITING = false;
-            }
-    
-    
-           
-    
-    
-    
+
+        // flag indicates edits are in progress
+        //
+        let EDITING = false;
+
+        // struct to hold form data
+        //
+        const LEED_CHANGES = blankLeedObject();
+
+
+
         /**
-        * RETURN TRUE IF VALUE EMPTY (INVALID)
-        * Failure-resistant way to handle different NO-VALUE values returned from DDB
+        * DROP DOWN MENU
         */
-        function noValue( theVal ) {
+        let DROP_DOWN = false;
+
+        /* When the user clicks on the button,
+        toggle between hiding and showing the dropdown content */
+        export function dropdownMenu() {
+
+            const menu = document.getElementById("dropdown_menu");
+            menu.classList.toggle("show");
+
+            DROP_DOWN ^= 1; // flip flag
+            }
+            window.dropdownMenu = dropdownMenu;
+
+
+        //
+        // ANY window click registers here
+        //
+        window.addEventListener( "click", (event) => {
+
+            if (! (event.target.matches('img'))) {
+
+                // click -- not on a link and not on the dropdown image
+                // Close the dropdown menu if the user clicks outside of it
+
+                var dropdown = document.getElementById("dropdown_menu");
+                dropdown.classList.remove("show");
+
+            }
+    }, true);
+
+
+
+
+
+
+    //
+    //
+    function beginEditing() {
+
+        if (EDITING) return;
+
+        var element = document.getElementById("saveButton");
+        element.innerHTML = "Post Leed";
+        element.style.backgroundColor = "var(--LEEDZ_GREEN)";
+        element.style.opacity = 1;
+
+        element = document.getElementById("cancelButton");
+        element.style.backgroundColor = "dodgerblue";
+
+        EDITING = true;
+
+
+    }
+
+
+    //
+    //
+    //
+    function endEditing() {
+        var element = document.getElementById("saveButton");
+        element.innerHTML = "Saved!";
+        element.style.backgroundColor = "darkorange";
+        element.style.opacity = 0.5;
+
+        element = document.getElementById("cancelButton");
+        element.style.backgroundColor = "cornflowerblue";
+
+        EDITING = false;
+    }
     
-            // null or undefined?
-            if (! theVal) return true;
-    
-            // there IS a value but it may be '0' or "" string
-            if (theVal == 0 || theVal == '0' || theVal == "") return true;
+
+        
+
+        //
+        //
+        //
+        async function saveChanges() {
+
+            if (! EDITING) return;
+
+            endEditing();
+            waitCursor();
             
-            return false;
+            try { 
+                await saveLeedChanges(LEED_CHANGES);
+            
+            } finally {
+                normalCursor();
+            }
+        } 
+        window.saveChanges = saveChanges;
+
+
+        //
+        //
+        //
+        async function deleteLeed() {
+
+            endEditing();
+            waitCursor();
+
+            try {
+                await leed_edit_Delete()
+            
+            } finally {
+
+                normalCursor();
+                clearFields();
+            }
+
         }
-    
-    
-        /**
-            * save changes to create form
-            * Post new leed to DB
-            *
-            */
-            async function postLeed() {
-    
-                if (! EDITING) return;
-    
-                endEditing();
-    
-    
-                // console.log("POSTING NEW LEED:");
-                // console.log(LEED_CHANGES);
-    
-                // LEED verification
-                //            
-                if ( noValue(LEED_CHANGES.tn) ) {
-                    printError("Add Leed", "Trade must be set");
-                    errorModal("Error Adding Leed: Trade must be set.", true);
-                    return;
-                }
-    
-                
-                if ( noValue(LEED_CHANGES.ti) ) {
-                    printError("Add Leed", "Title must be set");
-                    errorModal("Error Adding Leed: Title must be set.", true);
-                    return;
-                }
-    
-    
-                if ( noValue(LEED_CHANGES.st) ) {
-                    printError("Add Leed", "Start must be set");
-                    errorModal("Error Adding Leed: Start must be set.", true);
-                    return;
-                }
-    
-                
-                if ( noValue(LEED_CHANGES.et) ) {
-                    printError("Add Leed", "End must be set");
-                    errorModal("Error Adding Leed: End must be set.", true);
-                    return;
-                }
-    
-                if (LEED_CHANGES.st > LEED_CHANGES.et) {
-                    printError("Add Leed", "Start date must precede end date");
-                    errorModal("Error Adding Leed: Start date must precede end date.", true);
-                    return;
-                }
-    
-                if ( noValue(LEED_CHANGES.lc) ) {
-                    printError("Add Leed", "Location must be set");
-                    errorModal("Error Adding Leed: Location must be set.", true);
-                    return;
-    
-    
-                } else {
-    
-                    // SET THE LEED_CHANGES ZIP HERE
-                    let the_zip = LEED_CHANGES.lc.slice(-5);
-    
-    
-                    // NOT A 5-DIGIT NUMBER
-                    if (! new Number( the_zip ).valueOf()) {
-    
-                        printError("Add Leed", "zip code not found");
-                        errorModal("Error Adding Leed: Location must end in 5-digit zip.", true);
-                        return;
-    
-                    }   
-                    LEED_CHANGES.zp = the_zip;
-                }
-    
-    
-                if ( noValue(LEED_CHANGES.dt) ) {
-                    printError("Add Leed", "Details must be set");
-                    errorModal("Error Posting Leed: Some details must be set.", true);
-                    return;
-                }
-    
-                if (! LEED_CHANGES.pr) {
-                    printError("Add Leed", "Price must be set");
-                    errorModal("Error Adding Leed: Price must be set.", true);
-                    return;
-                }
-    
-    
-                waitCursor();
-                
-                showWaitingModal("Creating new Leed . . .");
-    
-                
-    
-                //   client <---> API Gateway <===> DB
-                //
-                //
-                let from_DB = null;
-                try {
-                    await createDBLeed( CURRENT_USER, LEED_CHANGES ).then((response) => from_DB = response );
-    
-                } catch (error) {
-                    printError("createDBLeed", error.message)
-                    errorModal("Error adding leed: " + error.message, false);
-            
-                } finally {
-                    
-                    normalCursor();
-                    cancelCreate();
-                    modalClose();
-                }
-    
-                console.log(from_DB)
-                if (! from_DB) return;
-    
-    
-                /**
-                * SHOW THE ERROR ALERT
-                * will not get here if create throws exception above
-                * This is a catch-all for null responses and
-                * HTTP 200 codes that contain error messages 
-                */
-                if (from_DB.er) {
-                    var msg = "Error adding leed: " + LEED_CHANGES.ti + " : " + from_DB.er;
-                    printError("Add Leed", msg);
-                    errorModal(msg, false);
-    
-    
-                } else {
-                    /**
-                    * SHOW THE SUCCESS ALERT
-                    *
-                    *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
-                    *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
-                    */
-                    var msg = 'Leed created [ ' + from_DB.tn + ' ] ' + from_DB.ti;
-                    console.log(msg);
-                    successAlert(msg);
-    
-                }
-    
-            }
-            window.postLeed = postLeed;
-    
-    
-    
-    
-            //
-            //
-            function successAlert( msg ) {
-    
-                var theAlert = document.getElementById("alert_success");
-                var newChild = document.createElement("span");
-                newChild.textContent = msg;
-    
-                if (theAlert.children.length <= 1) {
-                    theAlert.appendChild(newChild);
-                } else {
-                    theAlert.replaceChild(newChild, theAlert.children[1]);
-                }
-    
-                theAlert.style.display = "block";
-            }
-    
+        window.deleteLeed = deleteLeed;
 
 
 
 
-            /**
-             *
-             */
-             function editField( row_name, options ) {
+
+
+
+/**
+*
+*/
+function comboButton( the_button, row_name, row_index, options ) {
+
+    let the_row = document.getElementById(row_name);
+    let the_label = the_row.children[0];
+    let the_text = the_row.children[1];
+
+    beginEditing();
+
+    if (the_button.value == 'Edit') {
+
+        // this little hack ensures that we cycle correctly
+        the_button.value = "Hidden";
+        the_button.style.color = 'white';
+        the_button.style.backgroundColor ="var(--LEEDZ_DARKGREEN)";
+
+        editField( row_name, options );
+
+        the_button.value = "Finish";
+        the_button.style.color = 'black';
+        the_button.style.backgroundColor = "var(--LEEDZ_GREEN)";
+
+        the_text.style.color = 'black';
+
+
+
+    } else if (the_button.value == 'Finish') {
+
+        the_button.value = "Hidden";
+        the_button.style.color = 'white';
+        the_button.style.backgroundColor = "var(--LEEDZ_DARKGREEN)";
+        the_label.style.color = "var(--LEEDZ_DARKGREEN)";
+
+        the_text.style.color = "var(--LEEDZ_DARKGREEN)";
+
+        // console.log("HIDING LEED OPS");
+        changeLeedOpts( LEED_CHANGES, row_index, OPTS_HIDDEN );
+
+
+
+    } else if (the_button.value == 'Showing') {
+
+        // this little hack ensures that we cycle correctly
+        the_button.value = "Hidden";
+        the_button.style.color = 'white';
+        the_button.style.backgroundColor ="var(--LEEDZ_DARKGREEN)";
+
+
+        editField( row_name, options );
+
+        the_button.value = "Edit";
+        the_button.style.color = 'white';
+
+
+
+    } else if (the_button.value == 'Hidden') {
+
+        the_button.value = "Showing";
+        the_button.style.color = 'white';
+        the_button.style.backgroundColor = 'dodgerblue';
+        the_label.style.color = 'dodgerblue';
+
+        the_text.style.color = "dodgerblue";
+
+        // console.log("SHOWING LEED OPS");
+        changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
+
+
+
+    } else {
+        var msg = "Invalid button state: value=" + the_button.value;
+        printError("comboButton", msg);
+        throwError(msg);
+    } 
+
+
+}
+window.comboButton = comboButton;
+
+
+
+
+
+
+
+
     
-                try {
-                    inlineEdit( row_name, options );
-                } catch (error) {
-                    var msg = "Error editing " + row_name + ": " + error.message;
-                    printError("editField", msg);
-                    errorModal(msg, true);
-                    return;
-                }   
-            }
-            window.editField = editField;
-            
     
 
-            /**
-             *
-             *
-             */
-             export function hideField( row_index ) {
-                // console.log("HIDING FIELD: " + row_index);
-                changeLeedOpts( LEED_CHANGES, row_index, OPTS_HIDDEN );
-             }
-             window.hideField = hideField;
+/**
+ *
+ */
+function initEditor( CURRENT_USER, CURRENT_LEED ) {
+
+    try {
+
+        // LEED CHANGES
+        //
+        const LEED_CHANGES = blankLeedObject();
+
+        // VERY IMPORTANT
+        // we are editing the current leed so the ids must match
+        LEED_CHANGES.id = CURRENT_LEED.id;
+
+        var element = null;
+
+        // CREATOR
+        //
+        element = document.getElementById("td_creator");
+        element.innerHTML = '<B>' + CURRENT_USER.un + '</B>';
 
 
-            /**
-             *
-             */
-            function comboButton( the_button, row_name, row_index, options ) {
-       
-                let the_row = document.getElementById(row_name);
-                let the_label = the_row.children[0];
-                let the_text = the_row.children[1];
-
-                beginEditing();
-                if (the_button.value == 'Edit') {
-
-                    // this little hack ensures that we cycle correctly
-                    the_button.value = "Hidden";
-                    the_button.style.color = 'white';
-                    the_button.style.backgroundColor ="var(--LEEDZ_DARKGREEN)";
-
-                    editField( row_name, options );
-               
-     
-                    the_button.value = "Finish";
-                    the_button.style.color = 'black';
-                    the_button.style.backgroundColor = "var(--LEEDZ_GREEN)";
-                    
-                    the_text.style.color = 'black';
+        // TRADE
+        // 11/1/23 -- cannot change trade once leed is created
+        //
+        element = document.getElementById("td_trade");
+        element.innerHTML = CURRENT_LEED.tn;
+        LEED_CHANGES.tn = CURRENT_LEED.tn;
 
 
-                } else if (the_button.value == 'Finish') {
-
-                    the_button.value = "Hidden";
-                    the_button.style.color = 'white';
-                    the_button.style.backgroundColor = "var(--LEEDZ_DARKGREEN)";
-                    the_label.style.color = "var(--LEEDZ_DARKGREEN)";
-
-                    the_text.style.color = "var(--LEEDZ_DARKGREEN)";
-
-                    // console.log("HIDING LEED OPS");
-                    changeLeedOpts( LEED_CHANGES, row_index, OPTS_HIDDEN );
+        // TITLE
+        // title of this leed
+        element = document.getElementById("td_title");
+        element.innerHTML = CURRENT_LEED.ti;
 
 
+        // START DATE
+        // 
+        const startDate = new Date( parseInt(CURRENT_LEED.st) );
+        const isoStart = startDate.toISOString();
 
-                } else if (the_button.value == 'Showing') {
+        const start_weekday = getWeekday( getShortDateString( isoStart ) );
+        const start_monthname = getShortMonthname( isoStart.substring(5, 7) ); 
 
-                  // this little hack ensures that we cycle correctly
-                    the_button.value = "Hidden";
-                    the_button.style.color = 'white';
-                    the_button.style.backgroundColor ="var(--LEEDZ_DARKGREEN)";
+        // remove '0' at front if any
+        let start_date = isoStart.substring(8, 10);
+        if (start_date.startsWith('0')) { start_date = start_date.substring(1) };
 
-                 
-                    editField( row_name, options );
-
-                    the_button.value = "Edit";
-                    the_button.style.color = 'white';
+        const leed_year = isoStart.substring(0, 4);
+        const hours_start = getHours(isoStart);
+        const fullStartDate = start_weekday + " " + start_monthname + " " + start_date + ", " + leed_year; 
+        const start_time = hours_start[0] + ":" + getMinutes(isoStart) + hours_start[1];
+        element = document.getElementById("td_start");
+        element.innerHTML = fullStartDate + " at " + start_time;
 
 
 
+        // END DATE/TIME 
+        // END TIME IS REQUIRED AND CANNOT BE HIDDEN
+        //
+        const endDate = new Date( parseInt(CURRENT_LEED.et) );
+        const isoEnd = endDate.toISOString();
 
-                } else if (the_button.value == 'Hidden') {
+        const end_weekday = getWeekday( getShortDateString( isoEnd ) );
+        const end_monthname = getShortMonthname( isoEnd.substring(5, 7) ); 
 
-                    the_button.value = "Showing";
-                    the_button.style.color = 'white';
-                    the_button.style.backgroundColor = 'dodgerblue';
-                    the_label.style.color = 'dodgerblue';
+        // remove '0' at front if any
+        let end_date = isoStart.substring(8, 10);
+        if (end_date.startsWith('0')) { end_date = end_date.substring(1) };
 
-                    the_text.style.color = "dodgerblue";
+        const hours_end = getHours(isoEnd);
 
-                    // console.log("SHOWING LEED OPS");
-                    changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
+        const fullEndDate = end_weekday + " " + end_monthname + " " + end_date + ", " + leed_year; 
 
-                
-                
-                } else {
-                    var msg = "Invalid button state: value=" + the_button.value;
-                    printError("comboButton", msg);
-                    throwError(msg);
-                }
+        const end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
 
-            }
-            window.comboButton = comboButton;
-            
+        element = document.getElementById("td_end");
+        element.innerHTML = fullEndDate + " at " + end_time;
+
+
+        // LOCATION
+        // 
+        element = document.getElementById("td_loc");
+        element.innerHTML = CURRENT_LEED.lc;
+        if (CURRENT_LEED.op[ LEED_KEYS.LC ] == OPTS_HIDDEN )
+            changeLeedOpts( LEED_CHANGES, LEED_KEYS.LC, OPTS_HIDDEN );
+
+        // EMAIL
+        // 
+        element = document.getElementById("td_em");
+        if ( goodValue(CURRENT_LEED.em) ) element.innerHTML = CURRENT_LEED.em;
+        if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN )
+            changeLeedOpts( LEED_CHANGES, LEED_KEYS.EM, OPTS_HIDDEN );
+
+        // PHONE
+        // 
+        element = document.getElementById("td_ph");
+        if ( goodValue(CURRENT_LEED.ph) ) element.innerHTML = CURRENT_LEED.ph;
+        if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN )
+            changeLeedOpts( LEED_CHANGES, LEED_KEYS.PH, OPTS_HIDDEN );
+
+        // DETAILS
+        // 
+        element = document.getElementById("td_det");
+        if ( goodValue(CURRENT_LEED.dt) ) element.innerHTML = CURRENT_LEED.dt;
+        if (CURRENT_LEED.op[ LEED_KEYS.DT ] == OPTS_HIDDEN )
+            changeLeedOpts( LEED_CHANGES, LEED_KEYS.DT, OPTS_HIDDEN );
+
+        // REQS
+        // 
+        element = document.getElementById("td_reqs");
+        if ( goodValue(CURRENT_LEED.rq) ) element.innerHTML = CURRENT_LEED.rq;
+        if (CURRENT_LEED.op[ LEED_KEYS.RQ ] == OPTS_HIDDEN )
+            changeLeedOpts( LEED_CHANGES, LEED_KEYS.RQ, OPTS_HIDDEN );
+
+        // PRICE
+        // 
+        element = document.getElementById("td_pr");
+        element.innerHTML = CURRENT_LEED.pr;
+
+
+    } catch (error) {
+        const msg = "Cannot load leed editor: " + error.message;
+        printError("Load leed editor", msg);
+        errorModal(msg, true);
+    }
+
+}
+    
 
         
-    
-    
-            /**
-             * Clear all fields and start over
-             *
-             */
-             function cancelCreate() {
-               
-                inlineEdit('row_trade', cancelOptions);            
-                inlineEdit('row_title', cancelOptions);
-                inlineEdit('row_start', cancelOptions);
-                inlineEdit('row_end', cancelOptions);
-                inlineEdit('row_loc', cancelOptions);
-                inlineEdit('row_em', cancelOptions);
-                inlineEdit('row_ph', cancelOptions);
-                inlineEdit('row_det', cancelOptions);
-                inlineEdit('row_reqs', cancelOptions);
-                inlineEdit('row_pr', cancelOptions);
-            }
-            window.cancelCreate = cancelCreate;
+
+/**
+ * ON LOAD
+ *
+ * get CURRENT_USER AND CURRENT_LEED
+ *
+ */
+window.onload = (event) => {
+
+    try {
+        // CURRENT USER
+        //
+        const CURRENT_USER = getCurrentUser(true);
+        if ((! CURRENT_USER ) || (! CURRENT_USER.un)) {
+            var msg = "Cannot initialize leed editor: no CURRENT_USER";
+            console.error(msg);
+            throwError(msg);
+        }
+        console.log("CURRENT USER")
+        console.log(CURRENT_USER);
+
+        // CURRENT LEED
+        //
+        const CURRENT_LEED = getCurrentLeed(); 
+        if ((! CURRENT_LEED) || (! CURRENT_LEED.cr)) {
+            var msg = "Cannot initialize leed editor: no CURRENT_LEED";
+            console.error(msg);
+            throwError(msg);
+        }
+        console.log("CURRENT LEED")
+        console.log(CURRENT_LEED);
+
+        // load the page with the current user and leed
+        initEditor( CURRENT_USER, CURRENT_LEED );
+
+    } catch (error) {
+        const msg = "Cannot load leed editor: " + error.message;
+        printError("Load leed editor", msg);
+        errorModal(msg, true);
+    }
 
 
+};
 
-            /**
-             * On page load 
-             * call inlineEdit for every editable field 
-             *   creates blank text boxes and Finish buttons
-             *   links in inline-edit.js code
-             */
-            window.onload = (event) => {
-    
-                let element = document.getElementById("td_creator");
-                element.innerHTML = "<B style='font-size:larger'>" + CURRENT_USER.un + "</B>";
-                // leed creator is fixed to current user
-                LEED_CHANGES.un = CURRENT_USER.un 
-    
-                inlineEdit('row_trade', createOptions);            
-                inlineEdit('row_title', createOptions);
-                inlineEdit('row_start', createOptions);
-                inlineEdit('row_end', createOptions);
-
-                inlineEdit('row_loc', comboOptions);
-                inlineEdit('row_em', comboOptions);
-                inlineEdit('row_ph', comboOptions);
-                inlineEdit('row_det', comboOptions);
-                inlineEdit('row_reqs', comboOptions);
-
-                inlineEdit('row_pr', createOptions);
-            };
-    
               
+
+</script>
     
-    
-    
-    
-            
-    
-    
-            /**
-            * Change to a wait cursor
-            */
-            function waitCursor() {
-                document.body.style.cursor = 'wait';
-            }
-            window.waitCursor = waitCursor;
-    
-            /**
-            * Change back to normal cursor
-            */
-            function normalCursor() {
-                document.body.style.cursor = 'default';
-            }
-            window.normalCursor = normalCursor;
-    
-    
-        </script>
-    
-        
-            
-    
-    
-    </html>
+
+
+</html>

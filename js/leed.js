@@ -95,7 +95,7 @@ export const LEEDZ_CAL_KEY = "LC";
 
 const CACHE_DELIM = "|";
 
-const CURRENT_LEED = blankLeedObject();
+let CURRENT_LEED = blankLeedObject();
 
 
 /**
@@ -110,7 +110,7 @@ export function changeLeedOpts( theLeed, index, newVal ) {
   // can't do a direct op[index] = newVal
   // must do a substring + insert + concatenate
   theLeed.op = theLeed.op.substring(0, index) + newVal + theLeed.op.substring( index + 1 );
-  
+  // console.log("LEED OPTS=" + theLeed.op);
 }
 
 

@@ -8,21 +8,13 @@
 
 
 
-.modal {
-  
-  display:block;
 
+ .modal {
+  left: 14%;
   position: fixed;
-
-
-  left:5vw;
-
-  width:100% !important;
-  height:100% !important;
-
-  background-color: white;
+  width: 70%;
+  height: 70%;
 }
-
 
 
 
@@ -150,13 +142,14 @@
   #error_modal {
 
     z-index:900;
+    background-color: white;
     border: 6px solid #f44336;
-    height:fit-content;
-    min-height:70%;
-    width:fit-content;
+
     justify-content: left;
 
   }
+
+
 
 #alert_success {
   font-size:large;

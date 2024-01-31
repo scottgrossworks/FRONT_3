@@ -475,49 +475,42 @@ function inlineDefaultFinish(rowName, options) {
 
 
 
-            //
-            // INLINE TYPE
+            // FOOBAR
+            // FINISH BUTTON -- GO STRAIGHT TO CALLBACK
+            // Finish Button
             // Call appropriate callback for this row
             case "doneButton":
-            
-            if (options['showCallback']) {
-                    
-                var the_button = cell.children[0];
-                the_button.value = "Showing";
-                the_button.style.color = 'white';
-
-                the_button.style.backgroundColor = "dodgerblue";
-            
-                var the_label = tableRow.children[0];
-                the_label.style.color =  "dodgerblue";
-
-                var the_text = tableRow.children[1];
-                the_text.style.color =  "dodgerblue";
-
-                var row_index = cell.getAttribute('data-index');
-                options.showCallback( parseInt( row_index ));
-
-
-            } else if (options['hideCallback']) {
                 
-                var the_button = cell.children[0];
-                the_button.value = "Hidden";
-                the_button.style.color = 'white';
+                let status = tableRow.getAttribute('data-status');
 
-                the_button.style.backgroundColor = "var(--LEEDZ_DARKGREEN)";
-            
-                var the_label = tableRow.children[0];
-                the_label.style.color = "var(--LEEDZ_DARKGREEN)";
-    
-                var the_text = tableRow.children[1];
-                the_text.style.color = "var(--LEEDZ_DARKGREEN)";
 
-                var row_index = cell.getAttribute('data-index');
-                options.hideCallback( parseInt( row_index ));
-            } 
+                console.log("DONE BUTTON STATUS=" + status);                
 
+                // CALLBACK
+                // 
+                switch (status) {
+                
+                    case 'Showing':
+                        options.showCallback(rowName);
+                        break;
+
+                    
+                    case 'Hidden':
+                        options.hideCallback(rowName);
+                        break;
+
+                    case 'Finish':
+                        console.log("FINISH!");
+                        break;
+
+
+                    default:
+                        break;
+                }
+
+
+                
                 break;
-
 
 
 
@@ -704,10 +697,16 @@ function inlineDefaultFinish(rowName, options) {
     }
 
 
-    // Call appropriate callback for this row
-    if (options.hasOwnProperty("finishCallback")) {
+
+
+    //
+    // CALLBACK
+    // 
+    //
+    if ( options["finishCallback"] ) {
         options.finishCallback(rowData, rowName);
     }
+
 
 
     try {

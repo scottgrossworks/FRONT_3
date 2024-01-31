@@ -228,7 +228,8 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             //
         case "email":
 
-            var the_email = extractEmailAddress( inlineEditRowContents[rowName][i] );
+            var the_email = inlineEditRowContents[rowName][1]; 
+            //extractEmailAddress( inlineEditRowContents[rowName][i] );
 
             cellContent += `<input type='email' value='${the_email}' form='${rowName}Form'`;
             for (key in cell.dataset) {

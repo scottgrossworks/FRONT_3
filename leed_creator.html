@@ -155,7 +155,7 @@
                     <td id="td_trade" data-inlineType="trade_name" data-inlineName="trade" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD">
-                        <input type="button" value="Edit" onclick="editField('row_trade', createOptions)"/>
+                        <input type="button" value="Showing" onclick="editField('row_trade', createOptions)"/>
                     </td>
     
                 </tr>
@@ -173,7 +173,7 @@
                     <td id="td_title" data-inlineType="text" data-inlineName="title" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD">
-                        <input type="button" value="Edit" onclick="editField('row_title', createOptions)"/>
+                        <input type="button" value="Showing" onclick="editField('row_title', createOptions)"/>
                     </td>
     
                 </tr>
@@ -191,7 +191,7 @@
                     <td id="td_start" data-inlineType="date" data-inlineName="start" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD">
-                        <input type="button" value="Edit" onclick="editField('row_start', createOptions)"/>
+                        <input type="button" value="Showing" onclick="editField('row_start', createOptions)"/>
                     </td>
     
                 </tr>
@@ -209,7 +209,7 @@
                     <td id="td_end" data-inlineType="date" data-inlineName="end" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD">
-                        <input type="button" value="Edit" onclick="editField('row_end', createOptions)"/>
+                        <input type="button" value="Showing" onclick="editField('row_end', createOptions)"/>
                     </td>
     
                 </tr>
@@ -335,7 +335,7 @@
                     <td id="td_pr" data-inlineType="text" data-inlineName="pr" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD">
-                        <input type="button" value="Edit" onclick="editField('row_pr', createOptions)"/>
+                        <input type="button" value="Showing" onclick="editField('row_pr', createOptions)"/>
                     </td>
     
                 </tr>
@@ -821,20 +821,6 @@
 
                 switch ( the_button.value ) {
 
-                    case 'Edit':
-
-                    
-                        the_button.value = "Showing";
-                        the_button.style.color = 'white';
-                        the_button.style.backgroundColor = 'dodgerblue';
-                        the_label.style.color = 'dodgerblue';
-                        the_text.style.color = "dodgerblue";
-
-                        changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
-
-                        the_row.setAttribute('data-status', 'Showing');
-
-                        break;
 
                     case 'Finish': 
 

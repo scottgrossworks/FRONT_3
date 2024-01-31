@@ -1,0 +1,958 @@
+<!--
+    --
+    -- LEED CREATE 
+    -- 
+    -- the current user is the creator of the leed
+    --    
+    -->
+    
+    <!DOCTYPE html>
+    <html lang="en">
+        
+    
+    
+    <head>
+             <meta charset="UTF-8">
+             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         
+             <TITLE>Leed Editor</TITLE>
+         
+             <!-- Favicon -->
+             <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+             <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+     
+             
+            <link rel="stylesheet" href="css/globals.css" type="text/css" />
+            <link rel="stylesheet" href="css/modal.css" type="text/css" />
+    
+             <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
+             <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
+    
+             <script src="./js/inline-edit.js" type="module" defer></script> 
+        </head>
+    
+    
+             
+        <center>
+    
+    
+        <body>
+        
+    
+    
+                
+            <div class="row" style="left:0;width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+    
+    
+    
+                <div class="column _1">
+                    <a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+                </div>
+    
+    
+    
+                <div class="column _8" style="margin:auto 0;transform:translateY(6px)">
+                    <h1 class="user_title">Create Leed</h1>
+                </div>
+                
+                
+          
+                <div class="column _2 dropdown" style="margin:auto 0;">
+                
+                    <span><a href="javascript:dropdownMenu();"><img src="./img/logo_dd.png" style="height:80px"></a></span>
+                    <div id="dropdown_menu" class="dropdown-content">
+    
+                        <a href="./leedz_how-to.html" id="dd_howto">How To</a>
+                        
+                        <a href="./leedz_about.html">About</a>
+    
+                        <a href="./leedz_contact.html">Contact</a>
+    
+                    </div>
+    
+                </div>
+            </div>
+    
+                
+        <div id="alert_success" class="alert" style="display:none">
+            <span class="closebtn" onclick="this.parentElement.style.display='none'">&times;</span>
+        </div>
+    
+    
+    <section>
+        
+    
+    
+    
+    
+       <!-- 
+        -- DB -- WAITING.... --DB
+        -- 
+        -->
+        <div class="modal info_modal" id="waiting_modal" style="display:none">
+    
+            <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
+                <table>
+                    <TR><TD style="padding-bottom:20px; border:none;"><center>
+                        <h1 id="waiting_label" style="width:fit-content"></h1>
+                            </center>
+                    </TD></TR>
+                    <TR><TD style="border:none;"><center>
+                            <img src="./img/wait_spinner.gif" style="height:8vh;">
+                            </center>
+                        </TD>
+                    </TR>
+                </table>
+      
+          </div>
+    
+    
+    
+    
+        
+          <!-- 
+            -- ERROR MODAL 
+            -- 
+          -->
+          <div class="row modal" id="error_modal" style="display:none">
+            <center><img id="error_logo" src="img/logo_2.png"></center> 
+            <h1></h1>
+            <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
+          </div>
+    
+    
+    
+    <div class="row" id="form_container">
+    
+        <table id="leed_info_table">
+    
+                <!-- 2 -- 
+                    CREATOR 
+                    LOCKED
+                -->
+                <tr id="row_creator" data-status="Locked">
+                                
+                    <TD  class="labelTD">Creator: </TD>
+                    
+                    <td id="td_creator"></td>
+    
+                    <td data-inlineType="doneButton" class="buttonTD">
+                        <input type="button" value="Locked" style="background-color:darkgreen"/>
+                    </td>
+                </tr>
+    
+    
+    
+    
+                <!-- 3 -- 
+                    TRADE NAME
+                    LOCKED
+                 -->
+                <tr id="row_trade" data-status="Edit">
+                                
+                    <TD class="labelTD">Trade: </TD>
+                    
+                    <td id="td_trade" data-inlineType="trade_name" data-inlineName="trade" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+    
+                    <td data-inlineType="doneButton" class="buttonTD">
+                        <input type="button" value="Edit" onclick="editField('row_trade', createOptions)"/>
+                    </td>
+    
+                </tr>
+    
+    
+    
+                <!-- 1 --
+                    TITLE
+                    LOCKED
+                 -->
+                <tr id="row_title" data-status="Edit">
+                            
+                    <TD class="labelTD">Title: </TD>
+                    
+                    <td id="td_title" data-inlineType="text" data-inlineName="title" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+    
+                    <td data-inlineType="doneButton" class="buttonTD">
+                        <input type="button" value="Edit" onclick="editField('row_title', createOptions)"/>
+                    </td>
+    
+                </tr>
+    
+    
+    
+                <!-- 6 --
+                    START TIME
+                    LOCKED
+                 -->
+                <tr id="row_start" data-status="Edit">
+                            
+                    <TD class="labelTD">Start Time: </TD>
+                    
+                    <td id="td_start" data-inlineType="date" data-inlineName="start" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+    
+                    <td data-inlineType="doneButton" class="buttonTD">
+                        <input type="button" value="Edit" onclick="editField('row_start', createOptions)"/>
+                    </td>
+    
+                </tr>
+    
+    
+                        
+                <!-- 7 -- 
+                    END TIME
+                    LOCKED 
+                -->
+                <tr id="row_end" data-status="Edit">
+                            
+                    <TD class="labelTD">End Time: </TD>
+                    
+                    <td id="td_end" data-inlineType="date" data-inlineName="end" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+    
+                    <td data-inlineType="doneButton" class="buttonTD">
+                        <input type="button" value="Edit" onclick="editField('row_end', createOptions)"/>
+                    </td>
+    
+                </tr>
+    
+    
+    
+                <!-- 5 --
+                    LOCATION 
+                    FULL ADDRESS 
+
+                    HIDE
+                -->
+                <tr id="row_loc" data-status="Edit">
+                            
+                    <TD id="label_loc" class="labelTD">Address: </TD>
+                    
+                    <td id="td_loc" data-inlineType="text" data-inlineName="loc" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+    
+                    <td data-inlineType="doneButton" class="buttonTD" data-index="5">
+                        <input type="button" value="Edit" onclick="comboButton(this, 'row_loc', 5, createOptions)"/>
+                    </td>
+
+                </tr>
+    
+    
+    
+    
+                
+    
+    
+                <!-- 8 --
+                     EMAIL
+                    
+                    HIDE
+                -->
+                <tr id="row_em" data-status="Hidden">
+                                
+                    <TD id='label_em' class="labelTD">Email: </TD>
+                    
+                    <td id="td_em" data-inlineType="email" data-inlineName="em" data-inlineRequired="0"></td>
+    
+                    <td data-inlineType="doneButton" class="buttonTD" data-index="8">
+                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_em', 8, createOptions)"/>
+                    </td>
+    
+                </tr>
+    
+    
+    
+    
+                <!-- 9 -- 
+                    PHONE
+                    
+                    HIDE
+                -->
+                <tr id="row_ph" data-status="Hidden">
+                                
+                    <TD id='label_ph' class="labelTD">Phone: </TD>
+                    
+                    <td id="td_ph" data-inlineType="tel" data-inlineName="ph" data-inlineRequired="0"></td>
+    
+                    <td data-inlineType="doneButton" class="buttonTD" data-index="9">
+                        <input type="button" value="Hidden"  onclick="comboButton(this, 'row_ph', 9, createOptions)"/>
+                    </td>
+    
+                </tr>
+    
+    
+    
+    
+    
+                <!-- 10 -- 
+                    LEED DETAILS
+                    
+                    SHOW
+                -->
+                <tr id="row_det" data-status="Showing">
+                            
+                    <TD id='label_det' class="labelTD">Details: </TD>
+                    
+                    <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+    
+                    <td data-inlineType="doneButton" class="buttonTD" data-index="10">
+                        <input type="button" value="Showing"  onclick="comboButton(this, 'row_det', 10, createOptions)"/>
+                    </td>
+    
+                </tr>
+    
+    
+    
+                
+           
+                <!-- 11 -- 
+                    LEED REQUIREMENTS
+                
+                    SHOW
+                -->
+                <tr id="row_reqs" data-status="Showing">
+                            
+                    <TD id='label_reqs' class="labelTD">Requires: </TD>
+                    
+                    <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0"></td>
+    
+                    <td data-inlineType="doneButton" class="buttonTD" data-index="11">
+                        <input type="button" value="Showing"  onclick="comboButton(this, 'row_reqs', 11, createOptions)"/>
+                    </td>
+    
+                </tr>
+    
+    
+    
+    
+                
+                <!-- 12 -- 
+                    LEED PRICE
+                
+                    LOCKED
+                -->
+                <tr id="row_pr" data-status="Edit">
+                            
+                    <TD class="labelTD">Price $: </TD>
+                    
+                    <td id="td_pr" data-inlineType="text" data-inlineName="pr" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+    
+                    <td data-inlineType="doneButton" class="buttonTD">
+                        <input type="button" value="Edit" onclick="editField('row_pr', createOptions)"/>
+                    </td>
+    
+                </tr>
+    
+
+                <TR>
+                    <TD colspan=3 id="editor_notes"><b>*</b> For questions about posting leedz and getting paid, read our 
+                            <a href="./leedz_how-to.html" targe="_self">How-To</a> page and 
+                            the Leedz <a href="./leedz_tos.html" targe="_self">terms of service</a>.
+                    </TD>
+                </TR>
+            </table>	
+
+       
+        
+        </div>
+
+
+        
+        
+    <!--
+    --
+    -- BUTTONS
+    --
+    --
+    -- 
+    -->
+    
+    
+    
+    <div class="row">
+            <!-- POST LEED -->
+            <button id="saveButton" class="button save_button" value="save" style="opacity:0.5" onclick="postLeed()">Post Leed</button>
+    </div>
+            
+    
+    
+    <div class="row">
+            <!-- CANCEL -->
+            <button id="cancelButton" class="button cancel_button" value="cancel" style="opacity:1.0" onclick="clearFields()">Start Over</button>
+    </div>
+    
+    
+    
+        
+    
+        </section>  
+    <BR>     
+    <BR>   
+    <BR>
+    <BR>
+    </body>
+    
+    
+        <script type="module">
+                
+            import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } from "./js/dates.js";
+            import { getShortDateString, DTfromPretty, getMonthIndex } from "./js/dates.js";
+            
+            import { inlineEmailFinishCell, inlineURLFinishCell, inlineEdit } from "./js/inline-edit.js";
+            import { getCurrentUser, guestUser } from "./js/user.js";
+            import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
+
+            import { OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
+            import { blankLeedObject, clearCurrentLeed, createDBLeed  } from "./js/leed.js";
+
+            import { db_updateLeed, ADD_LEED, USERNAME_URL_PARAM, DB_FAIL, DB_SUCCESS } from "./js/dbTools.js";
+    
+            import { cancelOptions, createOptions } from "./js/leed_edit.js";
+            import { noValue, goodValue, successAlert, leed_edit_Save, leed_edit_Delete } from "./js/leed_edit.js";
+            import { waitCursor, normalCursor, showWaitingModal, modalClose, clearFields  } from "./js/leed_edit.js";
+            
+
+            
+            window.errorModalClose = errorModalClose;
+            window.inlineEdit = inlineEdit;
+    
+            window.cancelOptions = cancelOptions;
+            window.createOptions = createOptions;
+            
+            createOptions.finishCallback = defaultCallback;
+
+
+            // flag indicates edits are in progress
+            //
+            var EDITING = false;
+
+            // THE LEED CHANGES
+            // struct to hold form data
+            //
+            const LEED_CHANGES = blankLeedObject();
+            window.LEED_CHANGES = LEED_CHANGES;
+    
+
+
+
+    //
+    //
+    //
+    //
+    //
+    function defaultCallback(rowData, rowName) {
+
+
+        switch(rowName) {
+
+            case "row_trade":
+                LEED_CHANGES.tn = rowData["trade"];
+            break;
+
+            case "row_title":
+             LEED_CHANGES.ti = rowData["title"];
+            break;
+
+            case "row_start":
+                var dateTime = DTfromPretty( rowData["start"] );
+                LEED_CHANGES.st = dateTime;
+            break;
+
+            case "row_end":
+                var dateTime = DTfromPretty( rowData["end"] );
+                LEED_CHANGES.et = dateTime;
+            break;
+
+            case "row_em":
+                LEED_CHANGES.em = rowData["em"];
+            break;
+
+            case "row_ph":
+                LEED_CHANGES.ph = rowData["ph"];
+            break;
+
+            case "row_loc":
+                LEED_CHANGES.lc = rowData["loc"];
+            break;
+
+            case "row_det":
+                LEED_CHANGES.dt = rowData["det"];
+            break; 
+
+            case "row_reqs":
+                LEED_CHANGES.rq = rowData["reqs"];
+            break; 
+
+            case "row_pr":
+                LEED_CHANGES.pr = rowData["pr"];
+            break; 
+
+            default:
+                printError("defaultCallback()", "received unknown form field: " + rowName);
+            break;
+
+        }
+    }
+
+    cancelOptions.finishCallback = defaultCallback;
+    createOptions.finishCallback = defaultCallback;
+
+
+
+
+    // 
+    //
+    function showCallback(rowName) {
+
+        let tableRow = document.getElementById(rowName);
+            
+        var the_button = tableRow.children[2].children[0];
+        the_button.value = "Showing";
+        the_button.style.color = 'white';
+
+        the_button.style.backgroundColor = "dodgerblue";
+
+        var the_label = tableRow.children[0];
+        the_label.style.color =  "dodgerblue";
+
+        var the_text = tableRow.children[1];
+        the_text.style.color =  "dodgerblue";
+
+        tableRow.setAttribute('data-status', 'Showing');
+    }
+    createOptions.showCallback = showCallback;
+
+
+
+
+
+    // 
+    //
+    function hideCallback(rowName) {
+
+        let tableRow = document.getElementById(rowName);
+
+        var the_button = tableRow.children[2].children[0];
+        the_button.value = "Hidden";
+        the_button.style.color = 'white';
+    
+        the_button.style.backgroundColor = "var(--LEEDZ_DARKGREEN)";
+    
+        var the_label = tableRow.children[0];
+        the_label.style.color = "var(--LEEDZ_DARKGREEN)";
+    
+        var the_text = tableRow.children[1];
+        the_text.style.color = "var(--LEEDZ_DARKGREEN)";
+
+        tableRow.setAttribute('data-status', 'Hidden');
+        
+    }
+    createOptions.hideCallback = hideCallback;
+
+
+
+
+
+
+
+
+
+
+
+
+
+            /**
+            * DROP DOWN MENU
+            */
+             let DROP_DOWN = false;
+    
+             /* When the user clicks on the button,
+             toggle between hiding and showing the dropdown content */
+             export function dropdownMenu() {
+               
+                const menu = document.getElementById("dropdown_menu");
+                menu.classList.toggle("show");
+    
+               DROP_DOWN ^= 1; // flip flag
+             }
+             window.dropdownMenu = dropdownMenu;
+    
+              //
+              // ANY window click registers here
+              //
+              window.addEventListener( "click", (event) => {
+    
+                 if (! (event.target.matches('img'))) {
+                  
+                  // click -- not on a link and not on the dropdown image
+                  // Close the dropdown menu if the user clicks outside of it
+            
+                  var dropdown = document.getElementById("dropdown_menu");
+                  dropdown.classList.remove("show");
+    
+                }
+               
+    
+              }, true);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+            //
+            //
+            //
+            function beginEditing() {
+                var element = document.getElementById("saveButton");
+                element.innerHTML = "Post Leed";
+                element.style.backgroundColor = "var(--LEEDZ_GREEN)";
+                element.style.opacity = 1;
+    
+                element = document.getElementById("cancelButton");
+                element.style.backgroundColor = "dodgerblue";
+    
+                EDITING = true;
+    
+    
+            }
+    
+    
+            //
+            //
+            //
+            function endEditing() {
+                var element = document.getElementById("saveButton");
+                element.innerHTML = "Saved!";
+                element.style.backgroundColor = "darkorange";
+                element.style.opacity = 0.5;
+     
+                element = document.getElementById("cancelButton");
+                element.style.backgroundColor = "cornflowerblue";
+    
+                EDITING = false;
+            }
+    
+    
+           
+    
+    
+    
+            /**
+            * save changes to create form
+            * Post new leed to DB
+            *
+            */
+            async function postLeed() {
+    
+                if (! EDITING) return;
+    
+                endEditing();
+    
+    
+                if (! validateLeedChanges()) {
+                    printError("postLeed", "Cannot post invalid leed changes");
+                    return;
+                } 
+    
+                waitCursor();
+                
+                showWaitingModal("Creating new Leed . . .");
+    
+                let CURRENT_USER = getCurrentUser(false);
+                
+                //   client <---> API Gateway <===> DB
+                //
+                //
+                let from_DB = null;
+                try {
+                    await createDBLeed( CURRENT_USER, LEED_CHANGES ).then((response) => from_DB = response );
+    
+                } catch (error) {
+                    printError("createDBLeed", error.message)
+                    errorModal("Error adding leed: " + error.message, false);
+            
+                } finally {
+                    
+                    normalCursor();
+                    clearFields();
+                    modalClose();
+                }
+    
+    
+                /**
+                * SHOW THE ERROR ALERT
+                * will not get here if create throws exception above
+                * This is a catch-all for null responses and
+                * HTTP 200 codes that contain error messages 
+                */
+                if ((! from_DB) || from_DB.er) {
+                    var msg = "Error adding leed: " + LEED_CHANGES.ti + " : " + from_DB.er;
+                    printError("Add Leed", msg);
+                    errorModal(msg, false);
+                    return;
+    
+    
+                } else {
+                    /**
+                    * SHOW THE SUCCESS ALERT
+                    *
+                    *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
+                    *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
+                    */
+                    var msg = 'Leed created [ ' + from_DB.tn + ' ] ' + from_DB.ti;
+                    console.log(msg);
+                    console.log(from_DB)
+                    successAlert(msg);
+                }
+    
+            }
+            window.postLeed = postLeed;
+    
+    
+    
+
+
+
+            /**
+            * MUST RETURN TRUE
+            */
+            function validateLeedChanges(LEED_CHANGES) {
+                // console.log("POSTING NEW LEED:");
+                // console.log(LEED_CHANGES);
+    
+                // LEED verification
+                //            
+                if ( noValue(LEED_CHANGES.tn) ) {
+                    printError("Add Leed", "Trade must be set");
+                    errorModal("Error Adding Leed: Trade must be set.", true);
+                    return false;
+                }
+    
+                
+                if ( noValue(LEED_CHANGES.ti) ) {
+                    printError("Add Leed", "Title must be set");
+                    errorModal("Error Adding Leed: Title must be set.", true);
+                    return false;
+                }
+    
+    
+                if ( noValue(LEED_CHANGES.st) ) {
+                    printError("Add Leed", "Start must be set");
+                    errorModal("Error Adding Leed: Start must be set.", true);
+                    return false;
+                }
+    
+                
+                if ( noValue(LEED_CHANGES.et) ) {
+                    printError("Add Leed", "End must be set");
+                    errorModal("Error Adding Leed: End must be set.", true);
+                    return false;
+                }
+    
+                if (LEED_CHANGES.st > LEED_CHANGES.et) {
+                    printError("Add Leed", "Start date must precede end date");
+                    errorModal("Error Adding Leed: Start date must precede end date.", true);
+                    return false;
+                }
+    
+                // LOCATION
+                if ( noValue(LEED_CHANGES.lc) ) {
+                    printError("Add Leed", "Location must be set");
+                    errorModal("Error Adding Leed: Location must be set.", true);
+                    return false;
+    
+                    
+                } else {
+                    // ZIP
+                    // SET THE LEED_CHANGES ZIP HERE
+                    let the_zip = LEED_CHANGES.lc.slice(-5);
+
+                    // NOT A 5-DIGIT NUMBER
+                    if (! new Number( the_zip ).valueOf()) {
+
+                        printError("Add Leed", "zip code not found");
+                        errorModal("Error Adding Leed: Location must end in 5-digit zip.", true);
+                        return false;
+
+                    }   
+                    LEED_CHANGES.zp = the_zip;
+                }
+    
+    
+                if ( noValue(LEED_CHANGES.dt) ) {
+                    printError("Add Leed", "Details must be set");
+                    errorModal("Error Posting Leed: Some details must be set.", true);
+                    return false;
+                }
+    
+                if (! LEED_CHANGES.pr) {
+                    printError("Add Leed", "Price must be set");
+                    errorModal("Error Adding Leed: Price must be set.", true);
+                    return false;
+                }
+            
+            
+                // SUCCESS!!
+                //
+                return true;
+            }
+
+
+
+
+    
+
+
+
+
+      
+
+            /**
+             *
+             */
+             function comboButton( the_button, row_name, row_index, options ) {
+       
+                let the_row = document.getElementById(row_name);
+                let the_label = the_row.children[0];
+                let the_text = the_row.children[1];
+
+                let status = the_row.getAttribute('data-status');
+
+                beginEditing();
+
+                switch (status) {
+
+                    case 'Edit':
+
+                    
+                        the_button.value = "Showing";
+                        the_button.style.color = 'white';
+                        the_button.style.backgroundColor = 'dodgerblue';
+                        the_label.style.color = 'dodgerblue';
+                        the_text.style.color = "dodgerblue";
+
+                        changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
+
+                        the_row.setAttribute('data-status', 'Showing');
+
+                        break;
+
+                    case 'Finish': 
+
+                        the_button.value = "Showing";
+                        the_button.style.color = 'white';
+                        the_button.style.backgroundColor = 'dodgerblue';
+                        the_label.style.color = 'dodgerblue';
+                        the_text.style.color = "dodgerblue";
+
+                        changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
+
+                        the_row.setAttribute('data-status', 'Showing');
+
+                        break;
+                    
+                    case 'Showing': 
+                        
+                        the_button.value = "Hidden";
+                        the_button.style.color = 'white';
+                        the_button.style.backgroundColor ="var(--LEEDZ_DARKGREEN)";
+                        the_label.style.color = "var(--LEEDZ_DARKGREEN)";
+                        the_text.style.color =  "var(--LEEDZ_DARKGREEN)";
+
+                        the_row.setAttribute('data-status', 'Hidden');
+
+                        changeLeedOpts( LEED_CHANGES, row_index, OPTS_HIDDEN );
+
+                        break;
+                    
+                    case 'Hidden': 
+                        
+
+                        the_button.value = "Showing";
+                        the_button.style.color = 'white';
+                        the_button.style.backgroundColor = 'dodgerblue';
+                        the_label.style.color = 'dodgerblue';
+                        the_text.style.color = "dodgerblue";
+
+                        changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
+
+                        the_row.setAttribute('data-status', 'Showing');
+
+                        break;
+
+
+                    default: 
+                        var msg = "Invalid button state: value=" + the_button.value;
+                        printError("comboButton", msg);
+                        throwError(msg);
+
+                        break;
+
+                }
+
+                    
+
+            }
+            window.comboButton = comboButton;
+            
+
+        
+    
+
+
+
+            /**
+             * On page load 
+             * call inlineEdit for every editable field 
+             *   creates blank text boxes and Finish buttons
+             *   links in inline-edit.js code
+             */
+            window.onload = (event) => {
+
+                // CURRENT USER
+                //
+               
+                const CURRENT_USER = getCurrentUser(true);
+                if ((! CURRENT_USER ) || (! CURRENT_USER.un)) {
+                    var msg = "Cannot initialize leed editor: No current user";
+                    console.error(msg);
+                    errorModal(msg, true);
+                   
+                    CURRENT_USER = guestUser();
+                }   
+                console.log("CURRENT USER")
+                console.log(CURRENT_USER);
+
+               
+                let element = document.getElementById("td_creator");
+                element.innerHTML = "<B style='font-size:larger'>" + CURRENT_USER.un + "</B>";
+                // leed creator is fixed to current user
+                LEED_CHANGES.un = CURRENT_USER.un 
+               
+
+                inlineEdit('row_trade', createOptions);            
+                inlineEdit('row_title', createOptions);
+                inlineEdit('row_start', createOptions);
+                inlineEdit('row_end', createOptions);
+
+                inlineEdit('row_loc', createOptions);
+                inlineEdit('row_em', createOptions);
+                inlineEdit('row_ph', createOptions);
+
+                inlineEdit('row_det', createOptions);
+                inlineEdit('row_reqs', createOptions);
+
+                inlineEdit('row_pr', createOptions);
+            };
+    
+              
+    
+    
+        </script>
+    
+        
+            
+    
+    
+    </html>

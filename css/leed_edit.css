@@ -157,7 +157,7 @@ section > img {
 
 	.labelTD {
 	
-		max-width:80px;
+		max-width:70px;
 		margin: auto 0 auto 1vw;
 	}
 
@@ -165,7 +165,11 @@ section > img {
 		max-width:75px;
 	}
 
+	
+
+
 }
+
 
 
 
@@ -414,10 +418,9 @@ select {
 
 @media screen and (max-width:499px) {
 
-	input,
 	textarea,
-	select {
-		max-width:160px;
+	select {	
+		width:93%;
 	}
 
 }
@@ -438,7 +441,9 @@ input#finish_button {
 
 input[type="button"],
 input[type="submit"] {
-	padding: 0.5rem 1rem;
+	
+	padding: 0.5rem 0rem;
+
 	background-color: var(--LEEDZ_DARKGREEN);
 	border-radius: 5px;
 

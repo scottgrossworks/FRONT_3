@@ -72,6 +72,27 @@ export function errorModalClose() {
 
 
 /**
+ * CLOSE (ANY) MODAL DIALOG
+ */
+export function modalClose( force ) {
+
+  if (force) errorModalClose();
+
+  // close all modal dialogs
+  var modals = document.getElementsByClassName("info_modal");
+  for (var i = 0; i < modals.length; i++) {
+    if (force) {
+      modals[i].style.display = "none";
+    } else if (!  modals[i].classList.contains("modal_noclose")) {
+      modals[i].style.display = "none";
+    }
+    
+  }
+}
+window.modalClose = modalClose;
+
+
+/**
  * 
  *
  */

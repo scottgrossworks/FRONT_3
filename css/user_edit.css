@@ -121,16 +121,15 @@ table#badges_list tbody td {
 
 .sq_button {
 	
-    display: flex;
     align-items: center; /* Center the content vertically */
 
-    padding: 6px 8px 6px 8px;
+    padding: 5px;
     border: none !important;
     text-decoration: none;
-    display: flex;
+
     border-radius: 6px;
     max-height: 40px;
-    width: fit-content;
+    width: "96%";
     font-family: var(--FONT_3);
     font-size: medium;
     font-weight: 600;

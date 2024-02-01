@@ -246,7 +246,7 @@
 					
 					<TD  class="labelTD" style="border:none;vertical-align:top">Trades: </TD>
 					
-					<td id="trades_table">
+					<td id="trades_table" colspan=2>
 
 						<BR>
 
@@ -265,7 +265,6 @@
 					
 					</td>		
 
-					<td style="width:20%;border:none"></td>
 				</tr>
 			</table>	
 
@@ -302,7 +301,7 @@
     -- ERROR MODAL 
     -- 
     -->
-  <div class="row modal" id="error_modal">
+  <div class="row modal" id="error_modal" style="display:none">
     <center><img id="error_logo" src="img/logo_2.png"></center> 
     <h1></h1>
     <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
@@ -333,6 +332,8 @@
 		var EDITING = false;
 		let CURRENT_USER;
 		let USER_CHANGES;
+
+		window.errorModalClose = errorModalClose;
 
 		modalClose(true);
 

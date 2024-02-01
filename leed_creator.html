@@ -414,6 +414,7 @@
             
             window.errorModalClose = errorModalClose;
             window.inlineEdit = inlineEdit;
+            window.clearFields = clearFields;
     
             window.cancelOptions = cancelOptions;
             window.createOptions = createOptions;
@@ -449,7 +450,7 @@
             break;
 
             case "row_title":
-             LEED_CHANGES.ti = rowData["title"];
+                 LEED_CHANGES.ti = rowData["title"];
             break;
 
             case "row_start":
@@ -719,7 +720,7 @@
             /**
             * MUST RETURN TRUE
             */
-            function validateLeedChanges(LEED_CHANGES) {
+            function validateLeedChanges() {
                 // console.log("POSTING NEW LEED:");
                 // console.log(LEED_CHANGES);
     

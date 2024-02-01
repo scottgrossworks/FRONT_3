@@ -399,7 +399,7 @@
         import { getCurrentUser, guestUser } from "./js/user.js";
         
         import { LEED_KEYS, START_OPTS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
-        import { clearCurrentLeed, getCurrentLeed, blankLeedObject, saveLeedChanges, deleteCurrentLeed } from "./js/leed.js";
+        import { clearCurrentLeed, getCurrentLeed, blankLeedObject } from "./js/leed.js";
 
         import { printError, throwError, errorModal, modalClose, errorModalClose } from "./js/error.js";
         
@@ -636,7 +636,7 @@
             waitCursor();
             
             try { 
-                await saveLeedChanges(LEED_CHANGES);
+                await leed_edit_Save(LEED_CHANGES);
             
             } finally {
                 normalCursor();
@@ -739,8 +739,6 @@
                 break;
 
         }
-
-            
 
     }
     window.comboButton = comboButton;

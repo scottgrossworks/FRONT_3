@@ -5,7 +5,7 @@
  * 
  */
 import { OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./leed.js";
-import { createDBLeed, saveLeedChanges, deleteCurrentLeed } from "./leed.js";
+import { saveLeedChanges, deleteCurrentLeed } from "./leed.js";
 import { printError, errorModal } from "./error.js";
 
     export const URL_LEED_DELETED = "./leed_delete.html";
@@ -113,27 +113,6 @@ import { printError, errorModal } from "./error.js";
 
 
 
-    
-    /**
-     * CLOSE (ANY) MODAL DIALOG
-     */
-    function modalClose( force ) {
-    
-        if (force) errorModalClose();
-    
-        // close all modal dialogs
-        var modals = document.getElementsByClassName("info_modal");
-        for (var i = 0; i < modals.length; i++) {
-          if (force) {
-            modals[i].style.display = "none";
-          } else if (!  modals[i].classList.contains("modal_noclose")) {
-            modals[i].style.display = "none";
-          }
-          
-        }
-      }
-
-
 
 
     //
@@ -191,18 +170,11 @@ import { printError, errorModal } from "./error.js";
 
 
 
+
     /**
-    * save changes to create form
-    * Post new leed to DB
-    *
+    * MUST RETURN TRUE
     */
-    export async function postLeed( CURRENT_USER, LEED_CHANGES ) {
-
-        if (! EDITING) return;
-
-        endEditing();
-
-
+    export function validateLeedChanges( LEED_CHANGES ) {
         // console.log("POSTING NEW LEED:");
         // console.log(LEED_CHANGES);
 
@@ -211,55 +183,54 @@ import { printError, errorModal } from "./error.js";
         if ( noValue(LEED_CHANGES.tn) ) {
             printError("Add Leed", "Trade must be set");
             errorModal("Error Adding Leed: Trade must be set.", true);
-            return;
+            return false;
         }
 
         
         if ( noValue(LEED_CHANGES.ti) ) {
             printError("Add Leed", "Title must be set");
             errorModal("Error Adding Leed: Title must be set.", true);
-            return;
+            return false;
         }
 
 
         if ( noValue(LEED_CHANGES.st) ) {
             printError("Add Leed", "Start must be set");
             errorModal("Error Adding Leed: Start must be set.", true);
-            return;
+            return false;
         }
 
         
         if ( noValue(LEED_CHANGES.et) ) {
             printError("Add Leed", "End must be set");
             errorModal("Error Adding Leed: End must be set.", true);
-            return;
+            return false;
         }
 
         if (LEED_CHANGES.st > LEED_CHANGES.et) {
             printError("Add Leed", "Start date must precede end date");
             errorModal("Error Adding Leed: Start date must precede end date.", true);
-            return;
+            return false;
         }
 
+        // LOCATION
         if ( noValue(LEED_CHANGES.lc) ) {
             printError("Add Leed", "Location must be set");
             errorModal("Error Adding Leed: Location must be set.", true);
-            return;
+            return false;
 
-
+            
         } else {
-
-            // ADDRESS VALIDATE
+            // ZIP
             // SET THE LEED_CHANGES ZIP HERE
             let the_zip = LEED_CHANGES.lc.slice(-5);
-
 
             // NOT A 5-DIGIT NUMBER
             if (! new Number( the_zip ).valueOf()) {
 
                 printError("Add Leed", "zip code not found");
                 errorModal("Error Adding Leed: Location must end in 5-digit zip.", true);
-                return;
+                return false;
 
             }   
             LEED_CHANGES.zp = the_zip;
@@ -269,70 +240,22 @@ import { printError, errorModal } from "./error.js";
         if ( noValue(LEED_CHANGES.dt) ) {
             printError("Add Leed", "Details must be set");
             errorModal("Error Posting Leed: Some details must be set.", true);
-            return;
+            return false;
         }
 
         if (! LEED_CHANGES.pr) {
             printError("Add Leed", "Price must be set");
             errorModal("Error Adding Leed: Price must be set.", true);
-            return;
+            return false;
         }
-
-
-        waitCursor();
-        
-        showWaitingModal("Creating new Leed . . .");
-
-        
-
-        //   client <---> API Gateway <===> DB
+    
+    
+        // SUCCESS!!
         //
-        //
-        let from_DB = null;
-        try {
-            await createDBLeed( CURRENT_USER, LEED_CHANGES ).then((response) => from_DB = response );
-
-        } catch (error) {
-            printError("createDBLeed", error.message)
-            errorModal("Error adding leed: " + error.message, false);
-
-        } finally {
-            
-            normalCursor();
-            clearFields();
-            modalClose(false);
-        }
-
-        console.log(from_DB)
-        if (! from_DB) return;
-
-
-        /**
-        * SHOW THE ERROR ALERT
-        * will not get here if create throws exception above
-        * This is a catch-all for null responses and
-        * HTTP 200 codes that contain error messages 
-        */
-        if (from_DB.er) {
-            var msg = "Error adding leed: " + LEED_CHANGES.ti + " : " + from_DB.er;
-            printError("Add Leed", msg);
-            errorModal(msg, false);
-
-
-        } else {
-            /**
-            * SHOW THE SUCCESS ALERT
-            *
-            *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
-            *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
-            */
-            var msg = 'Leed created [ ' + from_DB.tn + ' ] ' + from_DB.ti;
-            console.log(msg);
-            successAlert(msg);
-
-        }
-
+        return true;
     }
+
+
 
 
 
@@ -355,7 +278,7 @@ import { printError, errorModal } from "./error.js";
             errorModal("Error saving changes: " + error.message, false);
 
         } 
-        console.log("GOT RESULTS!!!");
+
         console.log(from_DB)
 
             /**
@@ -445,4 +368,63 @@ import { printError, errorModal } from "./error.js";
     }
 
 
+
+
+
+/**
+ * Post new leed to DB
+ *
+ */
+export async function leed_edit_Post( LEED_CHANGES, CURRENT_USER ) {
+
+   
+    //   client <---> API Gateway <===> DB
+    //
+    //
+    let from_DB = null;
+    try {
+        await createDBLeed( CURRENT_USER, LEED_CHANGES ).then((response) => from_DB = response );
+
+    } catch (error) {
+        printError("createDBLeed", error.message)
+        errorModal("Error adding leed: " + error.message, false);
+
+    } finally {
+        
+        normalCursor();
+        clearFields();
+        modalClose(false);
+    }
+
+
+    /**
+    * SHOW THE ERROR ALERT
+    * will not get here if create throws exception above
+    * This is a catch-all for null responses and
+    * HTTP 200 codes that contain error messages 
+    */
+    if ((! from_DB) || from_DB.er) {
+        var msg = "Error adding leed: " + LEED_CHANGES.ti + " : " + from_DB.er;
+        printError("Add Leed", msg);
+        errorModal(msg, false);
+        return;
+
+
+    } else {
+        /**
+        * SHOW THE SUCCESS ALERT
+        *
+        *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
+        *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
+        */
+        var msg = 'Leed created [ ' + from_DB.tn + ' ] ' + from_DB.ti;
+        console.log(msg);
+        console.log(from_DB)
+        successAlert(msg);
+    }
+
+}
+
+
+    
 

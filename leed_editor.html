@@ -269,7 +269,7 @@
                                 
                     <TD id='label_ph' class="labelTD">Phone: </TD>
                     
-                    <td id="td_ph" data-inlineType="tel" data-inlineName="ph" data-inlineRequired="0"></td>
+                    <td id="td_ph" data-inlineType="tel" data-inlineName="ph" data-inlineRequired="0" data-inlinePlaceholder="(No Value)"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="9">
                         <input type="button" value="Hidden"  onclick="comboButton(this, 'row_ph', 9, createOptions)"/>
@@ -290,7 +290,7 @@
                             
                     <TD id='label_det' class="labelTD">Details: </TD>
                     
-                    <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+                    <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="0" data-inlinePlaceholder="(No Value)"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="10">
                         <input type="button" value="Showing"  onclick="comboButton(this, 'row_det', 10, createOptions)"/>
@@ -311,7 +311,7 @@
                             
                     <TD id='label_reqs' class="labelTD">Requires: </TD>
                     
-                    <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0"></td>
+                    <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0" data-inlinePlaceholder="(No Value)"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD" data-index="11">
                         <input type="button" value="Showing"  onclick="comboButton(this, 'row_reqs', 11, createOptions)"/>
@@ -332,7 +332,7 @@
                             
                     <TD class="labelTD">Price $: </TD>
                     
-                    <td id="td_pr" data-inlineType="text" data-inlineName="pr" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
+                    <td id="td_pr" data-inlineType="text" data-inlineName="pr" data-inlineRequired="1"></td>
     
                     <td data-inlineType="doneButton" class="buttonTD">
                         <input type="button" value="Showing" onclick="editField('row_pr', createOptions)"/>
@@ -360,7 +360,6 @@
     --
     -- BUTTONS
     --
-    --
     -- 
     -->
     
@@ -381,12 +380,12 @@
     
     
         
-    
-        </section>  
-    <BR>     
-    <BR>   
-    <BR>
-    <BR>
+
+    </section>  
+        <BR>     
+        <BR>   
+        <BR>
+        <BR>
     </body>
     
     
@@ -747,10 +746,6 @@
 
 
 
-
-
-
-
     
     
 
@@ -837,8 +832,6 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
 
         // LEED OPTIONS
         if (! CURRENT_LEED['op']) {
-            // THIS is an error condition
-            // default to START_OPTS but DO NOT fail
             printError("Current Leed","No leed options found - using DEFAULT");
             CURRENT_LEED['op'] = START_OPTS;
         }
@@ -853,33 +846,54 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
         // EMAIL
         // 
         element = document.getElementById("td_em");
-        if ( goodValue(CURRENT_LEED.em) ) element.innerHTML = CURRENT_LEED.em;
+        if ( goodValue(CURRENT_LEED.em) ) {
+            element.innerHTML = CURRENT_LEED.em;
+        } else {
+            inlineEdit('row_em', createOptions);
+        }
         if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN )
             changeLeedOpts( LEED_CHANGES, LEED_KEYS.EM, OPTS_HIDDEN );
+
 
         // PHONE
         // 
         element = document.getElementById("td_ph");
-        if ( goodValue(CURRENT_LEED.ph) ) element.innerHTML = CURRENT_LEED.ph;
+        if ( goodValue(CURRENT_LEED.ph) ) {
+            element.innerHTML = CURRENT_LEED.ph;
+        } else {
+            inlineEdit('row_ph', createOptions);
+        }
         if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN )
-            changeLeedOpts( LEED_CHANGES, LEED_KEYS.PH, OPTS_HIDDEN );
+        changeLeedOpts( LEED_CHANGES, LEED_KEYS.PH, OPTS_HIDDEN );
+
+
 
         // DETAILS
         // 
         element = document.getElementById("td_det");
-        if ( goodValue(CURRENT_LEED.dt) ) element.innerHTML = CURRENT_LEED.dt;
+        if ( goodValue(CURRENT_LEED.dt) ) {
+            element.innerHTML = CURRENT_LEED.dt;
+        } else {
+            inlineEdit('row_det', createOptions);
+        }
         if (CURRENT_LEED.op[ LEED_KEYS.DT ] == OPTS_HIDDEN )
-            changeLeedOpts( LEED_CHANGES, LEED_KEYS.DT, OPTS_HIDDEN );
+        changeLeedOpts( LEED_CHANGES, LEED_KEYS.DT, OPTS_HIDDEN );
+
 
         // REQS
         // 
         element = document.getElementById("td_reqs");
-        if ( goodValue(CURRENT_LEED.rq) ) element.innerHTML = CURRENT_LEED.rq;
+        if ( goodValue(CURRENT_LEED.rq) ) {
+            element.innerHTML = CURRENT_LEED.rq;
+        } else {
+            inlineEdit('row_reqs', createOptions);
+        }
         if (CURRENT_LEED.op[ LEED_KEYS.RQ ] == OPTS_HIDDEN )
-            changeLeedOpts( LEED_CHANGES, LEED_KEYS.RQ, OPTS_HIDDEN );
+        changeLeedOpts( LEED_CHANGES, LEED_KEYS.RQ, OPTS_HIDDEN );
+
 
         // PRICE
-        // 
+        // must be set
         element = document.getElementById("td_pr");
         element.innerHTML = CURRENT_LEED.pr;
 
@@ -928,6 +942,7 @@ window.onload = (event) => {
             "st":"1706745335718",
             "et":"1706745345718",
             "lc":"3346 S Canfield Ave, Los Angeles CA 90034",
+            "op":"0000020022110 ",
             "pr":"15"
         };
 

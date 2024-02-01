@@ -932,19 +932,7 @@ window.onload = (event) => {
 
         // CURRENT LEED
         //
-        // const CURRENT_LEED = getCurrentLeed(); 
-        
-        const CURRENT_LEED = {
-            "id":"1234567890",
-            "cr":"dave.reyes",
-            "tn":"caricatures",
-            "ti":"This is a test leed",
-            "st":"1706745335718",
-            "et":"1706745345718",
-            "lc":"3346 S Canfield Ave, Los Angeles CA 90034",
-            "op":"0000020022110 ",
-            "pr":"15"
-        };
+        const CURRENT_LEED = getCurrentLeed(); 
 
         if ((! CURRENT_LEED) || (! CURRENT_LEED.cr)) {
             var msg = "Cannot initialize leed editor: no CURRENT_LEED";

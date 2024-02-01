@@ -905,8 +905,8 @@
                     var msg = "Cannot initialize leed editor: No current user";
                     console.error(msg);
                     errorModal(msg, true);
-                   
-                    CURRENT_USER = guestUser();
+                    return;
+                    // CURRENT_USER = guestUser();
                 }   
                 console.log("CURRENT USER")
                 console.log(CURRENT_USER);

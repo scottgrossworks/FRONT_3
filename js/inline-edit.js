@@ -483,26 +483,25 @@ function inlineDefaultFinish(rowName, options) {
             case "doneButton":
                 
                 let status = tableRow.getAttribute('data-status');
-
-
                 console.log("DONE BUTTON STATUS=" + status);                
-
-                // CALLBACK
-                // 
-                switch (status) {
-                
-                    case 'Showing':
-                        options.showCallback(rowName);
-                        break;
-
+                if (status) {
+                    // CALLBACK
+                    // 
+                    switch (status) {
                     
-                    case 'Hidden':
-                        options.hideCallback(rowName);
-                        break;
+                        case 'Showing':
+                            options.showCallback(rowName);
+                            break;
+
+                        
+                        case 'Hidden':
+                            options.hideCallback(rowName);
+                            break;
 
 
-                    default:
-                        break;
+                        default:
+                            break;
+                    }
                 }
 
 

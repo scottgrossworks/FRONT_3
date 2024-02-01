@@ -1,98 +1,104 @@
 <!--
-    --
-    -- CONFIRM PAGE TO DELETE USER / DISCONNECT SQUARE
-    -- explain what happens / consequences
-    -- show links to tos - privacy 
-    -->
+--
+-- DELETE USER CONFIRM
+--    
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	
+
+<head>
+	
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<TITLE>Delete Confirm</TITLE>
     
-    <!DOCTYPE html>
-    <html lang="en">
-        
-    
-    <head>
-    
-             <meta charset="UTF-8">
-             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         
-             <TITLE>Leedz Delete User</TITLE>
-         
-             <!-- Favicon -->
-             <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
-             <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
-     
-             <link rel="stylesheet" href="./css/globals.css" type="text/css" />
-             <link rel="stylesheet" href="css/modal.css" type="text/css" />
+        <link rel="stylesheet" href="css/globals.css" type="text/css" />
+		<link rel="stylesheet" href="css/styles_sm.css" type="text/css" />
+		<link rel="stylesheet" href="css/styles_med.css" type="text/css" />
+		<link rel="stylesheet" href="css/styles_lg.css" type="text/css" />
+
+		<link rel="stylesheet" href="css/about.css" tyep="text/css"/>
+
+   
+	 
+	 	<!-- Favicon -->
+		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+ 
+
+	</head>
 
 
-        </head>
-    
-    
-             
-        <center>
-    
-    
-        <body>
-        
-    
-    
-                
-            <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
-    
-                <div class="column _1">
-    
-                    <a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
-                    </div>
-    
-                    <div class="column" style="margin:auto 0;transform:translateY(6px)">
-                        <h1 class="user_title">Delete User Accounts</h1>
-                    </div>
-                    
-                    <div class="column _3" style="padding:6px;text-align:center">
-                    <img src="./img/logo_2.png" style="width:120px">
-                    </div>
-                
-                
-            
-                </div>
-                
-    
-    
-                <section>
-    
-                    <BR> Explain Delete User and Delete Square Account and consequences of each.
-                    <BR>
-                    <button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="history.back()">
-                        Delete</button>
-    
-                     </section>  
-            
-    
-    
-        <!-- 
-          -- ERROR MODAL 
-          -- 
-          -->
-        <div class="row modal" id="error_modal">
-          <center><img id="error_logo" src="img/logo_2.png"></center> 
-          <h1></h1>
-          <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
-        </div>
-      
-      
-      
-        
-      
-      </body>
-    <script type="module">
-    
-    
-        import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
-  
-        // 1/2024
-        // Square Revoke Authorization
-				// requires AUTH token -- must be done by AWS Lambda
-				// take user to confirmation page
+		 
 
-        
-    </script>
-    </html>
+
+	<body>
+	
+
+		<center>
+
+			
+        <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+
+				<div class="column _1">
+					<a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+				</div>
+
+				<div class="column" style="margin:auto 0;transform:translateY(6px)">
+					<h1 class="user_title">Confirm User Delete</h1>
+				</div>
+				
+				<div class="column _3" style="padding:6px;text-align:center">
+					<img src="./img/logo_2.png" style="width:120px">
+				</div>
+			
+		</div>
+	
+		</center>
+
+
+    <section style="width:90%;margin:0 auto">
+		
+		<table style="padding:2vw;width:100%">;
+
+
+			<TR><TD>
+				<a name="coming_soon"></a>
+				You have chosen to delete your <b style="color:green">Leedz</b> account.
+				<BR>
+				<BR>
+				This will also delete your Square payment authorization. To request that the admin delete your account manually, please 
+        <a href='mailto:theleedz.com@gmail.com' style="font-weight:600;text-decoration:none">email the Leedz</a> and we will respond immedialtely.  
+				<BR>
+				<BR>
+				<b style="color:green">The Leedz</b> is in beta, building a community of trusted vendors working together for their businesses.  
+				If you are looking to invest in the gig economy and join our growing team, please <a href="mailto:theleedz.com@gmail.com">contact us</a>.
+	
+				</div>
+		
+		
+				<BR>
+				<BR>
+			</TD></TR>
+
+		</table>
+
+    </section>  
+	<center><button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="history.back()">Back</button></center>
+
+	<BR>
+	<BR>
+    
+		<div id="copyright_footer">
+			<span>
+			  All content is &copy;2024 The Leedz, all rights reserved, and may not be reproduced for commercial purposes without written permission.
+			</span>
+		  </div>
+
+
+</body>
+
+</html>

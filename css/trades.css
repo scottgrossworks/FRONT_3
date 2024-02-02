@@ -180,7 +180,7 @@
     padding: 12px;
     border:none;
     
-    margin:0 auto;
+    margin:1vh auto;
 }
 
 
@@ -194,13 +194,13 @@
   margin: 0 auto;
 }
 
-.add_button #add_trade {
+button#add_trade.add_button {
   background-color: var(--LEEDZ_DARKGREEN);
   color:white;
 
 }
 
-.add_button #post_leed {
+button#post_leed.add_button {
   background-color: var(--LEED_GREEN);
   color:black;
 

@@ -4,7 +4,7 @@
  * LEED CREATE AND EDIT UTILS
  * 
  */
-import { OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./leed.js";
+import { createDBLeed, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./leed.js";
 import { saveLeedChanges, deleteCurrentLeed } from "./leed.js";
 import { printError, errorModal } from "./error.js";
 
@@ -386,14 +386,13 @@ export async function leed_edit_Post( LEED_CHANGES, CURRENT_USER ) {
         await createDBLeed( CURRENT_USER, LEED_CHANGES ).then((response) => from_DB = response );
 
     } catch (error) {
-        printError("createDBLeed", error.message)
-        errorModal("Error adding leed: " + error.message, false);
+        printError("Leed Editor", error.message)
+        errorModal("Error posting leed: " + error.message, false);
 
     } finally {
         
         normalCursor();
         clearFields();
-        modalClose(false);
     }
 
 
@@ -403,9 +402,9 @@ export async function leed_edit_Post( LEED_CHANGES, CURRENT_USER ) {
     * This is a catch-all for null responses and
     * HTTP 200 codes that contain error messages 
     */
-    if ((! from_DB) || from_DB.er) {
-        var msg = "Error adding leed: " + LEED_CHANGES.ti + " : " + from_DB.er;
-        printError("Add Leed", msg);
+    if ((! from_DB) || from_DB['er']) {
+        var msg = "Error posting leed: " + LEED_CHANGES.ti + " : " + from_DB['er'];
+        printError("Leed Editor", msg);
         errorModal(msg, false);
         return;
 

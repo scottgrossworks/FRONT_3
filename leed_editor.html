@@ -977,18 +977,19 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
 window.onload = (event) => {
 
     try {
+
+        //
         // CURRENT USER
         //
-        // FIXME FIXME FIXME
-        // const CURRENT_USER = getCurrentUser(true);
-        const CURRENT_USER = guestUser();
+        const CURRENT_USER = getCurrentUser(true);
+        // const CURRENT_USER = guestUser();
         
         if ((! CURRENT_USER ) || (! CURRENT_USER.un)) {
             var msg = "Cannot initialize leed editor: no CURRENT_USER";
             console.error(msg);
             throwError(msg);
         }
-        console.log("CURRENT USER")
+
         console.log(CURRENT_USER);
 
         // CURRENT LEED
@@ -996,7 +997,7 @@ window.onload = (event) => {
         const CURRENT_LEED = getCurrentLeed(); 
 
 
-        // FIXME FIXME FIXME
+        /**
         CURRENT_LEED.id = "0123456789";
         CURRENT_LEED.ti = "Title Caricatures Title";
         CURRENT_LEED.tn = "caricatures";
@@ -1006,10 +1007,9 @@ window.onload = (event) => {
         CURRENT_LEED.em = "scottgrossworks@gmail.com";
         CURRENT_LEED.lc = "3346 S Canfield Ave, 90034";
         CURRENT_LEED.zp = "90034";
-        CURRENT_LEED.op = "0000010012220";
+        CURRENT_LEED.op = "0000020022220";
         CURRENT_LEED.pr = "50";
-
-
+        */
 
 
         if ((! CURRENT_LEED) || (! CURRENT_LEED.cr)) {
@@ -1017,7 +1017,7 @@ window.onload = (event) => {
             console.error(msg);
             throwError(msg);
         }
-        console.log("CURRENT LEED")
+        
         console.log(CURRENT_LEED);
 
         // load the page with the current user and leed

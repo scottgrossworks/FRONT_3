@@ -649,35 +649,35 @@
     */
     async function postLeed() {
 
-        if (! EDITING) return;
+        try {
+            if (! EDITING) return;
 
-        endEditing();
+            if (! validateLeedChanges( LEED_CHANGES )) {
+                printError("postLeed", "Cannot post invalid leed changes");
+                return;
+            } 
 
-        if (! validateLeedChanges( LEED_CHANGES )) {
-            printError("postLeed", "Cannot post invalid leed changes");
-            return;
-        } 
+            waitCursor();
 
-        waitCursor();
+            showWaitingModal("Creating new Leed . . .");
 
-        showWaitingModal("Creating new Leed . . .");
+            let CURRENT_USER = getCurrentUser(false);
 
-        let CURRENT_USER = getCurrentUser(false);
+            if (! CURRENT_USER) {
+                var msg = "Cannot post leed, no current user found";
+                printError("Post Leed", msg);
+                errorModal(msg, true);
+                return;
+            }
 
-        if (! CURRENT_USER) {
-            var msg = "Cannot post leed, no current user found";
-            printError("Post Leed", msg);
-            errorModal(msg, true);
-            return;
-        }
-        
-        try { 
             await leed_edit_Post(LEED_CHANGES, CURRENT_USER);
-        
+
         } finally {
+            endEditing();
             normalCursor();
             modalClose(true);
         }
+    
     } 
     window.postLeed = postLeed;
 

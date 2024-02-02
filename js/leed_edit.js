@@ -398,6 +398,7 @@ export async function leed_edit_Post( LEED_CHANGES, CURRENT_USER ) {
         clearFields();
     }
 
+    console.log(from_DB);
 
     /**
     * SHOW THE ERROR ALERT
@@ -406,7 +407,11 @@ export async function leed_edit_Post( LEED_CHANGES, CURRENT_USER ) {
     * HTTP 200 codes that contain error messages 
     */
     if ((! from_DB) || from_DB['er']) {
-        var msg = "Error posting leed: " + LEED_CHANGES.ti + " : " + from_DB['er'];
+
+        var msg = "Error posting leed: " + LEED_CHANGES.ti;
+        if (from_DB['er']) {
+            msg += " : " + from_DB['er'];
+        }
         printError("Leed Editor", msg);
         errorModal(msg, false);
         return;

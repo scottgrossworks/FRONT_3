@@ -8,7 +8,7 @@ import { showLeedAction } from "./action.js";
 import { setCurrentLeed, loadLeedzFromDB, loadLeedzFromCache, clearCurrentLeed } from "./leed.js";
 import { getColorForTrade } from "./trades.js";
 import { getCurrentUser } from "./user.js";
-import { printError, errorModal, throwError } from "./error.js";
+import { printError, errorModal, throwError, modalClose } from "./error.js";
 
 
 
@@ -469,7 +469,8 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     newLeed.addEventListener("click", function( event ) {
         
         waitCursor();
-        
+        showWaitingModal("Loading Leed Details . . .");
+
         // turn OFF old leed
         //
         clearCurrentLeed();
@@ -491,6 +492,9 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
         } catch (error) {
             printError("showLeedAction", error);
             errorModal("Error showing Action Window: " + error.message, true);
+        
+        } finally {
+            modalClose(false);
         }
         
     });
@@ -503,4 +507,21 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
 }
 
 
+
+
+
+
+      //
+      // WAITING -- Loading the Leedz....
+      // MODAL
+      //
+      function showWaitingModal(msg) {
+
+        let wait_msg = document.getElementById("waiting_label");
+        wait_msg.innerText = msg;
+
+        let waiting = document.getElementById("waiting_modal");
+        waiting.style.display = "block";
+      }
+      window.showWaitingModal = showWaitingModal;
 

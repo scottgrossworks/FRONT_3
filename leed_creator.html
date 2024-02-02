@@ -652,7 +652,7 @@
         try {
             if (! EDITING) return;
 
-            if (! validateLeedChanges()) {
+            if (! validateLeedChanges( LEED_CHANGES )) {
                 printError("postLeed", "Cannot post invalid leed changes");
                 return;
             } 

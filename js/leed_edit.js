@@ -44,29 +44,6 @@ import { printError, errorModal } from "./error.js";
 
 
         /**
-         *
-         *
-         */
-         export function hideField( row_index ) {
-            // console.log("HIDING FIELD: " + row_index);
-            changeLeedOpts( LEED_CHANGES, row_index, OPTS_HIDDEN );
-         }
-         window.hideField = hideField;
-
-
-        /**
-         *
-         *
-         */
-         export function showField( row_index ) {
-            // console.log("SHOWING FIELD: " + row_index);
-            changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
-         }
-         window.showField = showField;
-
-
-
-        /**
         * Clear all fields and start over
         *
         */
@@ -177,7 +154,7 @@ import { printError, errorModal } from "./error.js";
     /**
     * MUST RETURN TRUE
     */
-    export function validateLeedChanges() {
+    export function validateLeedChanges( LEED_CHANGES ) {
         // console.log("POSTING NEW LEED:");
         // console.log(LEED_CHANGES);
 
@@ -284,7 +261,7 @@ import { printError, errorModal } from "./error.js";
     *
     *
     */
-    export async function leed_edit_Save() {
+    export async function leed_edit_Save( LEED_CHANGES ) {
 
         //   client <---> API Gateway <===> DB
         //
@@ -394,7 +371,7 @@ import { printError, errorModal } from "./error.js";
  * Post new leed to DB
  *
  */
-export async function leed_edit_Post( CURRENT_USER ) {
+export async function leed_edit_Post( CURRENT_USER, LEED_CHANGES ) {
 
    
     //   client <---> API Gateway <===> DB

@@ -524,6 +524,9 @@
         the_text.style.color =  "dodgerblue";
 
         tableRow.setAttribute('data-status', 'Showing');
+
+        // console.log("SHOWING FIELD: " + row_index);
+        changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
     }
     createOptions.showCallback = showCallback;
     cancelOptions.showCallback = showCallback;
@@ -549,10 +552,17 @@
         the_text.style.color = "var(--LEEDZ_DARKGREEN)";
 
         tableRow.setAttribute('data-status', 'Hidden');
+
+        // console.log("HIDING FIELD: " + row_index);
+        changeLeedOpts( LEED_CHANGES, row_index, OPTS_HIDDEN );
         
     }
     createOptions.hideCallback = hideCallback;
     cancelOptions.showCallback = hideCallback;
+
+
+
+
 
 
 
@@ -629,11 +639,11 @@
         //
         async function saveChanges() {
 
-            if (! EDITING) return;
+                        if (! EDITING) return;
 
             endEditing();
 
-            if (! validateLeedChanges()) {
+            if (! validateLeedChanges( LEED_CHANGES )) {
                 printError("postLeed", "Cannot post invalid leed changes");
                 return;
             } 
@@ -644,7 +654,7 @@
             showWaitingModal("Saving Leed changes . . .");
 
             try { 
-                await leed_edit_Save();
+                await leed_edit_Save( LEED_CHANGES );
             
             } finally {
                 normalCursor();
@@ -782,7 +792,7 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
         //
         element = document.getElementById("td_creator");
         element.innerHTML = '<B>' + CURRENT_USER.un + '</B>';
-
+        LEED_CHANGES.cr = CURRENT_USER.un;
 
         // TRADE
         // 11/1/23 -- cannot change trade once leed is created
@@ -796,10 +806,12 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
         // title of this leed
         element = document.getElementById("td_title");
         element.innerHTML = CURRENT_LEED.ti;
+        LEED_CHANGES.ti = CURRENT_LEED.ti;
 
 
         // START DATE
-        // 
+        //
+        LEED_CHANGES.st = CURRENT_LEED.st; 
         const startDate = new Date( parseInt(CURRENT_LEED.st) );
         const isoStart = startDate.toISOString();
 
@@ -822,6 +834,7 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
         // END DATE/TIME 
         // END TIME IS REQUIRED AND CANNOT BE HIDDEN
         //
+        LEED_CHANGES.et = CURRENT_LEED.et;
         const endDate = new Date( parseInt(CURRENT_LEED.et) );
         const isoEnd = endDate.toISOString();
 
@@ -847,19 +860,23 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
             printError("Current Leed","No leed options found - using DEFAULT");
             CURRENT_LEED['op'] = START_OPTS;
         }
+        LEED_CHANGES.op = CURRENT_LEED.op;
 
         // LOCATION
-        // 
+        //
+        LEED_CHANGES.lc = CURRENT_LEED.lc; 
         element = document.getElementById("td_loc");
         element.innerHTML = CURRENT_LEED.lc;
         if (CURRENT_LEED.op[ LEED_KEYS.LC ] == OPTS_HIDDEN )
             changeLeedOpts( LEED_CHANGES, LEED_KEYS.LC, OPTS_HIDDEN );
 
+        
         // EMAIL
-        // 
+        //
         element = document.getElementById("td_em");
         if ( goodValue(CURRENT_LEED.em) ) {
             element.innerHTML = CURRENT_LEED.em;
+            LEED_CHANGES.em = CURRENT_LEED.em;
         } else {
             inlineEdit('row_em', createOptions);
         }
@@ -872,6 +889,7 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
         element = document.getElementById("td_ph");
         if ( goodValue(CURRENT_LEED.ph) ) {
             element.innerHTML = CURRENT_LEED.ph;
+            LEED_CHANGES.ph = CURRENT_LEED.ph;
         } else {
             inlineEdit('row_ph', createOptions);
         }
@@ -885,6 +903,7 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
         element = document.getElementById("td_det");
         if ( goodValue(CURRENT_LEED.dt) ) {
             element.innerHTML = CURRENT_LEED.dt;
+            LEED_CHANGES.dt = CURRENT_LEED.dt;
         } else {
             inlineEdit('row_det', createOptions);
         }
@@ -897,6 +916,7 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
         element = document.getElementById("td_reqs");
         if ( goodValue(CURRENT_LEED.rq) ) {
             element.innerHTML = CURRENT_LEED.rq;
+            LEED_CHANGES.rq = CURRENT_LEED.rq;
         } else {
             inlineEdit('row_reqs', createOptions);
         }
@@ -908,6 +928,7 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
         // must be set
         element = document.getElementById("td_pr");
         element.innerHTML = CURRENT_LEED.pr;
+        LEED_CHANGES.pr = CURRENT_LEED.pr;
 
 
     } catch (error) {

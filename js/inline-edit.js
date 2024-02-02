@@ -179,6 +179,7 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
                 } else {
                     dateTime = getTodayUTC().getTime();
+                    dateTime += 43200000; // add 12 hours
                     formatted = formatDTforInput( dateTime );
                 }
 
@@ -186,6 +187,7 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             } else if (options.origin == "cancel") { // restart and clear the page
 
                 dateTime = getTodayUTC().getTime();
+                dateTime += 43200000; // add 12 hours
                 formatted = formatDTforInput( dateTime );
 
 

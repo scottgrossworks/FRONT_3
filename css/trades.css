@@ -165,15 +165,13 @@
    
 
 
-  #add_trade_button {
+  .add_button {
     display: block;
     
     height:fit-content;
     width:fit-content;
     
     border-radius: 20%;
-    background-color: var(--LEEDZ_DARKGREEN);
-    color:white;
 
     font-size:18px;
     font-weight: bolder;
@@ -186,12 +184,24 @@
 }
 
 
-#add_trade_button img {
+.add_button img {
   height:30px;
   width:30px;
 }
 
-#add_trade_button b {
+.add_button b {
   display: block;
   margin: 0 auto;
+}
+
+.add_button #add_trade {
+  background-color: var(--LEEDZ_DARKGREEN);
+  color:white;
+
+}
+
+.add_button #post_leed {
+  background-color: var(--LEED_GREEN);
+  color:black;
+
 }

@@ -203,11 +203,8 @@
               <table>
                 <TR><TD><center><B style="font-size:x-large">Welcome new user!</B></center>
                   <BR>
-                  <BR>
-                    To get started, first <a href="#" onclick="openUserEdit()">authorize Square</a> to send and receive payments.
-                  <BR>
+                    To get started, first <a href="#" onclick="openUserEdit()">authorize Square</a> to send and receive payments.  
                     Then <a href="#" onclick="openUserEdit()">subscribe to trades</a> and view the current leedz posted on the calendar.  
-                  <BR>
                     Choose a trade, <a href="./leedz_how-to.html">post a leed</a>, and start selling!
                   <BR>
                   <BR>
@@ -222,7 +219,6 @@
               </center> 
             </h1>
             <a class="info_modal_close" href="javascript:modalClose(true);" href="">X</a>
-            <BR>
         </div>
     
       
@@ -347,12 +343,12 @@
 
         
         <div class="row">
-          <button class="button welcomeButton" onclick="window.open('./leedz_how-to.html', '_top')">How It Works</button>
+          <button class="button welcomeButton" onclick="window.open('./leedz_how-to.html', '_self')">How It Works</button>
        
         </div>      
 
         <div class="row">
-          <button class="button welcomeButton" onclick="window.open('./leedz_contact.html', '_top')">Contact Us</button>
+          <button class="button welcomeButton" onclick="window.open('./leedz_contact.html', '_self')">Contact Us</button>
        
         </div>      
 
@@ -572,7 +568,7 @@
             // LOGIN / LOGOUT DROPDOWN
             var ddLogout = document.getElementById("dd_logout");
             ddLogout.style.opacity = 1;
-            ddLogout.setAttribute("onclick", "window.open('" + URL_LOGIN + "', '_top')");
+            ddLogout.setAttribute("onclick", "window.open('" + URL_LOGIN + "', '_self')");
             ddLogout.innerHTML = "Log In";
 
           } else {
@@ -581,7 +577,7 @@
             ddLogout.style.opacity = 0.5;
             // var the_url = "./index.html?" + USERNAME_URL_PARAM + "=guest.user";
             // FIXME FIXME FIXME
-            // ddLogout.setAttribute("onclick", "window.open('" + the_url + "', '_top')");
+            // ddLogout.setAttribute("onclick", "window.open('" + the_url + "', '_self')");
             ddLogout.innerHTML = "Log Out";
           }
 
@@ -1005,7 +1001,7 @@ function trimAndRemoveSpaces(inputString) {
 
         // STEP 2 -- send BUYER to Square hosted QuickCheckout page 
         // https://developer.squareup.com/reference/square/checkout-api/create-payment-link
-        window.open( current_leed.sq_url, "_top"); 
+        window.open( current_leed.sq_url, "_self"); 
 
 
       }
@@ -1667,7 +1663,7 @@ window.onload = async function() {
             // 
             // !! REDIRECT TO LOGIN URL
             //
-            window.open(URL_LOGIN, "_top");
+            window.open(URL_LOGIN, "_self");
             return;
         }
 

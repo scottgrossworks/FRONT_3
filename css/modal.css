@@ -66,9 +66,8 @@
 
 #newUser_modal {
   
-  margin: 8vh auto;
+  margin: 3vh auto;
   z-index: 700;
-
   
   border: 6px solid green;
   border-radius: 20px;

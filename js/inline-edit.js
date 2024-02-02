@@ -485,6 +485,8 @@ function inlineDefaultFinish(rowName, options) {
             case "doneButton":
                 
                 let status = tableRow.getAttribute('data-status');
+                let leedkey = parseInt( tableRow.getAttribute('data-leedkey') );
+
                 // console.log("DONE BUTTON STATUS=" + status);                
                 if (status) {
                     // CALLBACK
@@ -492,12 +494,12 @@ function inlineDefaultFinish(rowName, options) {
                     switch (status) {
                     
                         case 'Showing':
-                            options.showCallback(rowName);
+                            options.showCallback(rowName, leedkey);
                             break;
 
                         
                         case 'Hidden':
-                            options.hideCallback(rowName);
+                            options.hideCallback(rowName, leedkey);
                             break;
 
 

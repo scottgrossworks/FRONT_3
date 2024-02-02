@@ -130,7 +130,7 @@
                     CREATOR 
                     LOCKED
                 -->
-                <tr id="row_creator" data-status="Locked">
+                <tr id="row_creator" data-status="Locked" data-leedkey="2">
                                 
                     <TD  class="labelTD">Creator: </TD>
                     
@@ -148,7 +148,7 @@
                     TRADE NAME
                     LOCKED
                  -->
-                <tr id="row_trade" data-status="Locked">
+                <tr id="row_trade" data-status="Locked" data-leedkey="3">
                                 
                     <TD class="labelTD">Trade: </TD>
                     
@@ -166,7 +166,7 @@
                     TITLE
                     LOCKED
                  -->
-                <tr id="row_title" data-status="Locked">
+                <tr id="row_title" data-status="Locked" data-leedkey="1">
                             
                     <TD class="labelTD">Title: </TD>
                     
@@ -184,7 +184,7 @@
                     START TIME
                     LOCKED
                  -->
-                <tr id="row_start" data-status="Locked">
+                <tr id="row_start" data-status="Locked" data-leedkey="6">
                             
                     <TD class="labelTD">Start Time: </TD>
                     
@@ -202,7 +202,7 @@
                     END TIME
                     LOCKED 
                 -->
-                <tr id="row_end" data-status="Locked">
+                <tr id="row_end" data-status="Locked" data-leedkey="7">
                             
                     <TD class="labelTD">End Time: </TD>
                     
@@ -222,13 +222,13 @@
 
                     HIDE
                 -->
-                <tr id="row_loc" data-status="Hidden">
+                <tr id="row_loc" data-status="Hidden" data-leedkey="5">
                             
                     <TD id="label_loc" class="labelTD">Address: </TD>
                     
                     <td id="td_loc" data-inlineType="text" data-inlineName="loc" data-inlineRequired="1" data-inlinePlaceholder="(Required)"></td>
     
-                    <td data-inlineType="doneButton" class="buttonTD" data-index="5">
+                    <td data-inlineType="doneButton" class="buttonTD">
                         <input type="button" value="Hidden" onclick="comboButton(this, 'row_loc', 5, createOptions)"/>
                     </td>
 
@@ -245,13 +245,13 @@
                     
                     HIDE
                 -->
-                <tr id="row_em" data-status="Hidden">
+                <tr id="row_em" data-status="Hidden" data-leedkey="8">
                                 
                     <TD id='label_em' class="labelTD">Email: </TD>
                     
                     <td id="td_em" data-inlineType="email" data-inlineName="em" data-inlineRequired="0" data-inlinePlaceholder="(No Value)"></td>
     
-                    <td data-inlineType="doneButton" class="buttonTD" data-index="8">
+                    <td data-inlineType="doneButton" class="buttonTD">
                         <input type="button" value="Hidden"  onclick="comboButton(this, 'row_em', 8, createOptions)"/>
                     </td>
     
@@ -265,13 +265,13 @@
                     
                     HIDE
                 -->
-                <tr id="row_ph" data-status="Hidden">
+                <tr id="row_ph" data-status="Hidden" data-leedkey="9">
                                 
                     <TD id='label_ph' class="labelTD">Phone: </TD>
                     
                     <td id="td_ph" data-inlineType="tel" data-inlineName="ph" data-inlineRequired="0" data-inlinePlaceholder="(No Value)"></td>
     
-                    <td data-inlineType="doneButton" class="buttonTD" data-index="9">
+                    <td data-inlineType="doneButton" class="buttonTD">
                         <input type="button" value="Hidden"  onclick="comboButton(this, 'row_ph', 9, createOptions)"/>
                     </td>
     
@@ -286,13 +286,13 @@
                     
                     SHOW
                 -->
-                <tr id="row_det" data-status="Showing">
+                <tr id="row_det" data-status="Showing" data-leedkey="10">
                             
                     <TD id='label_det' class="labelTD">Details: </TD>
                     
                     <td id="td_det" data-inlineType="text" data-inlineName="det" data-inlineRequired="0" data-inlinePlaceholder="(No Value)"></td>
     
-                    <td data-inlineType="doneButton" class="buttonTD" data-index="10">
+                    <td data-inlineType="doneButton" class="buttonTD">
                         <input type="button" value="Showing"  onclick="comboButton(this, 'row_det', 10, createOptions)"/>
                     </td>
     
@@ -307,13 +307,13 @@
                 
                     SHOW
                 -->
-                <tr id="row_reqs" data-status="Showing">
+                <tr id="row_reqs" data-status="Showing" data-leedkey="11">
                             
                     <TD id='label_reqs' class="labelTD">Requires: </TD>
                     
                     <td id="td_reqs" data-inlineType="text" data-inlineName="reqs" data-inlineRequired="0" data-inlinePlaceholder="(No Value)"></td>
     
-                    <td data-inlineType="doneButton" class="buttonTD" data-index="11">
+                    <td data-inlineType="doneButton" class="buttonTD">
                         <input type="button" value="Showing"  onclick="comboButton(this, 'row_reqs', 11, createOptions)"/>
                     </td>
     
@@ -328,7 +328,7 @@
                 
                     LOCKED
                 -->
-                <tr id="row_pr" data-status="Locked">
+                <tr id="row_pr" data-status="Locked" data-leedkey="12">
                             
                     <TD class="labelTD">Price $: </TD>
                     
@@ -507,7 +507,7 @@
 
     // 
     //
-    function showCallback(rowName) {
+    function showCallback(rowName, leedkey) {
 
         let tableRow = document.getElementById(rowName);
             
@@ -526,7 +526,7 @@
         tableRow.setAttribute('data-status', 'Showing');
 
         // console.log("SHOWING FIELD: " + row_index);
-        changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
+        changeLeedOpts( LEED_CHANGES, leedkey, OPTS_SHOWING );
     }
     createOptions.showCallback = showCallback;
     cancelOptions.showCallback = showCallback;
@@ -535,7 +535,7 @@
 
     // 
     //
-    function hideCallback(rowName) {
+    function hideCallback(rowName, leedkey) {
 
         let tableRow = document.getElementById(rowName);
 
@@ -554,7 +554,7 @@
         tableRow.setAttribute('data-status', 'Hidden');
 
         // console.log("HIDING FIELD: " + row_index);
-        changeLeedOpts( LEED_CHANGES, row_index, OPTS_HIDDEN );
+        changeLeedOpts( LEED_CHANGES, leedkey, OPTS_HIDDEN );
         
     }
     createOptions.hideCallback = hideCallback;
@@ -862,13 +862,24 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
         }
         LEED_CHANGES.op = CURRENT_LEED.op;
 
+
+
         // LOCATION
         //
         LEED_CHANGES.lc = CURRENT_LEED.lc; 
         element = document.getElementById("td_loc");
-        element.innerHTML = CURRENT_LEED.lc;
-        if (CURRENT_LEED.op[ LEED_KEYS.LC ] == OPTS_HIDDEN )
-            changeLeedOpts( LEED_CHANGES, LEED_KEYS.LC, OPTS_HIDDEN );
+        if ( goodValue(CURRENT_LEED.lc) ) {
+            element.innerHTML = CURRENT_LEED.lc;
+            LEED_CHANGES.lc = CURRENT_LEED.lc;
+        } else {
+            inlineEdit('row_loc', createOptions);
+        }
+        if (CURRENT_LEED.op[ LEED_KEYS.LC ] == OPTS_HIDDEN ) {
+            hideCallback("row_loc", LEED_KEYS.LC);
+        } else {
+            showCallback("row_loc", LEED_KEYS.LC);
+        }
+
 
         
         // EMAIL
@@ -880,8 +891,12 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
         } else {
             inlineEdit('row_em', createOptions);
         }
-        if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN )
-            changeLeedOpts( LEED_CHANGES, LEED_KEYS.EM, OPTS_HIDDEN );
+        if (CURRENT_LEED.op[ LEED_KEYS.EM ] == OPTS_HIDDEN ) {
+            hideCallback("row_em", LEED_KEYS.EM);
+        } else {
+            showCallback("row_em", LEED_KEYS.EM);
+        }
+
 
 
         // PHONE
@@ -893,8 +908,11 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
         } else {
             inlineEdit('row_ph', createOptions);
         }
-        if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN )
-        changeLeedOpts( LEED_CHANGES, LEED_KEYS.PH, OPTS_HIDDEN );
+        if (CURRENT_LEED.op[ LEED_KEYS.PH ] == OPTS_HIDDEN ) {
+            hideCallback("row_ph", LEED_KEYS.PH);
+        } else {
+            showCallback("row_ph", LEED_KEYS.PH);
+        }
 
 
 
@@ -907,8 +925,13 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
         } else {
             inlineEdit('row_det', createOptions);
         }
-        if (CURRENT_LEED.op[ LEED_KEYS.DT ] == OPTS_HIDDEN )
-        changeLeedOpts( LEED_CHANGES, LEED_KEYS.DT, OPTS_HIDDEN );
+        if (CURRENT_LEED.op[ LEED_KEYS.DT ] == OPTS_HIDDEN ) {
+            hideCallback("row_det", LEED_KEYS.DT);
+        } else {
+            showCallback("row_det", LEED_KEYS.DT);
+        }
+
+
 
 
         // REQS
@@ -920,8 +943,11 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
         } else {
             inlineEdit('row_reqs', createOptions);
         }
-        if (CURRENT_LEED.op[ LEED_KEYS.RQ ] == OPTS_HIDDEN )
-        changeLeedOpts( LEED_CHANGES, LEED_KEYS.RQ, OPTS_HIDDEN );
+        if (CURRENT_LEED.op[ LEED_KEYS.RQ ] == OPTS_HIDDEN ) {
+            hideCallback("row_reqs", LEED_KEYS.RQ);
+        } else {
+            showCallback("row_reqs", LEED_KEYS.RQ);
+        }
 
 
         // PRICE
@@ -953,8 +979,10 @@ window.onload = (event) => {
     try {
         // CURRENT USER
         //
+        // FIXME FIXME FIXME
         // const CURRENT_USER = getCurrentUser(true);
         const CURRENT_USER = guestUser();
+        
         if ((! CURRENT_USER ) || (! CURRENT_USER.un)) {
             var msg = "Cannot initialize leed editor: no CURRENT_USER";
             console.error(msg);
@@ -966,6 +994,23 @@ window.onload = (event) => {
         // CURRENT LEED
         //
         const CURRENT_LEED = getCurrentLeed(); 
+
+
+        // FIXME FIXME FIXME
+        CURRENT_LEED.id = "0123456789";
+        CURRENT_LEED.ti = "Title Caricatures Title";
+        CURRENT_LEED.tn = "caricatures";
+        CURRENT_LEED.cr = "scottgross.works";
+        CURRENT_LEED.st = "1706875201000";
+        CURRENT_LEED.et = "1706875201000";
+        CURRENT_LEED.em = "scottgrossworks@gmail.com";
+        CURRENT_LEED.lc = "3346 S Canfield Ave, 90034";
+        CURRENT_LEED.zp = "90034";
+        CURRENT_LEED.op = "0000010012220";
+        CURRENT_LEED.pr = "50";
+
+
+
 
         if ((! CURRENT_LEED) || (! CURRENT_LEED.cr)) {
             var msg = "Cannot initialize leed editor: no CURRENT_LEED";

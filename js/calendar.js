@@ -466,7 +466,7 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     //
     // open ACTION WINDOW
     //
-    newLeed.addEventListener("click", function( event ) {
+    newLeed.addEventListener("click", async function( event ) {
         
         waitCursor();
         showWaitingModal("Loading Leed Details . . .");
@@ -487,7 +487,7 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
         
         // GOTO ACTION WINDOW WITH DETAILS INFO
         try {
-            showLeedAction( leed_fromDB, true );
+            await showLeedAction( leed_fromDB, true );
 
         } catch (error) {
             printError("showLeedAction", error);

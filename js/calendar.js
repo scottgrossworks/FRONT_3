@@ -212,8 +212,6 @@ export function loadDBLeedz() {
 
     waitCursor();
 
-    console.log("loadDBLeedz()="+new Date().getTime());
-
     // ASYNC CALL
     //
     // API request --> DB 
@@ -245,7 +243,6 @@ export function loadDBLeedz() {
  */
 function refreshCalendar( results ) {
 
-    normalCursor();
 
     try {
 
@@ -263,6 +260,9 @@ function refreshCalendar( results ) {
         printError("Refreshing Calendar", error);
         errorModal(error.message, false);
         return;
+    
+    } finally {
+        normalCursor();
     }
 }
 

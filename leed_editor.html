@@ -632,13 +632,23 @@
             if (! EDITING) return;
 
             endEditing();
+
+            if (! validateLeedChanges( LEED_CHANGES )) {
+                printError("postLeed", "Cannot post invalid leed changes");
+                return;
+            } 
+
+
             waitCursor();
-            
+
+            showWaitingModal("Saving Leed changes . . .");
+
             try { 
                 await leed_edit_Save(LEED_CHANGES);
             
             } finally {
                 normalCursor();
+                modalClose(false);
             }
         } 
         window.saveChanges = saveChanges;
@@ -652,6 +662,8 @@
             endEditing();
             waitCursor();
 
+            showWaitingModal("Deleting Leed . . .");
+
             try {
                 await leed_edit_Delete()
             
@@ -659,6 +671,7 @@
 
                 normalCursor();
                 clearFields();
+                modalClose(false);
             }
 
         }

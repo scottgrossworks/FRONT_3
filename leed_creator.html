@@ -127,7 +127,7 @@
                     CREATOR 
                     LOCKED
                 -->
-                <tr id="row_creator" data-status="Locked">
+                <tr id="row_creator" data-status="Locked" data-leedkey="2">
                                 
                     <TD  class="labelTD">Creator: </TD>
                     
@@ -145,7 +145,7 @@
                     TRADE NAME
                     LOCKED
                  -->
-                <tr id="row_trade" data-status="Locked">
+                 <tr id="row_trade" data-status="Locked" data-leedkey="3">
                                 
                     <TD class="labelTD">Trade: </TD>
                     
@@ -163,7 +163,7 @@
                     TITLE
                     LOCKED
                  -->
-                <tr id="row_title" data-status="Locked">
+                 <tr id="row_title" data-status="Locked" data-leedkey="1">
                             
                     <TD class="labelTD">Title: </TD>
                     
@@ -181,7 +181,7 @@
                     START TIME
                     LOCKED
                  -->
-                <tr id="row_start" data-status="Locked">
+                 <tr id="row_start" data-status="Locked" data-leedkey="6">
                             
                     <TD class="labelTD">Start Time: </TD>
                     
@@ -199,7 +199,7 @@
                     END TIME
                     LOCKED 
                 -->
-                <tr id="row_end" data-status="Locked">
+                <tr id="row_end" data-status="Locked" data-leedkey="7">
                             
                     <TD class="labelTD">End Time: </TD>
                     
@@ -219,7 +219,7 @@
 
                     HIDE
                 -->
-                <tr id="row_loc" data-status="Hidden">
+                <tr id="row_loc" data-status="Hidden" data-leedkey="5">
                             
                     <TD id="label_loc" class="labelTD">Address: </TD>
                     
@@ -242,7 +242,7 @@
                     
                     HIDE
                 -->
-                <tr id="row_em" data-status="Hidden">
+                <tr id="row_em" data-status="Hidden" data-leedkey="8">
                                 
                     <TD id='label_em' class="labelTD">Email: </TD>
                     
@@ -262,7 +262,7 @@
                     
                     HIDE
                 -->
-                <tr id="row_ph" data-status="Hidden">
+                <tr id="row_ph" data-status="Hidden" data-leedkey="9">
                                 
                     <TD id='label_ph' class="labelTD">Phone: </TD>
                     
@@ -283,7 +283,7 @@
                     
                     SHOW
                 -->
-                <tr id="row_det" data-status="Showing">
+                <tr id="row_det" data-status="Showing" data-leedkey="10">
                             
                     <TD id='label_det' class="labelTD">Details: </TD>
                     
@@ -304,7 +304,7 @@
                 
                     SHOW
                 -->
-                <tr id="row_reqs" data-status="Showing">
+                <tr id="row_reqs" data-status="Showing" data-leedkey="11">
                             
                     <TD id='label_reqs' class="labelTD">Requires: </TD>
                     
@@ -325,7 +325,7 @@
                 
                     LOCKED
                 -->
-                <tr id="row_pr" data-status="Locked">
+                <tr id="row_pr" data-status="Locked" data-leedkey="12">
                             
                     <TD class="labelTD">Price $: </TD>
                     
@@ -499,9 +499,10 @@
 
 
 
+
     // 
     //
-    function showCallback(rowName) {
+    function showCallback(rowName, leedkey) {
 
         let tableRow = document.getElementById(rowName);
             
@@ -518,16 +519,18 @@
         the_text.style.color =  "dodgerblue";
 
         tableRow.setAttribute('data-status', 'Showing');
+
+        // console.log("SHOWING FIELD: " + row_index);
+        changeLeedOpts( LEED_CHANGES, leedkey, OPTS_SHOWING );
     }
     createOptions.showCallback = showCallback;
-
-
+    cancelOptions.showCallback = showCallback;
 
 
 
     // 
     //
-    function hideCallback(rowName) {
+    function hideCallback(rowName, leedkey) {
 
         let tableRow = document.getElementById(rowName);
 
@@ -544,14 +547,16 @@
         the_text.style.color = "var(--LEEDZ_DARKGREEN)";
 
         tableRow.setAttribute('data-status', 'Hidden');
+
+        // console.log("HIDING FIELD: " + row_index);
+        changeLeedOpts( LEED_CHANGES, leedkey, OPTS_HIDDEN );
         
     }
     createOptions.hideCallback = hideCallback;
+    cancelOptions.showCallback = hideCallback;
 
 
-
-
-
+    
 
     /**
     * DROP DOWN MENU

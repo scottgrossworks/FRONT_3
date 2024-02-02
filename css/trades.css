@@ -165,22 +165,22 @@
    
 
 
-  .add_button {
-    display: block;
-    
-    height:80px;
-    width:80px;
-    
-    border-radius: 20%;
+.add_button {
+  display: block;
+  
+  height:80px;
+  width:80px;
+  
+  border-radius: 20%;
 
-    font-size:18px;
-    font-weight: bolder;
-    letter-spacing: 0.07rem;
+  font-size:18px;
+  font-weight: bolder;
+  letter-spacing: 0.07rem;
 
-    padding: 12px;
-    border:none;
-    
-    margin:0 auto;
+  padding: 12px;
+  border:none;
+  
+  margin:0 auto;
 }
 
 
@@ -193,6 +193,7 @@
   display: block;
   margin: 0 auto;
 }
+
 
 button#add_trade.add_button {
   background-color: var(--LEEDZ_DARKGREEN);

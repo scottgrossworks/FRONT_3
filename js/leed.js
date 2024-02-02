@@ -143,6 +143,9 @@ export async function loadLeedzFromDB( subs, firstDay, lastDay, zip_home, zip_ra
       return;
   }
 
+
+  console.log(results);
+
     // query returns empty result set
     if (results.length == 0) {
 

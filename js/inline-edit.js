@@ -483,7 +483,7 @@ function inlineDefaultFinish(rowName, options) {
             case "doneButton":
                 
                 let status = tableRow.getAttribute('data-status');
-                console.log("DONE BUTTON STATUS=" + status);                
+                // console.log("DONE BUTTON STATUS=" + status);                
                 if (status) {
                     // CALLBACK
                     // 

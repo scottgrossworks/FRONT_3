@@ -10,8 +10,11 @@ import { printError, errorModal } from "./error.js";
 
     export const URL_LEED_DELETED = "./leed_delete.html";
     
-    export const cancelOptions = {  "origin": "cancel",
+    export const cancelOptions = {   "origin": "cancel",
+                                    "showCallback": null,
+                                    "hideCallback": null,
                                     "finishCallback": null };
+
 
 
     export const createOptions = {   "origin": "create",
@@ -45,7 +48,7 @@ import { printError, errorModal } from "./error.js";
          *
          */
          export function hideField( row_index ) {
-           console.log("HIDING FIELD: " + row_index);
+            // console.log("HIDING FIELD: " + row_index);
             changeLeedOpts( LEED_CHANGES, row_index, OPTS_HIDDEN );
          }
          window.hideField = hideField;
@@ -56,7 +59,7 @@ import { printError, errorModal } from "./error.js";
          *
          */
          export function showField( row_index ) {
-            console.log("SHOWING FIELD: " + row_index);
+            // console.log("SHOWING FIELD: " + row_index);
             changeLeedOpts( LEED_CHANGES, row_index, OPTS_SHOWING );
          }
          window.showField = showField;
@@ -296,7 +299,7 @@ import { printError, errorModal } from "./error.js";
             *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
             *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
             */
-            var msg = 'Leed Updated: ' + from_DB.ti + '  ( $ ' + from_DB.pr +' )';
+            var msg = 'Saved: ' + from_DB.ti + '  ( $ ' + from_DB.pr +' )';
             console.log(msg);
             successAlert( msg );
         }
@@ -351,7 +354,7 @@ import { printError, errorModal } from "./error.js";
             *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
             */
             var theAlert = document.getElementById("alert_success");
-            var msg = 'Deleted leed:  ' + from_DB.ti + '  ($ ' + from_DB.pr +' )';
+            var msg = 'Deleted:  ' + from_DB.ti + '  ($ ' + from_DB.pr +' )';
             var newChild = document.createElement("span");
             newChild.textContent = msg;
 
@@ -416,7 +419,7 @@ export async function leed_edit_Post( LEED_CHANGES, CURRENT_USER ) {
         *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
         *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
         */
-        var msg = 'Leed created [ ' + from_DB.tn + ' ] ' + from_DB.ti;
+        var msg = 'Posted [ ' + from_DB.tn + ' ] ' + from_DB.ti;
         console.log(msg);
         console.log(from_DB)
         successAlert(msg);

@@ -198,15 +198,15 @@
 
 
 button#add_trade.add_button {
-  background-color: var(--LEEDZ_DARKGREEN);
-  color:white;
+  background-color: var(--LEEDZ_GREEN);
+  color:black;
 
 }
 
 button#post_leed.add_button {
   margin-top:5vh;
-  background-color: var(--LEEDZ_GREEN);
-  color:black;
+  background-color: var(--LEEDZ_DARKGREEN);
+  color:white;
 
 }
 

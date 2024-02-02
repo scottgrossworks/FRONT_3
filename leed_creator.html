@@ -372,7 +372,7 @@
     
     <div class="row">
             <!-- CANCEL -->
-            <button id="cancelButton" class="button cancel_button" value="cancel" style="opacity:1.0" onclick="startOver()">Start Over</button>
+            <button id="cancelButton" class="button cancel_button" value="cancel" style="opacity:0.5" onclick="startOver()">Start Over</button>
     </div>
     
     
@@ -404,7 +404,7 @@
         import { inlineEmailFinishCell, inlineURLFinishCell, inlineEdit } from "./js/inline-edit.js";
         
         import { cancelOptions, createOptions, validateLeedChanges} from "./js/leed_edit.js";
-        import { noValue, goodValue, successAlert,  leed_edit_Post } from "./js/leed_edit.js";
+        import { noValue, goodValue, leed_edit_Post } from "./js/leed_edit.js";
         import { waitCursor, normalCursor, showWaitingModal, clearFields  } from "./js/leed_edit.js";
         
 
@@ -605,6 +605,7 @@
 
         element = document.getElementById("cancelButton");
         element.style.backgroundColor = "dodgerblue";
+        element.style.opacity = 1;
 
         EDITING = true;
     }
@@ -615,12 +616,12 @@
     //
     function endEditing() {
         var element = document.getElementById("saveButton");
-        element.innerHTML = "Saved!";
+        element.innerHTML = "Success!";
         element.style.backgroundColor = "darkorange";
         element.style.opacity = 0.5;
 
         element = document.getElementById("cancelButton");
-        element.style.backgroundColor = "cornflowerblue";
+        element.style.opacity = 0.5;
 
         EDITING = false;
     }
@@ -642,7 +643,7 @@
            
     
 
-    
+
     /**
     *
     */

@@ -205,12 +205,10 @@ export function loadDBLeedz() {
 
     CURRENT_SELECTION = null;
 
-    const current_user = getCurrentUser(false);  
+    const current_user = getCurrentUser(true);  
     if (current_user.un == null)
         throwError("LoadDBLeedz", "Current user is not initialized");
 
-
-    waitCursor();
 
     // ASYNC CALL
     //

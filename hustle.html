@@ -707,12 +707,13 @@
             CURRENT_USER.zp = theZip.valueOf();
             
             // this is an async call
+            // will return immediately - data shows up later        
+            saveUserChanges( CURRENT_USER );
+            
+            // this is an async call
             // will return immediately - data shows up later
             loadDBLeedz();
 
-            // this is an async call
-            // will return immediately - data shows up later        
-            saveUserChanges( CURRENT_USER );
           
           
           } finally {

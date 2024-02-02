@@ -210,11 +210,27 @@ import { printError, errorModal } from "./error.js";
             return false;
         }
 
-        if (LEED_CHANGES.st > LEED_CHANGES.et) {
-            printError("Add Leed", "Start date must precede end date");
-            errorModal("Error Adding Leed: Start date must precede end date.", true);
+        // START / END DATES
+        //
+        // Calculate the difference between the two dates in milliseconds
+        const difference = LEED_CHANGES.et - LEED_CHANGES.st;
+
+        // Check if the difference is equal to or greater than an hour
+        if (difference < 3600000) {
+            printError("Add Leed", "Start date must precede end date by an hour or more");
+            errorModal("Error Adding Leed: Start date must precede end date by an hour or more.", true);
             return false;
         }
+
+        // Check if the difference is less than or equal to 12 hours
+        const MAX_HRS = 12;
+        if (difference > (MAX_HRS * 3600000)) {
+            var msg = "Leed cannot be exceed " + MAX_HRS + " hours";
+            printError("Add Leed", msg);
+            errorModal("Error Adding Leed: " + msg, true);
+            return false;
+        }
+
 
         // LOCATION
         if ( noValue(LEED_CHANGES.lc) ) {

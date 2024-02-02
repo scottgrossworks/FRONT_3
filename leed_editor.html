@@ -633,7 +633,7 @@
 
             endEditing();
 
-            if (! validateLeedChanges( LEED_CHANGES )) {
+            if (! validateLeedChanges()) {
                 printError("postLeed", "Cannot post invalid leed changes");
                 return;
             } 
@@ -644,7 +644,7 @@
             showWaitingModal("Saving Leed changes . . .");
 
             try { 
-                await leed_edit_Save(LEED_CHANGES);
+                await leed_edit_Save();
             
             } finally {
                 normalCursor();

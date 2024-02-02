@@ -177,7 +177,7 @@ import { printError, errorModal } from "./error.js";
     /**
     * MUST RETURN TRUE
     */
-    export function validateLeedChanges( LEED_CHANGES ) {
+    export function validateLeedChanges() {
         // console.log("POSTING NEW LEED:");
         // console.log(LEED_CHANGES);
 
@@ -284,7 +284,7 @@ import { printError, errorModal } from "./error.js";
     *
     *
     */
-    export async function leed_edit_Save( LEED_CHANGES ) {
+    export async function leed_edit_Save() {
 
         //   client <---> API Gateway <===> DB
         //
@@ -394,7 +394,7 @@ import { printError, errorModal } from "./error.js";
  * Post new leed to DB
  *
  */
-export async function leed_edit_Post( LEED_CHANGES, CURRENT_USER ) {
+export async function leed_edit_Post( CURRENT_USER ) {
 
    
     //   client <---> API Gateway <===> DB

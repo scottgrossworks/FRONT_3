@@ -652,7 +652,7 @@
         try {
             if (! EDITING) return;
 
-            if (! validateLeedChanges( LEED_CHANGES )) {
+            if (! validateLeedChanges()) {
                 printError("postLeed", "Cannot post invalid leed changes");
                 return;
             } 
@@ -670,7 +670,7 @@
                 return;
             }
 
-            await leed_edit_Post(LEED_CHANGES, CURRENT_USER);
+            await leed_edit_Post( CURRENT_USER );
 
         } finally {
             endEditing();

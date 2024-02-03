@@ -10,7 +10,8 @@ import { getColorForTrade } from "./trades.js";
 import { getCurrentUser } from "./user.js";
 import { printError, errorModal, throwError, modalClose } from "./error.js";
 
-
+import { waitCursor, normalCursor, showWaitingModal } from "./js/leed_edit.js";
+     
 
 
 let CURRENT_SELECTION = null;
@@ -209,6 +210,7 @@ export function loadDBLeedz() {
     if (current_user.un == null)
         throwError("LoadDBLeedz", "Current user is not initialized");
 
+    showWaitingModal("Loading the Leedz . . .");
 
     // ASYNC CALL
     //
@@ -261,29 +263,11 @@ function refreshCalendar( results ) {
     
     } finally {
         normalCursor();
+        modalClose(false);
     }
 }
 
 
-
-        
-
-
-        /**
-        * Change to a wait cursor
-        */
-        function waitCursor() {
-            document.body.style.cursor = 'wait';
-        }
-        window.waitCursor = waitCursor;
-
-        /**
-        * Change back to normal cursor
-        */
-        function normalCursor() {
-            document.body.style.cursor = 'default';
-        }
-        window.normalCursor = normalCursor;
 
 
 
@@ -506,22 +490,4 @@ function createCalendarLeed( eachDay, trade_color, leed_fromDB ) {
     // console.log("CREATING CALENDAR LEED=" + trade_name + "==" + leed_fromDB.st);
 }
 
-
-
-
-
-
-      //
-      // WAITING -- Loading the Leedz....
-      // MODAL
-      //
-      function showWaitingModal(msg) {
-
-        let wait_msg = document.getElementById("waiting_label");
-        wait_msg.innerText = msg;
-
-        let waiting = document.getElementById("waiting_modal");
-        waiting.style.display = "block";
-      }
-      window.showWaitingModal = showWaitingModal;
 

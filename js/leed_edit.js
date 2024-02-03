@@ -80,16 +80,21 @@ import { printError, errorModal } from "./error.js";
 
 
 
-        //
-        //
-        // 
-        //
-        export function showWaitingModal(msg) {
-            let wait_msg = document.getElementById("waiting_label");
-            wait_msg.innerText = msg;
-            let waiting = document.getElementById("waiting_modal");
-            waiting.style.display = "block";
-        }
+      //
+      // WAITING -- Loading the Leedz....
+      // MODAL
+      //
+      export function showWaitingModal(msg) {
+
+        console.log("Waiting . . . " + msg);
+
+        let wait_msg = document.getElementById("waiting_label");
+        wait_msg.innerText = msg;
+
+        let waiting = document.getElementById("waiting_modal");
+        waiting.style.display = "block";
+      }
+      window.showWaitingModal = showWaitingModal;
 
 
 

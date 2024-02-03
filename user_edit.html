@@ -324,6 +324,8 @@
 		import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 		import { turnTrade_On, turnTrade_Off, getAllTrades, createTradesAndColors } from "./js/trades.js";
 
+        import { normalCursor, waitCursor, showWaitingModal } from "./js/leed_edit.js";
+
 		import { MAX_USER_SUBS } from "./js/user.js";
 
 		const URL_USER_DELETED = "./user_deleted.html";
@@ -488,23 +490,6 @@ function square_backButton() {
 
 
 
-
-
-/**
- * Change to a wait cursor
- */
- function waitCursor() {
-    document.body.style.cursor = 'wait';
-}
-
-/**
- * Change back to normal cursor
- */
-function normalCursor() {
-    document.body.style.cursor = 'default';
-}
-
-
 /**
 * SHOW THE SUCCESS ALERT
 *
@@ -553,7 +538,7 @@ async function initSquareButton() {
 				sq_button.addEventListener("click", function( event ) {
 					// takes user --> Square to authorize account
 					waitCursor();
-					window.open( URL_DEL_USER, "_top");
+					window.open( URL_DEL_USER, "_self");
 			
 				});
   
@@ -573,7 +558,7 @@ async function initSquareButton() {
 					// takes user --> Square to authorize account
 					waitCursor();
 					showWaitingModal("Authorizing Square Account...");
-					window.open( CURRENT_USER.sq_st, "_top");
+					window.open( CURRENT_USER.sq_st, "_self");
 			
 				});
   
@@ -616,25 +601,6 @@ async function initSquareButton() {
 			normalCursor();
 		}
   }
-
-
-
-
-
-
-	//
-	// WAITING -- Authorizing Square Account ...
-	// MODAL
-	//
-	function showWaitingModal(msg) {
-
-		let wait_msg = document.getElementById("waiting_label");
-		wait_msg.innerText = msg;
-
-		let waiting = document.getElementById("waiting_modal");
-		waiting.style.display = "block";
-	}
-	window.showWaitingModal = showWaitingModal;
 
 
 
@@ -960,7 +926,7 @@ function initTradesTable( all_trades, tradeListener ) {
 		function deleteAccount() {
 
 			try {
-				window.open( "./user_delete_confirm.html" , "_top");
+				window.open( "./user_delete_confirm.html" , "_self");
 
 			} catch ( error ) {
 

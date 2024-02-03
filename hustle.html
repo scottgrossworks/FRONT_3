@@ -507,7 +507,9 @@
     import { getCurrentLeed, setCurrentLeed, clearCurrentLeed, buyCurrentLeed, deleteCurrentLeed, reportCurrentLeed  }  from "./js/leed.js";
     import { CURRENT_LEED_KEY } from "./js/leed.js";
     import { printError, throwError, errorModal, modalClose, errorModalClose } from "./js/error.js";
-    import { leed_edit_Delete } from "./js/leed_edit.js";
+ 
+    import { waitCursor, normalCursor, showWaitingModal, leed_edit_Delete  } from "./js/leed_edit.js";
+        
 
     import { USERNAME_URL_PARAM, DB_FAIL, DB_SUCCESS } from "./js/dbTools.js";
 
@@ -758,23 +760,6 @@ function trimAndRemoveSpaces(inputString) {
 }
 
 
-
-
-      //
-      // WAITING -- Loading the Leedz....
-      // MODAL
-      //
-      function showWaitingModal(msg) {
-
-        console.log("Waiting . . . " + msg);
-
-        let wait_msg = document.getElementById("waiting_label");
-        wait_msg.innerText = msg;
-
-        let waiting = document.getElementById("waiting_modal");
-        waiting.style.display = "block";
-      }
-      window.showWaitingModal = showWaitingModal;
 
 
 
@@ -1124,25 +1109,6 @@ function trimAndRemoveSpaces(inputString) {
 
       
         
-
-
-        /**
-        * Change to a wait cursor
-        */
-      function waitCursor() {
-          document.body.style.cursor = 'wait';
-      }
-      window.waitCursor = waitCursor;
-
-      /**
-      * Change back to normal cursor
-      */
-      function normalCursor() {
-          document.body.style.cursor = 'default';
-      }
-      window.normalCursor = normalCursor;
-
-
 
 
       /**

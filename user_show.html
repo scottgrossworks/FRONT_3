@@ -207,63 +207,16 @@
 			
 
 		import { blankUserObject, getCurrentUser } from "./js/user.js";
-		import { printError, throwError, errorModalClose } from "./js/error.js";
+		import { printError, throwError, modalClose, errorModalClose } from "./js/error.js";
 		import { getTradeInfo } from "./js/trades.js";
 		import { db_getUser, USERNAME_URL_PARAM } from "./js/dbTools.js";
-
+        import { normalCursor, waitCursor, showWaitingModal } from "./js/leed_edit.js";
 
         window.errorModalClose = errorModalClose;
-        
+        window.modalClose = modalClose;
 
         const urlParams = new URLSearchParams(window.location.search);
         const url_username = urlParams.get( USERNAME_URL_PARAM );
-
-
-
-
-            //
-            // open NEW USER welcome modal
-            // new account -- no subs / search
-            //
-            function showWaitingModal(msg) {
-                let wait_msg = document.getElementById("waiting_label");
-                wait_msg.innerText = msg;
-                let waiting = document.getElementById("waiting_modal");
-                waiting.style.display = "block";
-            }
-            window.showWaitingModal = showWaitingModal;
-
-
-
-
-
-
-            /**
-            * CLOSE (ANY) MODAL DIALOG
-            */
-            function modalClose() {
-
-                // close all modal dialogs
-                var modals = document.getElementsByClassName("info_modal");
-                for (var i = 0; i < modals.length; i++) {
-                modals[i].style.display = "none";
-                }
-
-                errorModalClose();
-
-            }
-            window.modalClose = modalClose;
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -293,7 +246,7 @@
         } finally {
             
             normalCursor();
-            modalClose();
+            modalClose(false);
         }
 
         if (success) {
@@ -492,24 +445,6 @@ function showUserBadges( element, badges ) {
    
 
         
-
-
-        /**
-        * Change to a wait cursor
-        */
-        function waitCursor() {
-            document.body.style.cursor = 'wait';
-        }
-        window.waitCursor = waitCursor;
-  
-        /**
-        * Change back to normal cursor
-        */
-        function normalCursor() {
-            document.body.style.cursor = 'default';
-        }
-        window.normalCursor = normalCursor;
-
 
 
 	

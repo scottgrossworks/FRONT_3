@@ -47,7 +47,7 @@
                 </div>
     
                 <div class="column" style="margin:auto 0;transform:translateY(6px)">
-                    <h1 class="user_title">Report</h1>
+                    <h1 class="user_title">Report Leed</h1>
                 </div>
                     
                 <div class="column _3" style="padding:6px;text-align:center">
@@ -73,7 +73,7 @@
     -- DB -- WAITING.... --DB
     -- 
     -->
-    <div class="modal info_modal" id="waiting_modal">
+    <div class="modal info_modal" id="waiting_modal" style="display:none">
 
         <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
             <table>
@@ -98,7 +98,7 @@
         -- ERROR MODAL 
         -- 
       -->
-      <div class="row modal" id="error_modal">
+      <div class="row modal" id="error_modal" style="display:none">
         <center><img id="error_logo" src="img/logo_2.png"></center> 
         <h1></h1>
         <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
@@ -114,7 +114,7 @@
         <BR>
         <div style="padding:4vw;text-align:left;margin:1vh 5vw;background-color:var(--LEEDZ_GRAY);border-radius:10px">
                 
-                    <center style="font-weight:600">Is something wrong with this leed?</center>
+                    <center style="color:green;font-size:large;font-weight:600">Is something wrong with this leed?</center>
                     
                     <div style="height:2vh;"></div>
                     
@@ -134,11 +134,11 @@
                     </div>
                     <BR>
                     <BR>
-                    <div style="font-size:smaller"><a href="./leedz_how-to.html" target="_new">More info on reporting Leedz and what to look for.</a></div>
+                    <div style="font-size:smaller"><a href="./leedz_how-to.html" target="_new">More info</a> on reporting Leedz and what to look for.</div>
 
         </div>
 
-            <table  cellspacing="5w" cellpadding="10px">
+            <table  cellspacing="6vw" cellpadding="5vw">
 
                 <tr id="row_creator">
                                 
@@ -240,7 +240,7 @@
                 <!-- LEED REQUIREMENTS -->
                 <tr id="row_reqs">
                             
-                    <TD class="labelTD">Requirements: </TD>
+                    <TD class="labelTD">Reqs: </TD>
                     
                     <td id="td_reqs"><b style="color:green">Buy To Show</b></TD>
                 </tr>
@@ -259,7 +259,8 @@
                 
             <tr><td colspan="3" style="padding-top:20px; font-size:smaller;color:darkgreen;border:none">
                 Thank you for making <b>the Leedz</b> an open, honest marketplace for quality information.  
-                <a href="./leedz_how-to.html" target="_new">More info on reporting Leedz and what to look for.</a>
+                <BR>
+                <a href="./leedz_how-to.html" target="_new">More info</a> on reporting Leedz and what to look for.
             </td></tr>
     
             </table>	
@@ -300,8 +301,8 @@
             import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } from "./js/dates.js";
             import { getShortDateString, DTfromPretty } from "./js/dates.js";
             
-            import { getCurrentUser } from "./js/user.js";
-            import { getCurrentLeed, reportCurrentLeed } from "./js/leed.js";            
+            import { getCurrentUser, guestUser } from "./js/user.js";
+            import { getCurrentLeed, reportCurrentLeed, blankLeedObject } from "./js/leed.js";            
             import { LEED_KEYS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
             
             import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
@@ -314,23 +315,44 @@
             const BUY_TO_SHOW = "<b>Buy To Show</b>";
             const NO_VAL = "<b style='color:coral;'>None Provided</b>";
 
-            const CURRENT_USER = getCurrentUser(true);
+            // FIXME FIXME FIXME
+            let CURRENT_USER = getCurrentUser(true);
+            if (! CURRENT_USER.un) {
+                CURRENT_USER = guestUser();
+            }
     
     
-            const CURRENT_LEED = getCurrentLeed(); 
-            if (CURRENT_LEED == null)
-                throwError("Cannot initialize leed editor: CURRENT_LEED is null");
-        
+            // FIXME
+            console.log(CURRENT_USER);
+  
+            let CURRENT_LEED = getCurrentLeed(); 
 
-    
+            console.log(CURRENT_LEED);
+
+            if ((! CURRENT_LEED) || (! CURRENT_LEED.id)) {
+                
+                CURRENT_LEED = blankLeedObject();
+                CURRENT_LEED.id = "0123456789";
+                CURRENT_LEED.ti = "Title Caricatures Title";
+                CURRENT_LEED.tn = "caricatures";
+                CURRENT_LEED.cr = "scottgross.works";
+                CURRENT_LEED.st = "1706875201000";
+                CURRENT_LEED.et = "1706875201000";
+                CURRENT_LEED.em = "scottgrossworks@gmail.com";
+                CURRENT_LEED.lc = "3346 S Canfield Ave, 90034";
+                CURRENT_LEED.zp = "90034";
+                CURRENT_LEED.op = "0000020022220";
+                CURRENT_LEED.pr = "50";
+
+                // FIXME FIXME FIXME
+                // throwError("Cannot initialize leed editor: CURRENT_LEED is null");
+            }
+
     
             
             var element = null;
             
 
-            // FIXME
-            // console.log("CURRENT LEED")
-            // console.log(CURRENT_LEED);
 
 
 
@@ -360,7 +382,7 @@
             // START DATE
             // REQUIRED
             // 
-            const startDate = new Date( CURRENT_LEED.st );
+            const startDate = new Date( parseInt(CURRENT_LEED.st) );
             const isoStart = startDate.toISOString();
     
             const start_weekday = getWeekday( getShortDateString( isoStart ) );
@@ -393,7 +415,7 @@
             element = document.getElementById("td_end");
             if (CURRENT_LEED.et) {
 
-                const endDate = new Date( CURRENT_LEED.et );
+                const endDate = new Date( parseInt(CURRENT_LEED.et) );
                 const isoEnd = endDate.toISOString();
             
                 const end_weekday = getWeekday( getShortDateString( isoEnd ) );
@@ -579,7 +601,7 @@
                 const CURRENT_USER = getCurrentUser(true);
         
                 let href="./index.html?" + USERNAME_URL_PARAM + "=" + CURRENT_USER.un;
-                window.open(href, "_top");
+                window.open(href, "_self");
     
                 clearCurrentLeed();
                 self.close();

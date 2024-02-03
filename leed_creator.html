@@ -365,7 +365,7 @@
     
     <div class="row">
             <!-- POST LEED -->
-            <button id="saveButton" class="button save_button" value="save" style="opacity:0.5" onclick="postLeed()">Post Leed</button>
+            <button id="saveButton" class="button save_button" value="save" onclick="postLeed()">Post Leed</button>
     </div>
             
     
@@ -606,7 +606,6 @@
         var element = document.getElementById("saveButton");
         element.innerHTML = "Post Leed";
         element.style.backgroundColor = "var(--LEEDZ_GREEN)";
-        element.style.opacity = 1;
 
         element = document.getElementById("cancelButton");
         element.style.backgroundColor = "dodgerblue";
@@ -621,9 +620,8 @@
     //
     function endEditing() {
         var element = document.getElementById("saveButton");
-        element.innerHTML = "Success!";
-        element.style.backgroundColor = "darkorange";
-        element.style.opacity = 0.5;
+        element.innerHTML = "Saving ...";
+        element.style.backgroundColor = "var(--LEEDZ_DARKGREEN)";
 
         element = document.getElementById("cancelButton");
         element.style.opacity = 0.5;
@@ -640,9 +638,10 @@
      */
     function startOver() {
 
-        endEditing();
+        modalClose(false);
         clearFields();
         normalCursor();
+        beginEditing();
     }
     window.startOver = startOver;
            
@@ -656,6 +655,7 @@
 
         try {
             if (! EDITING) return;
+            endEditing();
 
             if (! validateLeedChanges( LEED_CHANGES )) {
                 printError("postLeed", "Cannot post invalid leed changes");
@@ -678,9 +678,7 @@
             await leed_edit_Post( CURRENT_USER, LEED_CHANGES );
 
         } finally {
-            endEditing();
-            normalCursor();
-            modalClose(false);
+            startOver();
         }
     
     } 

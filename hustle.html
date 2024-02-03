@@ -1084,7 +1084,6 @@ function trimAndRemoveSpaces(inputString) {
             errorModal("Error deleting leed: " + error.message, false);
 
         } finally {
-            endEditing();
             normalCursor();
         }
 
@@ -1113,6 +1112,8 @@ function trimAndRemoveSpaces(inputString) {
             var newChild = document.createElement("span");
             newChild.textContent = msg;
 
+            console.log(msg);
+            
             if (theAlert.children.length <= 1) {
                 theAlert.appendChild(newChild);
             } else {

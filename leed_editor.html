@@ -429,7 +429,7 @@
         // THE LEED CHANGES
         // struct to hold form data
         //
-        const LEED_CHANGES = blankLeedObject();
+        let LEED_CHANGES = blankLeedObject();
         window.LEED_CHANGES = LEED_CHANGES;
     
     
@@ -780,7 +780,7 @@ function initEditor( CURRENT_USER, CURRENT_LEED ) {
 
         // LEED CHANGES
         //
-        const LEED_CHANGES = blankLeedObject();
+        LEED_CHANGES = blankLeedObject();
 
         // VERY IMPORTANT
         // we are editing the current leed so the ids must match
@@ -1013,19 +1013,19 @@ window.onload = (event) => {
 
 
         if ((! CURRENT_LEED) || (! CURRENT_LEED.cr)) {
-            var msg = "Cannot initialize leed editor: no CURRENT_LEED";
-            console.error(msg);
+            var msg = "No current leed found";
+            printError("Page Load", msg);
             throwError(msg);
         }
-        
+
         console.log(CURRENT_LEED);
 
         // load the page with the current user and leed
         initEditor( CURRENT_USER, CURRENT_LEED );
 
     } catch (error) {
-        const msg = "Cannot load leed editor: " + error.message;
-        printError("Load leed editor", msg);
+        var msg = "Cannot load leed editor: " + error.message;
+        printError("Leed editor", msg);
         errorModal(msg, true);
     }
 

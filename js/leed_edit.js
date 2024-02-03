@@ -348,7 +348,7 @@ import { printError, errorModal } from "./error.js";
             *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
             */
             var theAlert = document.getElementById("alert_success");
-            var msg = 'Deleted:  ' + from_DB.ti + '  ($ ' + from_DB.pr +' )';
+            var msg = 'Leed Deleted:  ' + from_DB.ti + '  ($ ' + from_DB.pr +' )';
             var newChild = document.createElement("span");
             newChild.textContent = msg;
 

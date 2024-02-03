@@ -323,6 +323,7 @@ text-align: center;
 
 /* The alert message box */
 .alert {
+  z-index:700;
   padding: 20px 0px;
 
   margin:2vh auto;

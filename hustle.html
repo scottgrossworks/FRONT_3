@@ -1058,8 +1058,6 @@ function trimAndRemoveSpaces(inputString) {
 
 
 
-
-      // FOOBAR
       // DELETE the leed showing in the action window
       // responsible for showing modal on error
       //
@@ -1076,9 +1074,8 @@ function trimAndRemoveSpaces(inputString) {
             const the_leed = await leed_edit_Delete();
             
             if (the_leed) {
-
-
-
+              loadDBLeedz();
+              showWelcomeColumn();
             }
 
           } finally {

@@ -1,16 +1,15 @@
-
 /**
  * 
  * LEED CREATE AND EDIT UTILS
  * 
  */
-import { createDBLeed, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./leed.js";
+import { createDBLeed } from "./leed.js";
 import { saveLeedChanges, deleteCurrentLeed } from "./leed.js";
 import { printError, errorModal } from "./error.js";
 
     export const URL_LEED_DELETED = "./leed_delete.html";
-    
-    export const cancelOptions = {   "origin": "cancel",
+
+    export const cancelOptions = {  "origin": "cancel",
                                     "showCallback": null,
                                     "hideCallback": null,
                                     "finishCallback": null };
@@ -18,10 +17,9 @@ import { printError, errorModal } from "./error.js";
 
 
     export const createOptions = {   "origin": "create",
-                                     "showCallback": null,
-                                     "hideCallback": null,
-                                     "finishCallback": null };
-
+                                    "showCallback": null,
+                                    "hideCallback": null,
+                                    "finishCallback": null };
 
 
 
@@ -94,7 +92,7 @@ import { printError, errorModal } from "./error.js";
         let waiting = document.getElementById("waiting_modal");
         waiting.style.display = "block";
       }
-      window.showWaitingModal = showWaitingModal;
+
 
 
 

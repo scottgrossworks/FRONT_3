@@ -210,7 +210,7 @@ export function loadDBLeedz() {
     if (current_user.un == null)
         throwError("LoadDBLeedz", "Current user is not initialized");
 
-    showWaitingModal("Loading the Leedz . . .");
+    showWaitingModal("Leedz Calendar loading");
 
     // ASYNC CALL
     //

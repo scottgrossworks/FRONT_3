@@ -481,7 +481,6 @@ export async function db_getUser( username ) {
 
     // SHOULD NOT BE NULL
     // or would have thrown error above
-    console.log("DB_GET_USER");
     console.log(json_obj);
 
     return json_obj;

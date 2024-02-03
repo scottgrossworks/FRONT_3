@@ -556,7 +556,7 @@
     cancelOptions.showCallback = hideCallback;
 
 
-    
+
 
     /**
     * DROP DOWN MENU
@@ -791,11 +791,11 @@
 
     const CURRENT_USER = getCurrentUser(true);
     if ((! CURRENT_USER ) || (! CURRENT_USER.un)) {
-    var msg = "Cannot initialize leed editor: No current user";
-    console.error(msg);
-    errorModal(msg, true);
-    return;
-    // CURRENT_USER = guestUser();
+        var msg = "Cannot initialize leed editor: No current user";
+        console.error(msg);
+        errorModal(msg, true);
+        return;
+        // CURRENT_USER = guestUser();
     }   
     console.log("CURRENT USER")
     console.log(CURRENT_USER);

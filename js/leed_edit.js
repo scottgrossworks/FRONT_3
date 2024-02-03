@@ -324,7 +324,7 @@ import { printError, errorModal } from "./error.js";
         } 
         
         console.log(from_DB)
-        if (! from_DB) return;
+        if (! from_DB) return null;
 
 
         /**
@@ -337,6 +337,7 @@ import { printError, errorModal } from "./error.js";
             var msg = "Error deleting leed: " + from_DB.er;
             printError("Delete Leed", msg);
             errorModal(msg, false);
+            return null;
 
         } else {
 
@@ -359,6 +360,7 @@ import { printError, errorModal } from "./error.js";
 
             theAlert.style.display = "block";
 
+            return from_DB;
         }   
 
     }
@@ -401,7 +403,7 @@ export async function leed_edit_Post( CURRENT_USER, LEED_CHANGES ) {
     */
     if ((! from_DB) || from_DB['er']) {
 
-        var msg = "Error posting leed: " + LEED_CHANGES.ti;
+        var msg = "Error posting leed: " + LEED_CHANGES['ti'];
         if (from_DB['er']) {
             msg += " : " + from_DB['er'];
         }

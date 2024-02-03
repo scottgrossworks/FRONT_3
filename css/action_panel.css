@@ -383,8 +383,10 @@ img#edit_icon {
 
 
 
-
-
+.del_button:active {
+    background-color:tomato;
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.5);    
+}
 
 
 
@@ -396,8 +398,7 @@ img#edit_icon {
     cursor: pointer;
     position:relative;
 
-    background-color: #0071CE;
-    border: 1px solid #0071CE;
+    background-color: dodgerblue;
     color: white;
    
     
@@ -422,6 +423,13 @@ img#edit_icon {
     box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);    
 }
 
+
+
+
+.report_button:active {
+    background-color:royalblue;
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.5);    
+}
 
 
 

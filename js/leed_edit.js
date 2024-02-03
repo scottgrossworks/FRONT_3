@@ -419,7 +419,7 @@ export async function leed_edit_Post( CURRENT_USER, LEED_CHANGES ) {
         *  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
         *            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
         */
-        var msg = 'Posted [ ' + from_DB.tn + ' ] ' + from_DB.ti;
+        var msg = 'Leed Posted [ ' + from_DB.tn + ' ] ' + from_DB.ti;
         console.log(msg);
         console.log(from_DB)
         successAlert(msg);

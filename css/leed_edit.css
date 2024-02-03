@@ -367,6 +367,9 @@ table tbody td {
 }
 
 
+.del_button:active {
+    background-color:tomato;
+}
 
 
 .back_button {

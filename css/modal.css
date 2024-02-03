@@ -156,6 +156,11 @@
   font-size:large;
 }
  
+#alert_success span {
+  margin: 0 20px;
+}
+
+
 @media screen and (max-width: 799px) {
 
   .info_modal {
@@ -192,6 +197,7 @@
 
   #alert_success {
     font-size:medium;
+    text-align: ;
   }
 }
 
@@ -317,14 +323,14 @@ text-align: center;
 
 /* The alert message box */
 .alert {
-  padding: 20px;
+  padding: 20px 0px;
 
-  margin:2vh 0px;
+  margin:2vh auto;
 
   background-color: var(--LEEDZ_DARKGREEN);
   color: white;
 
-  width:99%;
+  width:100%;
 
   font-family: var(--FONT_1);
 

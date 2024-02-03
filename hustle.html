@@ -107,7 +107,7 @@
 
     <!-- SUCCESS ALERT -->
     <div id="alert_success" class="alert" style="display:none">
-      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      <span class="closebtn" onclick="this.parentElement.style.display='none'">&times;</span>
     </div>
 
 
@@ -1059,7 +1059,7 @@ function trimAndRemoveSpaces(inputString) {
 
 
 
-      //
+      // FOOBAR
       // DELETE the leed showing in the action window
       // responsible for showing modal on error
       //
@@ -1073,8 +1073,14 @@ function trimAndRemoveSpaces(inputString) {
           waitCursor();
 
           try {
-            await leed_edit_Delete();
-          
+            const the_leed = await leed_edit_Delete();
+            
+            if (the_leed) {
+
+
+
+            }
+
           } finally {
             normalCursor();
           }

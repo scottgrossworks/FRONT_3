@@ -515,11 +515,10 @@
       
     const URL_LOGIN = "https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com/hustle.html";
 
+    const URL_LEED_REPORT = "./leed_report.html";
     const URL_LEED_BOUGHT = "./leed_bought.html";
     const URL_LEED_CREATE = "./leed_creator.html";
-    const URL_LEED_DELETED = "./leed_deleted.html";
     const URL_LEED_EDIT = "./leed_editor.html";
-    const URL_LEED_REPORTED = "./leed_reported.html";
           
     const URL_USER_EDIT = "./user_editor.html";
 
@@ -898,7 +897,7 @@ function trimAndRemoveSpaces(inputString) {
 
         // GOTO report leed confirmation
         // with link to get back to main page
-        window.open( URL_REPORT_LEED , "_self");
+        window.open( URL_LEED_REPORT , "_self");
 
 
       }
@@ -1113,7 +1112,7 @@ function trimAndRemoveSpaces(inputString) {
             newChild.textContent = msg;
 
             console.log(msg);
-            
+
             if (theAlert.children.length <= 1) {
                 theAlert.appendChild(newChild);
             } else {
@@ -1127,10 +1126,6 @@ function trimAndRemoveSpaces(inputString) {
       window.deleteLeed = deleteLeed;
 
 
-
-      
-      const URL_BUY_LEED = "./leed_buy.html";
-      const URL_REPORT_LEED = "./leed_report.html";
 
         
       const col = document.getElementById("trades_column");      

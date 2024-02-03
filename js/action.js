@@ -6,7 +6,7 @@ import { db_getDeetz, USERNAME_URL_PARAM } from "./dbTools.js";
 import { errorModal, printError, throwError } from "./error.js";
 import { getCurrentUser } from "./user.js";
 import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed, getCurrentLeed } from "./leed.js";
-import { normalCursor } from "./js/leed_edit.js";
+import { normalCursor } from "./leed_edit.js";
 
 const NO_VAL = "<i style='font-weight:600;color:coral'>None Provided</i>";
 const BUY_TO_SHOW = "Buy to show";

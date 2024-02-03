@@ -10,7 +10,7 @@ import { getColorForTrade } from "./trades.js";
 import { getCurrentUser } from "./user.js";
 import { printError, errorModal, throwError, modalClose } from "./error.js";
 
-import { waitCursor, normalCursor, showWaitingModal } from "./js/leed_edit.js";
+import { waitCursor, normalCursor, showWaitingModal } from "./leed_edit.js";
      
 
 

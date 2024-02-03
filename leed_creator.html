@@ -675,10 +675,18 @@
                 return;
             }
 
-            await leed_edit_Post( CURRENT_USER, LEED_CHANGES );
+            const results = await leed_edit_Post( CURRENT_USER, LEED_CHANGES );
 
+
+        } catch (error) {
+            printError("Post Leed", error.message);
+            errorModal("Post Leed", error.message);
+            clearFields();
+            
         } finally {
-            startOver();
+            modalClose(false);
+            normalCursor();
+            beginEditing();
         }
     
     } 

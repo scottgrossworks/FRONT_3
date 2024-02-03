@@ -409,7 +409,7 @@ export async function leed_edit_Post( CURRENT_USER, LEED_CHANGES ) {
         }
         printError("Leed Editor", msg);
         errorModal(msg, false);
-        return;
+        return null;
 
 
     } else {
@@ -423,6 +423,8 @@ export async function leed_edit_Post( CURRENT_USER, LEED_CHANGES ) {
         console.log(msg);
         console.log(from_DB)
         successAlert(msg);
+
+        return from_DB;
     }
 
 }

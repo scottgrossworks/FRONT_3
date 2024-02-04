@@ -520,6 +520,7 @@
       
     const URL_LOGIN = "https://theleedz.auth.us-west-2.amazoncognito.com/login?client_id=12tgt6nf496i446dq70gaoohrj&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Ftheleedz.com/hustle.html";
 
+    const URL_STATS_PAGE = "http://theleedz.com";
     const URL_LEED_REPORT = "./leed_report.html";
     const URL_LEED_BOUGHT = "./leed_bought.html";
     const URL_LEED_CREATE = "./leed_creator.html";
@@ -578,11 +579,12 @@
 
           } else {
             
+            // LOGOUT
+            // send them back to stats page
+            //
             var ddLogout = document.getElementById("dd_logout");
             ddLogout.style.opacity = 0.5;
-            // var the_url = "./index.html?" + USERNAME_URL_PARAM + "=guest.user";
-            // FIXME FIXME FIXME
-            // ddLogout.setAttribute("onclick", "window.open('" + the_url + "', '_self')");
+            ddLogout.setAttribute("onclick", "window.open('" + URL_STATS_PAGE + "', '_self')");
             ddLogout.innerHTML = "Log Out";
           }
 

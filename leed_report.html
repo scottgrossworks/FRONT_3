@@ -316,14 +316,13 @@
             const BUY_TO_SHOW = "<b>Buy To Show</b>";
             const NO_VAL = "<b style='color:coral;'>None Provided</b>";
 
-            // FIXME FIXME FIXME
+
             let CURRENT_USER = getCurrentUser(true);
+            /**
             if (! CURRENT_USER.un) {
                 CURRENT_USER = guestUser();
             }
-    
-    
-            // FIXME
+            */
             console.log(CURRENT_USER);
   
             let CURRENT_LEED = getCurrentLeed(); 
@@ -331,7 +330,8 @@
             console.log(CURRENT_LEED);
 
             if ((! CURRENT_LEED) || (! CURRENT_LEED.id)) {
-                
+
+                /**
                 CURRENT_LEED = blankLeedObject();
                 CURRENT_LEED.id = "0123456789";
                 CURRENT_LEED.ti = "Title Caricatures Title";
@@ -344,9 +344,9 @@
                 CURRENT_LEED.zp = "90034";
                 CURRENT_LEED.op = "0000020022220";
                 CURRENT_LEED.pr = "50";
-
-                // FIXME FIXME FIXME
-                // throwError("Cannot initialize leed editor: CURRENT_LEED is null");
+                */
+                
+                throwError("Cannot initialize leed editor: CURRENT_LEED is null");
             }
 
     

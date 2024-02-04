@@ -400,6 +400,10 @@ a#date_bought_3 {
 
 
 
+#contact_item #contactButton:active {
+  background-color:tomato;
+  box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.5);    
+}
 
  
 
@@ -431,7 +435,10 @@ a#date_bought_3 {
 
 
 
-
+.stats_button:active {
+  background-color:royalblue;
+  box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.5);    
+}
 
 
 

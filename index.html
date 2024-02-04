@@ -382,6 +382,7 @@
     import { db_getStats } from "./js/dbTools.js";
     import { printError, errorModal, throwError } from "./js/error.js";
     import { prettyFormatDT, formatDTforInput } from "./js/dates.js";
+    import { waitCursor, normalCursor } from "./leed_edit.js";
 
     const MAX_TRADES = 6;
 
@@ -675,23 +676,6 @@ function addToTradeDiv( trade_name ) {
 
     theList.appendChild( newNode );
 }
-
-
-
-/**
- * Change to a wait cursor
- */
- function waitCursor() {
-    document.body.style.cursor = 'wait';
-}
-
-/**
- * Change back to normal cursor
- */
-function normalCursor() {
-    document.body.style.cursor = 'default';
-}
-
 
 
 

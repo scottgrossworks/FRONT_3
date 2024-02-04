@@ -25,9 +25,6 @@
 
     padding-top:20px;
     padding-bottom:20px;
-    padding-left:6px;
-    padding-right:6px;
-
 
     margin-left:0;
     margin-right:auto;
@@ -103,11 +100,11 @@
     flex-direction:column;
 
 
-    width:94%;
+    width:96%;
     height:fit-content;
 
     padding: 0;
-    margin: 0 0 0 6px;
+    margin: 0 auto;
 
     background-color:var(--LEEDZ_GRAY);
  

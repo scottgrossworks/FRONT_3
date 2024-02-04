@@ -12,7 +12,6 @@
  .modal {
   left: 14%;
   position: fixed;
-
   height: 70%;
 }
 
@@ -197,7 +196,7 @@
 
   #alert_success {
     font-size:medium;
-    text-align: ;
+    text-align:center;
   }
 }
 

@@ -810,8 +810,6 @@ export async function reportCurrentLeed() {
   if (! CURRENT_LEED)
     throwError("reportCurrentLeed", "CURRENT_LEED is null");
  
-    console.log("----------> ******** REPORTING CURRENT LEED TO SERVER ******* ");
-
     // API request --> DB 
     // report leed to DB
     //
@@ -844,7 +842,7 @@ export async function reportCurrentLeed() {
     }
 
 
-    console.log("BACK FROM DB REPORT RESULTS=" + results);
+    console.log( "LEED REPORTED: " + results);
     return results;
 }
 

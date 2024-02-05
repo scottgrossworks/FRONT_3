@@ -230,8 +230,8 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             //
         case "email":
 
-            var the_email = inlineEditRowContents[rowName][1]; 
-            //extractEmailAddress( inlineEditRowContents[rowName][i] );
+            // var the_email = inlineEditRowContents[rowName][1]; 
+            var the_email = extractEmailAddress( inlineEditRowContents[rowName][i] );
 
             cellContent += `<input type='email' value='${the_email}' form='${rowName}Form'`;
             for (key in cell.dataset) {
@@ -308,13 +308,18 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
 
 
 /**
- * mailto:scottgrossworks@gmailcom">scottgrossworks@gmailcom</a>  ---> scottgrossworks@gmail.com
+ * If there is a surrounding email tag, remove it
+ * <mailto:scottgrossworks@gmailcom">scottgrossworks@gmailcom</a>  ---> scottgrossworks@gmail.com
  */
 function extractEmailAddress( str ) {
 
     const firstIndex = str.indexOf('>');
     const secondIndex = str.indexOf('<', firstIndex);
   
+    if ((firstIndex == -1) || (secondIndex == -1)) {
+        return str;
+    }
+
     // Extract the substring between the '>' and '<' characters
     const substring = str.substring(firstIndex + 1, secondIndex);
   

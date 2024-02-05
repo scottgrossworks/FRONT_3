@@ -99,24 +99,37 @@ class DecimalJsonEncoder(json.encoder.JSONEncoder):
         return super().default(o)
 
 
-
 #
 # ENCRYPTION HANDLING
 #
+#
 
 def encryptToken( key_txt, token_txt):
-    fernet_key = generateFernetKey(key_txt)
-    f = Fernet(fernet_key)
-    encrypted_token = f.encrypt(token_txt.encode())
-    return encrypted_token
+    try:
+        fernet_key = generateFernetKey(key_txt)
+        f = Fernet(fernet_key)
+        encrypted_token = f.encrypt(token_txt.encode('ASCII'))
+        return encrypted_token
+    
+    except Exception as err:
+        logger.error("Error in encryptToken: " + str(err))
+        raise err
+
 
 
 
 def decryptToken( key_txt , encrypted_token):
-    fernet_key = generateFernetKey( key_txt )
-    f = Fernet(fernet_key)
-    decrypted_token = f.decrypt(encrypted_token).decode()
-    return decrypted_token
+    try:
+        fernet_key = generateFernetKey( key_txt )
+        f = Fernet(fernet_key)
+        decrypted_token = f.decrypt( encrypted_token.value )
+        return decrypted_token.decode('ASCII')
+    
+    except Exception as err:
+        logger.error("Error in decryptToken: " + str(err))
+        raise err
+
+
 
 
 # take a string as input and converts it into a string of 32 bytes suitable for cryptographic use

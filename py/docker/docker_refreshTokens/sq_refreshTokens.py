@@ -15,7 +15,7 @@ import boto3
 from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 import logging
@@ -35,18 +35,33 @@ logger.setLevel(logging.INFO)
 #
 
 def encryptToken( key_txt, token_txt):
-    fernet_key = generateFernetKey(key_txt)
-    f = Fernet(fernet_key)
-    encrypted_token = f.encrypt(token_txt.encode())
-    return encrypted_token
+    try:
+        fernet_key = generateFernetKey(key_txt)
+        f = Fernet(fernet_key)
+        encrypted_token = f.encrypt(token_txt.encode('ASCII'))
+        return encrypted_token
+    
+    except Exception as err:
+        logger.error("Error in encryptToken: " + str(err))
+        raise err
+
 
 
 
 def decryptToken( key_txt , encrypted_token):
-    fernet_key = generateFernetKey( key_txt )
-    f = Fernet(fernet_key)
-    decrypted_token = f.decrypt(encrypted_token).decode()
-    return decrypted_token
+    try:
+        fernet_key = generateFernetKey( key_txt )
+        f = Fernet(fernet_key)
+        decrypted_token = f.decrypt( encrypted_token.value )
+        return decrypted_token.decode('ASCII')
+    
+    except Exception as err:
+        logger.error("Error in decryptToken: " + str(err))
+        raise err
+
+
+
+
 
 
 # take a string as input and converts it into a string of 32 bytes suitable for cryptographic use
@@ -140,8 +155,20 @@ def handle_error(error):
     the_json = json.dumps( ret_obj )
     return createHttpResponse( 200, the_json )
 
-    
-    
+
+
+
+# input -- string formatted in the ISO date format --2024-02-27 03:33:41.187138
+# returns -- int the number of milliseconds since the epoch -- 1707106525200
+#
+def future_ex_date():
+    epoch = datetime.utcfromtimestamp(0)
+    current_datetime = datetime.now()
+    duration = timedelta(days=22)
+    new_datetime = current_datetime + duration
+    milliseconds = int((new_datetime - epoch).total_seconds() * 1000)
+    return milliseconds
+
     
     
 #
@@ -153,19 +180,19 @@ def handle_error(error):
 #
 def get_expiringRecords(table) :
   
-    ex_date = datetime.strftime(datetime.now() + timedelta(22), '%Y-%m-%d')
-    # logger.info('Renew all the access token that is earlier than ' + ex_date)
+    # test FUTURE date is 22 days ahead
+    ex_date = future_ex_date()
     
     try:
         
         fromDB = table.query(
             KeyConditionExpression=Key('pk').eq('user'),
             FilterExpression = 'sq_ex <= :ex_date',
-            ExpressionAttributeValues = { ':ex_date': { 'S': ex_date } }
+            ExpressionAttributeValues = { ':ex_date': ex_date }
         )
 
         if ((fromDB is None) or ('Items' not in fromDB)):
-            err_msg = "Error finding expiring user records for date: " + ex_date
+            err_msg = "Error finding expiring user records for date: " + str(ex_date)
             logger.error(err_msg)
             raise ClientError( err_msg )
             
@@ -190,39 +217,64 @@ def refresh_userToken(square, client_id, client_secret, the_user ) :
         encrypted_refresh_token = the_user['sq_rt']
         decrypted_refresh_token = decryptToken( the_user['sk'], encrypted_refresh_token ) 
         
-        
         request_body = {}
         request_body['client_id'] = client_id
         request_body['client_secret'] = client_secret
         request_body['grant_type'] = 'refresh_token'
-        request_body['refresh_token'] = decrypted_refresh_token
+        request_body['refresh_token'] = str(decrypted_refresh_token)
         request_body['redirect_uri'] = "http://theleedz.com/"
 
         response = square.obtain_token( request_body )
-    
         if (not response):
             msg = "No response from Square obtain_token API"
             logger.error(msg)
             raise Exception(msg)
-        
-        # RESPONSE will contain new refresh and expires
-        if (('access_token' not in response) or
-            ('expires_at' not in response) or
-            ('refresh_token' not in response)) :
-            msg = "Tokens not found in Square obtain_token API response"
+
+
+        if (response.is_error()):
+            msg = "Error returned from Square obtain token API: " + response.errors
             logger.error(msg)
             raise Exception(msg)
         
-        ret_obj = {}
-        ret_obj['sq_at'] = response[ 'access_token' ]
-        ret_obj['sq_ex'] = response[ 'expries_at' ]
-        ret_obj['sq_rt'] = response[ 'refresh_token' ]
+
+        # RESPONSE will contain new refresh and expires
+        if (('access_token' not in response.body) or
+            ('expires_at' not in response.body) or
+            ('refresh_token' not in response.body)) :
+            msg = "Tokens not found in Square obtain_token API response"
+            logger.error(msg)
+            raise Exception(msg)
+
         
-        return ret_obj
-   
+        ret_obj = {}
+        ret_obj['sq_at'] = response.body[ 'access_token' ]
+        ret_obj['sq_rt'] = response.body[ 'refresh_token' ]
+        ret_obj['sq_ex'] = 0
+        # ret_obj['sq_ex'] = response[ 'expries_at' ]
+
+        
+        try :
+            if response.body['expires_at']:
+                # convert ISO format String to milliseconds
+                # 2024-02-10T08:32:54Z --> 171434234934794 or whatever
+                dt = datetime.fromisoformat(response.body['expires_at'])
+                epoch = datetime.utcfromtimestamp(0).replace(tzinfo=timezone.utc)
+                ret_obj['sq_ex'] = int((dt - epoch).total_seconds() * 1000)
+
+            
+            # RETURN Square credentials
+            return ret_obj
+        
+        
+        except Exception as sq_err:
+            msg = "Error converting expires_at date [" + str(response.body['expires_at']) + "] : " + str(sq_err)
+            logger.error( msg )
+            raise ValueError(msg)
+        
    
     except Exception as err :
-        logger.error("Unable to refresh Square user tokens")
+        msg = str(err)
+        logger.error("Unable to refresh Square user tokens: " + msg)
         raise
     
 
@@ -231,14 +283,15 @@ def refresh_userToken(square, client_id, client_secret, the_user ) :
 #
 # Store the new sq_ex token back in DB for user
 # ALL TOKENS MUST BE ENCRYPTED
+#
 def save_newTokens(table, the_user, new_tokens) :
         
     un = the_user['sk']
     response = None
     
-    new_access = encryptToken(the_user['sk'], new_tokens['at'])
+    new_access = encryptToken(the_user['sk'], new_tokens['sq_at'])
     new_expires = new_tokens[ 'sq_ex' ]
-    new_refresh =  encryptToken(the_user['sk'], new_tokens['rt'])
+    new_refresh =  encryptToken(the_user['sk'], new_tokens['sq_rt'])
     
     update_expr = "SET sq_at=:sq_at,sq_ex=:sq_ex,sq_rt=:sq_rt"
     
@@ -262,7 +315,7 @@ def save_newTokens(table, the_user, new_tokens) :
     
         if 'Attributes' not in response :
 
-            err_msg = "Error refreshing Square tokens for user: " + un
+            err_msg = "Empty response.  Cannot refresh Square tokens for user: " + un
             logger.error( err_msg )
             raise ValueError( err_msg )
     
@@ -271,7 +324,7 @@ def save_newTokens(table, the_user, new_tokens) :
         
     
     except Exception as err:
-        err_msg = "Error refreshing Square tokens for user: " + un + " -- "  + str(err)
+        err_msg = str(err) + ".  Cannot refresh Square tokens for user: " + un
         logger.error(err_msg)
         raise Exception( err_msg )
         
@@ -323,7 +376,7 @@ def lambda_handler(event, context):
             
                 # refresh the OAuth access token
                 # will throw error -- will NOT return empty tokens
-                new_tokens = refresh_userToken( square_client.oauth,
+                new_tokens = refresh_userToken( square_client.o_auth,
                                                 client_id,
                                                 client_secret, 
                                                 the_user )
@@ -332,21 +385,23 @@ def lambda_handler(event, context):
                 save_newTokens(table, the_user, new_tokens)
                 success_counter += 1
         
+        
             except Exception as error:
                 # do not abort because of one problem user
-                user_info = the_user['sk'] + " [" + the_user['sq_id'] + "]"
+                user_info = the_user['sk']
+                if (the_user['sq_id']):
+                    user_info = user_info + " - " + str(the_user['sq_id'])
                 logger.error("Unable to refresh user token for leedz user: " + user_info)
+                logger.error( str(error ))
         
         
         
-        
-        result = "Refreshed " + success_counter + " / " + len(expiring_users) + " expiring oauth records"
+        result = "Refreshed " + str(success_counter) + " / " + str(len(expiring_users)) + " expiring oauth records"
         return handle_success( result )
         
     
     except Exception as error:
         
-        logger.error( str(error) )
         return handle_error(error)
     
 
@@ -365,10 +420,10 @@ def lambda_handler(event, context):
 # Create the HTTP response object
 #
 #
-def createHttpResponse( result ):
+def createHttpResponse( code, result ):
    
     response = {
-        'statusCode': 200,
+        'statusCode': code,
         'body': result,
         'headers': {
             'Content-Type': 'text/html',

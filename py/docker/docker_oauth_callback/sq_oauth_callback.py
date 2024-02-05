@@ -20,6 +20,8 @@ from botocore.exceptions import ClientError
 
 from square.client import Client
 
+from datetime import datetime, timezone
+
 import logging
 
 
@@ -184,12 +186,19 @@ def createHttpResponse( result ):
 #
 # ENCRYPTION HANDLING
 #
+#
 
 def encryptToken( key_txt, token_txt):
-    fernet_key = generateFernetKey(key_txt)
-    f = Fernet(fernet_key)
-    encrypted_token = f.encrypt(token_txt.encode())
-    return encrypted_token
+    try:
+        fernet_key = generateFernetKey(key_txt)
+        f = Fernet(fernet_key)
+        encrypted_token = f.encrypt(token_txt.encode('ASCII'))
+        return encrypted_token
+    
+    except Exception as err:
+        logger.error("Error in encryptToken: " + str(err))
+        raise err
+
 
 
 
@@ -378,12 +387,17 @@ def doTokenExchange(table, event, the_user):
             # 
             sq_at = encryptToken( the_user['sk'], access_token )
             sq_rt = encryptToken( the_user['sk'], refresh_token )
-
-            if not expires_at:
-                expires_at = '0'
+            
+            sq_ex = 0
+            if expires_at:
+                # convert ISO format String to milliseconds
+                # 2024-02-10T08:32:54Z --> 171434234934794 or whatever
+                dt = datetime.fromisoformat(expires_at)
+                epoch = datetime.utcfromtimestamp(0).replace(tzinfo=timezone.utc)
+                sq_ex = int((dt - epoch).total_seconds() * 1000)
             
             # will throw exception on failure
-            saveTokensToDB( table, the_user, sq_at, expires_at, merchant_id, sq_rt, 'authorized' )
+            saveTokensToDB( table, the_user, sq_at, sq_ex, merchant_id, sq_rt, 'authorized' )
 
         except Exception as e:
             err_str = str(e)
@@ -501,7 +515,7 @@ def getLeedzUser(table, sq_st):
 # sq_at = encrypted access_token 
 # sq_rt = encrypted refresh_token 
 # sq_st = state --> authorized
-# sq_ex = expires_at
+# sq_ex = expires_at  int epoch milliseconds
 #
 # saveTokensToDB( table, the_user, sq_at, expires_at, merchant_id, sq_rt, 'authorized' )
 #

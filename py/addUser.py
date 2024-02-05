@@ -90,8 +90,8 @@ def lambda_handler(event, context):
         table = dynamodb_client.Table('Leedz_DB')
 
         TRUE = 1
-        FALSE = 0
-        NO_VAL = ""
+        FALSE = None
+        NO_VAL = None
         NEW_USER = "new"
         
         
@@ -179,9 +179,10 @@ def lambda_handler(event, context):
                     'lp': 0,
                     'ls': 0,
                     'sq_at': NO_VAL,
+                    'sq_ex': 0,
+                    'sq_id': NO_VAL,
                     'sq_rt': NO_VAL,
-                    'sq_st': NEW_USER,
-                    'sq_ex': 0
+                    'sq_st': NEW_USER
                 },
                ConditionExpression='attribute_not_exists(pk) and attribute_not_exists(sk)'
             )

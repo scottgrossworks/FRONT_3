@@ -395,7 +395,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     if (CURRENT_USER.un == CURRENT_LEED.cr) {
 
         // this leed is posted by the current user
-        theDiv.innerHTML = "<a href='./user_edit.html'><b>" + CURRENT_LEED.cr + "</b></a>";
+        theDiv.innerHTML = "<a href='./user_editor.html'><b>" + CURRENT_LEED.cr + "</b></a>";
 
     } else {
     

@@ -109,7 +109,7 @@ def validateHeader( event, header, required ):
 # 
 def handle_success( msg, un ) :
     
-    result = "<!DOCTYPE html><html><head><meta http-equiv='refresh' content='0; URL=https://theleedz.com/user_edit.html?square=authorized'></head></html>"
+    result = "<!DOCTYPE html><html><head><meta http-equiv='refresh' content='0; URL=https://theleedz.com/user_editor.html?square=authorized'></head></html>"
     
     log_result = {  
         "cd" : 1,

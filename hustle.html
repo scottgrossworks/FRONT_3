@@ -914,6 +914,13 @@ function trimAndRemoveSpaces(inputString) {
           return;
         }
 
+        // check authorization status
+        const current_user = getCurrentUser(false);
+        if (current_user.sq_st != 'authorized') {
+          printError("buyLeed", "Square account not authorized");
+          openNewUserWelcome();
+          return;
+        }
 
 
         const current_leed = getCurrentLeed();

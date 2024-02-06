@@ -25,7 +25,10 @@ import urllib.request
 import urllib.error
 
 import boto3
+from boto3.dynamodb.types import Binary
+from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
+
 from decimal import Decimal
 
 from datetime import datetime, timezone
@@ -104,6 +107,8 @@ class DecimalJsonEncoder(json.encoder.JSONEncoder):
 #
 #
 
+
+
 def encryptToken( key_txt, token_txt):
     try:
         fernet_key = generateFernetKey(key_txt)
@@ -112,22 +117,26 @@ def encryptToken( key_txt, token_txt):
         return encrypted_token
     
     except Exception as err:
-        logger.error("Error in encryptToken: " + str(err))
-        raise err
-
-
-
-
-def decryptToken( key_txt , encrypted_token):
-    try:
-        fernet_key = generateFernetKey( key_txt )
-        f = Fernet(fernet_key)
-        decrypted_token = f.decrypt( encrypted_token.value )
-        return decrypted_token.decode('ASCII')
+        raise err   
     
+    
+
+def decryptToken(key_txt, encrypted_token):
+    try:
+        fernet_key = generateFernetKey(key_txt)
+        f = Fernet(fernet_key)
+
+        # Convert the encrypted_token to bytes
+        bytes_object = encrypted_token.value
+
+        decrypted_token = f.decrypt(bytes(bytes_object))
+
+        return decrypted_token.decode('ASCII')
+
     except Exception as err:
-        logger.error("Error in decryptToken: " + str(err))
+        print("Error in decryptToken: " + str(err))
         raise err
+
 
 
 
@@ -258,7 +267,7 @@ def lambda_handler(event, context):
         # 1/2024
         # retrieves the full DB entry for the seller
         # seller_info contains SQUARE authorization
-        seller_info = getSellerInfo(table, bn, tn, id)
+        seller_info = getSellerInfo(table, the_leed['cr'], tn, id)
          
          
         # generate Square QuickPay Checkout Link
@@ -371,7 +380,8 @@ def createPaymentLink(the_seller, the_leed, bn) :
                 "amount": app_fee
             },
             "redirect_url": "https://theleedz.com/hustle.html",
-            "merchant_support_email": "theleedz.com@gmail.com"
+            "merchant_support_email": "theleedz.com@gmail.com",
+            "ask_for_shipping_address":"false"
         },
         "quick_pay": {
             "location_id": LOCATION_ID,
@@ -553,6 +563,7 @@ def getLeedInfo(table, tn, id):
 # GET SELLER INFO
 #
 # extra params are for error reporting of potentially spurrious activity
+# cr -- leed creator -- seller
 #
 def getSellerInfo(table, cr, tn, id):
          

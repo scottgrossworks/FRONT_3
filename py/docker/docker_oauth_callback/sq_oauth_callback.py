@@ -11,7 +11,6 @@ from cryptography.fernet import Fernet
 import base64
 import hashlib
 
-from http import cookies
 import json
 
 import boto3
@@ -196,9 +195,7 @@ def encryptToken( key_txt, token_txt):
         return encrypted_token
     
     except Exception as err:
-        logger.error("Error in encryptToken: " + str(err))
-        raise err
-
+        raise err   
 
 
 
@@ -387,7 +384,10 @@ def doTokenExchange(table, event, the_user):
             
             # encrypt the refresh_token and access_token before save to db
             # TOKEN ENCRYPT KEY WILL BE USERNAME
-            # 
+            # FIXME
+            logger.info("ACCESS_TOKEN=" + access_token)
+            logger.info("REFRESH_TOKEN=" + refresh_token)
+            
             sq_at = encryptToken( the_user['sk'], access_token )
             sq_rt = encryptToken( the_user['sk'], refresh_token )
             

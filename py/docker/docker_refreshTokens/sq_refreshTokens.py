@@ -13,6 +13,7 @@ from square.client import Client
 
 import boto3
 from botocore.exceptions import ClientError
+from boto3.dynamodb.types import Binary
 from boto3.dynamodb.conditions import Key
 
 from datetime import datetime, timedelta, timezone
@@ -42,23 +43,25 @@ def encryptToken( key_txt, token_txt):
         return encrypted_token
     
     except Exception as err:
-        logger.error("Error in encryptToken: " + str(err))
-        raise err
-
-
-
-
-def decryptToken( key_txt , encrypted_token):
-    try:
-        fernet_key = generateFernetKey( key_txt )
-        f = Fernet(fernet_key)
-        decrypted_token = f.decrypt( encrypted_token.value )
-        return decrypted_token.decode('ASCII')
+        raise err   
     
-    except Exception as err:
-        logger.error("Error in decryptToken: " + str(err))
-        raise err
+    
 
+def decryptToken(key_txt, encrypted_token):
+    try:
+        fernet_key = generateFernetKey(key_txt)
+        f = Fernet(fernet_key)
+
+        # Convert the encrypted_token to bytes
+        bytes_object = encrypted_token.value
+
+        decrypted_token = f.decrypt(bytes(bytes_object))
+
+        return decrypted_token.decode('ASCII')
+
+    except Exception as err:
+        print("Error in decryptToken: " + str(err))
+        raise err
 
 
 
@@ -128,8 +131,6 @@ def handle_success( details ):
         'dt':details,
         'cd':1
     }
-    
-    logger.info(details)
     
     the_json = json.dumps( ret_obj )
     return createHttpResponse( 200, the_json )

@@ -359,8 +359,7 @@ def createPaymentLink(the_seller, the_leed, bn) :
     app_fee = int(price_cents * 0.09)
 
     # Square Access Token
-    # FIXME 1/2024
-    # MUST fernet dencrypt token using seller username
+    # 
     acc_token = 'Bearer ' + decryptToken( the_seller['sk'] , the_seller['sq_at'] )
     # acc_token = 'Bearer ' + the_seller['sq_at']
     
@@ -371,7 +370,7 @@ def createPaymentLink(the_seller, the_leed, bn) :
                 "currency": "USD",
                 "amount": app_fee
             },
-            "redirect_url": "theleedz.com/hustle.html",
+            "redirect_url": "https://theleedz.com/hustle.html",
             "merchant_support_email": "theleedz.com@gmail.com"
         },
         "quick_pay": {
@@ -399,10 +398,10 @@ def createPaymentLink(the_seller, the_leed, bn) :
     }
     
     
-    # logger.info("SENDING PAYMENT LINK REQ")
-    # logger.info(SQUARE_URL)
-    # logger.info(headers)
-    # logger.info(json_payload)
+    logger.info("SENDING PAYMENT LINK REQ")
+    logger.info(SQUARE_URL)
+    logger.info(headers)
+    logger.info(json_payload)
 
 
     

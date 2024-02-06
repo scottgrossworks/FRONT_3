@@ -257,6 +257,8 @@ def lambda_handler(event, context):
     TRUE = 1
     FALSE = 0
     
+    #logger.info(str(event))
+    
     try:
         
         # CHECK FOR ERROR
@@ -354,12 +356,13 @@ def doTokenExchange(table, event, the_user):
     app_secret = validateEnviron('sq_app_secret', TRUE)
     environment = validateEnviron('sq_environ', FALSE)
     if not environment:
-        environment = "sandbox"
+        environment = "production"
     
     #
     # calls Square client to make special POST req to Square
     #
     the_response = exchange_oauth_tokens( environment, auth_code, app_ID, app_secret )
+
     
     if ('errors' in the_response.body) :
 
@@ -407,6 +410,7 @@ def doTokenExchange(table, event, the_user):
     else :
         err_msg = "Error in OAuth token exchange.  Callback did not receive bearer token"
         logger.error(err_msg)
+        logger.error(the_response)
         raise Exception(err_msg)
         
 
@@ -441,7 +445,7 @@ def exchange_oauth_tokens(env, code, id, secret):
         request_body['client_secret'] = secret
         request_body['scopes'] = scopes
         request_body['code'] = code
-        request_body['redirect_uri'] = "http://theleedz.com/user_edit.html?square=authorized"
+        request_body['redirect_uri'] = "https://theleedz.com/user_editor.html?square=authorized"
         request_body['grant_type'] = 'authorization_code'
         response = oauth_api.obtain_token( request_body )
 

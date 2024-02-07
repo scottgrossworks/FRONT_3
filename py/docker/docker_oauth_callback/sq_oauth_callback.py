@@ -438,7 +438,7 @@ def exchange_oauth_tokens(env, code, id, secret):
         )
         oauth_api = square_client.o_auth
    
-        scopes = [ "ORDERS_WRITE", "ORDERS_READ", "PAYMENTS_WRITE", "PAYMENTS_READ", "PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS" ]
+        scopes = [ "ORDERS_WRITE", "ORDERS_READ", "PAYMENTS_WRITE", "PAYMENTS_READ", "PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS", "MERCHANT_PROFILE_READ" ]
     
         request_body = {}
         request_body['client_id'] = id

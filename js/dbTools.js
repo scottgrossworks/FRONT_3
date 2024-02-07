@@ -71,8 +71,6 @@ export async function db_updateUser( code, user_obj ) {
             break
         
         case CHG_USER:
-            console.log("dbTools.db_updateUser() CHG_USER"); 
-        
             
             let theURL = new URL(API_GATEWAY + "changeUser");
             let params = new URLSearchParams();
@@ -194,7 +192,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
          */
         case BUY_LEED:
             
-            console.log("dbTools.db_updateLeed() BUY LEED"); 
+            // console.log("dbTools.db_updateLeed() BUY LEED"); 
             var theURL = new URL(API_GATEWAY + "buyLeed");
             var params = new URLSearchParams();
 
@@ -294,7 +292,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
 
             theURL.search = params.toString();
 
-            console.log("CHANGE LEED URL=" + theURL);
+            // console.log("CHANGE LEED URL=" + theURL);
 
             await doGetHeaders( theURL,{} )
             .then(data => {
@@ -319,7 +317,7 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
          * 
          */
         case REP_LEED:
-            console.log("dbTools.db_updateLeed() REPORT LEED"); 
+            // console.log("dbTools.db_updateLeed() REPORT LEED"); 
             
             var theURL = new URL(API_GATEWAY + "reportLeed");
             var params = new URLSearchParams();
@@ -329,8 +327,6 @@ export async function db_updateLeed( code, user_obj, leed_obj ) {
             params.append( USERNAME_URL_PARAM, user_obj.un );
 
             theURL.search = params.toString();
-
-            console.log("THEURL=" + theURL);
 
             await doGetHeaders( theURL, {} )
             .then(data => {
@@ -578,10 +574,6 @@ export async function db_getLeedz( subs, start_date, end_date, zip_home, zip_rad
         searchParams.append( SUBS_URL_PARAM, subs_string );
 
         theURL.search = searchParams.toString();
-
-
-        // console.log(theURL.search)
-
 
         await doGet( theURL )
         .then(data => {

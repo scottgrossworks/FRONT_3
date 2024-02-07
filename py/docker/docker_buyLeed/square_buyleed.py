@@ -582,7 +582,7 @@ def getSellerInfo(table, cr, tn, id):
         
         else:
             the_seller = response['Item']
-            
+        
             # seller SQUARE STATE must be AUTHORIZED
             # RETURN seller data
             if (the_seller['sq_st'] == 'authorized'):

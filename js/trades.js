@@ -52,6 +52,7 @@ export async function initTrades() {
       createTradesAndColors( trades );  
 
       if ( no_subs ) { 
+        console.log("No subscriptions: using top trades")
         // the trades should be sorted by num_leedz
         // the guest user's subs are the top n leedz
         for (let i = 0; i < MAX_USER_SUBS; i++) {

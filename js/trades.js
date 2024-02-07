@@ -5,7 +5,7 @@
  */
 
 import { loadCacheLeedz, removeLeedzForTrade } from "./calendar.js";
-import { getCurrentUser, isGuestUser } from "./user.js";
+import { getCurrentUser, isGuestUser, saveCurrentUser } from "./user.js";
 import { db_getTrades } from "./dbTools.js";
 import { printError, errorModal, throwError } from "./error.js";
 import { hideActionWindow } from "./action.js";
@@ -56,8 +56,9 @@ export async function initTrades() {
         // the trades should be sorted by num_leedz
         // the guest user's subs are the top n leedz
         for (let i = 0; i < MAX_USER_SUBS; i++) {
-          currentUser.sb.push( trades[i].sk ); 
+          currentUser.sb.push( trades[i].sk );
         }
+        saveCurrentUser();
       }
   	
       initTradesColumn( tradeListener );

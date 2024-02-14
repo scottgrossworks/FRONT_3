@@ -219,9 +219,6 @@ def generateFernetKey( txt_src ) :
 
 # from https://developer.squareup.com/apps/sq0idp-fGPn-QZvqEnvGeWHA9sHMw/settings
 
-# sandbox_app_ID = "sandbox-sq0idb-phu8jRWJjN1ysnWqGMsBMA"
-# sandbox_access_token = "EAAAEM-qAHvj9qqGJ3wle3yx5iKeaK2h4fvF8yofv_ycuckMuCl7mxhnAK2wgSLq"
-
 # endpoint that handles Square authorization callback
 # @app.route('/authorize-callback', methods=['GET'])
 #

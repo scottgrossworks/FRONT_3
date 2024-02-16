@@ -361,16 +361,17 @@
 
                 await reloadCurrentUser(true).then((data) => {
                     CURRENT_USER = data;
-            })
-            .catch(error => {
-                throwError("Reload current user", error.message);
-            });
+                
+                }).catch(error => {
+                    throwError("Reload current user", error.message);
+                
+                });
 
                 square_backButton();
 
-            if (CURRENT_USER.sq_st == 'authorized') {
-                showSquareAuthorizedAlert();
-            }
+                if (CURRENT_USER.sq_st == 'authorized') {
+                    showSquareAuthorizedAlert();
+                }
 
 
             } else {
@@ -385,6 +386,7 @@
                 throwError("User Edit", "Not logged in");
             }	
 
+            
             // this will take on any changes the user makes on the form
             USER_CHANGES = CURRENT_USER;
 
@@ -399,7 +401,7 @@
             //
             if (goodValue(CURRENT_USER.em)) {
                 element = document.getElementById("td_email");
-                element.innerHTML = (CURRENT_USER.em) ? CURRENT_USER.em : "";
+                element.innerHTML =  CURRENT_USER.em;
             } else {
                 inlineEdit('row_email', createOptions);
             }
@@ -409,7 +411,7 @@
             //
             if (goodValue(CURRENT_USER.ws)) {
                 element = document.getElementById("td_website");
-                element.innerHTML = (CURRENT_USER.ws) ? CURRENT_USER.ws : "";
+                element.innerHTML = CURRENT_USER.ws;
             } else {
                 inlineEdit('row_website', createOptions);
             }
@@ -419,7 +421,7 @@
             //
             if (goodValue(CURRENT_USER.ab)) {
                 element = document.getElementById("td_about");
-                element.innerHTML = (CURRENT_USER.ab) ? CURRENT_USER.ab : "";
+                element.innerHTML =  CURRENT_USER.ab;
             } else {
                 inlineEdit('row_about', createOptions);
             }
@@ -429,7 +431,7 @@
             //
             if (goodValue(CURRENT_USER.zp)) {
                 element = document.getElementById("td_zip");
-                element.innerHTML = (CURRENT_USER.zp) ? CURRENT_USER.zp : "";
+                element.innerHTML = CURRENT_USER.zp;
             } else {
                 inlineEdit('row_zip', createOptions);
             }
@@ -439,7 +441,7 @@
             //
             if (goodValue(CURRENT_USER.zr)) {
                 element = document.getElementById("td_radius");
-                element.innerHTML = CURRENT_USER.zr
+                element.innerHTML = CURRENT_USER.zr;
             } else {
                 inlineEdit('row_radius', sampleOptions);
             }
@@ -459,7 +461,7 @@
         } catch (error) {
 
             // DO NOT FAIL -- show error modal dialog and print error to console
-            var msg = "Error loading user profile.<BR>Please refresh page."
+            var msg = "Error loading user profile.<BR>Please refresh page.";
             msg = error.message + "<BR>" + msg;
 
             printError("Reload User", msg);

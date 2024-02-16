@@ -348,7 +348,7 @@ def lambda_handler(event, context):
 def createPaymentLink(the_seller, the_leed, bn) :
     
     SQUARE_URL = validateEnviron("sq_checkout_url", 1)
-    LOCATION_ID = validateEnviron("sq_location_id", 1)
+    LOCATION_ID = the_seller['sq_lc']
 
     # tn - trade name
     # trade#balloons --> balloons

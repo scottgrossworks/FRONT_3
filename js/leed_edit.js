@@ -130,7 +130,7 @@ import { printError, errorModal } from "./error.js";
         if (! theVal) return false;
 
         // there IS a value but it may be '0' or "" string
-        if (theVal == '0' || theVal == "") return false;
+        if ( theVal == '0' || theVal == "" || theVal == 'null' ) return false;
 
         return true;
     }

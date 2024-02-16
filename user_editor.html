@@ -399,7 +399,7 @@
             //
             if (goodValue(CURRENT_USER.em)) {
                 element = document.getElementById("td_email");
-                element.innerHTML = CURRENT_USER.em;
+                element.innerHTML = (CURRENT_USER.em) ? CURRENT_USER.em : "";
             } else {
                 inlineEdit('row_email', createOptions);
             }
@@ -409,7 +409,7 @@
             //
             if (goodValue(CURRENT_USER.ws)) {
                 element = document.getElementById("td_website");
-                element.innerHTML = CURRENT_USER.ws;
+                element.innerHTML = (CURRENT_USER.ws) ? CURRENT_USER.ws : "";
             } else {
                 inlineEdit('row_website', createOptions);
             }
@@ -419,7 +419,7 @@
             //
             if (goodValue(CURRENT_USER.ab)) {
                 element = document.getElementById("td_about");
-                element.innerHTML = CURRENT_USER.ab;
+                element.innerHTML = (CURRENT_USER.ab) ? CURRENT_USER.ab : "";
             } else {
                 inlineEdit('row_about', createOptions);
             }
@@ -429,7 +429,7 @@
             //
             if (goodValue(CURRENT_USER.zp)) {
                 element = document.getElementById("td_zip");
-                element.innerHTML = CURRENT_USER.zp;
+                element.innerHTML = (CURRENT_USER.zp) ? CURRENT_USER.zp : "";
             } else {
                 inlineEdit('row_zip', createOptions);
             }

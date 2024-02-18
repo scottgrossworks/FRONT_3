@@ -68,6 +68,14 @@
   }
 
   
+@media screen and (max-width: 500px) {
+  #calendar_list {
+    margin-bottom:200px;
+  }
+
+}
+
+
   
   .each_day {
   

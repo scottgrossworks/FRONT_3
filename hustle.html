@@ -1620,6 +1620,9 @@ window.onload = async function() {
 
 
     if (isGuestUser(false)) {
+
+        showWaitingModal("Loading the Leedz . . .");
+
         try {
 
             // re-initialize current user with login credentials from AWS  

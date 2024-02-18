@@ -167,6 +167,7 @@
 
   .info_modal {
     width:90%;
+    top:10vh;
     margin:0 auto;
     padding:5px;
   }
@@ -187,7 +188,7 @@
   }
 
   #error_modal {
-    top:5vh;    
+    top:10vh;    
     height:70%!important;
   }
 

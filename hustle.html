@@ -137,27 +137,27 @@
     </div>
   
   
+
+    <!-- 
+      -- WAITING MODAL
+      -- 
+      -->
+      <div class="modal info_modal" id="waiting_modal" style="display:none">
+
+      <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
+        <table width="100%">
+            <TR><TD style="border:none;">
+              <h1 id="waiting_label" style="width:fit-content"></h1>
+            </TD></TR>
+            <TR><TD style="border:none;"><center>
+                    <img src="./img/wait_spinner.gif" style="height:10vh;">
+                    </center>
+                </TD>
+            </TR>
+        </table>
+
   
-      <!-- 
-        -- WAITING MODAL
-        -- 
-        -->
-        <div class="modal info_modal" id="waiting_modal" style="display:none">
-  
-          <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
-              <table width="100%">
-                  <TR><TD style="border:none;">
-                    <h1 id="waiting_label" style="width:fit-content"></h1>
-                  </TD></TR>
-                  <TR><TD style="border:none;"><center>
-                          <img src="./img/wait_spinner.gif" style="height:10vh;">
-                          </center>
-                      </TD>
-                  </TR>
-              </table>
-    
-    
-        </div>
+      </div>
     
     
     
@@ -1379,16 +1379,12 @@ async function mainPageLoad() {
     
       if (! CURRENT_USER ) CURRENT_USER = getCurrentUser(true);
 
-      // LOADING MODALS...
-      //
       // Is user a guest.user or a NEW user with NO trade subscriptions
       // will be given default top (MAX_TRADE_SUBSCRIPTIONS) like guest
-      //
       const newUser = (isGuestUser(true) || CURRENT_USER.sb.length == 0);
       if (newUser) {
+        modalClose(false);
         openNewUserWelcome();
-      } else {
-        showWaitingModal("Loading the Leedz . . .");
       }
       
 
@@ -1553,9 +1549,9 @@ async function mainPageLoad() {
 
       // set the trades sidebar      
       if (SIDE_OPEN) {
-      openNav();
+        openNav();
       } else {
-      closeNav();
+        closeNav();
       }
 
 
@@ -1564,15 +1560,21 @@ async function mainPageLoad() {
 
 
 
-  let CURRENT_USER = null;
-
   /**
     * If we are coming here from a back button, refresh with the latest 
     * user data
     */
+  let CURRENT_USER = null;
+  
   addEventListener('pageshow', function(event) {
+
      if (CURRENT_USER) { // are we coming BACK to this page?
-        CURRENT_USER = getCurrentUser(true); // refresh and reload
+        CURRENT_USER = getCurrentUser(true); // refresh and reload        
+
+        if (isGuestUser(false)) {
+          showWaitingModal("Loading the Leedz . . .");
+        }
+        
         mainPageLoad();
       }
   });

@@ -268,7 +268,8 @@ def lambda_handler(event, context):
         # retrieves the full DB entry for the seller
         # seller_info contains SQUARE authorization
         seller_info = getSellerInfo(table, the_leed['cr'], tn, id)
-         
+        
+        
          
         # generate Square QuickPay Checkout Link
         # code buyer and trade name into link
@@ -348,7 +349,10 @@ def lambda_handler(event, context):
 def createPaymentLink(the_seller, the_leed, bn) :
     
     SQUARE_URL = validateEnviron("sq_checkout_url", 1)
-    LOCATION_ID = the_seller['sq_lc']
+
+    # check for seller location_id - required for payment link 
+    if (not the_seller['sq_lc']) :
+        raise Exception("No location ID found for seller")
 
     # tn - trade name
     # trade#balloons --> balloons
@@ -381,10 +385,10 @@ def createPaymentLink(the_seller, the_leed, bn) :
             },
             "redirect_url": "https://theleedz.com/hustle.html",
             "merchant_support_email": "theleedz.com@gmail.com",
-            "ask_for_shipping_address":"false"
+            "ask_for_shipping_address":False,
         },
         "quick_pay": {
-            "location_id": LOCATION_ID,
+            "location_id": the_seller['sq_lc'],
             "name": the_leed['ti'],
             "price_money": {
                 "currency": "USD",
@@ -402,7 +406,7 @@ def createPaymentLink(the_seller, the_leed, bn) :
     # Set the request headers
     headers = {
         'Accept': 'application/json',
-        'Square-Version': '2023-12-13',
+        'Square-Version': '2024-01-18',
         'Authorization': acc_token,
         'Content-Type': 'application/json'
     }

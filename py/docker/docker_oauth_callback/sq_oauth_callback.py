@@ -17,6 +17,9 @@ import boto3
 from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
 
+import urllib.request
+import urllib.error
+
 from square.client import Client
 
 from datetime import datetime, timezone
@@ -348,14 +351,15 @@ def doTokenExchange(table, event, the_user):
     #
     app_ID = validateEnviron('sq_app_id', TRUE)
     app_secret = validateEnviron('sq_app_secret', TRUE)
-    environment = validateEnviron('sq_environ', FALSE)
-    if not environment:
-        environment = "production"
+    sq_env = validateEnviron('sq_environ', FALSE)
+    if not sq_env:
+        sq_env = "production"
+    
     
     #
-    # calls Square client to make special POST req to Square
+    # create SQUARE CLIENT 1 to perform token exchange
     #
-    the_response = exchange_oauth_tokens( environment, auth_code, app_ID, app_secret )
+    the_response = exchange_oauth_tokens( sq_env, auth_code, app_ID, app_secret )
 
     
     if ('errors' in the_response.body) :
@@ -379,12 +383,17 @@ def doTokenExchange(table, event, the_user):
             expires_at = the_response.body['expires_at']
             merchant_id = the_response.body['merchant_id']
             
-            # encrypt the refresh_token and access_token before save to db
-            # TOKEN ENCRYPT KEY WILL BE USERNAME
             # FIXME
             logger.info("ACCESS_TOKEN=" + access_token)
             logger.info("REFRESH_TOKEN=" + refresh_token)
+                        
+            # GET LOCATION ID FOR THIS SELLER
+            # will raise Exception
+            sq_lc = getLocationID( sq_env, access_token )
             
+            
+            # encrypt the refresh_token and access_token before save to db
+            # TOKEN ENCRYPT KEY WILL BE USERNAME
             sq_at = encryptToken( the_user['sk'], access_token )
             sq_rt = encryptToken( the_user['sk'], refresh_token )
             
@@ -397,12 +406,17 @@ def doTokenExchange(table, event, the_user):
                 sq_ex = int((dt - epoch).total_seconds() * 1000)
             
             # will throw exception on failure
-            saveTokensToDB( table, the_user, sq_at, sq_ex, merchant_id, sq_rt, 'authorized' )
+            saveTokensToDB( table, the_user, sq_at, sq_ex, merchant_id, sq_lc, sq_rt, 'authorized' )
+
+
+
 
         except Exception as e:
-            err_str = str(e)
-            logger.error("Error extracting tokens from response body: "  + err_str)    
-            raise e
+            msg = "Error in token exchange: "
+            err_str = msg + str(e)
+            logger.error( err_str )    
+            raise Exception(err_str)
+        
     
     else :
         err_msg = "Error in OAuth token exchange.  Callback did not receive bearer token"
@@ -421,20 +435,21 @@ def doTokenExchange(table, event, the_user):
 # the authorization code that is returned with the authorize callback.
 # We call `obtain_token` api with authorization code to get OAuth tokens.
 #
-def exchange_oauth_tokens(env, code, id, secret):
+def exchange_oauth_tokens(sq_env, code, id, secret):
    
+    # initialize square oauth client
+    square_client = Client(
+        environment=sq_env,
+        user_agent_detail='exchange_oauth_tokens',
+        max_retries=3,
+        timeout=900
+    )
+    
+    
     # logger.info("EXCHANGING OAUTH TOKENS")
     response = ""
     try:
-        # initialize square oauth client
-        square_client = Client(
-            environment=env,
-            user_agent_detail='sq_oauth_callback',
-            max_retries=3,
-            timeout=600
-        )
-        oauth_api = square_client.o_auth
-   
+
         scopes = [ "ORDERS_WRITE", "ORDERS_READ", "PAYMENTS_WRITE", "PAYMENTS_READ", "PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS", "MERCHANT_PROFILE_READ" ]
     
         request_body = {}
@@ -444,7 +459,7 @@ def exchange_oauth_tokens(env, code, id, secret):
         request_body['code'] = code
         request_body['redirect_uri'] = "https://theleedz.com/user_editor.html?square=authorized"
         request_body['grant_type'] = 'authorization_code'
-        response = oauth_api.obtain_token( request_body )
+        response = square_client.o_auth.obtain_token( request_body )
 
         # logger.info( response )
         
@@ -503,7 +518,72 @@ def getLeedzUser(table, sq_st):
     except Exception as err:
         raise
         
+
+
+
+
+
+#
+# Get location_id to include in any leed for sale payment link
+#
+def getLocationID( sq_env, access_token ) :
+    
+    try:        
+        # Create SQUARE CLIENT 2 to do Location ID search
+        # using authorization access_token
+        #
+        square_client = Client (
+            access_token = access_token,
+            environment = sq_env
+        )
+    
+        response = square_client.locations.retrieve_location(
+            location_id = "main"
+        )
+
+        # SUCCESS !!
+        # RETURN location_id from response dict
+        #
+        if response.is_success():
         
+            location = response.body['location']
+            location_id = location['id']
+            logger.info(location_id)
+            return location_id
+
+
+
+        # ERROR
+        #
+        elif response.is_error():
+            print('Error calling LocationsApi.listlocations')
+            errors = response.errors
+            # An error is returned as a list of errors
+            err_str = ""
+            for error in errors:
+                # Each error is represented as a dictionary
+                for key, value in error.items():
+                    err_str = str(key) + ": " + str(value) + ", " + err_str
+
+            raise Exception(error_message)
+
+        else:
+            error_message = "Unknown response from locations API: " + str(response)
+            # logger.error(error_message)
+            raise Exception(err_str)
+            
+      
+        
+    except Exception as err:
+        
+        err_str = "Cannot get Location ID: " + str(err)
+        raise Exception( err_str )
+    
+    
+    
+    
+    
+ 
 
 
 
@@ -520,15 +600,16 @@ def getLeedzUser(table, sq_st):
 #
 # saveTokensToDB( table, the_user, sq_at, expires_at, merchant_id, sq_rt, 'authorized' )
 #
-def saveTokensToDB( table, the_user, sq_at, sq_ex, sq_id, sq_rt, sq_st ) :
+def saveTokensToDB( table, the_user, sq_at, sq_ex, sq_id, sq_lc, sq_rt, sq_st ) :
     
     un = the_user['sk']
 
-    expr = 'SET sq_at=:sq_at,sq_ex=:sq_ex,sq_id=:sq_id,sq_rt=:sq_rt,sq_st=:sq_st'
+    expr = 'SET sq_at=:sq_at,sq_ex=:sq_ex,sq_id=:sq_id,sq_lc=:sq_lc,sq_rt=:sq_rt,sq_st=:sq_st'
     vals = {
             ':sq_at' : sq_at,
             ':sq_ex' : sq_ex,
-            ':sq_id' : sq_id,    
+            ':sq_id' : sq_id,
+            ':sq_lc' : sq_lc,    
             ':sq_rt' : sq_rt,
             ':sq_st' : sq_st
             }

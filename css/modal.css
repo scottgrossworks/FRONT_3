@@ -1,11 +1,5 @@
 
-/*
- *
- *
- */
-
  @import "./globals.css";
-
 
 
 
@@ -93,9 +87,6 @@
 
 
 
-
-
-
 #guest_modal {
   
   margin: 10vh 10vw;
@@ -107,10 +98,6 @@
 }
 
 
-/*
- *
- *
- */
 .info_modal{
 
   display: block;
@@ -118,7 +105,7 @@
   flex-direction: column;
   z-index:600;
 
-  top: 2vh!important;
+  top: 10vh!important;
   margin: 5vh 5vw;
 
   width:60vw!important;
@@ -137,17 +124,17 @@
 }
 
 
-  #error_modal {
+#error_modal {
 
-    width:70%;
+  width:70%;
 
-    z-index:900;
-    background-color: white;
-    border: 6px solid #f44336;
+  z-index:900;
+  background-color: white;
+  border: 6px solid #f44336;
 
-    justify-content: left;
+  justify-content: left;
 
-  }
+}
 
 
 
@@ -161,13 +148,11 @@
 
 
 
-
-
 @media screen and (max-width: 399px) {
 
   .info_modal {
     width:90%;
-    top:10vh;
+    top:15vh;
     margin:0 auto;
     padding:5px;
   }
@@ -213,6 +198,7 @@
 
   .info_modal {
     width:70%;
+    top:15vh;
     margin: 0;
     font-size:medium;
     padding:5px;
@@ -232,7 +218,6 @@
   }
     
 
-
   #error_modal h1 {
     font-size: medium;
   }
@@ -251,10 +236,7 @@
 
 
 
-
-
 .info_modal a {
-
 
   font-weight: 600;
   color:white;
@@ -265,7 +247,6 @@
 .info_logo {
 
   padding: 10px 10px 30px 10px;
-
   height:150px;
 }
 
@@ -274,8 +255,8 @@
 
 .info_modal_close {
 
-    display:block;
-    position:relative;
+  display:block;
+  position:relative;
 
   font-family: var(--FONT_3);
   background-color:var(--LEEDZ_DARKGREEN);
@@ -300,7 +281,6 @@
 
 #error_modal a {
 
-
   font-weight: 600;
   text-decoration: none;
 }
@@ -310,7 +290,6 @@
 #error_logo {
 
   padding: 10px 10px 30px 10px;
-
   height:150px;
 }
 
@@ -337,39 +316,33 @@
 
 
 
-
-
-
-
-
 #back_button_close {
 
   display:block;
   position:relative;
 
-font-family: var(--FONT_3);
-background-color:var(--LEEDZ_DARKGREEN);
+  font-family: var(--FONT_3);
+  background-color:var(--LEEDZ_DARKGREEN);
 
-color:white;
+  color:white;
 
-top: 50px;
-left:5px;
+  top: 50px;
+  left:5px;
 
-padding:10px;
-width:30px;
-border-radius: 10px;
+  padding:10px;
+  width:30px;
+  border-radius: 10px;
 
   transform: rotate(180deg);
-font-size: x-large;
-font-weight: bolder;
-text-decoration: none;
-text-align: center;
+  font-size: x-large;
+  font-weight: bolder;
+  text-decoration: none;
+  text-align: center;
 }
 
 
-
-/* The alert message box */
 .alert {
+
   z-index:700;
   padding: 20px 0px;
 
@@ -387,22 +360,22 @@ text-align: center;
 
 }
 
-/* The close button */
+
 .closebtn {
 
-margin: auto 2vw;
-color: white;
-font-weight: bold;
-float: right;
+  margin: auto 2vw;
+  color: white;
+  font-weight: bold;
+  float: right;
 
-transform: translateY(-10px);
+  transform: translateY(-10px);
 
-font-family: var(--FONT_1);
+  font-family: var(--FONT_1);
 
-font-size: 30px;
+  font-size: 30px;
 
-cursor: pointer;
-transition: 0.3s;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 

@@ -84,7 +84,7 @@ import { printError, errorModal } from "./error.js";
       //
       export function showWaitingModal(msg) {
 
-        console.log("Waiting . . . " + msg);
+        console.log(msg);
 
         let wait_msg = document.getElementById("waiting_label");
         wait_msg.innerText = msg;

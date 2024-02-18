@@ -115,7 +115,6 @@
 
 
 #up_addLeed {
-    display: block;
     
     height:32px;
     width: 32px;
@@ -126,13 +125,8 @@
     font-size:29px;
     font-weight: bolder;
 
-    margin: 0;
-    padding: 2px 2px 4px 2px;
-    border:none;
-
-    align-self: center;
-    text-align: center;;
-
+    text-align: center;
+    padding: 2px;
 
     margin-right:20px;
 }

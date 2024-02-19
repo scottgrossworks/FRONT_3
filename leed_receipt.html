@@ -10,89 +10,95 @@
 
 
 <head>
+    <link rel="stylesheet" href="css/globals.css" type="text/css" />
+    <link rel="stylesheet" href="css/modal.css" type="text/css" />
 
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-        <link rel="stylesheet" href="css/globals.css" type="text/css" />
-        <link rel="stylesheet" href="css/modal.css" type="text/css" />
+        <TITLE>Leed Receipt</TITLE>
+    
+        <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
+        <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+
+        <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
+        <link rel="stylesheet" href="./css/globals.css" type="text/css" />
+        <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
 
 
-   
-		 <meta charset="UTF-8">
-		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	 
-		 <TITLE>Leed Receipt</TITLE>
-	 
-	 	<!-- Favicon -->
-		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
-		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
- 
-         <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
-		 <link rel="stylesheet" href="./css/globals.css" type="text/css" />
-		 <link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
-
-         <link rel="stylesheet" href="css/modal.css" type="text/css" />
-
-
-		 <script src="./js/inline-edit.js" type="module" defer></script> 
-	</head>
+        <script src="./js/inline-edit.js" type="module" defer></script> 
+</head>
 
 
 		 
-	<center>
-
-
-        <body>
-        
-    
-    
-                
-            <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
-    
-                <div class="column _1">
-                    <!-- back to hustle -->
-                    <a id="history_back_button" onclick="history.go(-2)"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
-                </div>
-    
-                <div class="column" style="margin:auto 0;transform:translateY(6px)">
-                    <h1 class="user_title">Leed Bought</h1>
-                </div>
-                    
-                <div class="column _3" style="padding:6px;text-align:center">
-                    <img src="./img/logo_2.png" style="width:120px">
-                </div>
-                
-                
             
+<center>
+
+
+<body>
+
+
+    <div class="row" style="left:0;width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
+
+
+        <div class="column _1">
+            <a onclick="history.go(-2)"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+        </div>
+
+
+        <div class="column _8" style="margin:auto 0;transform:translateY(6px)">
+            <h1 class="user_title">Leed Receipt</h1>
+        </div>
+
+
+        <div class="column _2 dropdown" style="margin:auto 0;">
+
+            <span><a href="javascript:dropdownMenu();"><img src="./img/logo_dd.png" style="height:80px"></a></span>
+            <div id="dropdown_menu" class="dropdown-content">
+
+                <a href="./leedz_how-to.html" id="dd_howto">How To</a>
+                
+                <a href="./leedz_about.html">About</a>
+
+                <a href="./leedz_contact.html">Contact</a>
+
             </div>
-    
-    
-            <div id="alert_success" class="alert" style="display:none">
-                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-            </div>
-    
-        
-    
-    
+
+        </div>
+    </div>
+
+
     
     <section>
+        
     
+    
+
+    <!-- 
+    -- ERROR MODAL 
+    -- 
+    -->
+    <div class="row modal" id="error_modal" style="display:none">
+    <center><img id="error_logo" src="img/logo_2.png"></center> 
+    <h1></h1>
+    <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
     </div>
+
+
 
     <BR>
 
-
     <!--
-    --
     --  RECEIPT INFO
-    -- 
-    --
     -->
 
-            <!-- BUYER -->
-            <div style="font-size:larger;font-weight:600">
-            Congratulations <b style="color:green"><span id="user_welcome"></span></b>, you bought a leed!
-            <BR>An email receipt was sent to <b style="color:green"><span id="user_email"></span></b> with the information below.
-            </div>
+    <!-- BUYER -->
+    <div style="font-size:larger;font-weight:600">
+        Congratulations <b style="color:green"><span id="user_welcome"></span></b>, you bought a leed!
+        <BR>An email receipt was sent to <b style="color:green"><span id="user_email"></span></b> with the information below.
+    </div>
+
 
     <div class="row" id="leed_info">
 
@@ -251,102 +257,102 @@
 </body>
 
 <!--
-This is coming from the square_leedbought callback lambda function
-The transaction is approved (or not)
-The callback processes the results
-this url is encoded in the ORIGINAL payment link sent to the user in getDeetz()
-Square sends user here
-https://www.theleedz.com/leed_receipt.html?
-    id=1059445987
-    &
-    bn=theleedz
-    &
-    transactionId=LO3AyBjsoVUUFJul27DXQF4V9pfZY
-    &
-    orderId=LO3AyBjsoVUUFJul27DXQF4V9pfZY
+    This is coming from the square_leedbought callback lambda function
+    The transaction is approved (or not)
+    The callback processes the results
+    this url is encoded in the ORIGINAL payment link sent to the user in getDeetz()
+    Square sends user here
+    https://www.theleedz.com/leed_receipt.html?
+        id=1059445987
+        &
+        bn=theleedz
+        &
+        transactionId=LO3AyBjsoVUUFJul27DXQF4V9pfZY
+        &
+        orderId=LO3AyBjsoVUUFJul27DXQF4V9pfZY
 -->
-	<script type="module">
+<script type="module">
 			
-        import { formatDTforInput } from "./js/dates.js";
-        import { printError, throwError, errorModal } from "./js/error.js";
-        import { getCurrentUser } from "./js/user.js";
-		import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed, getCurrentLeed } from "./js/leed.js";
+    import { formatDTforInput } from "./js/dates.js";
+    import { printError, throwError, errorModal } from "./js/error.js";
+    import { getCurrentUser } from "./js/user.js";
+    import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed, getCurrentLeed } from "./js/leed.js";
 
-        import { USERNAME_URL_PARAM } from "./js/dbTools.js";
+    import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 
 
-        // Get the query string from the URL
-        const queryString = window.location.search;
-    
-        // Create a new instance of URLSearchParams with the query string
-        const params = new URLSearchParams(queryString);
-    
-        const leed_id = params.get('id');
-        const buyer_name = params.get('bn');
+    // Get the query string from the URL
+    const queryString = window.location.search;
 
-        if ((! leed_id) || (! buyer_name)) {
-            // ERROR !
-            var err_msg = "Incorrect URL parameters in leed_receipt.html callback";
-            printError( "Leed Receipt", err_msg );
-            errorModal("Cannot load leed receipt: " + err_msg, true);
-            throwError(err_msg);
-        }
+    // Create a new instance of URLSearchParams with the query string
+    const params = new URLSearchParams(queryString);
 
-        const sq_tid = params.get('transactionId');
-        const sq_oid = params.get('orderId');
+    const leed_id = params.get('id');
+    const buyer_name = params.get('bn');
 
-        if ((! sq_tid) || (! sq_oid)) {
-            // ERROR !
-            var err_msg = "No Order ID or Transaction ID found";
-            printError( "Leed Receipt", err_msg );
-            errorModal("Leed not bought: " + err_msg, true);
-            throwError(err_msg);
-        }   
+    if ((! leed_id) || (! buyer_name)) {
+        // ERROR !
+        var err_msg = "Incorrect URL parameters in leed_receipt.html callback";
+        printError( "Leed Receipt", err_msg );
+        errorModal("Cannot load leed receipt: " + err_msg, true);
+        throwError(err_msg);
+    }
 
+    const sq_tid = params.get('transactionId');
+    const sq_oid = params.get('orderId');
+
+    if ((! sq_tid) || (! sq_oid)) {
+        // ERROR !
+        var err_msg = "No Order ID or Transaction ID found";
+        printError( "Leed Receipt", err_msg );
+        errorModal("Leed not bought: " + err_msg, true);
+        throwError(err_msg);
+    }   
+
+    //
+    // SUCCESS !!
+    //
+    console.log("Leed Receipt: " + new Date());
+    console.log("Leed ID: " + leed_id);
+    console.log("Buyer: " + buyer_name);
+    console.log("Square Transaction ID: " + sq_tid);
+    console.log("Square Order ID: " + sq_oid);
+
+
+    // LOAD THE CURRENT USER
+    //
+    const CURRENT_USER = getCurrentUser(true);
+    if ((! CURRENT_USER) || (! CURRENT_USER.un)) {
+        // ERROR !
+        printError("Leed Receipt", "No current user");
+        errorModal("No current user logged in.", true);
+        throwError(err_msg);
+
+    } else if (CURRENT_USER.un != buyer_name) {
+        // ERROR !
+        var err_msg = "Current user does not match leed buyer";
+        printError("Leed Receipt", err_msg);
+        errorModal(err_msg, true);
+        throwError(err_msg);
+
+
+    } else {
+        
+        // LOAD THE CURRENT LEED
         //
-        // SUCCESS !!
-        //
-        console.log("Leed Receipt: " + new Date());
-        console.log("Leed ID: " + leed_id);
-        console.log("Buyer: " + buyer_name);
-        console.log("Square Transaction ID: " + sq_tid);
-        console.log("Square Order ID: " + sq_oid);
-
-
-        // LOAD THE CURRENT USER
-        //
-        const CURRENT_USER = getCurrentUser(true);
-        if ((! CURRENT_USER) || (! CURRENT_USER.un)) {
+        const leed_preview = getCurrentLeed();
+        if (leed_id != leed_preview.id) {
             // ERROR !
-            printError("Leed Receipt", "No current user");
-            errorModal("No current user logged in.", true);
-            throwError(err_msg);
-
-        } else if (CURRENT_USER.un != buyer_name) {
-            // ERROR !
-            var err_msg = "Current user does not match leed buyer";
+            var err_msg = "Current leed does not match leed bought";
             printError("Leed Receipt", err_msg);
             errorModal(err_msg, true);
             throwError(err_msg);
-
-
-        } else {
-            
-            // LOAD THE CURRENT LEED
-            //
-            const leed_preview = getCurrentLeed();
-            if (leed_id != leed_preview.id) {
-                // ERROR !
-                var err_msg = "Current leed does not match leed bought";
-                printError("Leed Receipt", err_msg);
-                errorModal(err_msg, true);
-                throwError(err_msg);
-            }
-
-            // SUCCESS !!
-            //
-            loadPage(CURRENT_USER, leed_preview);
         }
+
+        // SUCCESS !!
+        //
+        loadPage(CURRENT_USER, leed_preview);
+    }
 
 
 
@@ -410,18 +416,18 @@ https://www.theleedz.com/leed_receipt.html?
     
 
     /**
-        * full refresh of leed details with SHOW_ALL_OPTS
-        */
+    * full refresh of leed details with SHOW_ALL_OPTS
+    */
     export async function getLeedDeetz( CURRENT_USER, leed_preview ) {
-    
+
         // API request --> DB   
         // load full leed details for leed_preview.id
         //
         try {
-    
+
             await db_getDeetz( CURRENT_USER.un, leed_preview.tn, leed_preview.id, SHOW_ALL_OPTS )
                 .then((data) => {
-    
+
                     if (! data) throw new Error("null response from GET");
                     const leed_details = data;
                     
@@ -445,7 +451,7 @@ https://www.theleedz.com/leed_receipt.html?
             
         }
     }
-        
+
         
     </script>
 

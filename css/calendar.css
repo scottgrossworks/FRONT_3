@@ -62,7 +62,7 @@
  
     left:0px;
 
-    margin-bottom:100px;
+    margin-bottom:200px;
     overflow-y: scroll;    
 
   }
@@ -70,7 +70,7 @@
   
 @media screen and (max-width: 500px) {
   #calendar_list {
-    margin-bottom:200px;
+    margin-bottom:300px;
   }
 
 }

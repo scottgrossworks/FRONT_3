@@ -376,6 +376,10 @@ def createPaymentLink(the_seller, the_leed, bn) :
     acc_token = 'Bearer ' + decryptToken( the_seller['sk'] , the_seller['sq_at'] )
     # acc_token = 'Bearer ' + the_seller['sq_at']
     
+    # Build the callback URL
+    #
+    cb_url = "https://theleedz.com/leed_receipt.html?id=" + the_leed['sk'] + "&bn=" + bn
+    
     # Define the payload as a Python dictionary
     payload = {
         "checkout_options": {
@@ -383,7 +387,7 @@ def createPaymentLink(the_seller, the_leed, bn) :
                 "currency": "USD",
                 "amount": app_fee
             },
-            "redirect_url": "https://theleedz.com/hustle.html",
+            "redirect_url": cb_url,
             "merchant_support_email": "theleedz.com@gmail.com",
             "ask_for_shipping_address":False,
         },

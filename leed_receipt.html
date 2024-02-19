@@ -49,7 +49,8 @@
             <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
     
                 <div class="column _1">
-                    <a href="./hustle.html"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+                    <!-- back to hustle -->
+                    <a id="history_back_button" onclick="history.go(-2)"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
                 </div>
     
                 <div class="column" style="margin:auto 0;transform:translateY(6px)">
@@ -253,40 +254,81 @@
 	<script type="module">
 			
         import { formatDTforInput } from "./js/dates.js";
-		
+        import { printError, throwError, errorModal } from "./js/error.js";
         import { getCurrentUser } from "./js/user.js";
 		import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed, getCurrentLeed } from "./leed.js";
 
         import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 
 
-        //
+        // Get the query string from the URL
+        const queryString = window.location.search;
+    
+        // Create a new instance of URLSearchParams with the query string
+        const params = new URLSearchParams(queryString);
+    
+        const leed_id = params.get('id');
+        const buyer_name = params.get('bn');
+
+        if ((! leed_id) || (! buyer_name)) {
+            // ERROR !
+            var err_msg = "Incorrect URL parameters in leed_receipt.html callback";
+            printError( "Leed Receipt", err_msg );
+            errorModal("Cannot load leed receipt: " + err_msg, true);
+            throwError(err_msg);
+        }
+
         // LOAD THE CURRENT USER
         //
         const CURRENT_USER = getCurrentUser(true);
- 
-        if (CURRENT_USER == null || CURRENT_USER.un== null) {
-            
-            printError("Leed Bought", "No current user");
+        if ((! CURRENT_USER) || (! CURRENT_USER.un)) {
+            // ERROR !
+            printError("Leed Receipt", "No current user");
             errorModal("No current user logged in.", true);
-  
-        } else {
+            throwError(err_msg);
 
-            let user_welcome = document.getElementById("user_welcome");
-            user_welcome.innerText = CURRENT_USER.un;
-           
-            let user_email = document.getElementById("user_email");
-            user_email.innerText = CURRENT_USER.em;
+        } else if (CURRENT_USER.un != buyer_name) {
+            // ERROR !
+            var err_msg = "Current user does not match leed buyer";
+            printError("Leed Receipt", err_msg);
+            errorModal(err_msg, true);
+            throwError(err_msg);
+
+
+        } else {
+            
+            // LOAD THE CURRENT LEED
+            //
+            const leed_preview = getCurrentLeed();
+            if (leed_id != leed_preview.id) {
+                // ERROR !
+                var err_msg = "Current leed does not match leed bought";
+                printError("Leed Receipt", err_msg);
+                errorModal(err_msg, true);
+                throwError(err_msg);
+            }
+
+            // SUCCESS !!
+            //
+            loadPage(CURRENT_USER, leed_preview);
         }
 
 
 
+    //
+    // FULL REFRESH leed details with SHOW_ALL options
+    //
+    function loadPage(CURRENT_USER, leed_preview) {
+        
+        let user_welcome = document.getElementById("user_welcome");
+        user_welcome.innerText = CURRENT_USER.un;
+       
+        let user_email = document.getElementById("user_email");
+        user_email.innerText = CURRENT_USER.em;
 
-        //
-        // FULL REFRESH leed details with SHOW_ALL options
-        //
-        const leed_preview = getCurrentLeed();
+
         const LEED_BOUGHT = getLeedDeetz(CURRENT_USER, leed_preview);
+
 
         var the_div = document.getElementById("td_cr");
         the_div.innerText = LEED_BOUGHT['cr'];
@@ -321,53 +363,50 @@
         var the_div = document.getElementById("td_pr");
         the_div.innerText = '$ ' + LEED_BOUGHT['pr'];
         
+    }
 
 
 
-
-        
-
-        /**
-         * full refresh of leed details with SHOW_ALL_OPTS
-         */
-        export async function getLeedDeetz( CURRENT_USER, leed_preview ) {
-        
-            // API request --> DB   
-            // load full leed details for leed_preview.id
-            //
-            try {
-        
-                await db_getDeetz( CURRENT_USER.un, leed_preview.tn, leed_preview.id, SHOW_ALL_OPTS )
-                    .then((data) => {
-        
-                        if (! data) throw new Error("null response from GET");
-                        const leed_details = data;
-                        
-                        // query returns empty result set
-                        if (! leed_details)
-                            throw new Error("No leed details for id: " + leed_preview.id);
-                        
-                        // COPY leed details into current leed object 
-                        setCurrentLeed(leed_details);
-
-                        return leed_details;
-
-                    })
-                .catch(error => {
-                    throw error;            
-                })
-            } catch ( error ) {
-
-                printError( "db_getDeetz()", error.message );
-                errorModal("Cannot get leed details for [" + leed_preview.tn + "] " + leed_preview.id, true);
-                
-            }
-        }
-        
-        
     
 
-	</script>
+    /**
+        * full refresh of leed details with SHOW_ALL_OPTS
+        */
+    export async function getLeedDeetz( CURRENT_USER, leed_preview ) {
+    
+        // API request --> DB   
+        // load full leed details for leed_preview.id
+        //
+        try {
+    
+            await db_getDeetz( CURRENT_USER.un, leed_preview.tn, leed_preview.id, SHOW_ALL_OPTS )
+                .then((data) => {
+    
+                    if (! data) throw new Error("null response from GET");
+                    const leed_details = data;
+                    
+                    // query returns empty result set
+                    if (! leed_details)
+                        throw new Error("No leed details for id: " + leed_preview.id);
+                    
+                    // COPY leed details into current leed object 
+                    setCurrentLeed(leed_details);
 
-	
+                    return leed_details;
+
+                })
+            .catch(error => {
+                throw error;            
+            })
+        } catch ( error ) {
+
+            printError( "db_getDeetz()", error.message );
+            errorModal("Cannot get leed details for [" + leed_preview.tn + "] " + leed_preview.id, true);
+            
+        }
+    }
+        
+        
+    </script>
+
 </html>

@@ -126,7 +126,9 @@ section > img {
 
 
 
-
+#leed_info {
+	overflow-y: scroll;
+}
 
 
 

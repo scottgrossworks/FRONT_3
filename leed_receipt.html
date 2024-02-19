@@ -250,13 +250,27 @@
 
 </body>
 
-
+<!--
+This is coming from the square_leedbought callback lambda function
+The transaction is approved (or not)
+The callback processes the results
+this url is encoded in the ORIGINAL payment link sent to the user in getDeetz()
+Square sends user here
+https://www.theleedz.com/leed_receipt.html?
+    id=1059445987
+    &
+    bn=theleedz
+    &
+    transactionId=LO3AyBjsoVUUFJul27DXQF4V9pfZY
+    &
+    orderId=LO3AyBjsoVUUFJul27DXQF4V9pfZY
+-->
 	<script type="module">
 			
         import { formatDTforInput } from "./js/dates.js";
         import { printError, throwError, errorModal } from "./js/error.js";
         import { getCurrentUser } from "./js/user.js";
-		import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed, getCurrentLeed } from "./leed.js";
+		import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed, getCurrentLeed } from "./js/leed.js";
 
         import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 
@@ -277,6 +291,27 @@
             errorModal("Cannot load leed receipt: " + err_msg, true);
             throwError(err_msg);
         }
+
+        const sq_tid = params.get('transactionId');
+        const sq_oid = params.get('orderId');
+
+        if ((! sq_tid) || (! sq_oid)) {
+            // ERROR !
+            var err_msg = "No Order ID or Transaction ID found";
+            printError( "Leed Receipt", err_msg );
+            errorModal("Leed not bought: " + err_msg, true);
+            throwError(err_msg);
+        }   
+
+        //
+        // SUCCESS !!
+        //
+        console.log("Leed Receipt: " + new Date());
+        console.log("Leed ID: " + leed_id);
+        console.log("Buyer: " + buyer_name);
+        console.log("Square Transaction ID: " + sq_tid);
+        console.log("Square Order ID: " + sq_oid);
+
 
         // LOAD THE CURRENT USER
         //
@@ -328,7 +363,7 @@
 
 
         const LEED_BOUGHT = getLeedDeetz(CURRENT_USER, leed_preview);
-
+ 
 
         var the_div = document.getElementById("td_cr");
         the_div.innerText = LEED_BOUGHT['cr'];
@@ -360,8 +395,13 @@
         var the_div = document.getElementById("td_ph");
         the_div.innerText = LEED_BOUGHT['ph'];
         
+        //
+        // PRICE
+        //
         var the_div = document.getElementById("td_pr");
-        the_div.innerText = '$ ' + LEED_BOUGHT['pr'];
+        var the_price =  '$ ' + LEED_BOUGHT['pr'];
+        the_div.innerText = the_price;
+        console.log("Price: " + the_price);
         
     }
 

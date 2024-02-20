@@ -148,7 +148,7 @@ import { printError, errorModal } from "./error.js";
         if (! theVal) return true;
 
         // there IS a value but it may be '0' or "" string
-        if (theVal == 0 || theVal == '0' || theVal == "") return true;
+        if (theVal == 0 || theVal == '0' || theVal == "" || theVal == "null" ) return true;
 
         return false;
     }

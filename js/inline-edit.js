@@ -480,10 +480,6 @@ function inlineDefaultFinish(rowName, options) {
 
 
 
-
-
-
-            // FOOBAR
             // FINISH BUTTON -- GO STRAIGHT TO CALLBACK
             // Finish Button
             // Call appropriate callback for this row

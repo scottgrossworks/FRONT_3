@@ -416,6 +416,7 @@
                 element.innerHTML =  CURRENT_USER.em;
             } else {
                 inlineEdit('row_email', createOptions);
+                beginEditing();
             }
 
 
@@ -426,6 +427,7 @@
                 element.innerHTML = CURRENT_USER.ws;
             } else {
                 inlineEdit('row_website', createOptions);
+                beginEditing();
             }
 
 
@@ -436,6 +438,7 @@
                 element.innerHTML =  CURRENT_USER.ab;
             } else {
                 inlineEdit('row_about', createOptions);
+                beginEditing();
             }
 
 
@@ -446,6 +449,7 @@
                 element.innerHTML = CURRENT_USER.zp;
             } else {
                 inlineEdit('row_zip', createOptions);
+                beginEditing();
             }
 
 
@@ -456,6 +460,7 @@
                 element.innerHTML = CURRENT_USER.zr;
             } else {
                 inlineEdit('row_radius', sampleOptions);
+                beginEditing();
             }
 
 
@@ -856,7 +861,7 @@ function defaultCallback(rowData, rowName) {
 
         }
 
-    // console.log(USER_CHANGES);
+        // console.log(USER_CHANGES);
 
     }
 

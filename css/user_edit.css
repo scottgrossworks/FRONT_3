@@ -187,7 +187,9 @@ table#badges_list tbody td {
 		font-size:small;
 	}
 
-	input[type="button"] {
+	input[value="Edit"],
+	input[value="Finish"],
+	input[value="Remove"] {
 
 		float:right;
 		width:80%;
@@ -203,6 +205,14 @@ table#badges_list tbody td {
 	#form_container {
 		font-size:small;
 	}
+
+	section {
+		font-size: 0.9em;
+		font-family: var(--FONT_3);
+		margin:0 auto;
+
+	}
+
 
 }
 
@@ -294,16 +304,6 @@ section {
 }
 
 
-
-@media screen and (max-width:499px) {
-	section {
-		font-size: 0.9em;
-		font-family: var(--FONT_3);
-		margin:0 auto;
-
-	}
-
-}
 
 
 

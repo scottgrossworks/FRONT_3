@@ -5,22 +5,21 @@
  */
 import { saveLeedChanges, deleteCurrentLeed, createDBLeed } from "./leed.js";
 import { printError, errorModal } from "./error.js";
-import { showCallback, hideCallback, defaultCallback } from "./inline-edit.js";
 
 
     export const URL_LEED_DELETED = "./leed_delete.html";
 
     export const cancelOptions = {  "origin": "cancel",
-        "showCallback": showCallback,
-        "hideCallback": hideCallback,
-        "finishCallback": defaultCallback };
+        "showCallback": null,
+        "hideCallback": null,
+        "finishCallback": null };
 
 
 
     export const createOptions = {   "origin": "create",
-        "showCallback": showCallback,
-        "hideCallback": hideCallback,
-        "finishCallback": defaultCallback };
+        "showCallback": null,
+        "hideCallback": null,
+        "finishCallback": null };
 
 
 

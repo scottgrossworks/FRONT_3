@@ -390,7 +390,7 @@
     
     
     <script type="module">
-                
+
         import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } from "./js/dates.js";
         import { getShortDateString, DTfromPretty } from "./js/dates.js";
         
@@ -402,17 +402,17 @@
         import { clearCurrentLeed, getCurrentLeed, blankLeedObject } from "./js/leed.js";
 
         import { printError, throwError, errorModal, modalClose, errorModalClose } from "./js/error.js";
-        
-        import { USERNAME_URL_PARAM } from "./js/dbTools.js";
 
         import { cancelOptions, createOptions } from "./js/leed_edit.js";
-        import { noValue, goodValue, successAlert, leed_edit_Save, leed_edit_Delete } from "./js/leed_edit.js";
+        import { goodValue, successAlert, leed_edit_Save, leed_edit_Delete } from "./js/leed_edit.js";
         import { waitCursor, normalCursor, showWaitingModal, clearFields, validateLeedChanges  } from "./js/leed_edit.js";
         
 
 
         window.errorModalClose = errorModalClose;
         window.inlineEdit = inlineEdit;
+        window.clearFields = clearFields;
+
 
         window.cancelOptions = cancelOptions;
         window.createOptions = createOptions;

@@ -701,36 +701,19 @@ function inlineDefaultFinish(rowName, options) {
     }
 
 
-
-
     //
-    // CALLBACK
-    // 
+    // CALLBACK AND FINISH
     //
-    if ( options["finishCallback"] ) {
-        options.finishCallback(rowData, rowName);
-    }
-
-
-
     try {
+        
+        if ( options["finishCallback"] ) {
+            options.finishCallback(rowData, rowName);
+        }
+
         // update the table cell with the new value
         for (i = 0; i < tableRow.childElementCount; i++) {
             var cell = tableRow.children[i];
-            
-            if (options.hasOwnProperty("urlFinish")) {
-
-                inlineURLFinishCell(cell, i, rowName);
-
-            } else if (options.hasOwnProperty("emailFinish")) {
-
-                inlineEmailFinishCell(cell, i, rowName);
-
-
-            } else {
-
-                inlineDefaultFinishCell(cell, i, rowName);
-            }
+            inlineDefaultFinishCell(cell, i, rowName);
         }
 
     } catch (error) {
@@ -792,34 +775,6 @@ export function inlineDefaultFinishCell(cell, i, rowName) {
     cellContent += inlineEditRowContents[rowName][i];
     cell.innerHTML = cellContent;
 }
-
-
-
-
-//
-
-export function inlineURLFinishCell(cell, i, rowName) {
-
-    var content = inlineEditRowContents[rowName][i];
-    if (i == 1) {
-        cell.innerHTML = "<a href='" + content + "'>" + content + "</a>";
-    } else {
-        cell.innerHTML = content;
-    }
-}
-
-
-export function inlineEmailFinishCell(cell, i, rowName) {
-
-    var content = inlineEditRowContents[rowName][i];
-
-    if (i == 1) {
-        cell.innerHTML = "<a href='mailto:" + content + "'>" + content + "</a>";
-    } else {
-        cell.innerHTML = content;
-    }
-}
-
 
 
 

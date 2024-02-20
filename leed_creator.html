@@ -389,49 +389,57 @@
     
     <script type="module">
             
-        import { DTfromPretty } from "./js/dates.js";
+    import { DTfromPretty } from "./js/dates.js";
+
+    import { getCurrentUser, guestUser } from "./js/user.js";
+
+    import { printError, throwError, errorModal, errorModalClose, modalClose } from "./js/error.js";
+
+    import { OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
+    import { blankLeedObject } from "./js/leed.js";
+
+    import { inlineEdit } from "./js/inline-edit.js";
+
+    import { cancelOptions, createOptions } from "./js/leed_edit.js";
+    import { validateLeedChanges, leed_edit_Post } from "./js/leed_edit.js";
+    import { waitCursor, normalCursor, showWaitingModal, clearFields  } from "./js/leed_edit.js";
+
+
+    window.errorModalClose = errorModalClose;
+    window.inlineEdit = inlineEdit;
+    window.clearFields = clearFields;
+
+    window.cancelOptions = cancelOptions;
+    window.createOptions = createOptions;
+
+
+    // flag indicates edits are in progress
+    //
+    var EDITING = false;
+
+    // THE LEED CHANGES
+    // struct to hold form data
+    //
+    const LEED_CHANGES = blankLeedObject();
+    window.LEED_CHANGES = LEED_CHANGES;
+
+
+    
+    //
+    //
+    //
+    export function setCallbacks( options ) {
         
-        import { getCurrentUser, guestUser } from "./js/user.js";
+        options.finishCallback = defaultCallback;
+        options.showCallback = showCallback;
+        options.hideCallback = hideCallback;
 
-        import { printError, throwError, errorModal, errorModalClose, modalClose } from "./js/error.js";
-
-        import { OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
-        import { blankLeedObject } from "./js/leed.js";
-
-        import { inlineEdit } from "./js/inline-edit.js";
-        
-        import { cancelOptions, createOptions } from "./js/leed_edit.js";
-        import { validateLeedChanges, leed_edit_Post } from "./js/leed_edit.js";
-        import { waitCursor, normalCursor, showWaitingModal, clearFields  } from "./js/leed_edit.js";
-        
-
-        
-        window.errorModalClose = errorModalClose;
-        window.inlineEdit = inlineEdit;
-        window.clearFields = clearFields;
-
-        window.cancelOptions = cancelOptions;
-        window.createOptions = createOptions;
-
-
-
-
-        // flag indicates edits are in progress
-        //
-        var EDITING = false;
-
-        // THE LEED CHANGES
-        // struct to hold form data
-        //
-        const LEED_CHANGES = blankLeedObject();
-        window.LEED_CHANGES = LEED_CHANGES;
+    }
+    window.setCallbacks = setCallbacks();
     
 
 
 
-    //
-    //
-    //
     //
     //
     function defaultCallback(rowData, rowName) {
@@ -489,9 +497,6 @@
 
         }
     }
-    cancelOptions.finishCallback = defaultCallback;
-    createOptions.finishCallback = defaultCallback;
-
 
     // 
     //
@@ -516,10 +521,6 @@
         // console.log("SHOWING FIELD: " + row_index);
         changeLeedOpts( LEED_CHANGES, leedkey, OPTS_SHOWING );
     }
-
-    createOptions.showCallback = showCallback;
-    cancelOptions.showCallback = showCallback;
-
 
 
     // 
@@ -546,10 +547,6 @@
         changeLeedOpts( LEED_CHANGES, leedkey, OPTS_HIDDEN );
         
     }
-
-    createOptions.hideCallback = hideCallback;
-    cancelOptions.showCallback = hideCallback;
-
 
 
 
@@ -679,9 +676,7 @@
             clearFields();
             
         } finally {
-            modalClose(false);
-            normalCursor();
-            beginEditing();
+            startOver();
         }
     
     } 
@@ -803,6 +798,9 @@
         LEED_CHANGES.un = CURRENT_USER.un 
 
 
+        setCallbacks( createOptions );
+
+
         inlineEdit('row_trade', createOptions);            
         inlineEdit('row_title', createOptions);
         inlineEdit('row_start', createOptions);
@@ -816,6 +814,7 @@
         inlineEdit('row_reqs', createOptions);
 
         inlineEdit('row_pr', createOptions);
+
     };
 
 

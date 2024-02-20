@@ -313,38 +313,50 @@
       
     
         </body>
-    
-    
-        <script type="module">
-                
-            import { printError, throwError, errorModal, modalClose, errorModalClose } from "./js/error.js";
- 
-            import { USERNAME_URL_PARAM } from "./js/dbTools.js";
- 
-            import { turnTrade_On, turnTrade_Off, getAllTrades, createTradesAndColors } from "./js/trades.js";
-    
-            import { isSubscribed, saveUserChanges, getCurrentUser, reloadCurrentUser, deleteCurrentUser } from "./js/user.js";
-            import { MAX_USER_SUBS } from "./js/user.js";
-            
-            import { clearCurrentLeed } from "./js/leed.js";
 
-            import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
-            import { inlineEdit } from "./js/inline-edit.js";
 
-            import { cancelOptions, createOptions } from "./js/leed_edit.js";
-            import { noValue, goodValue, successAlert, leed_edit_Save, leed_edit_Delete } from "./js/leed_edit.js";
-            import { waitCursor, normalCursor, showWaitingModal, clearFields  } from "./js/leed_edit.js";
-            
+<script type="module">
     
-            const URL_USER_DELETED = "./user_deleted.html";
-            const URL_DEL_USER = "./user_delete_confirm.html";
+    import { printError, throwError, errorModal, modalClose, errorModalClose } from "./js/error.js";
+
+    import { USERNAME_URL_PARAM } from "./js/dbTools.js";
+
+    import { turnTrade_On, turnTrade_Off, getAllTrades, createTradesAndColors } from "./js/trades.js";
+
+    import { isSubscribed, saveUserChanges, getCurrentUser, reloadCurrentUser, deleteCurrentUser } from "./js/user.js";
+    import { MAX_USER_SUBS } from "./js/user.js";
+
+    import { clearCurrentLeed } from "./js/leed.js";
+
+    import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
+    import { inlineEdit } from "./js/inline-edit.js";
+
+    import { cancelOptions, createOptions } from "./js/leed_edit.js";
+    import { noValue, goodValue, successAlert, leed_edit_Save, leed_edit_Delete } from "./js/leed_edit.js";
+    import { waitCursor, normalCursor, showWaitingModal, clearFields  } from "./js/leed_edit.js";
+
     
-            var EDITING = false;
-            let CURRENT_USER;
-            let USER_CHANGES;
-    
-            window.errorModalClose = errorModalClose;
-    
+    window.errorModalClose = errorModalClose;
+    window.inlineEdit = inlineEdit;
+
+
+    const URL_USER_DELETED = "./user_deleted.html";
+    const URL_DEL_USER = "./user_delete_confirm.html";
+
+    var EDITING = false;
+    let CURRENT_USER;
+    let USER_CHANGES;
+
+
+    const defaultOptions = { "finishCallback": defaultCallback };
+
+    const emailOptions = {  "finishCallback": defaultCallback,
+                            "emailFinish": inlineEmailFinishCell };
+
+    const urlOptions = {    "finishCallback": defaultCallback,
+                            "urlFinish": inlineURLFinishCell };
+
+    const sampleOptions = { "finishCallback": selectCallback };	
 
 
     
@@ -501,7 +513,7 @@
         back_button.onclick = function() {
             backButton(-1);
           };
-    }
+    }    
     function square_backButton() {
         let back_button = document.getElementById("history_back_button");
         back_button.onclick = function() {
@@ -633,10 +645,6 @@
     
     
     
-    
-    
-    
-    
     /**
      * 
      * 
@@ -684,12 +692,7 @@
       }
     
     
-        
     
-    
-    
-    
-      
     
     
     /**
@@ -968,24 +971,6 @@ function defaultCallback(rowData, rowName) {
 
 
 
-    var defaultOptions = { "finishCallback": defaultCallback };
-
-    var emailOptions = {    "finishCallback": defaultCallback,
-                            "emailFinish": inlineEmailFinishCell };
-
-    var urlOptions = {	"finishCallback": defaultCallback,
-                        "urlFinish": inlineURLFinishCell };
-
-    var sampleOptions = { "finishCallback": selectCallback };	
-
-
-    window.inlineEdit = inlineEdit;
-    window.defaultOptions = defaultOptions;
-    window.emailOptions = emailOptions;
-    window.urlOptions = urlOptions;
-    window.sampleOptions = sampleOptions;
-
-
 
 
         
@@ -999,6 +984,11 @@ function defaultCallback(rowData, rowName) {
  *
  */
 window.onload = (event) => {       
+
+    window.defaultOptions = defaultOptions;
+    window.emailOptions = emailOptions;
+    window.urlOptions = urlOptions;
+    window.sampleOptions = sampleOptions;
 
     modalClose(true);
     

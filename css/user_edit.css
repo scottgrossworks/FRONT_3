@@ -181,6 +181,27 @@ table#badges_list tbody td {
 
 
 @media screen and (max-width:599px) {
+
+	.sq_button {
+		float:right;
+		font-size:small;
+	}
+
+	input {
+
+		float:right;
+		width:80%;
+		
+		padding:12px 8px;
+	
+		font-size: 0.85rem;
+		outline: none;
+		border-radius: 7px;
+	
+		font-family: var(--FONT_2);
+	
+	}
+	
 	
 
 	

@@ -354,6 +354,9 @@
 
     const sampleOptions = { "finishCallback": selectCallback };	
 
+    window.defaultOptions = defaultOptions;
+    window.sampleOptions = sampleOptions;
+
     
     /**
     *
@@ -984,9 +987,6 @@ function defaultCallback(rowData, rowName) {
  *
  */
 window.onload = (event) => {       
-
-    window.defaultOptions = defaultOptions;
-    window.sampleOptions = sampleOptions;
 
     modalClose(true);
     

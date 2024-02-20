@@ -10,16 +10,18 @@ import { printError, errorModal } from "./error.js";
     export const URL_LEED_DELETED = "./leed_delete.html";
 
     export const cancelOptions = {  "origin": "cancel",
-        "showCallback": null,
-        "hideCallback": null,
-        "finishCallback": null };
+                                    "showCallback": null,
+                                    "hideCallback": null,
+                                    "finishCallback": null 
+                                };
 
 
 
     export const createOptions = {   "origin": "create",
-        "showCallback": null,
-        "hideCallback": null,
-        "finishCallback": null };
+                                    "showCallback": null,
+                                    "hideCallback": null,
+                                    "finishCallback": null
+                                 };
 
 
 

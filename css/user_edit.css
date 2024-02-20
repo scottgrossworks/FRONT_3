@@ -187,7 +187,7 @@ table#badges_list tbody td {
 		font-size:small;
 	}
 
-	input {
+	input[type="button"] {
 
 		float:right;
 		width:80%;
@@ -195,15 +195,10 @@ table#badges_list tbody td {
 		padding:12px 8px;
 	
 		font-size: 0.85rem;
-		outline: none;
 		border-radius: 7px;
-	
-		font-family: var(--FONT_2);
 	
 	}
 	
-	
-
 	
 	#form_container {
 		font-size:small;

@@ -461,7 +461,7 @@ function inlineDefaultFinish(rowName, options) {
 
 
                 var theVal = cell.children[getFromChildren].value;
-                var trimVal = theVal.trim();
+                var trimVal = theVal.trim().toLowerCase();
 
                 //
                 // is this a valid trade name?  If not -- show error and force re-enter

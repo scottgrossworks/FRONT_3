@@ -412,6 +412,9 @@
     window.createOptions = createOptions;
 
 
+    setCallbacks( createOptions );
+
+    
     // flag indicates edits are in progress
     //
     var EDITING = false;
@@ -434,7 +437,7 @@
         options.hideCallback = hideCallback;
 
     }
-    window.setCallbacks = setCallbacks();
+    window.setCallbacks = setCallbacks;
     
 
 

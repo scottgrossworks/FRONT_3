@@ -403,7 +403,7 @@
 
         import { inlineEmailFinishCell, inlineURLFinishCell, inlineEdit } from "./js/inline-edit.js";
         
-        import { cancelOptions, createOptions, validateLeedChanges} from "./js/leed_edit.js";
+        import { validateLeedChanges} from "./js/leed_edit.js";
         import { noValue, goodValue, leed_edit_Post } from "./js/leed_edit.js";
         import { waitCursor, normalCursor, showWaitingModal, clearFields  } from "./js/leed_edit.js";
         
@@ -412,11 +412,6 @@
         window.errorModalClose = errorModalClose;
         window.inlineEdit = inlineEdit;
         window.clearFields = clearFields;
-
-        window.cancelOptions = cancelOptions;
-        window.createOptions = createOptions;
-        
-        createOptions.finishCallback = defaultCallback;
 
 
         // flag indicates edits are in progress
@@ -437,7 +432,7 @@
     //
     //
     //
-    function defaultCallback(rowData, rowName) {
+    export function defaultCallback(rowData, rowName) {
 
 
         beginEditing();
@@ -492,17 +487,14 @@
 
         }
     }
-
-    cancelOptions.finishCallback = defaultCallback;
-    createOptions.finishCallback = defaultCallback;
-
+    window.defaultCallback = defaultCallback;
 
 
 
 
     // 
     //
-    function showCallback(rowName, leedkey) {
+    export function showCallback(rowName, leedkey) {
 
         let tableRow = document.getElementById(rowName);
             
@@ -523,14 +515,12 @@
         // console.log("SHOWING FIELD: " + row_index);
         changeLeedOpts( LEED_CHANGES, leedkey, OPTS_SHOWING );
     }
-    createOptions.showCallback = showCallback;
-    cancelOptions.showCallback = showCallback;
-
+    window.showCallback = showCallback;
 
 
     // 
     //
-    function hideCallback(rowName, leedkey) {
+    export function hideCallback(rowName, leedkey) {
 
         let tableRow = document.getElementById(rowName);
 
@@ -552,10 +542,7 @@
         changeLeedOpts( LEED_CHANGES, leedkey, OPTS_HIDDEN );
         
     }
-    createOptions.hideCallback = hideCallback;
-    cancelOptions.showCallback = hideCallback;
-
-
+    window.hideCallback = hideCallback;
 
 
     /**
@@ -792,49 +779,41 @@
     */
     window.onload = (event) => {
 
-    // CURRENT USER
-    //
-
-    const CURRENT_USER = getCurrentUser(true);
-    if ((! CURRENT_USER ) || (! CURRENT_USER.un)) {
-        var msg = "Cannot initialize leed editor: No current user";
-        console.error(msg);
-        errorModal(msg, true);
-        return;
-        // CURRENT_USER = guestUser();
-    }   
-    console.log("CURRENT USER")
-    console.log(CURRENT_USER);
+        const CURRENT_USER = getCurrentUser(true);
+        if ((! CURRENT_USER ) || (! CURRENT_USER.un)) {
+            var msg = "Cannot initialize leed editor: No current user";
+            console.error(msg);
+            errorModal(msg, true);
+            return;
+        }   
+        console.log(CURRENT_USER);
 
 
-    let element = document.getElementById("td_creator");
-    element.innerHTML = "<B style='font-size:larger'>" + CURRENT_USER.un + "</B>";
-    // leed creator is fixed to current user
-    LEED_CHANGES.un = CURRENT_USER.un 
+        let element = document.getElementById("td_creator");
+        element.innerHTML = "<B style='font-size:larger'>" + CURRENT_USER.un + "</B>";
+        // leed creator is fixed to current user
+        LEED_CHANGES.un = CURRENT_USER.un 
 
 
-    inlineEdit('row_trade', createOptions);            
-    inlineEdit('row_title', createOptions);
-    inlineEdit('row_start', createOptions);
-    inlineEdit('row_end', createOptions);
+        inlineEdit('row_trade', createOptions);            
+        inlineEdit('row_title', createOptions);
+        inlineEdit('row_start', createOptions);
+        inlineEdit('row_end', createOptions);
 
-    inlineEdit('row_loc', createOptions);
-    inlineEdit('row_em', createOptions);
-    inlineEdit('row_ph', createOptions);
+        inlineEdit('row_loc', createOptions);
+        inlineEdit('row_em', createOptions);
+        inlineEdit('row_ph', createOptions);
 
-    inlineEdit('row_det', createOptions);
-    inlineEdit('row_reqs', createOptions);
+        inlineEdit('row_det', createOptions);
+        inlineEdit('row_reqs', createOptions);
 
-    inlineEdit('row_pr', createOptions);
+        inlineEdit('row_pr', createOptions);
     };
 
 
-    
-    
-        </script>
-    
-        
-            
-    
-    
-    </html>
+
+
+</script>
+
+
+</html>

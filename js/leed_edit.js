@@ -3,23 +3,24 @@
  * LEED CREATE AND EDIT UTILS
  * 
  */
-import { createDBLeed } from "./leed.js";
-import { saveLeedChanges, deleteCurrentLeed } from "./leed.js";
+import { saveLeedChanges, deleteCurrentLeed, createDBLeed } from "./leed.js";
 import { printError, errorModal } from "./error.js";
+import { showCallback, hideCallback, defaultCallback } from "./inline-edit.js";
+
 
     export const URL_LEED_DELETED = "./leed_delete.html";
 
     export const cancelOptions = {  "origin": "cancel",
-                                    "showCallback": null,
-                                    "hideCallback": null,
-                                    "finishCallback": null };
+        "showCallback": showCallback,
+        "hideCallback": hideCallback,
+        "finishCallback": defaultCallback };
 
 
 
     export const createOptions = {   "origin": "create",
-                                    "showCallback": null,
-                                    "hideCallback": null,
-                                    "finishCallback": null };
+        "showCallback": showCallback,
+        "hideCallback": hideCallback,
+        "finishCallback": defaultCallback };
 
 
 

@@ -331,7 +331,6 @@
     import { inlineEmailFinishCell, inlineURLFinishCell } from "./js/inline-edit.js";
     import { inlineEdit } from "./js/inline-edit.js";
 
-    import { createOptions } from "./js/leed_edit.js";
     import { noValue, goodValue, successAlert, leed_edit_Save, leed_edit_Delete } from "./js/leed_edit.js";
     import { waitCursor, normalCursor, showWaitingModal, clearFields  } from "./js/leed_edit.js";
 
@@ -354,7 +353,6 @@
                             };
 
     const sampleOptions = { "finishCallback": selectCallback };	
-
 
     
     /**
@@ -412,7 +410,7 @@
                 element = document.getElementById("td_email");
                 element.innerHTML =  CURRENT_USER.em;
             } else {
-                inlineEdit('row_email', createOptions);
+                inlineEdit('row_email', defaultOptions);
                 beginEditing();
             }
 
@@ -423,7 +421,7 @@
                 element = document.getElementById("td_website");
                 element.innerHTML = CURRENT_USER.ws;
             } else {
-                inlineEdit('row_website', createOptions);
+                inlineEdit('row_website', defaultOptions);
                 beginEditing();
             }
 
@@ -434,7 +432,7 @@
                 element = document.getElementById("td_about");
                 element.innerHTML =  CURRENT_USER.ab;
             } else {
-                inlineEdit('row_about', createOptions);
+                inlineEdit('row_about', defaultOptions);
                 beginEditing();
             }
 
@@ -445,7 +443,7 @@
                 element = document.getElementById("td_zip");
                 element.innerHTML = CURRENT_USER.zp;
             } else {
-                inlineEdit('row_zip', createOptions);
+                inlineEdit('row_zip', defaultOptions);
                 beginEditing();
             }
 

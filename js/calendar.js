@@ -210,6 +210,10 @@ export function loadDBLeedz() {
     if (current_user.un == null)
         throwError("LoadDBLeedz", "Current user is not initialized");
 
+    const first_date = firstDayShowing();
+    const last_date = lastDayShowing();
+
+    console.log("loadDBLeedz -- " + first_date + " to " + last_date);
     showWaitingModal("Loading the Leedz . . .");
 
     // ASYNC CALL
@@ -219,7 +223,7 @@ export function loadDBLeedz() {
     // returns immediately -- provide callback for DB results when they come in
     try {
 
-        loadLeedzFromDB(current_user.sb, firstDayShowing(), lastDayShowing(), current_user.zp, current_user.zr, refreshCalendar );
+        loadLeedzFromDB(current_user.sb, first_date, last_date, current_user.zp, current_user.zr, refreshCalendar );
             
     } catch (error) {
         printError("Loading leedz from DB", error);

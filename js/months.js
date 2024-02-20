@@ -84,6 +84,7 @@ function hideBackArrow( leftArrow, handler ) {
 function showPrevMonth() {
     
     let prevMonth = getPrevMonth();
+    console.log("SHOWING PREV=" + prevMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
 
     let theMonth = prevMonth.getUTCMonth() + 1;
 
@@ -122,7 +123,7 @@ function showNextMonth() {
 
     
     let nextMonth = getNextMonth();
-    // console.log("SNM=" + nextMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
+    console.log("SHOWING NEXT=" + nextMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
 
     let theMonth = nextMonth.getUTCMonth() + 1; 
     let theYear = nextMonth.getUTCFullYear();

@@ -13,42 +13,6 @@ const BUY_TO_SHOW = "Buy to show";
 
 
 
-/**   
-
-function setActionHeight( window_height ) {
-
-    var action = document.getElementById("action_panel");
-    // var screen = action.getAttribute("screen");
-    
-    var action_height = Math.floor(window_height * 0.7 );
-    action.style.height = action_height;
- 
-    switch (screen) {
-        
-        case "0":
-            // small
-            // mobile phones
-            action.style.height = action_height;
-            break;
-        
-        case "1":
-            // medium
-            // tablets
-            action.style.height = action_height;
-            break;
-        
-        case "2":
-            // large
-            // browser window
-            action.style.height = action_height;
-            break;
-        
-        default:
-            printError("setActionHeight", "invalid screen attribute: " + screen);
-    }
-}
-*/
-
 
 
 
@@ -91,6 +55,8 @@ leed_details contains
 *
 */
 export async function showLeedAction( leed_preview , gotoDB ) {
+
+    console.log("SLA: " + leed_preview.id + " goto: " + gotoDB);
 
     const CURRENT_USER = getCurrentUser(false);
 

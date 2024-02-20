@@ -770,228 +770,224 @@
     
     
     
-    
-    
-        /**
-        * Helper function
-        * 
-        * 
-        */
-        function tradeListener(trade, radioButton, theLabel) {
+
+
+    /**
+    * Helper function
+    * 
+    * 
+    */
+    function tradeListener(trade, radioButton, theLabel) {
+        
+
+        try {
+
+            if ( isSubscribed(trade)  ) { // TRADE is ON
             
-    
-            try {
-    
-               if ( isSubscribed(trade)  ) { // TRADE is ON
+                turnTrade_Off(null, radioButton, theLabel, trade);
+                USER_CHANGES.sb = USER_CHANGES.sb.filter(function (sub) {
+                    return sub != trade;
+                });
                 
-                    turnTrade_Off(null, radioButton, theLabel, trade);
-                    USER_CHANGES.sb = USER_CHANGES.sb.filter(function (sub) {
-                        return sub != trade;
-                    });
+                beginEditing();
+                
+            } else { // TRADE is OFF
+
+                if (USER_CHANGES.sb.length >= MAX_USER_SUBS) {
                     
-                    beginEditing();
-                    
-               } else { // TRADE is OFF
-    
-                    if (USER_CHANGES.sb.length >= MAX_USER_SUBS) {
-                        
-                        printError("Trades Table", "Maximum " + MAX_USER_SUBS + " trade subscriptions allowed");
-                        var warning = document.getElementById('trades_warning');
-                        warning.style.color = 'red';
-                        return;
-                    }
-                    turnTrade_On(null, radioButton, theLabel, trade );
-                    USER_CHANGES.sb.push(trade);
-                    
-                    beginEditing();
-               }
-         
-               
-           } catch (error) {
-             printError("tradeListener", error.message);
-             return false;
-           }
+                    printError("Trades Table", "Maximum " + MAX_USER_SUBS + " trade subscriptions allowed");
+                    var warning = document.getElementById('trades_warning');
+                    warning.style.color = 'red';
+                    return;
+                }
+                turnTrade_On(null, radioButton, theLabel, trade );
+                USER_CHANGES.sb.push(trade);
+                
+                beginEditing();
+            }
+        
             
-    
+        } catch (error) {
+            printError("tradeListener", error.message);
+            return false;
         }
-        window.tradeListener = tradeListener;
         
-    
-    
-    
-    
-    
-    
-    
-            function defaultCallback(rowData, rowName) {
-    
-                beginEditing();
-    
-                switch(rowName) {
-    
-                    case "row_username":
-                        USER_CHANGES.un = rowData["username"];
-                        break;
-    
-                    case "row_zip":
-                        USER_CHANGES.zp = rowData["zip"];
-                        break;
-    
-                    case "row_about":
-                        USER_CHANGES.ab = rowData["about"];
-                        break;
-    
-                    case "row_website":
-                        USER_CHANGES.ws = rowData["website"];
-                        break; 
-                        
-                    case "row_email":
-                        USER_CHANGES.em = rowData["email"];
-                        break; 
-    
-    
-                    default:
-                        printError("defaultCallback()", "received unknown form field: " + rowName);
-                        break;
-    
-                }
-    
-                // console.log(USER_CHANGES);
-    
-            }
-    
-    
-    
-    
+
+    }
+    window.tradeListener = tradeListener;
         
-            function selectCallback(rowData, rowName) {
-    
-                beginEditing();
-    
-                switch ( rowName ) {
-    
-                    case "row_radius":
-                        const theData = rowData["_radiusValue"];
-                        USER_CHANGES.zr = theData;
-                        break;
-    
-                    default:
-                        printError("defaultCallback()", "received unknown form field: " + rowName);
-                        break;
-                }
-    
-    
-                // console.log(USER_CHANGES);
-            }
-    
-    
-    
-    
-            //
-            //
-            //
-            function beginEditing() {
-                var element = document.getElementById("saveButton");
-                element.innerHTML = "Save Changes";
-                element.style.backgroundColor = "var(--LEEDZ_GREEN)";
-                element.style.opacity = 1;
-    
-                EDITING = true;
-            }
-    
-    
-            //
-            //
-            //
-            function endEditing() {
-                var element = document.getElementById("saveButton");
-                element.innerHTML = "Saved!";
-                element.style.backgroundColor = "darkorange";
-                element.style.opacity = 0.5;
-    
-    
-                var warning = document.getElementById('trades_warning');
-                warning.style.color = 'green';
-    
-                EDITING = false;
-            }
-    
-    
-    
-            /**
-             * EDIT the current user account and save changes to DB
-             */
-            async function saveChanges() {
-    
-                if (! EDITING) return;
-    
-    
-                try {
-                    await saveUserChanges( USER_CHANGES );		
+
+
+
+
+function defaultCallback(rowData, rowName) {
+
+        beginEditing();
+
+        switch(rowName) {
+
+            case "row_username":
+                USER_CHANGES.un = rowData["username"];
+                break;
+
+            case "row_zip":
+                USER_CHANGES.zp = rowData["zip"];
+                break;
+
+            case "row_about":
+                USER_CHANGES.ab = rowData["about"];
+                break;
+
+            case "row_website":
+                USER_CHANGES.ws = rowData["website"];
+                break; 
+                
+            case "row_email":
+                USER_CHANGES.em = rowData["email"];
+                break; 
+
+
+            default:
+                printError("defaultCallback()", "received unknown form field: " + rowName);
+                break;
+
+        }
+
+    // console.log(USER_CHANGES);
+
+    }
+
+
+
+
+
+    function selectCallback(rowData, rowName) {
+
+        beginEditing();
+
+        switch ( rowName ) {
+
+            case "row_radius":
+                const theData = rowData["_radiusValue"];
+                USER_CHANGES.zr = theData;
+                break;
+
+            default:
+                printError("defaultCallback()", "received unknown form field: " + rowName);
+                break;
+        }
+
+
+    // console.log(USER_CHANGES);
+    }
+
+
+
+
+    //
+    //
+    //
+    function beginEditing() {
+        var element = document.getElementById("saveButton");
+        element.innerHTML = "Save Changes";
+        element.style.backgroundColor = "var(--LEEDZ_GREEN)";
+        element.style.opacity = 1;
+
+        EDITING = true;
+    }
+    window.beginEditing = beginEditing;
+
+    //
+    //
+    //
+    function endEditing() {
+        var element = document.getElementById("saveButton");
+        element.innerHTML = "Saved!";
+        element.style.backgroundColor = "darkorange";
+        element.style.opacity = 0.5;
+
+
+        var warning = document.getElementById('trades_warning');
+        warning.style.color = 'green';
+
+        EDITING = false;
+    }
+    window.endEditing = endEditing;
+
+
+    /**
+    * EDIT the current user account and save changes to DB
+    */
+    async function saveChanges() {
+
+        if (! EDITING) return;
+
+
+        try {
+            await saveUserChanges( USER_CHANGES );		
+
+            let theAlert = document.getElementById("alert_success");
+            theAlert.innerHTML = "Account changes saved.";
+            theAlert.style.display = "block";
+
+        } catch ( error ) {
+
+            printError("saveChanges", error);
+                errorModal("Cannot edit user account: " + error.message, false);
+
+        } finally {
+            endEditing();
             
-                    let theAlert = document.getElementById("alert_success");
-                    theAlert.innerHTML = "Account changes saved.";
-                    theAlert.style.display = "block";
-    
-                } catch ( error ) {
-    
-                    printError("saveChanges", error);
-                      errorModal("Cannot edit user account: " + error.message, false);
-    
-                } finally {
-                    endEditing();
-                    
-                }	
-            
-            }
-            window.saveChanges = saveChanges;
-    
-    
-    
-    
-            /**
-             * DELETE the current user account and reload the page in Guest user mode
-             */
-            function deleteAccount() {
-    
-                try {
-                    window.open( "./user_delete_confirm.html" , "_top");
-    
-                } catch ( error ) {
-    
-                    printError("deleteAccount", error);
-                      errorModal("Cannot delete user account: " + error.message, false);
-    
-                } finally {
-                    endEditing();
-                }	
-            }
-            window.deleteAccount = deleteAccount;
-    
-    
-    
-    
-            var defaultOptions = { "finishCallback": defaultCallback };
-    
-            var emailOptions = {    "finishCallback": defaultCallback,
-                                    "emailFinish": inlineEmailFinishCell };
-    
-            var urlOptions = {		"finishCallback": defaultCallback,
-                                    "urlFinish": inlineURLFinishCell };
-    
-            var sampleOptions = { "finishCallback": selectCallback };	
-    
-    
-            window.inlineEdit = inlineEdit;
-            window.defaultOptions = defaultOptions;
-            window.emailOptions = emailOptions;
-            window.urlOptions = urlOptions;
-            window.sampleOptions = sampleOptions;
-    
-            window.saveChanges = saveChanges;
-    
-    
-    
+    }	
+
+    }
+    window.saveChanges = saveChanges;
+
+
+
+
+    /**
+    * DELETE the current user account and reload the page in Guest user mode
+    */
+    function deleteAccount() {
+
+        try {
+            window.open( "./user_delete_confirm.html" , "_top");
+
+        } catch ( error ) {
+
+            printError("deleteAccount", error);
+                errorModal("Cannot delete user account: " + error.message, false);
+
+        } finally {
+            endEditing();
+        }	
+    }
+    window.deleteAccount = deleteAccount;
+
+
+
+
+    var defaultOptions = { "finishCallback": defaultCallback };
+
+    var emailOptions = {    "finishCallback": defaultCallback,
+                            "emailFinish": inlineEmailFinishCell };
+
+    var urlOptions = {	"finishCallback": defaultCallback,
+                        "urlFinish": inlineURLFinishCell };
+
+    var sampleOptions = { "finishCallback": selectCallback };	
+
+
+    window.inlineEdit = inlineEdit;
+    window.defaultOptions = defaultOptions;
+    window.emailOptions = emailOptions;
+    window.urlOptions = urlOptions;
+    window.sampleOptions = sampleOptions;
+
+
+
+
         
     
     
@@ -1016,12 +1012,6 @@ window.onload = (event) => {
 
 
 
+</script>
 
-
-        </script>
-    
-        
-            
-    
-    
-    </html>
+</html>

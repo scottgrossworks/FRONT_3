@@ -542,11 +542,8 @@
           
           if (SIDE_OPEN) {
               closeNav();
-              SIDE_OPEN = false;
-          
           } else {
               openNav();
-              SIDE_OPEN = true;
           }
       }
       window.openClose = openClose;
@@ -1103,6 +1100,8 @@ function trimAndRemoveSpaces(inputString) {
         open.innerHTML = "&#10140;"
 
         col.style.marginLeft = "0";
+        
+        SIDE_OPEN = true;
       }
  
       
@@ -1115,6 +1114,8 @@ function trimAndRemoveSpaces(inputString) {
         open.innerHTML = "&#9776;"
 
         col.style.marginLeft = "-120px";
+
+        SIDE_OPEN = false;
       }
 
 
@@ -1151,7 +1152,6 @@ function trimAndRemoveSpaces(inputString) {
           if (screen == 'L') {
 
             action.setAttribute("screen", 2);  
-            SIDE_OPEN = true;
             openNav();
 
             showWelcomeColumn();
@@ -1160,7 +1160,6 @@ function trimAndRemoveSpaces(inputString) {
           } else if (screen == 'M') {
 
             action.setAttribute("screen", 1);
-            SIDE_OPEN = false;
             closeNav();
             actionModal();
 
@@ -1169,7 +1168,6 @@ function trimAndRemoveSpaces(inputString) {
           } else {
 
             action.setAttribute("screen", 0);
-            SIDE_OPEN = false;
             closeNav();  
             actionModal();
 

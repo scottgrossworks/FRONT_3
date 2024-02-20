@@ -96,7 +96,7 @@
     <!-- BUYER -->
     <div style="font-size:larger;font-weight:600">
         Congratulations <b style="color:green"><span id="user_welcome"></span></b>, you bought a leed!
-        <BR>Check your email <b style="color:green"><span id="user_email"></span></b> for this receipt.
+        <BR style="font-size:normal">Check your email <b style="color:green"><span id="user_email"></span></b> for this receipt.
     </div>
 
 
@@ -282,7 +282,7 @@
 
 
     window.errorModalClose = errorModalClose;
-    
+
     // Get the query string from the URL
     const queryString = window.location.search;
 
@@ -361,7 +361,7 @@
     //
     // FULL REFRESH leed details with SHOW_ALL options
     //
-    function loadPage(CURRENT_USER, leed_preview) {
+    async function loadPage(CURRENT_USER, leed_preview) {
         
         let user_welcome = document.getElementById("user_welcome");
         user_welcome.innerText = CURRENT_USER.un;
@@ -370,7 +370,7 @@
         user_email.innerText = CURRENT_USER.em;
 
 
-        const LEED_BOUGHT = getLeedDeetz(CURRENT_USER, leed_preview);
+        const LEED_BOUGHT = await getLeedDeetz(CURRENT_USER, leed_preview);
  
 
         var the_div = document.getElementById("td_cr");

@@ -73,7 +73,27 @@
     <section>
         
     
-    
+    <!-- 
+    -- WAITING MODAL
+    -- 
+    -->
+    <div class="modal info_modal" id="waiting_modal" style="display:none">
+
+    <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
+        <table width="100%">
+            <TR><TD style="border:none;">
+                <h1 id="waiting_label" style="width:fit-content"></h1>
+            </TD></TR>
+            <TR><TD style="border:none;"><center>
+                    <img src="./img/wait_spinner.gif" style="height:10vh;">
+                    </center>
+                </TD>
+            </TR>
+        </table>
+
+
+    </div>
+
 
     <!-- 
     -- ERROR MODAL 
@@ -277,101 +297,56 @@
     import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
     import { getCurrentUser } from "./js/user.js";
     import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed, getCurrentLeed } from "./js/leed.js";
-
+    import { waitCursor, normalCursor, showWaitingModal  } from "./js/leed_edit.js";
     import { USERNAME_URL_PARAM, db_getDeetz } from "./js/dbTools.js";
-
 
     window.errorModalClose = errorModalClose;
 
-    // Get the query string from the URL
-    const queryString = window.location.search;
-
-    // Create a new instance of URLSearchParams with the query string
-    const params = new URLSearchParams(queryString);
-
-    const leed_id = params.get('id');
-    const buyer_name = params.get('bn');
-
-    if ((! leed_id) || (! buyer_name)) {
-        // ERROR !
-        var err_msg = "Incorrect URL parameters in leed_receipt.html callback";
-        printError( "Leed Receipt", err_msg );
-        errorModal("Cannot load leed receipt: " + err_msg, true);
-        throwError(err_msg);
-    }
-
-    const sq_tid = params.get('transactionId');
-    const sq_oid = params.get('orderId');
-
-    if ((! sq_tid) || (! sq_oid)) {
-        // ERROR !
-        var err_msg = "No Order ID or Transaction ID found";
-        printError( "Leed Receipt", err_msg );
-        errorModal("Leed not bought: " + err_msg, true);
-        throwError(err_msg);
-    }   
-
-    //
-    // SUCCESS !!
-    //
-    console.log("Leed Receipt: " + new Date());
-    console.log("Leed ID: " + leed_id);
-    console.log("Buyer: " + buyer_name);
-    console.log("Square Transaction ID: " + sq_tid);
-    console.log("Square Order ID: " + sq_oid);
 
 
-    // LOAD THE CURRENT USER
-    //
-    const CURRENT_USER = getCurrentUser(true);
-    if ((! CURRENT_USER) || (! CURRENT_USER.un)) {
-        // ERROR !
-        printError("Leed Receipt", "No current user");
-        errorModal("No current user logged in.", true);
-        throwError(err_msg);
-
-    } else if (CURRENT_USER.un != buyer_name) {
-        // ERROR !
-        var err_msg = "Current user does not match leed buyer";
-        printError("Leed Receipt", err_msg);
-        errorModal(err_msg, true);
-        throwError(err_msg);
-
-
-    } else {
-        
-        // LOAD THE CURRENT LEED
+    /**
+     * Goto DynamoDB for full refresh leed details with SHOW_ALL options
+     *
+     */
+    async function loadPage(leed_preview, CURRENT_USER) {
+    
+        // API request --> DB   
+        // load full leed details for leed_preview.id
         //
-        const leed_preview = getCurrentLeed();
-        if (leed_id != leed_preview.id) {
-            // ERROR !
-            var err_msg = "Current leed does not match leed bought";
-            printError("Leed Receipt", err_msg);
-            errorModal(err_msg, true);
-            throwError(err_msg);
+        let LEED_BOUGHT = undefined;
+        try {
+
+            await db_getDeetz( CURRENT_USER.un, leed_preview.tn, leed_preview.id, SHOW_ALL_OPTS )
+                .then((data) => {
+
+                    console.log("BACK FROM GET DEETZ!");
+                    
+                    if (! data) 
+                        throw new Error("null response from GET");
+                    else
+                        LEED_BOUGHT = data;
+
+                    // COPY leed details into current leed object 
+                    setCurrentLeed(LEED_BOUGHT);
+
+                })
+            .catch(error => {
+                throw error;            
+            })
+        } catch ( error ) {
+
+            printError( "db_getDeetz()", error.message );
+            errorModal("Cannot get leed details for [" + leed_preview.tn + "] " + leed_preview.id, true);
+            return;
         }
+ 
+        console.log("LOADING PAGE");
 
-        // SUCCESS !!
-        //
-        loadPage(CURRENT_USER, leed_preview);
-    }
-
-
-
-    //
-    // FULL REFRESH leed details with SHOW_ALL options
-    //
-    async function loadPage(CURRENT_USER, leed_preview) {
-        
         let user_welcome = document.getElementById("user_welcome");
         user_welcome.innerText = CURRENT_USER.un;
        
         let user_email = document.getElementById("user_email");
         user_email.innerText = CURRENT_USER.em;
-
-
-        const LEED_BOUGHT = await getLeedDeetz(CURRENT_USER, leed_preview);
- 
 
         var the_div = document.getElementById("td_cr");
         the_div.innerText = LEED_BOUGHT['cr'];
@@ -416,45 +391,101 @@
 
 
     
+ /**
+ * ON LOAD
+ *
+ * get CURRENT_USER AND CURRENT_LEED
+ *
+ */
+window.onload = (event) => {       
+    
+    try {
+        waitCursor();
+        showWaitingModal("Loading Leed receipt . . .");
 
-    /**
-    * full refresh of leed details with SHOW_ALL_OPTS
-    */
-    export async function getLeedDeetz( CURRENT_USER, leed_preview ) {
 
-        // API request --> DB   
-        // load full leed details for leed_preview.id
-        //
-        try {
+        // Get the query string from the URL
+        const queryString = window.location.search;
 
-            await db_getDeetz( CURRENT_USER.un, leed_preview.tn, leed_preview.id, SHOW_ALL_OPTS )
-                .then((data) => {
+        // Create a new instance of URLSearchParams with the query string
+        const params = new URLSearchParams(queryString);
 
-                    if (! data) throw new Error("null response from GET");
-                    const leed_details = data;
-                    
-                    // query returns empty result set
-                    if (! leed_details)
-                        throw new Error("No leed details for id: " + leed_preview.id);
-                    
-                    // COPY leed details into current leed object 
-                    setCurrentLeed(leed_details);
+        const leed_id = params.get('id');
+        const buyer_name = params.get('bn');
 
-                    return leed_details;
-
-                })
-            .catch(error => {
-                throw error;            
-            })
-        } catch ( error ) {
-
-            printError( "db_getDeetz()", error.message );
-            errorModal("Cannot get leed details for [" + leed_preview.tn + "] " + leed_preview.id, true);
-            
+        if ((! leed_id) || (! buyer_name)) {
+            // ERROR !
+            var err_msg = "Incorrect URL parameters in leed_receipt.html callback";
+            printError( "Leed Receipt", err_msg );
+            errorModal("Cannot load leed receipt: " + err_msg, true);
+            throwError(err_msg);
         }
-    }
+
+        const sq_tid = params.get('transactionId');
+        const sq_oid = params.get('orderId');
+
+        if ((! sq_tid) || (! sq_oid)) {
+            // ERROR !
+            var err_msg = "No Order ID or Transaction ID found";
+            printError( "Leed Receipt", err_msg );
+            errorModal("Leed not bought: " + err_msg, true);
+            throwError(err_msg);
+        }   
+
+        //
+        // SUCCESS !!
+        //
+        console.log("Leed Receipt: " + new Date());
+        console.log("Leed ID: " + leed_id);
+        console.log("Buyer: " + buyer_name);
+        console.log("Square Transaction ID: " + sq_tid);
+        console.log("Square Order ID: " + sq_oid);
+
+
+        // LOAD THE CURRENT USER
+        //
+        const CURRENT_USER = getCurrentUser(true);
+        if ((! CURRENT_USER) || (! CURRENT_USER.un)) {
+            // ERROR !
+            printError("Leed Receipt", "No current user");
+            errorModal("No current user logged in.", true);
+            throwError(err_msg);
+
+        } else if (CURRENT_USER.un != buyer_name) {
+            // ERROR !
+            var err_msg = "Current user does not match leed buyer";
+            printError("Leed Receipt", err_msg);
+            errorModal(err_msg, true);
+            throwError(err_msg);
+
+
+        }
+                
+        // LOAD THE CURRENT LEED
+        //
+        const leed_preview = getCurrentLeed();
+        if (leed_id != leed_preview.id) {
+            // ERROR !
+            var err_msg = "Current leed does not match leed bought";
+            printError("Leed Receipt", err_msg);
+            errorModal(err_msg, true);
+            throwError(err_msg);
+        }
+
+        // SUCCESS !!
+        // GET THE LEED RECEIPT FROM DB ASYNC and 
+        // LOAD THE PAGE DATA
+        loadPage(leed_preview, CURRENT_USER);
 
         
+
+    } finally {
+        modalClose(false);
+        normalCursor();
+    }
+};
+
+
     </script>
 
 </html>

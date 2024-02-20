@@ -183,7 +183,7 @@
                         <td id="td_email" data-inlineType="email" data-inlineName="email" data-inlineRequired="true" data-inlinePlaceholder="(Required)"></td>
         
                         <td data-inlineType="doneButton" class="buttonTD">
-                            <input type="button" value="Edit" onclick="inlineEdit('row_email', emailOptions)"/>
+                            <input type="button" value="Edit" onclick="inlineEdit('row_email', defaultOptions)"/>
                         </td>
                     </tr>
     
@@ -197,7 +197,7 @@
                         <td id="td_website" data-inlineType="link" data-inlineName="website" data-inlineRequired="0" data-inlinePlaceholder="(Website)"></td>
         
                         <td data-inlineType="doneButton" class="buttonTD">
-                            <input type="button" value="Edit" onclick="inlineEdit('row_website', urlOptions)"/>
+                            <input type="button" value="Edit" onclick="inlineEdit('row_website', defaultOptions)"/>
                         </td>
                     </tr>
     
@@ -348,13 +348,10 @@
     let USER_CHANGES;
 
 
-    const defaultOptions = { "finishCallback": defaultCallback };
-
-    const emailOptions = {  "finishCallback": defaultCallback,
-                            "emailFinish": inlineEmailFinishCell };
-
-    const urlOptions = {    "finishCallback": defaultCallback,
-                            "urlFinish": inlineURLFinishCell };
+    const defaultOptions = { "finishCallback": defaultCallback,
+                             "emailFinish": inlineEmailFinishCell ,
+                             "urlFinish": inlineURLFinishCell
+                            };
 
     const sampleOptions = { "finishCallback": selectCallback };	
 
@@ -991,8 +988,6 @@ function defaultCallback(rowData, rowName) {
 window.onload = (event) => {       
 
     window.defaultOptions = defaultOptions;
-    window.emailOptions = emailOptions;
-    window.urlOptions = urlOptions;
     window.sampleOptions = sampleOptions;
 
     modalClose(true);

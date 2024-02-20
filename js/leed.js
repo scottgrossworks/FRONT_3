@@ -646,43 +646,34 @@ export async function createDBLeed( current_user, leedObj ) {
     // API request --> DB 
     // save leed to DB
     //
-    let results = null;
+    let results = undefined;
     try {
         // 
         //  client <---> API Gateway <===> DB
         //
         results = await db_updateLeed( ADD_LEED, current_user, leedObj );
-
+        // may be ERROR object
+        
         // should never happen
-        if (results == null) {
+        if (! results) {
           throwError("Add Leed", "Null response received from server");
-        }
-
-        /**
-         * 
-         *    result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
-         *    {'id': 1259743,'ti':This is the title,'pr':44,'cd': 1}
-         * 1 == SUCCESS
-         */
-        // received error code
-        if (results.cd == DB_FAIL) {
-          printError("db_updateLeed", results.er);
-          throwError("Create Leed", results.er);
         }
 
 
     } catch (error) {   
         printError( "Add Leed", error.message );
-        printError( "Received JSON", results);
         
-        // EXIT FUNCTION HERE
-        throwError( "Cannot Add Leed", error); 
-        // return results;
+        if (! results) {
+          results = {
+            cd : 0,
+            er : error.toString()
+          };
+        }
+          
 
-    } 
-
-
-    return results;
+    } finally {
+        return results;
+    }
 }
 
 

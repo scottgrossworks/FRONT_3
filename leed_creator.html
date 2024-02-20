@@ -414,7 +414,7 @@
 
     setCallbacks( createOptions );
 
-    
+
     // flag indicates edits are in progress
     //
     var EDITING = false;
@@ -673,8 +673,9 @@
 
 
         } catch (error) {
-            printError("Post Leed", error.message);
-            errorModal("Post Leed", error.message);
+            var err_str = error.toString();
+            printError("Post Leed", err_str);
+            errorModal("Post Leed", err_str);
             clearFields();
             
         } finally {

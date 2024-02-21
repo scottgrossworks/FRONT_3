@@ -177,8 +177,7 @@ def createHttpResponse( result ):
         'Access-Control-Allow-Headers': '*',
             },
     }
-    # logger.info("RETURNING RESPONSE")
-    logger.info(response)
+    # logger.info(response)
     
     return response
 
@@ -254,7 +253,7 @@ def lambda_handler(event, context):
     TRUE = 1
     FALSE = 0
     
-    #logger.info(str(event))
+    # logger.info(str(event))
     
     try:
         
@@ -383,9 +382,8 @@ def doTokenExchange(table, event, the_user):
             expires_at = the_response.body['expires_at']
             merchant_id = the_response.body['merchant_id']
             
-            # FIXME
-            logger.info("ACCESS_TOKEN=" + access_token)
-            logger.info("REFRESH_TOKEN=" + refresh_token)
+            # logger.info("ACCESS_TOKEN=" + access_token)
+            # logger.info("REFRESH_TOKEN=" + refresh_token)
                         
             # GET LOCATION ID FOR THIS SELLER
             # will raise Exception
@@ -445,8 +443,6 @@ def exchange_oauth_tokens(sq_env, code, id, secret):
         timeout=900
     )
     
-    
-    # logger.info("EXCHANGING OAUTH TOKENS")
     response = ""
     try:
 
@@ -548,7 +544,7 @@ def getLocationID( sq_env, access_token ) :
         
             location = response.body['location']
             location_id = location['id']
-            logger.info(location_id)
+            # logger.info(location_id)
             return location_id
 
 

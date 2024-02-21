@@ -70,7 +70,7 @@
 
 
     
-    <section>
+    <section style="margin:0 2vw; font-size:1em">
         
     
     <!-- 
@@ -293,7 +293,6 @@
 -->
 <script type="module">
 			
-    import { formatDTforInput } from "./js/dates.js";
     import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
     import { getCurrentUser } from "./js/user.js";
     import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed, getCurrentLeed } from "./js/leed.js";
@@ -318,8 +317,6 @@
 
             await db_getDeetz( CURRENT_USER.un, leed_preview.tn, leed_preview.id, SHOW_ALL_OPTS )
                 .then((data) => {
-
-                    console.log("BACK FROM GET DEETZ!");
                     
                     if (! data) 
                         throw new Error("null response from GET");
@@ -340,7 +337,6 @@
             return;
         }
  
-        console.log("LOADING PAGE");
 
         let user_welcome = document.getElementById("user_welcome");
         user_welcome.innerText = CURRENT_USER.un;
@@ -352,16 +348,17 @@
         the_div.innerText = LEED_BOUGHT['cr'];
         
         var the_div = document.getElementById("td_tn");
-        the_div.innerText = LEED_BOUGHT['tn'];
+        var trade_name = LEED_BOUGHT['pk'].slice(5);
+        the_div.innerText = trade_name;
         
         var the_div = document.getElementById("td_ti");
         the_div.innerText = LEED_BOUGHT['ti'];
         
         var the_div = document.getElementById("td_st");
-        the_div.innerText = formatDTforInput(LEED_BOUGHT['st']);
+        the_div.innerText = new Date(LEED_BOUGHT['st']).toLocaleString('en-US', { timeZone: 'UTC' });
         
         var the_div = document.getElementById("td_et");
-        the_div.innerText = formatDTforInput(LEED_BOUGHT['et']);
+        the_div.innerText = new Date(LEED_BOUGHT['et']).toLocaleString('en-US', { timeZone: 'UTC' });
         
         var the_div = document.getElementById("td_lc");
         the_div.innerText = LEED_BOUGHT['lc'];

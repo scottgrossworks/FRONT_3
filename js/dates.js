@@ -50,7 +50,6 @@ export function getNewDate(year, month, day, hour, min, sec) {
     return gmtDate;
   }
 
-  
 
 
 
@@ -58,24 +57,19 @@ export function getNewDate(year, month, day, hour, min, sec) {
  *  input Date().getTime()
  *  for use in input type="datetime-local"
  */
-export function formatDTforInput(dateTimeString) {
-    
-    const dateObj = new Date(dateTimeString);
+export function formatDTforInput( dateTime ) {
 
-
-    var year = dateObj.getUTCFullYear();
-    var month = twoDigitInt( dateObj.getUTCMonth() + 1 );
-    var day = twoDigitInt( dateObj.getUTCDate() );
-        
+    var the_d = new Date( dateTime );
     
-    const hours = twoDigitInt(dateObj.getUTCHours());
-    // const minutes = twoDigitInt(String(dateObj.getUTCMinutes()).padStart(2, "0"));
-    const minutes = twoDigitInt(String(dateObj.getUTCMinutes()).padStart(1, "0"));
-
-    
-    let retStr = `${year}-${month}-${day}T${hours}:${minutes}`;
-    return retStr;
+    var year = the_d.getUTCFullYear();
+    var month = (the_d.getUTCMonth() + 1).toString().padStart(2, '0'); // getMonth returns a zero-based index of the month: 0-11
+    var day = the_d.getUTCDate().toString().padStart(2, '0'); // 1 - 31
+    var hours = the_d.getUTCHours().toString().padStart(2, '0'); // 0 - 23
+    var minutes = the_d.getUTCMinutes().toString().padStart(2, '0'); // 0 - 59
+  
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
+
 
 
 

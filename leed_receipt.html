@@ -266,7 +266,7 @@
   <BR>
 
 
-    <div id="copyright_footer">
+    <div id="copyright_footer" style="display:none">
         <span>
           All content is &copy;2024 The Leedz, all rights reserved, and may not be reproduced for commercial purposes without written permission.
         </span>
@@ -347,42 +347,46 @@
         var the_div = document.getElementById("td_cr");
         the_div.innerText = LEED_BOUGHT['cr'];
         
-        var the_div = document.getElementById("td_tn");
+        the_div = document.getElementById("td_tn");
         var trade_name = LEED_BOUGHT['pk'].slice(5);
         the_div.innerText = trade_name;
         
-        var the_div = document.getElementById("td_ti");
+        the_div = document.getElementById("td_ti");
         the_div.innerText = LEED_BOUGHT['ti'];
         
-        var the_div = document.getElementById("td_st");
+        the_div = document.getElementById("td_st");
         the_div.innerText = new Date( parseInt(LEED_BOUGHT['st']) ).toLocaleString('en-US', { timeZone: 'UTC' });
         
-        var the_div = document.getElementById("td_et");
+         the_div = document.getElementById("td_et");
         the_div.innerText = new Date( parseInt(LEED_BOUGHT['et']) ).toLocaleString('en-US', { timeZone: 'UTC' });
         
-        var the_div = document.getElementById("td_lc");
+        the_div = document.getElementById("td_lc");
         the_div.innerText = LEED_BOUGHT['lc'];
         
-        var the_div = document.getElementById("td_dt");
+        the_div = document.getElementById("td_dt");
         the_div.innerText = LEED_BOUGHT['dt'];
         
-        var the_div = document.getElementById("td_rq");
+        the_div = document.getElementById("td_rq");
         the_div.innerText = LEED_BOUGHT['rq'];
         
-        var the_div = document.getElementById("td_em");
+        the_div = document.getElementById("td_em");
         the_div.innerText = LEED_BOUGHT['em'];
         
-        var the_div = document.getElementById("td_ph");
+        the_div = document.getElementById("td_ph");
         the_div.innerText = LEED_BOUGHT['ph'];
         
         //
         // PRICE
         //
-        var the_div = document.getElementById("td_pr");
+        the_div = document.getElementById("td_pr");
         var the_price =  '$ ' + LEED_BOUGHT['pr'];
         the_div.innerText = the_price;
         console.log("Price: " + the_price);
         
+
+        // append the copyright footer
+        the_div = document.getElementById("copyright_footer");
+        the.div.style.display = "block";
     }
 
 

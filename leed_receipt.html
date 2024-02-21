@@ -355,10 +355,10 @@
         the_div.innerText = LEED_BOUGHT['ti'];
         
         var the_div = document.getElementById("td_st");
-        the_div.innerText = new Date(LEED_BOUGHT['st']).toLocaleString('en-US', { timeZone: 'UTC' });
+        the_div.innerText = new Date( parseInt(LEED_BOUGHT['st']) ).toLocaleString('en-US', { timeZone: 'UTC' });
         
         var the_div = document.getElementById("td_et");
-        the_div.innerText = new Date(LEED_BOUGHT['et']).toLocaleString('en-US', { timeZone: 'UTC' });
+        the_div.innerText = new Date( parseInt(LEED_BOUGHT['et']) ).toLocaleString('en-US', { timeZone: 'UTC' });
         
         var the_div = document.getElementById("td_lc");
         the_div.innerText = LEED_BOUGHT['lc'];

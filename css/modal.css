@@ -343,7 +343,7 @@
 
 .alert {
 
-  z-index:700;
+  z-index:500;
   padding: 20px 0px;
 
   margin:2vh auto;

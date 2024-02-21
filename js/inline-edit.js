@@ -522,7 +522,7 @@ function inlineDefaultFinish(rowName, options) {
             case "link":
 
                 var theVal = cell.children[getFromChildren].value;
-                var trimVal = trimAndRemoveSpaces( theVal );
+                var trimVal = trimAndRemoveSpaces( theVal ).toLowerCase();
 
                 rowData[cell.dataset.inlinename] = trimVal;
                 inlineEditRowContents[rowName][i] = trimVal;

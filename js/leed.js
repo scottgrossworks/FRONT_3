@@ -118,7 +118,6 @@ export function changeLeedOpts( theLeed, index, newVal ) {
  */
 export async function loadLeedzFromDB( subs, firstDay, lastDay, zip_home, zip_radius, theCallback ) {
     
-
   // API request --> DB 
   // load leedz for this trade and date range showing
   //
@@ -141,24 +140,24 @@ export async function loadLeedzFromDB( subs, firstDay, lastDay, zip_home, zip_ra
       return;
   }
 
-
   console.log(results);
 
-    // query returns empty result set
-    if (results.length == 0) {
+  // query returns empty result set
+  if (results.length == 0) {
 
-      // CLEAR the CACHE for this date
-      var cache_key = LEEDZ_CAL_KEY + getMonth() + getYear();
-      window.localStorage.setItem( cache_key, "");
+    // CLEAR the CACHE for this date
+    var cache_key = LEEDZ_CAL_KEY + getMonth() + getYear();
+    window.localStorage.setItem( cache_key, "");
 
-    } else { 
+  } else { 
 
-      saveLeedzToCache( results, getMonth(), getYear() );
-    
-    }
+    saveLeedzToCache( results, getMonth(), getYear() );
+  
+  }
 
-    // the callback function will populate the calendar and update the cache
-    theCallback( results );
+  // the callback function will populate the calendar and update the cache
+  theCallback( results );
+
 }
 
 
@@ -653,7 +652,7 @@ export async function createDBLeed( current_user, leedObj ) {
         //
         results = await db_updateLeed( ADD_LEED, current_user, leedObj );
         // may be ERROR object
-        
+
         // should never happen
         if (! results) {
           throwError("Add Leed", "Null response received from server");

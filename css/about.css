@@ -25,8 +25,25 @@ html, body {
 		font-size:1.5em;
 	}
 
+	.img_howto {
+
+		height:300px;
+		width:300px;
+	}
+
 }
   
+
+
+ 
+@media screen and (min-width: 500px) {
+
+.img_howto {
+	height: auto;
+	width: 45vw;
+}
+}
+
 
 
 table {

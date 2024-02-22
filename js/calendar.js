@@ -213,7 +213,7 @@ export function loadDBLeedz() {
     const first_date = firstDayShowing();
     const last_date = lastDayShowing();
 
-    console.log("loadDBLeedz -- " + first_date + " to " + last_date);
+    // console.log("loadDBLeedz -- " + first_date + " to " + last_date);
     showWaitingModal("Loading the Leedz . . .");
 
     // ASYNC CALL

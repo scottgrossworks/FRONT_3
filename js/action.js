@@ -56,7 +56,7 @@ leed_details contains
 */
 export async function showLeedAction( leed_preview , gotoDB ) {
 
-    console.log("SLA: " + leed_preview.id + " goto: " + gotoDB);
+    // console.log("Showing Leed: " + leed_preview.id + " goto: " + gotoDB);
 
     const CURRENT_USER = getCurrentUser(false);
 
@@ -135,10 +135,11 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     // console.log("SCREEN=" + screen);
 
     var leed_monthname = "";
+    var month_index = parseInt( isoStart.substring(5, 7) );
     if (screen == "2") { // large
-        leed_monthname = getShortMonthname( isoStart.substring(5, 7) ); 
+        leed_monthname = getShortMonthname( month_index ); 
     } else {
-        leed_monthname = getMonthname( isoStart.substring(5, 7) ); 
+        leed_monthname = getMonthname( month_index ); 
     }
 
 

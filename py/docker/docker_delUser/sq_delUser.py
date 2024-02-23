@@ -220,7 +220,7 @@ def send_userEmail( the_user ):
 
                 
     # The HTML body of the email
-    BODY_START = "<html><head></head><body><h1>Leedz user has been deleted. " + user_info + "</h1><BR><BR>Square authorization revoked for: " + the_user['id']
+    BODY_START = "<html><head></head><body><b>Leedz user has been deleted. " + user_info + "</b><BR><BR>Square authorization revoked for: " + the_user['id']
     BODY_MID = "You will need to create a new account and re-auhtorize Square to use the Leedz again."
     BODY_END = "<BR><BR>Thank you,<BR>The Leedz</body></html>"
     
@@ -304,8 +304,7 @@ def lambda_handler(event, context):
                 raise ValueError("User not found: " + un)
             
             the_user = fromDB['Item']
-            if ('sq_id' not in the_user):
-                raise ValueError("Cannot find Square merchant ID for user: " + un)
+
 
         except Exception as err:
             logger.error("Cannot find user [" + un + "] : " + str(err))
@@ -315,11 +314,10 @@ def lambda_handler(event, context):
         # SQUARE MERCHANT ID
         # may not be set if user is not authorized
         merchant_id = the_user['sq_id']
-        
-        
         if (not merchant_id or merchant_id == ""):
             logger.info("No Square Authorization found for user: " + un)
-        
+            # not a fatal error
+            
         else :
             # REVOKE SQUARE AUTHORIZATION
             # will throw Exception

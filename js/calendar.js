@@ -229,6 +229,9 @@ export function loadDBLeedz() {
         printError("Loading leedz from DB", error);
         errorModal(error.message, false);
         return;
+        
+    } finally {
+        normalCursor();
     }
 }
 

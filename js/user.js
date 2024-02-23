@@ -53,9 +53,15 @@ let CURRENT_USER = blankUserObject();
       BLANK_USER.sb = [];
       BLANK_USER.bg = [];
     
-      // 1/2024 SQUARE STATUS
+
+      // STATS
+      BLANK_USER.lb = 0;
+      BLANK_USER.lp = 0;
+      BLANK_USER.ls = 0;
+
+      // SQUARE 
       BLANK_USER.sq_st = null;
-    
+      
       return BLANK_USER;
     }
 

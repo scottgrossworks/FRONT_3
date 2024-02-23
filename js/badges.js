@@ -7,7 +7,7 @@
 const badge_0 = {
 
     'tit': 'Account Secured',
-    'cap': '<a href="../leedz_privacy.html">Your Privacy Secured</a>',
+    'cap': '<a href="../leedz_privacy.html">Privacy &amp; Security</a>',
     'url': '../img/badge_0.png'
 };
 

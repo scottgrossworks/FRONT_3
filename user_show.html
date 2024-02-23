@@ -92,7 +92,7 @@
     -- ERROR MODAL 
     -- 
     -->
-    <div class="row modal" id="error_modal">
+    <div class="row modal" id="error_modal"  style="display:none">
         <center><img id="error_logo" src="img/logo_2.png"></center> 
         <h1></h1>
         <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
@@ -142,6 +142,15 @@
                 </tr>
 
 
+                <tr id="row_stats">
+
+					<TD class="labelTD">Leedz: </TD>
+					
+		
+					<td colspan=2 id="td_stats" data-inlineType="textarea" data-inlineName="stats"></td>
+					
+				</tr>
+
 
 
 
@@ -160,7 +169,7 @@
 					<TD class="labelTD">About: </TD>
 					
 		
-					<td colspan=2 id="td_about" data-inlineType="textarea" data-inlineName="about">Help sell the leedz you post</td>
+					<td colspan=2 id="td_about" data-inlineType="textarea" data-inlineName="about"></td>
 					
 				</tr>
 
@@ -193,12 +202,28 @@
         <BR>
     </div>			
 
-</section>
+</section>  
 
 
 
+<center><button id='back_button' class="button save_button" style="display:none;background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="history.back()">Back</button></center>
 
-	</body>
+<BR>
+<BR>
+<BR>
+<BR>
+
+
+  <div id="copyright_footer" style="display:none;bottom:0;position:fixed">
+    <span>
+    All content is &copy;2024 The Leedz, all rights reserved, and may not be reproduced for c;pisommercial purposes without written permission.
+    </span>
+    </div>
+
+
+
+</body>
+
 
     <script src="./js/badges.js"></script>
 
@@ -207,7 +232,7 @@
 			
 
 		import { blankUserObject, getCurrentUser } from "./js/user.js";
-		import { printError, throwError, modalClose, errorModalClose } from "./js/error.js";
+		import { printError, throwError, modalClose, errorModal, errorModalClose } from "./js/error.js";
 		import { getTradeInfo } from "./js/trades.js";
 		import { db_getUser, USERNAME_URL_PARAM } from "./js/dbTools.js";
         import { normalCursor, waitCursor, showWaitingModal } from "./js/leed_edit.js";
@@ -215,103 +240,114 @@
         window.errorModalClose = errorModalClose;
         window.modalClose = modalClose;
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const url_username = urlParams.get( USERNAME_URL_PARAM );
-
-
-
         // top of page
         // HEADER
         // element = document.querySelector(".user_title");
         // element.innerHTML = url_username;
 
-        const NO_VAL = "<b style='color:coral'>None Provided</b>";
-        var element = null;
-        const SHOW_USER = blankUserObject();
 
-        waitCursor();
+        
 
-        showWaitingModal("Getting User info . . .");
+/**
+ * Load the page elements and throw errors if SHOW_USER object incomplete
+ *
+ */
+ function loadPage(SHOW_USER) {
+    
+    const NO_VAL = "<b style='color:coral'>None Provided</b>";
+    var element = null;
 
+    if (SHOW_USER.un) {
+        element = document.getElementById("td_username");
+        element.innerHTML = SHOW_USER.un;
+    
+    } else {
+        // THIS IS AN ERROR CONDITION
+        // this should not happen
+        // throw up error modal and investiate cause
+        var msg = "No username in user object";
+        printError("Show User", msg);
+        errorModal("Invalid User info: " + msg, true);
+        throwError("Show User", msg);
+    }
 
-        let success = null;
-        try {
+    if (SHOW_USER.em) {
+        element = document.getElementById("td_email");
+        var prefix = "<a href='mailto:" + SHOW_USER.em + "'>";
+        var postfix = "</a>";
+        element.innerHTML = prefix + SHOW_USER.em + postfix;
+    } else {
+        element.innerHTML = NO_VAL;
+    }
 
-            await showUser( url_username ).then((response) => success = response);
-
-        } catch (error) {
-            const msg = "Cannot show user profile for:<BR>" + url_username + "<BR>" + error.message;
-            errorModal(msg, true);
-            
-        } finally {
-            
-            normalCursor();
-            modalClose(false);
-        }
-
-        if (success) {
-            
-
-            if (SHOW_USER.un) {
-                element = document.getElementById("td_username");
-                element.innerHTML = SHOW_USER.un;
-            
-            } else {
-                // THIS IS AN ERROR CONDITION
-                // this should not happen
-                // throw up error modal and investiate cause
-                var msg = "No username in user object";
-                printError("Show User", msg);
-                errorModal("Invalid User info: " + msg, true);
-                throwError("Show User", msg);
-            }
-
-            if (SHOW_USER.em) {
-                element = document.getElementById("td_email");
-                var prefix = "<a href='mailto:" + SHOW_USER.em + "'>";
-                var postfix = "</a>";
-                element.innerHTML = prefix + SHOW_USER.em + postfix;
-            } else {
-                element.innerHTML = NO_VAL;
-            }
-
-            if (SHOW_USER.ws) {
-                element = document.getElementById("td_website");
-                var prefix = "<a href='" + SHOW_USER.ws + "'>";
-                var postfix = "</a>";
-                element.innerHTML = prefix + SHOW_USER.ws + postfix;
-            } else {
-                element.innerHTML = NO_VAL;
-            }
+    if (SHOW_USER.ws) {
+        element = document.getElementById("td_website");
+        var prefix = "<a href='" + SHOW_USER.ws + "'>";
+        var postfix = "</a>";
+        element.innerHTML = prefix + SHOW_USER.ws + postfix;
+    } else {
+        element.innerHTML = NO_VAL;
+    }
 
 
-            if (SHOW_USER.ab) {
-                element = document.getElementById("td_about");
-                element.innerHTML = SHOW_USER.ab;
-            } else {
-                element.innerHTML = NO_VAL;
-            }
+    if (SHOW_USER.ab) {
+        element = document.getElementById("td_about");
+        element.innerHTML = SHOW_USER.ab;
+    } else {
+        element.innerHTML = NO_VAL;
+    }
 
 
-            //
-            // TRADES SUBSCRIBED
-            // 
-            if (SHOW_USER.sb) {
-                element = document.getElementById("td_subs");
-                showUserTrades(element, SHOW_USER.sb);
-            }
+    //
+    // TRADES SUBSCRIBED
+    // 
+    if (SHOW_USER.sb) {
+        element = document.getElementById("td_subs");
+        showUserTrades(element, SHOW_USER.sb);
+    }
 
 
-            //
-            // BADGES
-            //
-            if (SHOW_USER.bg) {
-                element = document.getElementById("td_badges");
-                showUserBadges(element, SHOW_USER.bg);
-            }
+    //
+    // BADGES
+    //
+    if (SHOW_USER.bg) {
+        element = document.getElementById("td_badges");
+        showUserBadges(element, SHOW_USER.bg);
+    }
+
+    //
+    // STATS
+    //
+    if (SHOW_USER.bg) {
+        element = document.getElementById("td_stats");
+        showStats(element, SHOW_USER.lp, SHOW_USER.lb, SHOW_USER.ls);
+    }
 
 
-        }
+
+ }
+
+
+
+/**
+ *
+ *
+ */
+ function showStats( element, leedz_posted, leedz_bought, leedz_sold ) {
+
+    let ratio = 0;
+    if (leedz_sold != 0 && leedz_posted != 0) {
+        ratio = Math.round((leedz_sold / leedz_posted) * 100);
+    }
+
+    var the_html = "<b style='font-size:small;color:dodgerblue'>Bought: " + leedz_bought + 
+                    "&nbsp;&nbsp;|&nbsp;&nbsp;<b style='color:darkgreen'>Sold " + leedz_sold + " / " + leedz_posted + 
+                    " Posted ( " + ratio + "% )</b></b>";
+
+     element.innerHTML = the_html;
+
+ }
+
 
 /**
  *
@@ -364,7 +400,7 @@ function showUserBadges( element, badges ) {
     for (let i = 0; i < badges.length; i++) {
 
         var the_badge = ALL_BADGES[ String(badges[i]) ];
-        the_html += "<TR><td class='badge_icon'><img src='" + the_badge.url + "'></td><td><B>" + the_badge.tit + "</B><BR>" + the_badge.cap + "</td></TR>";
+        the_html += "<TR><td class='badge_icon'><img width='80%' height='80%' src='" + the_badge.url + "'></td><td><B>" + the_badge.tit + "</B><BR>" + the_badge.cap + "</td></TR>";
             
     }
     
@@ -383,36 +419,31 @@ function showUserBadges( element, badges ) {
  *
  *
  */
- async function showUser( username ) {
+ async function showUser( SHOW_USER, username ) {
 
     //   client <---> API Gateway <===> DB
     //
     // GET the user JSON data from the server
     // UPDATE SHOW_USER with new values from DB
     //
-    let resObj = [];   
+    let resObj = undefined;   
     try {
     // get the user object
         await db_getUser( username )
         .then((data) => {
     
-            if (data == null) throw new Error("null response from GET");
+            if (! data) throw new Error("null response from GET");
             
             resObj = data;
             
-    
         })
         .catch(error => {
-            let msg =  "Error initializing user [ " + username + " ]: " + error.message;
+            let msg =  "Error getting User Profile data for: " + username + " -- " + error.message;
             printError("db_getUser", msg);
-            throwError('Init User', error);
             return false;
         });
 
-
-        console.log("GOT USER DATA!");
         console.log( resObj );
-
 
         // copy the new values into SHOW_USER
 
@@ -432,23 +463,79 @@ function showUserBadges( element, badges ) {
         // USER BADGES
         SHOW_USER.bg = (resObj) ? resObj.bg.split(',').map(element=>element.trim()) : [];
            
+        // STATS
+        SHOW_USER.lb = resObj.lb;
+        SHOW_USER.lp = resObj.lp;
+        SHOW_USER.ls = resObj.ls;
+    
+        return true;
     
     } catch (error) {
-
-        printError( "showUser", error.message );
-        throw error;
+        printError( "Error getting User Profile data: ", error.message );
+        throwError("showUser", error);
     }
-
-    return true;
 }
        
    
 
+    
+/**
+* ON LOAD
+*
+* get CURRENT_USER AND CURRENT_LEED
+*
+*/
+window.onload = async (event) => {       
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const url_username = urlParams.get( USERNAME_URL_PARAM );
+
+    if (! url_username) {
+        const msg = "Cannot load User Profile.  No username URL parameter 'un'";
+        errorModal(msg, true);
+        throwError(msg);
+    }
+
+    try {
+
+        waitCursor();
+        showWaitingModal("Getting User info . . .");
+
         
+        const SHOW_USER = blankUserObject();
+        
+        let success = null;
+        success = await showUser( SHOW_USER, url_username );
+
+        if (success) {
+
+            loadPage(SHOW_USER);
+
+        } else {
+            var msg = "No user profile returned from server";
+            throwError(msg);
+        }
+
+
+
+    } catch (error) {
+        const msg = "Cannot show user profile for:<BR>" + url_username + "<BR>" + error.toString();
+        errorModal(msg, true);
+        
+    } finally {
+        normalCursor();
+        modalClose(false);
+
+        
+        var element = document.getElementById("back_button");
+        element.style.display = "block";
+        element = document.getElementById("copyright_footer");
+        element.style.display = "block";
+    }
+}
 
 
 	
-	</script>
-
+</script>
 
 </html>

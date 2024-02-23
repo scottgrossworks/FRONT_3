@@ -647,9 +647,17 @@ async function doGetHeaders(theUrl, new_headers) {
         method: 'GET',
         headers: headers,
         timeout: "10000"
-    }).then(response => {
-        if (!response.ok) {
-            console.error(response);
+
+    }).then(async response => {
+        
+        if (! response) {
+            var msg = "NULL response received from server";
+            throw new Error(msg);
+        }
+
+        
+        if (! response.ok) {
+            console.error(response.status + " -- " + response.message);
             throw new Error('Network response was not OK: [' + response.status + "] :" + response.message);
         }
 
@@ -657,7 +665,7 @@ async function doGetHeaders(theUrl, new_headers) {
 
         // DECODE THE JSON
         try {
-            the_json = response.json();
+            the_json = await response.json();
 
         } catch (err) {
             throwError("JSON", err.message);

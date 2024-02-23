@@ -48,7 +48,7 @@ const badge_4 = {
 const badge_5 = {
 
     'tit': 'Square Seller',
-    'cap': 'Authorized to sell Leedz using Square',
+    'cap': 'Authorized to get paid using Square',
     'url': '../img/badge_5.png'
 };
 

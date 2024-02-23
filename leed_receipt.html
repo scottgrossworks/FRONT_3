@@ -43,7 +43,7 @@
 
 
         <div class="column _1">
-            <a onclick="history.go(-3)"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+            <a onclick="history.go(-3)"><button class="back_button" style="margin:35px 10px; width:50px">&#10140;</button></a>
         </div>
 
 
@@ -114,9 +114,9 @@
     -->
 
     <!-- BUYER -->
-    <div style="font-size:larger;font-weight:600">
-        Congratulations <b style="color:green"><span id="user_welcome"></span></b>, you bought a leed!
-        <BR style="font-size:normal">Check your email <b style="color:green"><span id="user_email"></span></b> for this receipt.
+    <div><b>Congratulations <span id="user_welcome" style="color:green"></span>, you bought a leed!</b>
+        <BR>
+        Check your email for this receipt: <b style="color:green"><span id="user_email"></span></b>.
     </div>
 
 
@@ -140,7 +140,7 @@
             <!-- TRADE NAME -->
             <tr id="row_tn">
                             
-                <TD class="labelTD">Trade Name: </TD>
+                <TD class="labelTD">Trade: </TD>
                 
                 <td id="td_tn"></td>
 
@@ -164,7 +164,7 @@
             <!-- START TIME -->
             <tr id="row_st">
                         
-                <TD class="labelTD">Start Time: </TD>
+                <TD class="labelTD">Start: </TD>
                 
                 <td id="td_st"></td>
 
@@ -176,7 +176,7 @@
             <!-- END TIME -->
             <tr id="row_et">
                         
-                <TD class="labelTD">End Time: </TD>
+                <TD class="labelTD">End: </TD>
                 
                 <td id="td_et"></td>
 
@@ -238,7 +238,7 @@
             <!-- REQUIREMENTS -->
             <tr id="row_rq">
                                 
-                <TD class="labelTD">Requirements: </TD>
+                <TD class="labelTD">Reqs: </TD>
                 
                 <td id="td_rq"></td>
 
@@ -261,20 +261,28 @@
 
         </table>	
     </div>
+
 </section>  
 
-  <BR>
+<BR>
+    <BR>
+    <BR>
+        
+<center><button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="history.back()">Back</button></center>
 
+<BR>
+<BR>
+<BR>
 
-    <div id="copyright_footer" style="display:none">
+    <div id="copyright_footer">
         <span>
           All content is &copy;2024 The Leedz, all rights reserved, and may not be reproduced for commercial purposes without written permission.
         </span>
       </div>
 
 
-
 </body>
+
 
 <!--
     This is coming from the square_leedbought callback lambda function

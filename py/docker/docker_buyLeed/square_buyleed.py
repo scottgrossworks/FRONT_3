@@ -389,7 +389,10 @@ def createPaymentLink(the_seller, the_leed, bn) :
             },
             "redirect_url": cb_url,
             "merchant_support_email": "theleedz.com@gmail.com",
+            "allow_tipping":False,
             "ask_for_shipping_address":False,
+            "enable_coupon":False,
+            "enable_loyalty":False,
         },
         "quick_pay": {
             "location_id": the_seller['sq_lc'],

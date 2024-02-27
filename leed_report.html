@@ -400,47 +400,40 @@
 
 
 
+            
+            // END DATE/TIME 
+            // REQUIRED
+            // 
+            element = document.getElementById("td_end");
+       
+
+            const endDate = new Date( parseInt(CURRENT_LEED.et) );
+            const isoEnd = endDate.toISOString();
+        
+            const end_weekday = getWeekday( getShortDateString( isoEnd ) );
+            const end_monthname = getShortMonthname( isoEnd.substring(5, 7) ); 
+            
+            // remove '0' at front if any
+            let end_date = isoStart.substring(8, 10);
+            if (end_date.startsWith('0')) { end_date = end_date.substring(1) };
+            
+            const hours_end = getHours(isoEnd);
+    
+            const fullEndDate = end_weekday + " " + end_monthname + " " + end_date + ", " + leed_year; 
+    
+            const end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
+
+            element.innerHTML = fullEndDate + " at " + end_time;
+        
+
+
+    
+
             // approach to showing/hiding
             // if it is returned from the DB at all -- it is not hidden
             // if it is not returned -- check if it is hidden 
             // if not -- it is not provided at all
 
-
-            
-            // END DATE/TIME CAN BE HIDDEN OR SHOWN
-            // OPTIONAL
-            //
-            element = document.getElementById("td_end");
-            if (CURRENT_LEED.et) {
-
-                const endDate = new Date( parseInt(CURRENT_LEED.et) );
-                const isoEnd = endDate.toISOString();
-            
-                const end_weekday = getWeekday( getShortDateString( isoEnd ) );
-                const end_monthname = getShortMonthname( isoEnd.substring(5, 7) ); 
-                
-                // remove '0' at front if any
-                let end_date = isoStart.substring(8, 10);
-                if (end_date.startsWith('0')) { end_date = end_date.substring(1) };
-                
-                const hours_end = getHours(isoEnd);
-        
-                const fullEndDate = end_weekday + " " + end_monthname + " " + end_date + ", " + leed_year; 
-        
-                const end_time = hours_end[0] + ":" + getMinutes(isoEnd) + hours_end[1];
-
-                element.innerHTML = fullEndDate + " at " + end_time;
-            
-
-            } else if (CURRENT_LEED.op[ LEED_KEYS.END ] == OPTS_HIDDEN ) {
-
-                element.innerHTML= BUY_TO_SHOW;
-            
-            } else {
-                element.innerHTML= NO_VAL;
-            }
-
-    
 
     
             // LOCATION
@@ -450,7 +443,7 @@
             if (CURRENT_LEED.lc) {
                 element.innerHTML = CURRENT_LEED.lc;
             
-            } else if (CURRENT_LEED.op[ LEED_KEYS.LOC ] == OPTS_HIDDEN ) {
+            } else if (CURRENT_LEED.op[ LEED_KEYS.LC ] == OPTS_HIDDEN ) {
                 
                 element.innerHTML= BUY_TO_SHOW;
             } else {

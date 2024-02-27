@@ -833,8 +833,6 @@ export async function reportCurrentLeed() {
         return results;
     }
 
-
-    console.log( "LEED REPORTED: " + results);
     return results;
 }
 

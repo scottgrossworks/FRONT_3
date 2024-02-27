@@ -11,6 +11,7 @@ from botocore.exceptions import ClientError
 import logging
 from square.client import Client
 import os
+from datetime import datetime as dt, timezone, timedelta
 
 
 logger = logging.getLogger()
@@ -18,6 +19,36 @@ logger.setLevel(logging.INFO)
 
 
 
+
+
+
+# return the current time in milliseconds based on the Pacific USA time zone.
+#
+def now_milliseconds():
+    current_time = dt.now(timezone(timedelta(hours=-8)))
+    epoch = dt(1970, 1, 1, tzinfo=timezone(timedelta(hours=-8)))
+    milliseconds_since_epoch = int((current_time - epoch).total_seconds() * 1000)
+    return milliseconds_since_epoch
+    
+
+#
+# convert a long date from now_milliseconds() into a pretty date
+# January 05, 2024 - 11:29
+#
+def prettyDate( the_date ):
+    
+    if (not the_date) :
+        return ""
+    
+    int_date = int(the_date)
+    timestamp = dt.fromtimestamp( int_date / 1000)  # Convert milliseconds to seconds
+    formatted_date = timestamp.strftime("%B %d, %Y - %H:%M")
+    return formatted_date
+    
+    
+    
+    
+    
 #
 #
 #
@@ -69,7 +100,7 @@ def validateParam( event, param, required ):
 #    2. remove the OAuth record from the database
 #
 def revoke_Square( square_client, client_id, client_secret, merchant_id ):
-     
+
     request_body = {}
     request_body['client_id'] = client_id
     request_body['merchant_id'] = merchant_id
@@ -100,12 +131,18 @@ def delete_CognitoUser( user_pool_ID, un ):
             UserPoolId=user_pool_ID,
             Username=un
         )
-
         return response
     
+    
+    except ClientError as err:
+       if err.response['Error']['Code'] == 'UserNotFoundException':
+            logger.info("Cognito user not found " + un + " : " + str(err))
+       else:
+            logger.error("Error deleting Cognito user " + un + " : " + str(err))
+
     except Exception as err:
         logger.error("Error deleting Cognito user " + un + " : " + str(err))
-        raise
+        # DO NOT FAIL
     
     
 
@@ -146,8 +183,11 @@ def delete_LeedzUser( table, un ):
         raise
 
    
-
-            
+   
+   
+   
+      
+    
             
 
 
@@ -180,8 +220,6 @@ def handle_error(error):
 def handle_success( the_dict ):
     
     msg = str( the_dict )
-    logger.error( msg )
-    
     # Convert the dictionary to a JSON string
     the_json = json.dumps( the_dict )
 
@@ -189,16 +227,22 @@ def handle_success( the_dict ):
 
 
 
-
-
-
+#
+#
+#        result['cd'] = 1
+#        result['un'] = un
+#        result['em'] = the_user['em']
+#        result['id'] = merchant_id
+#        result['dt'] = "User has been removed from the Leedz and Square authorization revoked"
+#
 # SEND user account delete confirmation RECEIPT EMAIL
 # use SES service
 #
-def send_userEmail( the_user ):
+def send_adminEmail( the_user ):
     
-    SENDER = "theleedz.com@gmail.com" # must be verified in AWS SES Email
+    SENDER = "admin@theleedz.com" # must be verified in AWS SES Email
     RECIPIENT = the_user['em']
+    CC = "theleedz.com@gmail.com"
     SUBJECT = "Leedz User Deleted: " + the_user['un']
     
     user_info = "[" + the_user['un'] + "] " + the_user['em']
@@ -211,6 +255,8 @@ def send_userEmail( the_user ):
                 + "\r\n" + 
                 "Square authorization revoked for: " + the_user['id'] 
                 + "\r\n" + 
+                "Square merchant: " + the_user['id']
+                + "\r\n" + 
                 "You will need to create a new account and re-auhtorize Square to use the Leedz again."
                 + "\r\n" + 
                 "Thank you,"
@@ -220,8 +266,8 @@ def send_userEmail( the_user ):
 
                 
     # The HTML body of the email
-    BODY_START = "<html><head></head><body><b>Leedz user has been deleted. " + user_info + "</b><BR><BR>Square authorization revoked for: " + the_user['id']
-    BODY_MID = "You will need to create a new account and re-auhtorize Square to use the Leedz again."
+    BODY_START = "<html><head></head><body><b>Leedz user has been deleted. " + user_info + "</b><BR><BR>Square authorization revoked for merchant: " + the_user['id']
+    BODY_MID = "<BR><BR>You will need to create a new account and re-auhtorize Square to use the Leedz again."
     BODY_END = "<BR><BR>Thank you,<BR>The Leedz</body></html>"
     
 
@@ -234,6 +280,9 @@ def send_userEmail( the_user ):
             Destination={
                 'ToAddresses': [
                     RECIPIENT,
+                ],
+                'CcAddresses': [
+                    CC,
                 ],
             },
             Message={
@@ -301,30 +350,42 @@ def lambda_handler(event, context):
             fromDB = table.get_item(Key={"pk": "user", "sk" : un})
                       
             if 'Item' not in fromDB:
-                raise ValueError("User not found: " + un)
+                raise ValueError("Leedz user not found: " + un)
             
             the_user = fromDB['Item']
 
 
         except Exception as err:
-            logger.error("Cannot find user [" + un + "] : " + str(err))
+            logger.error("Cannot find Leedz user [" + un + "] : " + str(err))
             raise err
         
         
+        # EMAIL
+        # should only occur in testing
+        user_email = 'undefined'
+        if ('em' in the_user):
+            user_email = the_user['em']
+        
+        
+        
         # SQUARE MERCHANT ID
-        # may not be set if user is not authorized
-        merchant_id = the_user['sq_id']
-        if (not merchant_id or merchant_id == ""):
+        # may not be set if user is not authorized 
+        merchant_id = 'unauthorized'
+        
+        
+        # logger.info( the_user )
+        
+        
+        if (('sq_id' not in the_user) or (the_user['sq_id'] == None) or (the_user['sq_id'] == "")) :
             logger.info("No Square Authorization found for user: " + un)
-            # not a fatal error
+            # DO NOT FAIL
             
         else :
             # REVOKE SQUARE AUTHORIZATION
             # will throw Exception
+            merchant_id = the_user['sq_id']
             try :
 
-                # SQUARE INFO
-                #
                 client_id = validateEnviron('sq_app_id', TRUE)
                 client_secret = validateEnviron('sq_app_secret', TRUE)
                 environ = validateEnviron('sq_environ', TRUE)
@@ -345,26 +406,25 @@ def lambda_handler(event, context):
         
         #
         # DELETE COGNITO USER from leedz_users userpool
-        # will throw Exception before returning
+        # will NOT throw if user not found
         delete_CognitoUser( cognito_pool, un )
-        
         
         #
         # DELETE LEEDZ USER
-        # will throw Exception before returning
+        # 
         delete_LeedzUser( table, un )
   
     
         result = {}
         result['cd'] = 1
         result['un'] = un
-        result['em'] = the_user['em']
+        result['em'] = user_email
         result['id'] = merchant_id
         result['dt'] = "User has been removed from the Leedz and Square authorization revoked"
         
         
         # SEND CONFIRMATION EMAIL
-        send_userEmail( result )
+        send_adminEmail( result )
         
         return handle_success(result)
   

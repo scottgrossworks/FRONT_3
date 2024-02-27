@@ -22,12 +22,11 @@ export function initMonthChooser() {
      *
      */
     const leftArrow = months.children[0];
-
     if (isCurrentMonth()) {
-        hideBackArrow(leftArrow, showPrevMonth);
+        hideBackArrow(leftArrow, showPrevMonth_handler);
     
     } else {
-        showBackArrow(leftArrow, showPrevMonth);
+        showBackArrow(leftArrow, showPrevMonth_handler);
     }
 
         
@@ -39,9 +38,9 @@ export function initMonthChooser() {
     const rightArrow = months.children[2];
     rightArrow.addEventListener("click", function(event) {
     
-        showNextMonth();
+        showNextMonth_handler();
     
-        showBackArrow(leftArrow, showPrevMonth);
+        showBackArrow(leftArrow, showPrevMonth_handler);
 
     });
 
@@ -81,11 +80,13 @@ function hideBackArrow( leftArrow, handler ) {
  * 
  * 
  */
-function showPrevMonth() {
+function showPrevMonth_handler() {
     
     let prevMonth = getPrevMonth();
-    // console.log("SHOWING PREV=" + prevMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
+    console.log("PREV HANDLER=" + prevMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
 
+
+    // FOOBAR why + 1
     let theMonth = prevMonth.getUTCMonth() + 1;
 
     let theYear = prevMonth.getFullYear();
@@ -107,55 +108,13 @@ function showPrevMonth() {
     
     const leftArrow = document.querySelector(".month_chooser").children[0];
     if (isCurrentMonth()) {
-        hideBackArrow(leftArrow, showPrevMonth);
+        hideBackArrow(leftArrow, showPrevMonth_handler);
     
     } else {
-        showBackArrow(leftArrow, showPrevMonth);
+        showBackArrow(leftArrow, showPrevMonth_handler);
     }
 }
-window.showPrevMonth = showPrevMonth;
-
-
-/**
- * 
- */
-function showNextMonth() {
-
-    
-    let nextMonth = getNextMonth();
-    // console.log("SHOWING NEXT=" + nextMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
-
-    let theMonth = nextMonth.getUTCMonth() + 1; 
-    let theYear = nextMonth.getUTCFullYear();
-
-    let theLabel = document.querySelector("#month_label");
-    theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
-
-    setDateShowing( nextMonth );
-
-    buildCalendar();
-
-    loadCacheLeedz();
-
-    // this is an async call
-    // will return immediately - data shows up later
-    // console.error("showNextMonth.loadDBLeedz()");
-    loadDBLeedz();
-
-   
-   const leftArrow = document.querySelector(".month_chooser").children[0];
-   if (isCurrentMonth())
-        hideBackArrow( leftArrow, showPrevMonth);
-    else
-       showBackArrow(leftArrow, showPrevMonth);
-
-}
-window.showNextMonth = showNextMonth;
-
-
-
-
-
+window.showPrevMonth_handler = showPrevMonth_handler;
 
 
 
@@ -180,8 +139,52 @@ function getPrevMonth() {
         theMonth--;
     }
 
-    return getNewDate( theYear, theMonth, 1 , 0, 0, 1);
+    const newDate = getNewDate( theYear, theMonth, 1 , 0, 0, 1);
+    
+    console.log("getPrevMonth() = " + newDate.toLocaleString('en-US', { timeZone: 'UTC' }));
+
+    return newDate;
 }
+
+
+
+
+/**
+ * 
+ */
+function showNextMonth_handler() {
+
+    
+    let nextMonth = getNextMonth();
+    console.log("NEXT HANDLER=" + nextMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
+
+    // FOOBAR
+    let theMonth = nextMonth.getUTCMonth() + 1; 
+    let theYear = nextMonth.getUTCFullYear();
+
+    let theLabel = document.querySelector("#month_label");
+    theLabel.textContent = getMonthname( theMonth ) + ", " + theYear;
+
+    setDateShowing( nextMonth );
+
+    buildCalendar();
+
+    loadCacheLeedz();
+
+    // this is an async call
+    // will return immediately - data shows up later
+    loadDBLeedz();
+
+   
+   const leftArrow = document.querySelector(".month_chooser").children[0];
+   if (isCurrentMonth())
+        hideBackArrow( leftArrow, showPrevMonth);
+    else
+       showBackArrow(leftArrow, showPrevMonth);
+
+}
+window.showNextMonth_handler = showNextMonth_handler;
+
 
 
 /*
@@ -203,7 +206,6 @@ function getNextMonth() {
 
     const newDate = getNewDate( theYear, theMonth, 1 , 0, 0, 1);
 
-    // console.log("          GNM=" + newDate.toLocaleString('en-US', { timeZone: 'UTC' }));
     return newDate;
 }
 

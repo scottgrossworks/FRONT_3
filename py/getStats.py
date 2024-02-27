@@ -1,17 +1,21 @@
 #
-# GET STATS for the front page
+# DELETE USER AND SEND EMAIL TO ADMIN
 #
 #
 #
-#
-#
+
+
 import json
 import json.encoder
 from decimal import Decimal
 import boto3
+
+from boto3.dynamodb.conditions import Key
+from botocore.exceptions import ClientError
+
+from datetime import datetime as dt, timezone, timedelta
+
 import logging
-
-
 
 
 

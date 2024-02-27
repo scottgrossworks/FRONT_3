@@ -85,8 +85,6 @@ function showPrevMonth_handler() {
     let prevMonth = getPrevMonth();
     console.log("PREV HANDLER=" + prevMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
 
-
-    // FOOBAR why + 1
     let theMonth = prevMonth.getUTCMonth() + 1;
 
     let theYear = prevMonth.getFullYear();

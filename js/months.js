@@ -158,7 +158,7 @@ function showNextMonth_handler() {
     let nextMonth = getNextMonth();
     console.log("NEXT HANDLER=" + nextMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
 
-    // FOOBAR
+
     let theMonth = nextMonth.getUTCMonth() + 1; 
     let theYear = nextMonth.getUTCFullYear();
 
@@ -175,12 +175,12 @@ function showNextMonth_handler() {
     // will return immediately - data shows up later
     loadDBLeedz();
 
-   
-   const leftArrow = document.querySelector(".month_chooser").children[0];
-   if (isCurrentMonth())
-        hideBackArrow( leftArrow, showPrevMonth);
+
+    const leftArrow = document.querySelector(".month_chooser").children[0];
+    if (isCurrentMonth())
+        hideBackArrow( leftArrow, showPrevMonth_handler);
     else
-       showBackArrow(leftArrow, showPrevMonth);
+        showBackArrow(leftArrow, showPrevMonth_handler);
 
 }
 window.showNextMonth_handler = showNextMonth_handler;

@@ -11,7 +11,7 @@ import { prettyFormatDT, formatDTforInput, DTfromPretty, getTodayUTC } from "./d
 
 
 
-const MAX_TEXT_CHARS = 300;
+const MAX_TEXT_CHARS = 350;
 
 var inlineEditRowContents = {};
 

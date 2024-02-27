@@ -93,7 +93,8 @@ export const LEEDZ_CAL_KEY = "LC";
 
 const CACHE_DELIM = "|";
 
-let CURRENT_LEED = blankLeedObject();
+const CURRENT_LEED = blankLeedObject();
+window.CURRENT_LEED = CURRENT_LEED;
 
 
 /**
@@ -215,8 +216,7 @@ export function getCurrentLeed() {
     if (CURRENT_LEED.id == null) {
         // CURRENT_LEED is blank
         // go back to cache
-        // loadCacheLeed();
-        CURRENT_LEED = window.current_leed;  
+        loadCacheLeed();
     }
 
 
@@ -351,7 +351,6 @@ export function cacheCurrentLeed( theLeed ) {
     }
    
 
-    window.current_leed = CURRENT_LEED;
     window.localStorage.setItem( CURRENT_LEED_KEY, leedJSON );
 }
 
@@ -370,7 +369,7 @@ export function cacheCurrentLeed( theLeed ) {
     if (! leedJSON) {
       // this is not an error -- will happen any time program starts with empty cache  
       // printError("loadCacheLeed", "No value in cache for key: " + CURRENT_LEED_KEY);
-        CURRENT_LEED = blankLeedObject();
+        clearCurrentLeed();
         return;
     }
 

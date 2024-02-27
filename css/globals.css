@@ -124,7 +124,8 @@
   bottom: 0;
   margin: 0 auto;
 
-  padding:20px 2vw 0 2vw;
+  line-height:1;
+  padding:10px 2vw 10px 2vw;
   width:100%;
   height:4vh;
   background-color: var(--LEEDZ_EMERALD);

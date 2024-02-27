@@ -244,7 +244,7 @@ export function setDateShowing( theDate ) {
     // FORMAT -->  toUTCString()
     // "Wed, 14 Jun 2017 07:00:00 GMT"
     let utc_string = theDate.toUTCString();
-    window.sessionStorage.setItem(DATE_KEY, utc_string);
+    window.localStorage.setItem(DATE_KEY, utc_string);
 
 }
 
@@ -291,7 +291,7 @@ export function getDateShowing() {
     // if not set
     // check session storage for a previously-viewed calendar
     // NEVER RETURN A DATE PRIOR TO current month
-    const cacheDate = window.sessionStorage.getItem( DATE_KEY );
+    const cacheDate = window.localStorage.getItem( DATE_KEY );
     // FORMAT -->  toUTCString()
     // "Wed, 14 Jun 2017 07:00:00 GMT"
    
@@ -306,7 +306,7 @@ export function getDateShowing() {
         DATE_SHOWING = getTodayUTC();  
         
         // save in case of browser close / refresh
-        window.sessionStorage.setItem( DATE_KEY, DATE_SHOWING.toUTCString() ); 
+        window.localStorage.setItem( DATE_KEY, DATE_SHOWING.toUTCString() ); 
     }
     
 

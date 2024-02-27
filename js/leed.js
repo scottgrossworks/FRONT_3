@@ -349,7 +349,7 @@ export function cacheCurrentLeed( theLeed ) {
     }
    
 
-    window.sessionStorage.setItem( CURRENT_LEED_KEY, leedJSON );
+    window.localStorage.setItem( CURRENT_LEED_KEY, leedJSON );
 }
 
 
@@ -363,7 +363,7 @@ export function cacheCurrentLeed( theLeed ) {
  */
  function loadCacheLeed() {
 
-    const leedJSON =  window.sessionStorage.getItem( CURRENT_LEED_KEY );
+    const leedJSON =  window.localStorage.getItem( CURRENT_LEED_KEY );
     if (! leedJSON) {
       // this is not an error -- will happen any time program starts with empty cache  
       // printError("loadCacheLeed", "No value in cache for key: " + CURRENT_LEED_KEY);
@@ -439,7 +439,7 @@ export function saveLeedzToCache( new_leedz, the_month, the_year ) {
   });
 
 
-  // rewrite to session storage
+  // rewrite to local storage
   // 
   var cache_key = LEEDZ_CAL_KEY + the_month + the_year;
   window.localStorage.setItem( cache_key, JSON_leedz);

@@ -205,6 +205,7 @@ function getNextMonth() {
     }
 
     const newDate = getNewDate( theYear, theMonth, 1 , 0, 0, 1);
+    console.log("NEXT MONTH=" + newDate.toLocaleString('en-US', { timeZone: 'UTC' }));
 
     return newDate;
 }

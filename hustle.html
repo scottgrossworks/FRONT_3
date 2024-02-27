@@ -1152,7 +1152,6 @@ function trimAndRemoveSpaces(inputString) {
 
             action.setAttribute("screen", 2);  
             openNav();
-
             showWelcomeColumn();
 
 
@@ -1161,7 +1160,6 @@ function trimAndRemoveSpaces(inputString) {
             action.setAttribute("screen", 1);
             closeNav();
             actionModal();
-
 
 
           } else {
@@ -1565,7 +1563,7 @@ async function mainPageLoad() {
   
   addEventListener('pageshow', function(event) {
 
-    modalClose(true);
+    showWelcomeColumn();
 
      if (CURRENT_USER) { // are we coming BACK to this page?
         CURRENT_USER = getCurrentUser(true); // refresh and reload        

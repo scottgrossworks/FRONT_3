@@ -215,7 +215,8 @@ export function getCurrentLeed() {
     if (CURRENT_LEED.id == null) {
         // CURRENT_LEED is blank
         // go back to cache
-        loadCacheLeed();  
+        // loadCacheLeed();
+        CURRENT_LEED = window.current_leed;  
     }
 
 
@@ -268,6 +269,7 @@ export function setCurrentLeed( jsonObj ) {
     if ( jsonObj['sq_oid'] )  CURRENT_LEED.sq_oid = jsonObj['sq_oid'];
 
     cacheCurrentLeed( CURRENT_LEED );
+
 
     return CURRENT_LEED;
 }
@@ -349,6 +351,7 @@ export function cacheCurrentLeed( theLeed ) {
     }
    
 
+    window.current_leed = CURRENT_LEED;
     window.localStorage.setItem( CURRENT_LEED_KEY, leedJSON );
 }
 

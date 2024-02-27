@@ -1159,14 +1159,14 @@ function trimAndRemoveSpaces(inputString) {
 
             action.setAttribute("screen", 1);
             closeNav();
-            actionModal();
+            actionModal( true );
 
 
           } else {
 
             action.setAttribute("screen", 0);
             closeNav();  
-            actionModal();
+            actionModal( true );
 
           }
       }
@@ -1201,18 +1201,32 @@ function trimAndRemoveSpaces(inputString) {
  * SHOW Right-hand ACTION modal
  *
  */
-  function actionModal() {
-    let welcome = document.getElementById("welcome_panel");
-    welcome.style.display = "none";
+  function actionModal( show ) {
 
-    var closeColumn = document.getElementById("lic_close");
-    closeColumn.style.display = "flex";
+    //
+    // SHOW
+    //
+    if (show) {
+      let welcome = document.getElementById("welcome_panel");
+      welcome.style.display = "none";
 
-    // let closeBut = document.getElementById("buy_modal_close");
-    // closeBut.style.display = "flex";
+      var closeColumn = document.getElementById("lic_close");
+      closeColumn.style.display = "flex";
 
-    let action = document.getElementById("action_panel");
-    action.className = "modal";
+      // let closeBut = document.getElementById("buy_modal_close");
+      // closeBut.style.display = "flex";
+
+      let action = document.getElementById("action_panel");
+      action.className = "modal";
+
+      //
+      // HIDE
+      //
+    } else {
+      
+      let action = document.getElementById("action_panel");
+      action.style.display = "none";
+    }
 
   }
   window.actionModal = actionModal;
@@ -1563,7 +1577,7 @@ async function mainPageLoad() {
   
   addEventListener('pageshow', function(event) {
 
-    showWelcomeColumn();
+    actionModal( false );
 
      if (CURRENT_USER) { // are we coming BACK to this page?
         CURRENT_USER = getCurrentUser(true); // refresh and reload        

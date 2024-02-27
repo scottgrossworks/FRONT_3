@@ -289,7 +289,7 @@ export function getDateShowing() {
     } 
 
     // if not set
-    // check session storage for a previously-viewed calendar
+    // check local storage for a previously-viewed calendar
     // NEVER RETURN A DATE PRIOR TO current month
     const cacheDate = window.localStorage.getItem( DATE_KEY );
     // FORMAT -->  toUTCString()

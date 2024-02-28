@@ -84,17 +84,17 @@
 
 
 
-.info_modal{
+.info_modal {
 
   display: block;
   z-index:600;  
   flex-direction: column;
 
-  top: 10vh!important;
-  margin: 5vh auto;
-
-  width:70vw!important;
-  height:max-content!important;
+  top: 15vh;
+  margin: 0 auto;
+  left:15%;
+  width:70%;
+  height:max-content;
 
   text-decoration: none;
 
@@ -138,8 +138,7 @@
 
   .info_modal {
     width:90%;
-    top:15vh;
-    margin:0 auto;
+    left:10%;
     padding:5px;
   }
 
@@ -183,10 +182,6 @@
 @media screen and (min-width:400px) and (max-width: 799px) {
 
   .info_modal {
-    width:70%;
-    top:15vh;
-    margin: 0;
-    font-size:medium;
     padding:5px;
   }
 

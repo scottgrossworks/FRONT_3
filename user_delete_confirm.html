@@ -21,7 +21,7 @@
 		<link rel="stylesheet" href="css/styles_lg.css" type="text/css" />
 
 		<link rel="stylesheet" href="css/about.css" tyep="text/css"/>
-
+        <link rel="stylesheet" href="css/action_panel.css" type="text/css" />
    
 	 
 	 	<!-- Favicon -->
@@ -67,21 +67,22 @@
 
 			<TR><TD>
 				<a name="coming_soon"></a>
-				You have chosen to delete your <b style="color:green">Leedz</b> account.
+				You have chosen to <b>delete</b> your <b style="color:green">Leedz</b> account.
+				<BR>
+				<BR>This will rovoke both your login to <b>the Leedz</b> and also your <b>Square</b> payment authorization.  You will no longer be able to buy leedz, 
+					or to receive payment from the leedz you have posted on the calendar.  The Leedz cannot guarantee any pending Square payments will be received without error.  
 				<BR>
 				<BR>
-				This will also delete your Square payment authorization. To request that the admin delete your account manually, please 
-        <a href='mailto:theleedz.com@gmail.com' style="font-weight:600;text-decoration:none">email the Leedz</a> and we will respond immedialtely.  
+					
+					To ensure utmost security for your account, the button below will send an email to <b>the Leedz Admin</b> requesting your account removal, which will be processed by 
+					a human operator.
+				
 				<BR>
 				<BR>
-				<b style="color:green">The Leedz</b> is in beta, building a community of trusted vendors working together for their businesses.  
-				If you are looking to invest in the gig economy and join our growing team, please <a href="mailto:theleedz.com@gmail.com">contact us</a>.
-	
-				</div>
-		
-		
 				<BR>
-				<BR>
+					<center>
+						<button id="action_del" class="button del_button" onclick="deleteUser()">Delete</button>
+				</center>
 			</TD></TR>
 
 		</table>

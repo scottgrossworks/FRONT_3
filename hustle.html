@@ -1308,16 +1308,12 @@ async function mainPageLoad() {
     
       if (! CURRENT_USER ) CURRENT_USER = getCurrentUser(true);
 
-      // Is user a guest.user or a NEW user with NO trade subscriptions
-      // will be given default top (MAX_TRADE_SUBSCRIPTIONS) like guest
-      const newUser = (isGuestUser(true) || CURRENT_USER.sb.length == 0);
-      if (newUser) {
-        openNewUserWelcome();
-      } else {
+      if ( buySellReady(true) ) {
         showWaitingModal("Loading the Leedz . . .");      
+      } else {
+        openNewUserWelcome();
       }
-
-
+      
       // clear any pre-existing leed in memory
       //
       clearCurrentLeed();

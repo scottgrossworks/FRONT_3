@@ -172,9 +172,6 @@
 	async function sendDelUserRequest() {
 
 		let CURRENT_USER = getCurrentUser(true);
-
-		CURRENT_USER.un = "scott.gross";
-	
 	
 		if ((! CURRENT_USER) || (! CURRENT_USER.un)) {
 			var msg = "Cannot delete user.  No current user found";

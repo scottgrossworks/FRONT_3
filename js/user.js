@@ -14,7 +14,7 @@ export const MAX_USER_SUBS = 6;
 
 const GUEST_USER = blankUserObject();
 GUEST_USER.un = "guest.user";
-GUEST_USER.em = "scottgrossworks@gmail.com";
+GUEST_USER.em = "theleedz.com@gmail.com";
 
 let CURRENT_USER = blankUserObject();
 
@@ -60,7 +60,7 @@ let CURRENT_USER = blankUserObject();
       BLANK_USER.ls = 0;
 
       // SQUARE 
-      BLANK_USER.sq_st = null;
+      BLANK_USER.sq_st = "new";
       
       return BLANK_USER;
     }
@@ -239,15 +239,25 @@ export async function deleteCurrentUser() {
 
 
 /**
- * 
+ * 2/24 consolidate new user and guest user
  * @returns true if we are using the GUEST account
  */
 export function isGuestUser( guest_user ) {
 
-  if ( guest_user )
-    return CURRENT_USER === GUEST_USER;
-  else 
-    return CURRENT_USER !== GUEST_USER;
+  if (guest_user) {
+
+    if (CURRENT_USER == GUEST_USER)
+      return true;
+
+    if (CURRENT_USER.sq_st != 'authorized')
+      return true;
+    
+    return false;
+
+
+  } else { // false
+    // -- is this a regular, authorized user?
+    return (CURRENT_USER.sq_st == 'authorized');
 }
 
 
@@ -569,5 +579,3 @@ export function isSubscribed( trade_name ) {
     return (index > -1); // true if index is 0,1,2....
     
   }
-
-  

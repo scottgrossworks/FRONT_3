@@ -764,19 +764,6 @@ function trimAndRemoveSpaces(inputString) {
 
 
 
-      //
-      // open GUEST welcome modal
-      // some features not available to guest accounts
-      // invite user to sign up for account -- provide sign-up link
-      //
-      function openGuestWelcome() {
-        let guest = document.getElementById("guest_modal");
-        guest.style.display = "block";
-      }
-      window.openGuestWelcome = openGuestWelcome;
-
-
-
 
       //
       // open NEW USER welcome modal
@@ -801,20 +788,13 @@ function trimAndRemoveSpaces(inputString) {
       //
       function openCreateLeed() {
 
-
+        // will check Square status
         if (isGuestUser( true )) {
           printError("openCreateLeed", "Guest user cannot create leedz");
-          openGuestWelcome();
-          return;
-        } 
-
-        const current_user = getCurrentUser(false);
-        if (current_user.sq_st != 'authorized') {
-          printError("openCreateLeed", "Cannot post leed until seller's Square account authorized");
           openNewUserWelcome();
           return;
-        }
-        
+        } 
+        // OPEN leed_creator.html
         window.open( URL_LEED_CREATE , "_self");
       }
 
@@ -831,12 +811,12 @@ function trimAndRemoveSpaces(inputString) {
       function openUserEdit() {
 
         if (isGuestUser( true )) {
-          printError("openUserEdit", "Cannot edit Guest user account");
-          openGuestWelcome();
-
-        } else {
-          window.open( URL_USER_EDIT , "_self");
+          printError("openUserEdit", "Guest account cannot edit User Profile");
+          openNewUserWelcome();
+          return;
         }
+        // OPEN user_editor.html
+        window.open( URL_USER_EDIT , "_self");
       }
 
       window.openUserEdit = openUserEdit;
@@ -857,7 +837,7 @@ function trimAndRemoveSpaces(inputString) {
         // should NEVER happen
         if (isGuestUser( true )) {
           printError("openLeedEdit", "Guest User cannot edit leeds");
-          openGuestWelcome();
+          openNewUserWelcome();
 
         } else {
 
@@ -876,9 +856,10 @@ function trimAndRemoveSpaces(inputString) {
       //
       async function reportLeed() {
 
+        // will check authorization status
         if (isGuestUser( true )) {
           printError("reportLeed", "Guest User cannot report leeds");
-          openGuestWelcome();
+          openNewUserWelcome();
           return;
         }
 
@@ -904,21 +885,15 @@ function trimAndRemoveSpaces(inputString) {
       */
       async function buyButton() {
 
+        // will check authorization status
         if (isGuestUser( true )) {
           printError("buyLeed", "Guest User cannot buy leeds");
-          openGuestWelcome();
-          return;
-        }
-
-        // check authorization status
-        const current_user = getCurrentUser(false);
-        if (current_user.sq_st != 'authorized') {
-          printError("buyLeed", "Square account not authorized");
           openNewUserWelcome();
           return;
         }
 
 
+        const current_user = getCurrentUser(false);
         const current_leed = getCurrentLeed();
 
         /**
@@ -1057,7 +1032,7 @@ function trimAndRemoveSpaces(inputString) {
 
           if (isGuestUser( true )) {
             printError("deleteLeed", "Guest User cannot delete leeds");
-            openGuestWelcome();
+            openNewUserWelcome();
             return;
           }
           waitCursor();
@@ -1253,33 +1228,19 @@ function initUserPanel(current_user) {
     let user_href = document.getElementById("user_href");
 
 
+    // will check Square status
     if (isGuestUser(true)) {
       dot.style.backgroundColor = "darkorange";
       user_href.style.color = "darkorange";
 
       dot.addEventListener( "click", (event) => {    
-        openGuestWelcome();
-      });
-
-      user_href.addEventListener( "click", (event) => {    
-        openGuestWelcome();
-      });
-
-
-
-    } else if (current_user.sq_st != 'authorized') {
-
-      dot.style.backgroundColor = "dodgerblue";
-      // user_href.style.color = "var(--LEEDZ_GREEN)";
-
-      dot.addEventListener( "click", (event) => {    
         openNewUserWelcome();
       });
 
-      user_href.innerHTML = current_user.un;
       user_href.addEventListener( "click", (event) => {    
-        openUserEdit();
+        openNewUserWelcome();
       });
+
 
 
 

@@ -487,6 +487,55 @@ export async function db_getUser( username ) {
 
 
 
+
+/**
+ * returns JSON user object
+ * 
+ * 
+ */
+export async function db_delUser( username ) {
+    
+    if (username == null) {
+        throwError("db_delUser()", "no username provided");
+    }
+    let json_obj = null;
+
+    try {
+
+        const theURL = new URL(API_GATEWAY + "delUser");
+        const params = new URLSearchParams({ [USERNAME_URL_PARAM]: username });
+        theURL.search = params.toString();
+        
+        await doGetHeaders( theURL, {} )
+        .then(data => {
+
+          json_obj = data;
+
+        })
+        .catch(error => {
+
+          printError("Delete User", error);
+          throwError(error.src, "User not found: " + username);
+        });
+
+
+    } catch (error) {
+        throwError(error.src, error.message);
+    }
+
+    // SHOULD NOT BE NULL
+    // or would have thrown error above
+    // console.log(json_obj);
+
+    return json_obj;
+}    
+
+
+
+
+
+
+
 /**
  * GET DEETZ
  * Get the full leed details for this leed

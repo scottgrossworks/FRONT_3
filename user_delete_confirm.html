@@ -22,8 +22,12 @@
 
 		<link rel="stylesheet" href="css/about.css" tyep="text/css"/>
         <link rel="stylesheet" href="css/action_panel.css" type="text/css" />
-   
-	 
+		<link rel="stylesheet" href="./css/leed_edit.css" tyep="text/css"/>
+		<link rel="stylesheet" href="css/modal.css" type="text/css" />
+
+		<script src="./js/inline-edit.js" type="module" defer></script> 
+
+
 	 	<!-- Favicon -->
 		 <link rel="shortcut icon" type="image/png" href="./img/favicon.png"> 
 		 <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
@@ -44,7 +48,7 @@
         <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
 
 				<div class="column _1">
-					<a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+					<a href="http://theleedz.com"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
 				</div>
 
 				<div class="column" style="margin:auto 0;transform:translateY(6px)">
@@ -60,33 +64,71 @@
 		</center>
 
 
-    <section style="width:90%;margin:0 auto">
+    <section>
 		
-		<table style="padding:2vw;width:100%">;
+		
+		<!-- 
+			-- DB -- WAITING.... --DB
+			-- 
+			-->
+    <div class="modal info_modal" id="waiting_modal" style="display:none">
+
+        <center><img class="info_logo" src="img/logo_2.png" style="padding-bottom:0"></center> 
+            <table>
+                <TR><TD style="padding-bottom:20px; border:none;"><center>
+                    <h1 id="waiting_label" style="width:fit-content"></h1>
+                        </center>
+                </TD></TR>
+                <TR><TD style="border:none;"><center>
+                        <img src="./img/wait_spinner.gif" style="height:8vh;">
+                        </center>
+                    </TD>
+                </TR>
+            </table>
+
+  
+      </div>
 
 
-			<TR><TD>
-				<a name="coming_soon"></a>
+
+    
+      <!-- 
+        -- ERROR MODAL 
+        -- 
+      -->
+      <div class="row modal" id="error_modal" style="display:none">
+        <center><img id="error_logo" src="img/logo_2.png"></center> 
+        <h1></h1>
+        <a id="error_modal_close" href="javascript:errorModalClose();" href="">X</a>
+      </div>
+    
+
+	  <div style="width:80%;margin:0 auto" id="info_page">
+
+		<BR>
+		<BR>
 				You have chosen to <b>delete</b> your <b style="color:green">Leedz</b> account.
 				<BR>
-				<BR>This will rovoke both your login to <b>the Leedz</b> and also your <b>Square</b> payment authorization.  You will no longer be able to buy leedz, 
-					or to receive payment from the leedz you have posted on the calendar.  The Leedz cannot guarantee any pending Square payments will be received without error.  
+				<BR> If you have had a bad experience with the Leedz or wish to report an error, please <a href="./leedz_contact.html">Contact Us</a>.
+				
+				<BR>
+				<BR>The <b style='color:coral'>button</b> below  will rovoke both your <b>Leedz login</b> and also your <b>Square payment authorization</b>.  You will no longer be able to buy leedz, 
+				or to receive payment from the leedz you have posted on the calendar.  To resume using <b>the Leedz </b> you will need to 
+				sign-in again and re-authorize <b>Square</b>.
 				<BR>
 				<BR>
-					
-					To ensure utmost security for your account, the button below will send an email to <b>the Leedz Admin</b> requesting your account removal, which will be processed by 
-					a human operator.
+					To ensure security for your account and the best user experience the button below will send an email to <b>the Leedz Admin</b> requesting your account removal, which will be processed 
+					immediately by a human operator.
 				
 				<BR>
 				<BR>
 				<BR>
 					<center>
-						<button id="action_del" class="button del_button" onclick="deleteUser()">Delete</button>
+						<button class="button del_button" onclick="sendDelUserRequest()">Delete</button>
 				</center>
-			</TD></TR>
-
-		</table>
-
+				<BR>
+				<BR>
+	  </div>
     </section>  
 	<center><button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="history.back()">Back</button></center>
 
@@ -102,4 +144,97 @@
 
 </body>
 
+
+
+    
+<script type="module">
+	
+	import { getCurrentUser, guestUser } from "./js/user.js";
+	import { printError, throwError, errorModal, modalClose, errorModalClose } from "./js/error.js";
+	import { normalCursor, waitCursor, showWaitingModal } from "./js/leed_edit.js";
+	import { db_delUser } from "./js/dbTools.js";
+
+	window.errorModalClose = errorModalClose;
+
+
+    
+        
+
+
+	async function sendDelUserRequest() {
+
+		let CURRENT_USER = getCurrentUser(true);
+
+		CURRENT_USER.un = "scott.gross";
+	
+	
+		if ((! CURRENT_USER) || (! CURRENT_USER.un)) {
+			var msg = "Cannot delete user.  No current user found";
+			errorModal(msg, true);
+			printError("Delete User", msg);
+			throwError(msg);
+		}
+	
+		
+		waitCursor();
+		showWaitingModal("Sending Delete User request to server . . .");
+		
+		let from_DB = null;
+		try {
+	
+			// GO BACK to server and delete leed
+			// compliment of add leed
+	
+			from_DB = await db_delUser( CURRENT_USER.un );
+	
+		} catch ( error ) {
+			var msg = "Error sending Delete User request: " + error.message;
+			printError("Report Leed", msg);
+			errorModal(msg, true);
+	
+		} finally {
+			normalCursor();
+			modalClose(false);
+		}
+	
+
+		if (from_DB.er) {
+			var msg = "Error sending Delete User request: " + from_DB.er;
+			printError("Delete User", msg);
+			errorModal(msg, false);
+			throwError(msg);
+	
+		} else {
+	
+		  /**
+			* SHOW THE SUCCESS ALERT
+			*
+			*  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
+			*            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
+			*/
+			var theAlert = document.getElementById("alert_success");
+			var msg = 'Reported leed:  ' + from_DB.id + '  ( ' + from_DB.ti +' )';
+			var newChild = document.createElement("span");
+			newChild.textContent = msg;
+	
+			if (theAlert.children.length <= 1) {
+				theAlert.appendChild(newChild);
+			} else {
+				theAlert.replaceChild(newChild, theAlert.children[1]);
+			}
+	
+			theAlert.style.display = "block";
+	
+		}   
+	}
+	window.sendDelUserRequest = sendDelUserRequest;
+
+
+
+</script>
+    
+        
+            
+    
+    
 </html>

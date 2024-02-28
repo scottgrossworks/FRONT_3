@@ -15,7 +15,6 @@
 
   margin: 5vh auto;
 
-  width:90%;
   background-color: var(--LEEDZ_GRAY);
   padding: 20px;
   border-radius:10px;
@@ -112,8 +111,9 @@
 
 #error_modal {
 
-  width:70%;
-
+  width:90%;
+  top:10vh;
+  left:5vw;
   z-index:900;
   background-color: white;
   border: 6px solid #f44336;
@@ -160,7 +160,7 @@
 
   #error_modal {
     top:10vh;    
-    height:80%!important;
+    height:70%!important;
   }
 
   #error_modal h1 {
@@ -199,7 +199,6 @@
   }
 
   #error_modal {
-    top:5vh;    
     height:70%!important;
   }
     

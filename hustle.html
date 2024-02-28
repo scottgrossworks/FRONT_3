@@ -1204,11 +1204,13 @@ function initUserPanel(current_user) {
     if (buySellReady(true)) {
         dot.style.backgroundColor = "var(--LEEDZ_GREEN)";
     } else {
+        // indicate user still needs to register Square
         dot.style.backgroundColor = "dodgerblue";
     }
 
     // user_href.style.color = "var(--LEEDZ_GREEN)";
 
+    // OPEN THE USER EDITOR
     dot.addEventListener( "click", (event) => {    
       openUserEdit();
     });

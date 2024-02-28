@@ -228,8 +228,6 @@ export async function deleteCurrentUser() {
     
     // save modified CURRENT_USER to session storage
     saveCacheUser( CURRENT_USER );
-
-
 }
 
 
@@ -258,6 +256,7 @@ export function isGuestUser( guest_user ) {
   } else { // false
     // -- is this a regular, authorized user?
     return (CURRENT_USER.sq_st == 'authorized');
+  }
 }
 
 

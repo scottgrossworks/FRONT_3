@@ -38,30 +38,36 @@
 
 		 
 
-
 	<body>
-	
+        
+    
+    
+                
+		<div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
 
-		<center>
+			<div class="column _1">
+				<a href="http://theleedz.com"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+			</div>
 
-			
-        <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
-
-				<div class="column _1">
-					<a href="http://theleedz.com"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
-				</div>
-
-				<div class="column" style="margin:auto 0;transform:translateY(6px)">
-					<h1 class="user_title">Confirm User Delete</h1>
-				</div>
+			<div class="column" style="margin:auto 0;transform:translateY(6px)">
+				<h1 class="user_title">Delete User</h1>
+			</div>
 				
-				<div class="column _3" style="padding:6px;text-align:center">
-					<img src="./img/logo_2.png" style="width:120px">
-				</div>
+			<div class="column _3" style="padding:6px;text-align:center">
+				<img src="./img/logo_2.png" style="width:120px">
+			</div>
 			
+			
+		
 		</div>
+
+
+		<div id="alert_success" class="alert" style="display:none">
+			<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+		</div>
+
 	
-		</center>
+
 
 
     <section>
@@ -109,7 +115,8 @@
 		<BR>
 				You have chosen to <b>delete</b> your <b style="color:green">Leedz</b> account.
 				<BR>
-				<BR> If you have had a bad experience with the Leedz or wish to report an error, please <a href="./leedz_contact.html">Contact Us</a>.
+				<BR> If you have had a bad experience with the Leedz or wish to report an error, please 
+					<b><a href="./leedz_contact.html">contact us</a></b>.
 				
 				<BR>
 				<BR>The <b style='color:coral'>button</b> below  will rovoke both your <b>Leedz login</b> and also your <b>Square payment authorization</b>.  You will no longer be able to buy leedz, 
@@ -130,7 +137,8 @@
 				<BR>
 	  </div>
     </section>  
-	<center><button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="history.back()">Back</button></center>
+	<center><button class="button save_button" 
+		style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="window.open('http://theleedz.com','_self')">Back</button></center>
 
 	<BR>
 	<BR>
@@ -209,11 +217,10 @@
 		  /**
 			* SHOW THE SUCCESS ALERT
 			*
-			*  result = "{'id': " + id + ",'ti':" + ti + ",'pr':" + pr + ",'cd': 1}" 
-			*            {'id': 15013540,'ti':2222 FairFax Airbrush Title,'pr':55,'cd': 1}
+			*  result = "{'un': " + un + ",'em':" + em, 'cd': 1 }" 
 			*/
 			var theAlert = document.getElementById("alert_success");
-			var msg = 'Reported leed:  ' + from_DB.id + '  ( ' + from_DB.ti +' )';
+			var msg = 'Delete Requested:  ' + from_DB.un + '  ( ' + from_DB.em +' )';
 			var newChild = document.createElement("span");
 			newChild.textContent = msg;
 	

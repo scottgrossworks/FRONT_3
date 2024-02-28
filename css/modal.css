@@ -88,7 +88,7 @@
 .info_modal{
 
   display: block;
-  
+  z-index:600;  
   flex-direction: column;
 
   top: 10vh!important;

@@ -1312,16 +1312,15 @@ async function mainPageLoad() {
       // will be given default top (MAX_TRADE_SUBSCRIPTIONS) like guest
       const newUser = (isGuestUser(true) || CURRENT_USER.sb.length == 0);
       if (newUser) {
-        modalClose(false);
         openNewUserWelcome();
+      } else {
+        showWaitingModal("Loading the Leedz . . .");      
       }
-      
+
 
       // clear any pre-existing leed in memory
       //
       clearCurrentLeed();
-
-
 
 
       // INIT USER PANEL
@@ -1337,8 +1336,6 @@ async function mainPageLoad() {
         printError("User Panel", error);
         errorModal( msg , true );
       }
-
-
 
 
 
@@ -1367,7 +1364,6 @@ async function mainPageLoad() {
       }
 
 
-    
 
       /**
       * TRADES
@@ -1523,7 +1519,7 @@ async function mainPageLoad() {
 window.onload = async function() {
 
     const userLogin = {};
-    
+
     try {
 
       getUserLogin( userLogin );
@@ -1549,8 +1545,6 @@ window.onload = async function() {
       CURRENT_USER = guestUser();   
     }
 
-
-    showWaitingModal("Loading the Leedz . . .");
 
     try {
 

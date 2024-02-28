@@ -164,37 +164,6 @@
         
     
       <!-- 
-        -- GUEST WELCOME MODAL 
-        -- 
-        -->
-        <div class="modal info_modal modal_noclose" id="guest_modal" style="display:none">
-          <center><img class="info_logo" src="img/logo_2.png"></center> 
-          <h1>
-              <center>
-              <table>
-                <TR><TD>
-                  Guest User Modal -- Some features are not available to Guest users.
-                  <BR>
-                  <BR>
-                  To edit your user profile, buy, post, edit, or report a leed,
-                  <BR>
-                  <a href="http://scottgross.works">sign-up</a> for a <a href="http://scottgross.works">FREE</a> account.
-                </TD></TR>
-              </table>
-              </center> 
-            </h1>
-    
-              <BR>
-          <a class="info_modal_close" href="javascript:modalClose(true);" href="">X</a>
-          <BR>
-       
-        </div>
-    
-    
-    
-        
-    
-      <!-- 
         -- NEW USER WELCOME MODAL 
         -- 
         -->
@@ -204,9 +173,9 @@
           <h1>
               <center>
               <table>
-                <TR><TD><center><B style="font-size:x-large">Welcome new user!</B></center>
+                <TR><TD><center><B style="font-size:x-large">Welcome to The Leedz!</B></center>
                   <BR>
-                    To get started, complete your <a href="#" onclick="openUserEdit()">User Info</a> and introduce yourself to Leedz buyers.  
+                    To get the most out of <b style='color:green'>The Leedz</b>, complete your <a href="#" onclick="openUserEdit()">User Info</a> and introduce yourself to buyers.  
                     <a href="#" onclick="openUserEdit()">Authorize Square</a> to send and receive payments.  
                     Then <a href="#" onclick="openUserEdit()">subscribe to trades</a> and view the current leedz posted on the calendar.  
                     Choose a trade, <a href="./leedz_how-to.html">post a leed</a>, and start selling!
@@ -502,7 +471,7 @@
 
   <script type="module" charset=”utf-8″>
 
-    import { initUser, getUserLogin, guestUser, getCurrentUser, saveUserChanges, isGuestUser, isSubscribed } from "./js/user.js";      
+    import { initUser, getUserLogin, guestUser, getCurrentUser, saveUserChanges, buySellReady, isGuestUser, isSubscribed } from "./js/user.js";      
     import { initTrades } from "./js/trades.js";   
     import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
@@ -788,9 +757,8 @@ function trimAndRemoveSpaces(inputString) {
       //
       function openCreateLeed() {
 
-        // will check Square status
-        if (isGuestUser( true )) {
-          printError("openCreateLeed", "Guest user cannot create leedz");
+        if (buySellReady(false)) {
+          printError("openCreateLeed", "Authorize Square to create leedz");
           openNewUserWelcome();
           return;
         } 
@@ -834,16 +802,13 @@ function trimAndRemoveSpaces(inputString) {
       //
       function openLeedEdit() {
 
-        // should NEVER happen
-        if (isGuestUser( true )) {
-          printError("openLeedEdit", "Guest User cannot edit leeds");
+        if (buySellReady( false )) {
+          printError("openLeedEdit", "Authorize Square to edit leedz");
           openNewUserWelcome();
-
-        } else {
-
+          return;
+        }
           window.open( URL_LEED_EDIT , "_self");
         }
-      }
       window.openLeedEdit = openLeedEdit;
 
 
@@ -856,19 +821,12 @@ function trimAndRemoveSpaces(inputString) {
       //
       async function reportLeed() {
 
-        // will check authorization status
         if (isGuestUser( true )) {
           printError("reportLeed", "Guest User cannot report leeds");
           openNewUserWelcome();
           return;
         }
-
-
-        // GOTO report leed confirmation
-        // with link to get back to main page
         window.open( URL_LEED_REPORT , "_self");
-
-
       }
       window.reportLeed = reportLeed;
 
@@ -885,9 +843,8 @@ function trimAndRemoveSpaces(inputString) {
       */
       async function buyButton() {
 
-        // will check authorization status
-        if (isGuestUser( true )) {
-          printError("buyLeed", "Guest User cannot buy leeds");
+        if ( buySellReady ( false )) {
+          printError("buyLeed", "Authorize Square to buy leedz");
           openNewUserWelcome();
           return;
         }
@@ -1030,11 +987,12 @@ function trimAndRemoveSpaces(inputString) {
       //
       async function deleteLeed() {
 
-          if (isGuestUser( true )) {
-            printError("deleteLeed", "Guest User cannot delete leeds");
+          if ( buySellReady ( false )) {
+            printError("deleteLeed", "Authorize Square to delete leedz");
             openNewUserWelcome();
             return;
           }
+
           waitCursor();
 
           try {
@@ -1227,8 +1185,7 @@ function initUserPanel(current_user) {
     let dot = document.getElementById("up_dot");
     let user_href = document.getElementById("user_href");
 
-
-    // will check Square status
+  
     if (isGuestUser(true)) {
       dot.style.backgroundColor = "darkorange";
       user_href.style.color = "darkorange";
@@ -1240,26 +1197,26 @@ function initUserPanel(current_user) {
       user_href.addEventListener( "click", (event) => {    
         openNewUserWelcome();
       });
-
-
-
-
-    } else { // authorized
-      dot.style.backgroundColor = "var(--LEEDZ_GREEN)";
-      // user_href.style.color = "var(--LEEDZ_GREEN)";
-
-
-      dot.addEventListener( "click", (event) => {    
-        openUserEdit();
-      });
-
-      user_href.innerHTML = current_user.un;
-      user_href.addEventListener( "click", (event) => {    
-          openUserEdit();
-      });
-
-
+    
+      return;
     }
+
+    if (buySellReady(true)) {
+        dot.style.backgroundColor = "var(--LEEDZ_GREEN)";
+    } else {
+        dot.style.backgroundColor = "dodgerblue";
+    }
+
+    // user_href.style.color = "var(--LEEDZ_GREEN)";
+
+    dot.addEventListener( "click", (event) => {    
+      openUserEdit();
+    });
+
+    user_href.innerHTML = current_user.un;
+    user_href.addEventListener( "click", (event) => {    
+        openUserEdit();
+    });
 
     showUserBadges(current_user);
       
@@ -1563,58 +1520,54 @@ async function mainPageLoad() {
 
 window.onload = async function() {
 
-  const userLogin = {};
+    const userLogin = {};
     
     try {
 
-        getUserLogin( userLogin );
-        // console.log(userLogin);
+      getUserLogin( userLogin );
+      // console.log(userLogin);
 
-        if (! userLogin['un']) {
-            // 
-            // !! REDIRECT TO LOGIN URL
-            //
-            window.open(URL_LOGIN, "_self");
-            return;
-        }
+      if (! userLogin['un']) {
+      // 
+      // !! REDIRECT TO LOGIN URL
+      //
+      window.open(URL_LOGIN, "_self");
+      return;
+    }
 
 
     } catch (err) {
-          var msg = "Cannot log into the Leedz.";
-          msg = err.message + "<BR>" + msg + "<BR>Using guest account.";
-          printError("Leedz Login", msg);
-          errorModal( msg , true );
-          
-          // DO NOT FAIL
-          // ! USE GUEST USER
-          CURRENT_USER = guestUser();   
+      var msg = "Cannot log into the Leedz.";
+      msg = err.message + "<BR>" + msg + "<BR>Using guest account.";
+      printError("Leedz Login", msg);
+      errorModal( msg , true );
+
+      // DO NOT FAIL
+      // ! USE GUEST USER
+      CURRENT_USER = guestUser();   
     }
 
 
-    if (isGuestUser(false)) {
+    showWaitingModal("Loading the Leedz . . .");
 
-        showWaitingModal("Loading the Leedz . . .");
+    try {
 
-        try {
+      // re-initialize current user with login credentials from AWS  
+      CURRENT_USER = await initUser( userLogin['un'] );
 
-            // re-initialize current user with login credentials from AWS  
-            // FIXME what to do with
-            //  userLogin['access_token'], userLogin['id_token']
-            CURRENT_USER = await initUser( userLogin['un'] );
+    } catch (error) {
 
-        } catch (error) {
+      var msg = "Cannot load user data for " + userLogin['un'] + " [" + userLogin['em'] + "].<BR>Using guest account.";
+      msg = error.message + "<BR>" + msg;
+      printError("Leedz Login", msg);
+      errorModal( msg , false );
 
-            var msg = "Cannot load user data for " + userLogin['un'] + " [" + userLogin['em'] + "].<BR>Using guest account.";
-            msg = error.message + "<BR>" + msg;
-            printError("Leedz Login", msg);
-            errorModal( msg , false );
+      // DO NOT FAIL
+      // ! USE GUEST USER
+      CURRENT_USER = guestUser();   
 
-            // DO NOT FAIL
-            // ! USE GUEST USER
-            CURRENT_USER = guestUser();   
-
-        }
     }
+ 
       // LOAD the page with the current user info
       mainPageLoad();
 

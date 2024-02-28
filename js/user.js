@@ -15,6 +15,7 @@ export const MAX_USER_SUBS = 6;
 const GUEST_USER = blankUserObject();
 GUEST_USER.un = "guest.user";
 GUEST_USER.em = "theleedz.com@gmail.com";
+GUEST_USER.sq_st = "guest"
 
 let CURRENT_USER = blankUserObject();
 
@@ -233,30 +234,29 @@ export async function deleteCurrentUser() {
 
 
 
+/**
+ * presumes isGuestUser(false)
+ */
+export function buySellReady( is_ready ) {
+
+  if (is_ready)
+    return (CURRENT_USER.sq_st == 'authorized');
+  else 
+    return (CURRENT_USER.sq_st != 'authorized');
+}
 
 
 
 /**
- * 2/24 consolidate new user and guest user
+ * 
  * @returns true if we are using the GUEST account
  */
 export function isGuestUser( guest_user ) {
 
-  if (guest_user) {
-
-    if (CURRENT_USER == GUEST_USER)
-      return true;
-
-    if (CURRENT_USER.sq_st != 'authorized')
-      return true;
-    
-    return false;
-
-
-  } else { // false
-    // -- is this a regular, authorized user?
-    return (CURRENT_USER.sq_st == 'authorized');
-  }
+  if ( guest_user )
+    return CURRENT_USER === GUEST_USER;
+  else 
+    return CURRENT_USER !== GUEST_USER;
 }
 
 

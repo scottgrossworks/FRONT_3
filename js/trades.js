@@ -37,8 +37,6 @@ export async function initTrades() {
 
   const currentUser = getCurrentUser(false);
 
-  let no_subs = isGuestUser(true) || (currentUser.sb.length == 0);
-
   try {
       await getAllTrades().then((response) => trades = response ); 
 
@@ -51,8 +49,8 @@ export async function initTrades() {
       // initialize the spectrum of colors
       createTradesAndColors( trades );  
 
-      if ( no_subs ) { 
-        console.log("No subscriptions: using top trades")
+      if (  currentUser.sb.length == 0 ) { 
+        console.log("No subscriptions: using Top Trades")
         // the trades should be sorted by num_leedz
         // the guest user's subs are the top n leedz
         for (let i = 0; i < MAX_USER_SUBS; i++) {

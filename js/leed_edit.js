@@ -3,7 +3,7 @@
  * LEED CREATE AND EDIT UTILS
  * 
  */
-import { saveLeedChanges, deleteCurrentLeed, createDBLeed, changeLeedOpts } from "./leed.js";
+import { saveLeedChanges, deleteCurrentLeed, createDBLeed, changeLeedOpts, OPTS_SHOWING } from "./leed.js";
 import { printError, errorModal } from "./error.js";
 
 

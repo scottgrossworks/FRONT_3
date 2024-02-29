@@ -3,7 +3,7 @@
  * LEED CREATE AND EDIT UTILS
  * 
  */
-import { saveLeedChanges, deleteCurrentLeed, createDBLeed } from "./leed.js";
+import { saveLeedChanges, deleteCurrentLeed, createDBLeed, changeLeedOpts } from "./leed.js";
 import { printError, errorModal } from "./error.js";
 
 
@@ -237,12 +237,24 @@ import { printError, errorModal } from "./error.js";
             LEED_CHANGES.zp = the_zip;
         }
 
-
-        if ( noValue(LEED_CHANGES.dt) ) {
-            printError("Add Leed", "Details must be set");
-            errorModal("Error Posting Leed: Some details must be set.", true);
-            return false;
+        // CANNOT HIDE EMPTY FIELDS
+        //
+        if ( noValue(LEED_CHANGES.em) ) {
+            changeLeedOpts( LEED_CHANGES, 8, OPTS_SHOWING );
         }
+        
+        if ( noValue(LEED_CHANGES.ph) ) {
+            changeLeedOpts( LEED_CHANGES, 9, OPTS_SHOWING );
+        }
+        
+        if ( noValue(LEED_CHANGES.dt) ) {
+            changeLeedOpts( LEED_CHANGES, 10, OPTS_SHOWING );
+        }
+
+        if ( noValue(LEED_CHANGES.rq) ) {
+            changeLeedOpts( LEED_CHANGES, 11, OPTS_SHOWING );
+        }
+
 
         if (! LEED_CHANGES.pr) {
             printError("Add Leed", "Price must be set");

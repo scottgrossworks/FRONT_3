@@ -1491,15 +1491,15 @@ async function mainPageLoad() {
 
     actionModal( false );
 
-     if (CURRENT_USER) { // are we coming BACK to this page?
-        CURRENT_USER = getCurrentUser(true); // refresh and reload        
+    //  if (CURRENT_USER) { // are we coming BACK to this page?
+    CURRENT_USER = getCurrentUser(true); // refresh and reload        
 
-        if (isGuestUser(false)) {
-          showWaitingModal("Loading the Leedz . . .");
-        }
-        
-        mainPageLoad();
-      }
+    if (isGuestUser(false)) {
+    showWaitingModal("Loading the Leedz . . .");
+    }
+
+    mainPageLoad();
+  
   });
 
 

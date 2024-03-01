@@ -1325,7 +1325,7 @@ async function mainPageLoad() {
       if (! CURRENT_USER ) CURRENT_USER = getCurrentUser(true);
 
       if ( buySellReady(true) ) {
-        console.log("main page load");
+        // console.log("main page load");
         showWaitingModal("Loading the Leedz . . .");      
       } else {
         openNewUserWelcome();

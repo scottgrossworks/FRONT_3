@@ -170,7 +170,7 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
             var theVal = inlineEditRowContents[rowName][i];
             var formatted = null;
             var dateTime = null;
-            if (options.origin == "create") {  // coming from create page 
+            if (options.origin == "create") {  
                 
                 // is the field blank (use Today), or are we 
                 // editing field with existing value?
@@ -182,13 +182,6 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
                     dateTime += 43200000; // add 12 hours
                     formatted = formatDTforInput( dateTime );
                 }
-
-
-            } else if (options.origin == "cancel") { // restart and clear the page
-
-                dateTime = getTodayUTC().getTime();
-                dateTime += 43200000; // add 12 hours
-                formatted = formatDTforInput( dateTime );
 
 
             } else {   // coming from edit page

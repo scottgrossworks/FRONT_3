@@ -489,7 +489,6 @@ function loadCacheUser() {
   
 
     let userJSON = window.localStorage.getItem( CACHE_USER_KEY );
-    let userObj = null;
     if (! userJSON) {
       // NOT an error -- will happen any time app started with fresh cache and new user
       console.log("Leedz user cache", "No value for cache key=" + CACHE_USER_KEY);
@@ -499,18 +498,17 @@ function loadCacheUser() {
     // CACHE contains JSON
     // verfiy it and create object
     try {
-      userObj = JSON.parse( userJSON );
-  
-    } catch (error) {
-      printError("loadCacheUser", "Cannot parse JSON: " + userJSON);
-      return null;
-    }
-
-    
+      const userObj = JSON.parse( userJSON );
+      return userObj;
     // console.log("LOAD USER CACHE=" + new Date().getTime());
     // console.log(userObj);
-
-    return userObj;
+    
+    } catch (error) {
+      const err_msg =  "Cannot parse JSON: " + error.toString();
+      printError("loadCacheUser", err_msg);
+      printError("JSON = " + userJSON);
+      return null;
+    }
 }
 
 

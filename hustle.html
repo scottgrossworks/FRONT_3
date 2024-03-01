@@ -1309,6 +1309,7 @@ async function mainPageLoad() {
       if (! CURRENT_USER ) CURRENT_USER = getCurrentUser(true);
 
       if ( buySellReady(true) ) {
+        console.log("main page load");
         showWaitingModal("Loading the Leedz . . .");      
       } else {
         openNewUserWelcome();
@@ -1489,6 +1490,7 @@ async function mainPageLoad() {
   
   addEventListener('pageshow', function(event) {
 
+    console.log("pageshow");
     actionModal( false );
 
     //  if (CURRENT_USER) { // are we coming BACK to this page?

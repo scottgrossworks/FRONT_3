@@ -402,7 +402,7 @@
 
         import { printError, throwError, errorModal, modalClose, errorModalClose } from "./js/error.js";
 
-        import { cancelOptions, createOptions } from "./js/leed_edit.js";
+        import { createOptions } from "./js/leed_edit.js";
         import { goodValue, successAlert, leed_edit_Save, leed_edit_Delete } from "./js/leed_edit.js";
         import { waitCursor, normalCursor, showWaitingModal, clearFields, validateLeedChanges  } from "./js/leed_edit.js";
         
@@ -412,8 +412,6 @@
         window.inlineEdit = inlineEdit;
         window.clearFields = clearFields;
 
-
-        window.cancelOptions = cancelOptions;
         window.createOptions = createOptions;
         
 
@@ -496,9 +494,6 @@
         }
     }
 
-
-
-    cancelOptions.finishCallback = defaultCallback;
     createOptions.finishCallback = defaultCallback;
 
 
@@ -528,8 +523,6 @@
         changeLeedOpts( LEED_CHANGES, leedkey, OPTS_SHOWING );
     }
     createOptions.showCallback = showCallback;
-    cancelOptions.showCallback = showCallback;
-
 
 
     // 
@@ -557,9 +550,6 @@
         
     }
     createOptions.hideCallback = hideCallback;
-    cancelOptions.showCallback = hideCallback;
-
-
 
 
 

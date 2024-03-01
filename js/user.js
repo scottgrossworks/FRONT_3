@@ -283,7 +283,7 @@ export function getCurrentUser( useCache ) {
     }
   }
 
-  console.log(CURRENT_USER);
+  // console.log(CURRENT_USER);
   // may be blank - won't be null
   return CURRENT_USER;
 }

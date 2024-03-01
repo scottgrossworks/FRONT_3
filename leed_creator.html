@@ -651,8 +651,10 @@
             if (! EDITING) return;
             endEditing();
 
+            
             if (! validateLeedChanges( LEED_CHANGES )) {
                 printError("postLeed", "Cannot post invalid leed changes");
+ 
                 return;
             } 
 
@@ -670,17 +672,16 @@
             }
 
             const results = await leed_edit_Post( CURRENT_USER, LEED_CHANGES );
+            
+            startOver();
 
 
         } catch (error) {
             var err_str = error.toString();
             printError("Post Leed", err_str);
             errorModal("Post Leed", err_str);
-            clearFields();
-            
-        } finally {
-            startOver();
-        }
+            // do not clear fields -- let user what went wrong
+        } 
     
     } 
     window.postLeed = postLeed;

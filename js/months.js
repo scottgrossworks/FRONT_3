@@ -41,6 +41,7 @@ export function initMonthChooser() {
         showNextMonth_handler();
     
         showBackArrow(leftArrow, showPrevMonth_handler);
+        event.preventDefault();
     });
 
 
@@ -80,8 +81,6 @@ function hideBackArrow( leftArrow, handler ) {
  * 
  */
 function showPrevMonth_handler(event) {
-
-    event.preventDefault();
     
     let prevMonth = getPrevMonth();
     // console.log("PREV HANDLER=" + prevMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
@@ -151,10 +150,7 @@ function getPrevMonth() {
 /**
  * 
  */
-function showNextMonth_handler(event) {
-
-    console.log("NEXT=" + event);
-    // event.preventDefault();
+function showNextMonth_handler() {
 
     let nextMonth = getNextMonth();
     // console.log("NEXT HANDLER=" + nextMonth.toLocaleString('en-US', { timeZone: 'UTC' }));

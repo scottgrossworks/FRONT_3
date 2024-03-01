@@ -449,7 +449,7 @@ function inlineDefaultFinish(rowName, options) {
                 var trimVal = checkPhone( theVal );
 
      
-                if ( trimVal ) {
+                if ( ! trimVal ) {
                     let errMsg = "Invalid phone number: " + theVal;
                     printError("inlineDefaultFinish", errMsg);
                     alert(errMsg);

@@ -40,6 +40,9 @@ export function initMonthChooser() {
     
         showNextMonth_handler();
     
+
+        console.log("IN LISTENR event=" + event);
+        
         showBackArrow(leftArrow, showPrevMonth_handler(event));
     });
 

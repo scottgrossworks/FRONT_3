@@ -511,13 +511,15 @@ function inlineDefaultFinish(rowName, options) {
                             break;
 
 
+                        case 'Locked':
+                            options.finishCallback(rowData, rowName);
+                            break;
+                        
+
                         default:
                             break;
                     }
                 }
-
-
-                
                 break;
 
 

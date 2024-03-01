@@ -38,7 +38,7 @@ export function initMonthChooser() {
     const rightArrow = months.children[2];
     rightArrow.addEventListener("click", function(event) {
     
-        event.stopPropagation();
+        event.stopImmediatePropagation();
 
         showNextMonth_handler(event);
     
@@ -61,8 +61,8 @@ function showBackArrow( leftArrow, handler ) {
         leftArrow.style.opacity = 1;
         leftArrow.addEventListener("click",function(event) { 
             
-            event.stopPropagation();
-
+            event.stopImmediatePropagation();
+            
             handler(event) 
         });
     }

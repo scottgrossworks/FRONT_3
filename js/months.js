@@ -139,7 +139,7 @@ function getPrevMonth() {
 
     const newDate = getNewDate( theYear, theMonth, 1 , 0, 0, 1);
     
-    console.log("getPrevMonth() = " + newDate.toLocaleString('en-US', { timeZone: 'UTC' }));
+    // console.log("getPrevMonth() = " + newDate.toLocaleString('en-US', { timeZone: 'UTC' }));
 
     return newDate;
 }
@@ -203,7 +203,7 @@ function getNextMonth() {
     }
 
     const newDate = getNewDate( theYear, theMonth, 1 , 0, 0, 1);
-    console.log("NEXT MONTH=" + newDate.toLocaleString('en-US', { timeZone: 'UTC' }));
+    // console.log("NEXT MONTH=" + newDate.toLocaleString('en-US', { timeZone: 'UTC' }));
 
     return newDate;
 }

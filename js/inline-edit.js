@@ -184,6 +184,14 @@ function inlineDefaultUpdateCell(cell, i, rowName, options) {
                 }
 
 
+                
+            } else if (options.origin == "cancel") { // restart and clear the page
+
+                dateTime = getTodayUTC().getTime();
+                formatted = formatDTforInput( dateTime );
+
+
+
             } else {   // coming from edit page
                 var current_leed = getCurrentLeed();
                 dateTime = (rowName == "row_start") ? current_leed.st : current_leed.et;
@@ -439,13 +447,15 @@ function inlineDefaultFinish(rowName, options) {
                 
                 var theVal = cell.children[getFromChildren].value;
                 var trimVal = checkPhone( theVal );
+
      
-                if (! trimVal ) {
+                if ( trimVal ) {
                     let errMsg = "Invalid phone number: " + theVal;
                     printError("inlineDefaultFinish", errMsg);
                     alert(errMsg);
                     return;
                 }
+
 
                 rowData[cell.dataset.inlinename] = trimVal;
                 inlineEditRowContents[rowName][i] = trimVal;
@@ -759,7 +769,6 @@ function checkForZip(s) {
     // Check if the cleaned string is composed only of numerals and is 10 digits long
     if (/^\d{10}$/.test(cleanedStr)) {
       return cleanedStr;
-   
     } else {
       return null;
     }

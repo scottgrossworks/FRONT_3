@@ -41,6 +41,9 @@ import { printError, errorModal } from "./error.js";
         *
         */
         export function clearFields() {
+
+            createOptions.origin = 'cancel';
+
             inlineEdit('row_trade', createOptions);            
             inlineEdit('row_title', createOptions);
             inlineEdit('row_start', createOptions);
@@ -51,6 +54,8 @@ import { printError, errorModal } from "./error.js";
             inlineEdit('row_det', createOptions);
             inlineEdit('row_reqs', createOptions);
             inlineEdit('row_pr', createOptions);
+
+            createOptions.origin = 'create';
         }
 
 

@@ -438,16 +438,14 @@ function inlineDefaultFinish(rowName, options) {
             case "tel":
                 
                 var theVal = cell.children[getFromChildren].value;
-                var trimVal = trimAndRemoveSpaces( theVal );
-
+                var trimVal = checkPhone( theVal );
      
-                if (! checkPhone( trimVal )) {
+                if (! trimVal ) {
                     let errMsg = "Invalid phone number: " + theVal;
                     printError("inlineDefaultFinish", errMsg);
                     alert(errMsg);
                     return;
                 }
-
 
                 rowData[cell.dataset.inlinename] = trimVal;
                 inlineEditRowContents[rowName][i] = trimVal;
@@ -751,18 +749,21 @@ function checkForZip(s) {
 
 /**
  * Verify phone number
- * @param {c} s from form
- * @returns true if phone number only contains digits, . and - otherwise return false
+ * takes (212) 555-1212
+ * @returns 2125551212 or null if invalid phone number
  */
-  function checkPhone(s) {
+  function checkPhone(the_str) {
+    // Remove spaces, parentheses, dashes, and dots
+    let cleanedStr = the_str.replace(/[\s().-]/g, '');
+  
+    // Check if the cleaned string is composed only of numerals and is 10 digits long
+    if (/^\d{10}$/.test(cleanedStr)) {
+      return cleanedStr;
    
-    if (s.length != 10) return false;
-
-    // Check if the string only contains valid phone number characters
-    return /^[0-9]+$/.test(s);
-
+    } else {
+      return null;
+    }
   }
-
 
 
 

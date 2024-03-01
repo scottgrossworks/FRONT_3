@@ -81,7 +81,7 @@ function hideBackArrow( leftArrow, handler ) {
  */
 function showPrevMonth_handler(event) {
 
-    console.log("EVENT=" + event);
+    event.preventDefault();
     
     let prevMonth = getPrevMonth();
     // console.log("PREV HANDLER=" + prevMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
@@ -153,7 +153,7 @@ function getPrevMonth() {
  */
 function showNextMonth_handler(event) {
 
-    console.log("NEXT MONTH=" + event);
+    event.preventDefault();
 
     let nextMonth = getNextMonth();
     // console.log("NEXT HANDLER=" + nextMonth.toLocaleString('en-US', { timeZone: 'UTC' }));

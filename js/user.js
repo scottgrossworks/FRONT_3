@@ -6,7 +6,7 @@
 
 import { db_getUser, db_updateUser, DEL_USER, CHG_USER, DB_FAIL } from "./dbTools.js";
 import { printError, throwError } from "./error.js";
-
+import { goodValue } from "./leed_edit.js";
 
 
 export const CACHE_USER_KEY = "U";
@@ -368,11 +368,11 @@ export async function initUser( login ) {
 
       CURRENT_USER.em = resObj['em'];
 
-      CURRENT_USER.ws = (resObj['ws']) ? resObj['ws'] : null;
-      CURRENT_USER.ab = (resObj['ab']) ? resObj['ab'] : null;
+      CURRENT_USER.ws = (goodValue(resObj['ws'])) ? resObj['ws'] : null;
+      CURRENT_USER.ab = (goodValue(resObj['ab'])) ? resObj['ab'] : null;
 
-      CURRENT_USER.zp = (resObj['zp'] && resObj['zp'] != '0') ? resObj['zp'] : 0;
-      CURRENT_USER.zr = (resObj['zr'] && resObj['zr'] != '0') ? resObj['zr'] : 0;
+      CURRENT_USER.zp = (goodValue(resObj['zp'])) ? resObj['zp'] : 0;
+      CURRENT_USER.zr = (goodValue(resObj['zr'])) ? resObj['zr'] : 0;
 
       // TRADES SUBSCRIPTIONS
       CURRENT_USER.sb =  (resObj['sb']) ? resObj['sb'].split(',').map(element=>element.trim()) : [];
@@ -382,7 +382,7 @@ export async function initUser( login ) {
 
       // 1/2024
       // SQUARE STATUS
-      CURRENT_USER.sq_st = (resObj['sq_st']) ? resObj['sq_st'] : null;
+      CURRENT_USER.sq_st = (resObj['sq_st']) ? resObj['sq_st'] : 'new';
 
     } catch (error) {
 

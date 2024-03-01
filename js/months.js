@@ -62,7 +62,7 @@ function showBackArrow( leftArrow, handler ) {
         leftArrow.addEventListener("click",function(event) { 
             
             event.stopImmediatePropagation();
-            
+
             handler(event) 
         });
     }

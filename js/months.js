@@ -38,12 +38,12 @@ export function initMonthChooser() {
     const rightArrow = months.children[2];
     rightArrow.addEventListener("click", function(event) {
     
-        showNextMonth_handler();
+        showNextMonth_handler(event);
     
 
         console.log("IN LISTENR event=" + event);
-        
-        showBackArrow(leftArrow, showPrevMonth_handler(event));
+
+        showBackArrow(leftArrow, showPrevMonth_handler);
     });
 
 

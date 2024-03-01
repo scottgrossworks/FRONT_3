@@ -681,6 +681,10 @@
                 //
                 CURRENT_USER.zr = theMiles.valueOf();
                 CURRENT_USER.zp = theZip.valueOf();
+              } else {
+
+                CURRENT_USER.zr = null;
+                CURRENT_USER.zp = 0;
               }
             
             // this is an async call

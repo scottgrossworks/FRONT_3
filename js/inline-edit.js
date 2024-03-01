@@ -7,6 +7,7 @@ import { printError, throwError } from "./error.js";
 import { MAX_LEED_PRICE, getCurrentLeed } from "./leed.js";
 import { isValidTrade } from "./trades.js";
 import { prettyFormatDT, formatDTforInput, DTfromPretty, getTodayUTC } from "./dates.js";
+import { goodValue } from "./leed_edit.js";
 
 
 
@@ -413,23 +414,29 @@ function inlineDefaultFinish(rowName, options) {
 
                 var trimVal = trimAndRemoveSpaces( theVal );
 
-                if (trimVal.length != 5) {
-                    let errMsg = "Zip code must be 5 digits";
-                    printError("inlineDefaultFinish", errMsg );
-                    alert(errMsg);
-                    return;
+                if (goodValue( trimVal)) {
+
+                    if (trimVal.length != 5) {
+                        let errMsg = "Zip code must be 5 digits";
+                        printError("inlineDefaultFinish", errMsg );
+                        alert(errMsg);
+                        return;
+                    }
+
+                    if (! isNumOnly( trimVal )) {
+                        let errMsg = "Zip code must be all digits";
+                        printError("inlineDefaultFinish", errMsg );
+                        alert(errMsg);
+                        return;
+                    }
+                    rowData[cell.dataset.inlinename] = trimVal;
+                    inlineEditRowContents[rowName][i] = trimVal;
+                } else {
+                    rowData[cell.dataset.inlinename] = "";
+                    inlineEditRowContents[rowName][i] = "";
                 }
 
-                if (! isNumOnly( trimVal )) {
-                    let errMsg = "Zip code must be all digits";
-                    printError("inlineDefaultFinish", errMsg );
-                    alert(errMsg);
-                    return;
-                }
 
-
-                rowData[cell.dataset.inlinename] = trimVal;
-                inlineEditRowContents[rowName][i] = trimVal;
                 break;
 
 

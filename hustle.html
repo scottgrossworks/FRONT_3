@@ -629,56 +629,59 @@
             
             // verify that miles is a number <= 9999
             var trimVal = trimAndRemoveSpaces( miles.value );
-          
-            if (! isNumOnly( trimVal )) {
-              let errMsg = "Miles From must be a number";
-              printError("Miles contains non-numeric", errMsg );
-              
-              errorModal("Cannot search for Leedz<BR>" + errMsg, false);
-              return;
-            }
-            
-            // SEARCH RADIUS
-            const theMiles = new Number(trimVal);
-            if (theMiles > 3000) {
-              let msg = "Miles From is too large: " + theMiles;
-              let errMsg = "Search radius must be < 3000 miles";
-              printError(msg, errMsg );
 
-              errorModal("Cannot search for Leedz<BR>" + msg + "<BR>" + errMsg, false);
-              return;
-            }
-
-            
-            // verify that zip is a 5-digit number
-            //
-            trimVal = trimAndRemoveSpaces( zip.value );
-
-            if (trimVal.length != 5) {
-                let errMsg = "Zip code must be 5 digits";
-                printError("Zip Code length", errMsg );
+            if ( trimVal ) {
                 
-                errorModal("Cannot search for Leedz<BR>" + errMsg, false);
-                return;
-            }
-
-            if (! isNumOnly( trimVal )) {
-
-                let msg = "Invalid Zip code: " + trimVal;
-                let errMsg = "Zip code must be all digits";
-                printError(msg, errMsg );
+                if (! isNumOnly( trimVal )) {
+                  let errMsg = "Miles From must be a number";
+                  printError("Miles contains non-numeric", errMsg );
+                  
+                  errorModal("Cannot search for Leedz<BR>" + errMsg, false);
+                  return;
+                }
                 
-                errorModal("Cannot search for Leedz<BR>" + msg + "<BR>" + errMsg, false);
-                return;
-            }
+                // SEARCH RADIUS
+                const theMiles = new Number(trimVal);
+                if (theMiles > 3000) {
+                  let msg = "Miles From is too large: " + theMiles;
+                  let errMsg = "Search radius must be < 3000 miles";
+                  printError(msg, errMsg );
 
-            // ZIP CODE
-            const theZip = new Number(trimVal);
-            
-            // these values are inserted into the current user profile
-            //
-            CURRENT_USER.zr = theMiles.valueOf();
-            CURRENT_USER.zp = theZip.valueOf();
+                  errorModal("Cannot search for Leedz<BR>" + msg + "<BR>" + errMsg, false);
+                  return;
+                }
+
+                
+                // verify that zip is a 5-digit number
+                //
+                trimVal = trimAndRemoveSpaces( zip.value );
+
+                if (trimVal.length != 5) {
+                    let errMsg = "Zip code must be 5 digits";
+                    printError("Zip Code length", errMsg );
+                    
+                    errorModal("Cannot search for Leedz<BR>" + errMsg, false);
+                    return;
+                }
+
+                if (! isNumOnly( trimVal )) {
+
+                    let msg = "Invalid Zip code: " + trimVal;
+                    let errMsg = "Zip code must be all digits";
+                    printError(msg, errMsg );
+                    
+                    errorModal("Cannot search for Leedz<BR>" + msg + "<BR>" + errMsg, false);
+                    return;
+                }
+
+                // ZIP CODE
+                const theZip = new Number(trimVal);
+                
+                // these values are inserted into the current user profile
+                //
+                CURRENT_USER.zr = theMiles.valueOf();
+                CURRENT_USER.zp = theZip.valueOf();
+              }
             
             // this is an async call
             // will return immediately - data shows up later        
@@ -687,7 +690,6 @@
             // this is an async call
             // will return immediately - data shows up later
             loadDBLeedz();
-
           
           
           } finally {
@@ -719,7 +721,17 @@
 
 
 
+/**
+ * will return null
+ */
 function trimAndRemoveSpaces(inputString) {
+
+  if (! inputString) return null;
+
+  if (inputString == "") return null;
+
+  if (inputString == 'null') return null;
+
   // Trim leading/trailing white spaces and remove spaces in between
   let trimmedString = inputString.trim().replace(/\s+/g, " ");
   // Replace all single spaces with ""

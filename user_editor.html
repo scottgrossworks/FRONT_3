@@ -832,7 +832,10 @@ function defaultCallback(rowData, rowName) {
                 break;
 
             case "row_zip":
-                USER_CHANGES.zp = rowData["zip"];
+                if (goodValue(rowData['zip']))
+                    USER_CHANGES.zp = rowData["zip"];
+                else
+                    USER_CHANGES.zp = null;
                 break;
 
             case "row_about":

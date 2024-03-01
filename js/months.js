@@ -153,7 +153,8 @@ function getPrevMonth() {
  */
 function showNextMonth_handler(event) {
 
-    event.preventDefault();
+    console.log("NEXT=" + event);
+    // event.preventDefault();
 
     let nextMonth = getNextMonth();
     // console.log("NEXT HANDLER=" + nextMonth.toLocaleString('en-US', { timeZone: 'UTC' }));

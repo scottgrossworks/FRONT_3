@@ -283,6 +283,7 @@ export function getCurrentUser( useCache ) {
     }
   }
 
+  console.log(CURRENT_USER);
   // may be blank - won't be null
   return CURRENT_USER;
 }
@@ -502,7 +503,7 @@ function loadCacheUser() {
       return userObj;
     // console.log("LOAD USER CACHE=" + new Date().getTime());
     // console.log(userObj);
-    
+
     } catch (error) {
       const err_msg =  "Cannot parse JSON: " + error.toString();
       printError("loadCacheUser", err_msg);

@@ -9,19 +9,12 @@ import { printError, errorModal } from "./error.js";
 
     export const URL_LEED_DELETED = "./leed_delete.html";
 
-    export const cancelOptions = {  "origin": "cancel",
-                                    "showCallback": null,
-                                    "hideCallback": null,
-                                    "finishCallback": null 
-                                };
-
-
-
     export const createOptions = {  "origin": "create",
                                     "showCallback": null,
                                     "hideCallback": null,
                                     "finishCallback": null
                                  };
+    window.createOptions = createOptions;
 
 
 
@@ -49,16 +42,20 @@ import { printError, errorModal } from "./error.js";
         */
         export function clearFields() {
 
-            inlineEdit('row_trade', cancelOptions);            
-            inlineEdit('row_title', cancelOptions);
-            inlineEdit('row_start', cancelOptions);
-            inlineEdit('row_end', cancelOptions);
-            inlineEdit('row_loc', cancelOptions);
-            inlineEdit('row_em', cancelOptions);
-            inlineEdit('row_ph', cancelOptions);
-            inlineEdit('row_det', cancelOptions);
-            inlineEdit('row_reqs', cancelOptions);
-            inlineEdit('row_pr', cancelOptions);
+            createOptions.origin = 'cancel';
+
+            inlineEdit('row_trade', createOptions);            
+            inlineEdit('row_title', createOptions);
+            inlineEdit('row_start', createOptions);
+            inlineEdit('row_end', createOptions);
+            inlineEdit('row_loc', createOptions);
+            inlineEdit('row_em', createOptions);
+            inlineEdit('row_ph', createOptions);
+            inlineEdit('row_det', createOptions);
+            inlineEdit('row_reqs', createOptions);
+            inlineEdit('row_pr', createOptions);
+
+            createOptions.origin = 'create';
         }
 
 

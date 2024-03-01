@@ -32,7 +32,6 @@ export function inlineEdit(rowName, options) {
             var cell = tableRow.children[i];
 
             // console.log("inlineEdit i=" + i + " cell=" + cell.innerHTML + " origin=" + options.origin);
-
             if ((i == 1) && (options.origin == "cancel"))
                 inlineEditRowContents[rowName][i] = "";
             else

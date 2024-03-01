@@ -40,8 +40,7 @@ export function initMonthChooser() {
     
         showNextMonth_handler();
     
-        showBackArrow(leftArrow, showPrevMonth_handler);
-        event.preventDefault();
+        showBackArrow(leftArrow, showPrevMonth_handler(event));
     });
 
 
@@ -58,7 +57,7 @@ function showBackArrow( leftArrow, handler ) {
 
     if (leftArrow.style.opacity != 1) {
         leftArrow.style.opacity = 1;
-        leftArrow.addEventListener("click", handler);
+        leftArrow.addEventListener("click",function(event) { handler(event) });
     }
 }
 
@@ -81,7 +80,7 @@ function hideBackArrow( leftArrow, handler ) {
  * 
  */
 function showPrevMonth_handler(event) {
-    
+    event.preventDefault();
     let prevMonth = getPrevMonth();
     // console.log("PREV HANDLER=" + prevMonth.toLocaleString('en-US', { timeZone: 'UTC' }));
 
@@ -150,7 +149,8 @@ function getPrevMonth() {
 /**
  * 
  */
-function showNextMonth_handler() {
+function showNextMonth_handler(event) {
+    event.preventDefault();
 
     let nextMonth = getNextMonth();
     // console.log("NEXT HANDLER=" + nextMonth.toLocaleString('en-US', { timeZone: 'UTC' }));

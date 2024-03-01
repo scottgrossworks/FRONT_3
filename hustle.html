@@ -478,7 +478,7 @@
     import { getCurrentLeed, clearCurrentLeed, buyCurrentLeed, deleteCurrentLeed, reportCurrentLeed  }  from "./js/leed.js";
     import { printError, throwError, errorModal, modalClose, errorModalClose } from "./js/error.js";
  
-    import { waitCursor, normalCursor, showWaitingModal, leed_edit_Delete  } from "./js/leed_edit.js";
+    import { waitCursor, normalCursor, showWaitingModal, leed_edit_Delete, goodValue } from "./js/leed_edit.js";
         
 
     import { USERNAME_URL_PARAM, DB_FAIL, DB_SUCCESS } from "./js/dbTools.js";
@@ -1356,15 +1356,19 @@ async function mainPageLoad() {
       // using current_user preferences if set
       //
       try {
-
-        if (CURRENT_USER.zr) {
-          let miles = document.getElementById("distance_miles");
-          miles.value = CURRENT_USER.zr;
-        }
         
-        if (CURRENT_USER.zp) {
-          let zip = document.getElementById("distance_from");
+        let miles = document.getElementById("distance_miles");
+        if (goodValue(CURRENT_USER.zr)) {
+          miles.value = CURRENT_USER.zr;
+        } else {
+          miles.value = "";
+        }
+
+        let zip = document.getElementById("distance_from");
+        if (goodValue(CURRENT_USER.zp)) {
           zip.value = CURRENT_USER.zp;
+        } else {
+          zip.value = "";
         }
 
       } catch (error) {
@@ -1506,17 +1510,19 @@ async function mainPageLoad() {
   
   addEventListener('pageshow', function(event) {
 
-    console.log("pageshow");
     actionModal( false );
 
-    //  if (CURRENT_USER) { // are we coming BACK to this page?
-    CURRENT_USER = getCurrentUser(true); // refresh and reload        
+    if (CURRENT_USER) { // are we coming BACK to this page?
+      CURRENT_USER = getCurrentUser(true); // refresh and reload        
 
-    if (isGuestUser(false)) {
-    showWaitingModal("Loading the Leedz . . .");
+      if (isGuestUser(true)) {
+        openNewUserWelcome();
+      } else {
+        showWaitingModal("Loading the Leedz . . .");
+      } 
+
+      mainPageLoad();
     }
-
-    mainPageLoad();
   
   });
 

@@ -35,7 +35,7 @@
 
 
         <div class="column _1">
-            <a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+            <a onclick="window.open( backButtonURL(), '_self' )"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
         </div>
 
 
@@ -201,7 +201,7 @@
 
 
 
-<center><button id='back_button' class="button save_button" style="display:none;background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="history.back()">Back</button></center>
+<center><button id='back_button' class="button save_button" style="display:none;background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="window.open( backButtonURL(), '_self' )">Back</button></center>
 
 <BR>
 <BR>
@@ -226,12 +226,13 @@
 	<script type="module">
 			
 
-		import { blankUserObject, getCurrentUser } from "./js/user.js";
+		import { blankUserObject, getCurrentUser, backButtonURL } from "./js/user.js";
 		import { printError, throwError, modalClose, errorModal, errorModalClose } from "./js/error.js";
 		import { getTradeInfo } from "./js/trades.js";
 		import { db_getUser, USERNAME_URL_PARAM } from "./js/dbTools.js";
         import { normalCursor, waitCursor, showWaitingModal } from "./js/leed_edit.js";
 
+        window.backButtonURL = backButtonURL;
         window.errorModalClose = errorModalClose;
         window.modalClose = modalClose;
 

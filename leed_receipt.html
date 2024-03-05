@@ -43,7 +43,7 @@
 
 
         <div class="column _1">
-            <a onclick="history.go(-3)"><button class="back_button" style="margin:35px 10px; width:50px">&#10140;</button></a>
+            <a onclick="window.open( backButtonURL(), '_self' )"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
         </div>
 
 
@@ -268,7 +268,7 @@
     <BR>
     <BR>
         
-<center><button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="history.back()">Back</button></center>
+<center><button class="button save_button" style="background-color:var(--LEEDZ_DARKGREEN); color:white" onclick="window.open( backButtonURL(), '_self' )">Back</button></center>
 
 <BR>
 <BR>
@@ -302,10 +302,13 @@
 <script type="module">
 			
     import { printError, throwError, errorModal, errorModalClose } from "./js/error.js";
-    import { getCurrentUser } from "./js/user.js";
+    import { getCurrentUser, backButtonURL } from "./js/user.js";
     import { LEED_KEYS, OPTS_HIDDEN, SHOW_ALL_OPTS, setCurrentLeed, getCurrentLeed } from "./js/leed.js";
     import { waitCursor, normalCursor, showWaitingModal  } from "./js/leed_edit.js";
     import { USERNAME_URL_PARAM, db_getDeetz } from "./js/dbTools.js";
+
+
+    window.backButtonURL = backButtonURL;
 
     window.errorModalClose = errorModalClose;
 

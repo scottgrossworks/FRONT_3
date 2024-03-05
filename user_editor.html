@@ -43,7 +43,7 @@
     
                 <div class="column _1">
                 <!-- back to hustle -->
-                    <a id="history_back_button" onclick="backButton(-1)"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+                     <a onclick="window.open( backButtonURL(), '_self' )"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
                     </div>
     
                     <div class="column" style="margin:auto 0;transform:translateY(6px)">
@@ -324,7 +324,7 @@
     import { turnTrade_On, turnTrade_Off, getAllTrades, createTradesAndColors } from "./js/trades.js";
 
     import { isSubscribed, saveUserChanges, getCurrentUser, reloadCurrentUser, deleteCurrentUser } from "./js/user.js";
-    import { MAX_USER_SUBS } from "./js/user.js";
+    import { MAX_USER_SUBS, backButtonURL } from "./js/user.js";
 
     import { clearCurrentLeed } from "./js/leed.js";
     import { inlineEdit } from "./js/inline-edit.js";
@@ -335,7 +335,7 @@
     
     window.errorModalClose = errorModalClose;
     window.inlineEdit = inlineEdit;
-
+    window.backButtonURL = backButtonURL;
 
     const URL_USER_DELETED = "./user_deleted.html";
     const URL_DEL_USER = "./user_delete_confirm.html";
@@ -351,6 +351,8 @@
 
     window.defaultOptions = defaultOptions;
     window.sampleOptions = sampleOptions;
+
+
 
     
     /**
@@ -372,8 +374,6 @@
                 
                 });
 
-                square_backButton();
-
                 if (CURRENT_USER.sq_st == 'authorized') {
                     showSquareAuthorizedAlert();
                 }
@@ -381,7 +381,6 @@
 
             } else {
                 CURRENT_USER = getCurrentUser(true);
-                user_backButton();
             }
 
 
@@ -500,31 +499,10 @@
     }
     
     
-    /**
-     * coming from hustle?  -- -1 takes you back
-     * coming from Square? -- -3 takes you back
-     *
-     * <a id="history_back_buton" onclick="history.go(-1)">
-     */ 
-    function user_backButton() {
-        let back_button = document.getElementById("history_back_button");
-        back_button.onclick = function() {
-            backButton(-1);
-          };
-    }    
-    function square_backButton() {
-        let back_button = document.getElementById("history_back_button");
-        back_button.onclick = function() {
-            backButton(-4);
-          };
-     }
-     function backButton( how_far ) {
-        history.go( how_far );
-     }
-     window.backButton = backButton;
-    
-    
-    
+
+
+
+
     
     
     /**

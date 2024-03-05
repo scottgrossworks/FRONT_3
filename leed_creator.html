@@ -45,7 +45,7 @@
     
     
                 <div class="column _1">
-                    <a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+                    <a onclick="window.open( backButtonURL(), '_self' )"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
                 </div>
     
     
@@ -391,7 +391,7 @@
             
     import { DTfromPretty } from "./js/dates.js";
 
-    import { getCurrentUser, guestUser } from "./js/user.js";
+    import { getCurrentUser, guestUser, backButtonURL } from "./js/user.js";
 
     import { printError, throwError, errorModal, errorModalClose, modalClose } from "./js/error.js";
 
@@ -410,6 +410,10 @@
     window.clearFields = clearFields;
 
     window.createOptions = createOptions;
+
+    window.backButtonURL = backButtonURL;
+
+
 
 
     setCallbacks( createOptions );

@@ -42,7 +42,7 @@
             <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
     
                 <div class="column _1">
-                    <a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+                    <a onclick="window.open( backButtonURL(), '_self' )"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
                 </div>
     
                 <div class="column" style="margin:auto 0;transform:translateY(6px)">
@@ -300,7 +300,7 @@
             import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname } from "./js/dates.js";
             import { getShortDateString, DTfromPretty } from "./js/dates.js";
             
-            import { getCurrentUser, guestUser } from "./js/user.js";
+            import { getCurrentUser, guestUser, backButtonURL } from "./js/user.js";
             import { getCurrentLeed, reportCurrentLeed, blankLeedObject } from "./js/leed.js";            
             import { LEED_KEYS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
             
@@ -309,6 +309,7 @@
             import { normalCursor, waitCursor, showWaitingModal } from "./js/leed_edit.js";
 
 
+            window.backButtonURL = backButtonURL;
             window.errorModalClose = errorModalClose;
            
             const BUY_TO_SHOW = "<b>Buy To Show</b>";

@@ -46,7 +46,7 @@
     
     
                 <div class="column _1">
-                    <a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+                    <a onclick="window.open( backButtonURL(), '_self' )"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
                 </div>
     
     
@@ -395,7 +395,7 @@
         import { getShortDateString, DTfromPretty } from "./js/dates.js";
         
         import { inlineEdit } from "./js/inline-edit.js";
-        import { getCurrentUser, guestUser } from "./js/user.js";
+        import { getCurrentUser, guestUser, backButtonURL } from "./js/user.js";
         
         import { LEED_KEYS, START_OPTS, OPTS_LOCKED, OPTS_HIDDEN, OPTS_SHOWING, changeLeedOpts } from "./js/leed.js";
         import { clearCurrentLeed, getCurrentLeed, blankLeedObject } from "./js/leed.js";
@@ -407,7 +407,7 @@
         import { waitCursor, normalCursor, showWaitingModal, clearFields, validateLeedChanges  } from "./js/leed_edit.js";
         
 
-
+        window.backButtonURL = backButtonURL;
         window.errorModalClose = errorModalClose;
         window.inlineEdit = inlineEdit;
         window.clearFields = clearFields;

@@ -870,7 +870,10 @@ function trimAndRemoveSpaces(inputString) {
       */
       async function buyButton() {
 
-        if ( buySellReady ( false )) {
+        // 3/2024 - should users be allowed to buy leedz who HAVE NOT registered for Square?
+        //
+        //
+        if ( isGuestUser( true )) {
           printError("buyLeed", "Authorize Square to buy leedz");
           openNewUserWelcome();
           return;

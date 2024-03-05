@@ -9,8 +9,12 @@ import { printError, throwError } from "./error.js";
 import { goodValue } from "./leed_edit.js";
 
 
-export const CACHE_USER_KEY = "U";
+export const CACHE_USER_KEY = "CU";
+export const ID_TOKEN_KEY = "ID";
+export const ACCESS_TOKEN_KEY = "AT";
 export const MAX_USER_SUBS = 6;
+
+export const BASE_URL = "https://www.theleedz.com/hustle.html#";
 
 const GUEST_USER = blankUserObject();
 GUEST_USER.un = "guest.user";
@@ -109,6 +113,8 @@ export function getUserLogin( userLogin ) {
       userLogin['access_token'] = loginTokens['access_token']; 
     }
 
+    saveUserTokens(userLogin['id_token'], userLogin['access_token']);
+
 
   } catch (err) {
     var msg = "Error parsing login tokens: " + err.message;
@@ -116,6 +122,53 @@ export function getUserLogin( userLogin ) {
     throwError(msg);
   }
 }
+
+
+
+
+//
+//
+//
+function saveUserTokens( id_token, access_token ) {
+
+    window.localStorage.setItem( ID_TOKEN_KEY , id_token);
+    window.localStorage.setItem( ACCESS_TOKEN_KEY , access_token);
+
+}
+
+
+/**
+ * 
+ * https://www.theleedz.com/hustle.html
+ * #
+ * id_token=eyJraWQiO. .....
+ * &
+ * access_token=eyJraWQ  .... 
+ * &
+ * expires_in=3600
+ * &
+ * token_type=Bearer
+ * 
+ */
+export function backButtonURL() {
+
+    let finish_URL = BASE_URL;
+
+    var id_token = window.localStorage.getItem( ID_TOKEN_KEY );
+    var access_token = window.localStorage.getItem( ACCESS_TOKEN_KEY );
+
+    if ( id_token && access_token ) {
+
+      finish_URL = finish_URL +
+                  "id_token=" + id_token +
+                  "access_token=" + access_token +
+                  "expires_in=3600&token_type=Bearer";
+    }
+
+    return finish_URL;
+}
+
+
 
 
 //

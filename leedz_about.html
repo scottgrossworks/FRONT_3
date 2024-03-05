@@ -44,7 +44,7 @@
         <div class="row" style="width:95vw;vertical-align:bottom;border-bottom: 2px solid var(--LEEDZ_DARKGREEN);">
 
             <div class="column _1">
-                <a onclick="history.back()"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
+                <a onclick="window.open( backButtonURL(), '_self' )"><button class="back_button" style="margin:35px 20px; width:50px">&#10140;</button></a>
 
                 </div>
 
@@ -296,7 +296,15 @@
 <script src="./js/badges.js"></script>
 
 <script type="module">
+        
+    import { backButtonURL } from "./js/user.js";
 
+
+window.backButtonURL = backButtonURL;
+
+
+// PAGE LOAD
+//
 let element = document.getElementById("div_badges");
 showBadges(element);
 

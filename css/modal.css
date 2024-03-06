@@ -13,7 +13,7 @@
 
 .modal h1 {
 
-  margin: 5vh auto;
+  margin: 1vh auto;
 
   background-color: var(--LEEDZ_GRAY);
   padding: 20px;
@@ -281,7 +281,7 @@
   font-family: var(--FONT_3);
   background-color: var(--LEEDZ_DARKGREEN);
   color: white;
-  top: 20px;
+  top: 10px;
   left: 5px;
   padding: 10px;
   width: 5%;

@@ -90,10 +90,10 @@
   z-index:600;  
   flex-direction: column;
 
-  top: 15vh;
+  top: 10%;
   margin: 0 auto;
-  left:15%;
-  width:70%;
+  left:10%;
+  width:80%;
   height:max-content;
 
   text-decoration: none;
@@ -138,7 +138,7 @@
 
   .info_modal {
     width:90%;
-    left:10%;
+    left:5%;
     padding:5px;
   }
 

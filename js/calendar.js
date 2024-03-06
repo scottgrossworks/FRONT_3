@@ -16,9 +16,6 @@ import { waitCursor, normalCursor, showWaitingModal } from "./leed_edit.js";
 
 let CURRENT_SELECTION = null;
 
-const CACHE_DELIM = '|';
- 
-
 
 
 

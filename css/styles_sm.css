@@ -100,8 +100,9 @@
 
 
 #calendar_main {
-position: relative;
+  position: relative;
   margin-left:10px !important;
+  padding-bottom:50px;
 }
 
 

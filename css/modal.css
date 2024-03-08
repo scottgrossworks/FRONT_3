@@ -92,7 +92,8 @@
 
   top: 10%;
   margin: 0 auto;
-
+  left:5vw;
+  
   width:80%;
   height:max-content;
 
@@ -182,6 +183,7 @@
 
   .info_modal {
     padding:5px;
+    left:5vw;
   }
 
   .info_modal a {

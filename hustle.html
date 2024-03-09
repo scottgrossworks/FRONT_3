@@ -751,6 +751,9 @@ function trimAndRemoveSpaces(inputString) {
       // new account -- no subs / search
       //
       function openNewUserWelcome() {
+        
+        modalClose(true);
+
         let newU = document.getElementById("newUser_modal");
         newU.style.display = "block";
       }
@@ -1563,6 +1566,9 @@ window.onload = async function() {
       // ! USE GUEST USER
       CURRENT_USER = guestUser();   
     }
+
+
+    showWaitingModal("Loading the Leedz . . .");      
 
 
     try {

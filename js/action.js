@@ -527,8 +527,10 @@ export function hideActionWindow() {
 
 function showDatePosted( theDiv, long_date ) {
 
-    var isoDate = new Date( long_date ).getISOString();
-    theDiv.innerText = "<B>" + getShortDateString( isoDate ) + "</B>";
+    // date posted
+    var str_d = new Date( long_date ).toString();
+    var short_d = str_d.substring(0, str_d.indexOf(' ', 14));
+    theDiv.innerText = "<B>" + short_d.toString() + "</B>";
 
     // Get the current date in milliseconds since the epoch
     var currentDate = new Date().getTime();

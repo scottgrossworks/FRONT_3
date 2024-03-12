@@ -547,22 +547,23 @@ function showDatePosted( theDiv, long_date ) {
         theDiv.style.color = "darkred";
 
     } else {
+        theDiv.style.color = "var(--LEEDZ_DARKGREEN)";
         switch (true) {
             case (hours <= 48):
                 // The date is 48 hours or less than the current date/time
-                theDiv.style.color = "var(--LEEDZ_DARKGREEN)";
+                theDiv.style.opacity = 1;
                 break;
             case (days <= 7):
                 // The date is 1 week or less than the current date/time
-                theDiv.style.color = "darkgreen";
+                theDiv.style.opacity = 0.75;
                 break;
             case (days > 7 && days <= 31):
                 // The date is between a week and a month from the current date/time
-                theDiv.style.color = "dodgerblue";
+                theDiv.style.opacity = 0.6;
                 break;
             default:
                 // The date is older than one month from the current date/time
-                theDiv.style.color = "DarkSlateBlue";
+                theDiv.style.opacity = 0.3;
         }
     }
 }

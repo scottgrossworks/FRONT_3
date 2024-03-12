@@ -1,6 +1,6 @@
 /* action.js */
 
-import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname, getShortDateString } from "./dates.js";
+import { getWeekday, getHours, getMinutes, getShortMonthname, getMonthname, getShortDateString, getShortDate } from "./dates.js";
 import { getColorForTrade } from "./trades.js";
 import { db_getDeetz, USERNAME_URL_PARAM } from "./dbTools.js";
 import { errorModal, printError, throwError } from "./error.js";
@@ -374,6 +374,18 @@ export async function showLeedAction( leed_preview , gotoDB ) {
 
 
 
+    //  DATE POSTED
+    //  3/2024
+    //  indicate how 'hot' the leed is -- by how new it is
+    //  so the user knows if it's been on the board a long time or not
+    //  
+    if ( CURRENT_LEED.dp ) {
+        theDiv = document.querySelector("#dp_value");       
+        showDatePosted( theDiv, CURRENT_LEED.dp );
+    }
+
+
+    
     
     // PRICE 
     // from leed_details
@@ -504,5 +516,52 @@ export function hideActionWindow() {
 }
 
 
+
+
+/**
+ * 
+ * @param {*} theDiv in hustle.html lic_row id='dp' 
+ * @param {*} long_date the milliseconds long dp field from the leed
+ */
+
+
+function showDatePosted( theDiv, long_date ) {
+
+    theDiv.innerText = getShortDate( long_date );
+
+    // Get the current date in milliseconds since the epoch
+    var currentDate = new Date().getTime();
+
+    // Calculate the difference in milliseconds
+    var diff = currentDate - long_date;
+
+    // Convert the difference to hours, days and months
+    var hours = diff / (1000 * 60 * 60);
+    var days = diff / (1000 * 60 * 60 * 24);
+
+    if (long_date == 0) {
+        // ERROR CONDITION
+        theDiv.style.color = "darkred";
+
+    } else {
+        switch (true) {
+            case (hours <= 48):
+                // The date is 48 hours or less than the current date/time
+                theDiv.style.color = "var(--LEEDZ_GREEN)";
+                break;
+            case (days <= 7):
+                // The date is 1 week or less than the current date/time
+                theDiv.style.color = "green";
+                break;
+            case (days > 7 && days <= 30):
+                // The date is between a week and a month from the current date/time
+                theDiv.style.color = "dodgerblue";
+                break;
+            default:
+                // The date is older than one month from the current date/time
+                theDiv.style.color = "midnightlbue";
+        }
+    }
+}
 
   

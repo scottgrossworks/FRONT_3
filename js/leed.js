@@ -42,6 +42,11 @@ LEED DETAILS
     SQUARE Order ID
     sq_oid
     not part of options or anything shown to client 
+
+
+
+    3/2024
+    date_posted metadata -- always shown to user in action menu
 *
 */
 
@@ -198,6 +203,9 @@ export function blankLeedObject() {
     BLANK_LEED.sq_url = null;
     BLANK_LEED.sq_oid = null;
 
+    // date_posted metadata
+    BLANK_LEED.dp = 0;
+
     return BLANK_LEED;
   }
   
@@ -268,6 +276,11 @@ export function setCurrentLeed( jsonObj ) {
     if ( jsonObj['sq_url'] )  CURRENT_LEED.sq_url = jsonObj['sq_url'];
     if ( jsonObj['sq_oid'] )  CURRENT_LEED.sq_oid = jsonObj['sq_oid'];
 
+    // date_posted
+    if (jsonObj['dp']) {
+      var long_date = parseInt( jsonObj['dp']);
+      if (long_date) CURRENT_LEED.dp = long_date;
+    }
     cacheCurrentLeed( CURRENT_LEED );
 
 
@@ -308,6 +321,9 @@ export function clearCurrentLeed() {
     // SQUARE PAYMENT LINK /  OrderID
     CURRENT_LEED.sq_url = null;
     CURRENT_LEED.sq_oid = null;
+
+    // date_posted
+    CURRENT_LEED.dp = 0;
     
     cacheCurrentLeed( blankLeedObject() );
     

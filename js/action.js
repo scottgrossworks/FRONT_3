@@ -547,7 +547,7 @@ function showDatePosted( theDiv, long_date ) {
         theDiv.style.color = "darkred";
 
     } else {
-        theDiv.style.color = "var(--LEEDZ_DARKGREEN)";
+        theDiv.style.color = "darkgreen";
         switch (true) {
             case (hours <= 48):
                 // The date is 48 hours or less than the current date/time

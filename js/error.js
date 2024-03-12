@@ -122,7 +122,7 @@ export function errorModal( error, noclose ) {
 
   modal.setAttribute(ERR_KEY, errorString);
 
-  let theMsg = modal.children[2]; /* the error text */
+  let theMsg = modal.children[3]; /* the error text */
   theMsg.style.width = "90%";
 
   let email_link = "<a href='mailto:" + BUG_EMAIL + "'> Report Bug</a>";

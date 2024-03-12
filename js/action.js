@@ -554,15 +554,15 @@ function showDatePosted( theDiv, long_date ) {
                 break;
             case (days <= 7):
                 // The date is 1 week or less than the current date/time
-                theDiv.style.color = "green";
+                theDiv.style.color = "darkgreen";
                 break;
             case (days > 7 && days <= 30):
                 // The date is between a week and a month from the current date/time
-                theDiv.style.color = "dodgerblue";
+                theDiv.style.color = "midnightblue";
                 break;
             default:
                 // The date is older than one month from the current date/time
-                theDiv.style.color = "midnightlbue";
+                theDiv.style.color = "dodgerblue";
         }
     }
 }

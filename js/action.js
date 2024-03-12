@@ -555,15 +555,15 @@ function showDatePosted( theDiv, long_date ) {
                 break;
             case (days <= 7):
                 // The date is 1 week or less than the current date/time
-                theDiv.style.opacity = 0.75;
+                theDiv.style.opacity = 0.65;
                 break;
             case (days > 7 && days <= 31):
                 // The date is between a week and a month from the current date/time
-                theDiv.style.opacity = 0.6;
+                theDiv.style.opacity = 0.4;
                 break;
             default:
                 // The date is older than one month from the current date/time
-                theDiv.style.opacity = 0.3;
+                theDiv.style.opacity = 0.25;
         }
     }
 }

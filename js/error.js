@@ -126,7 +126,7 @@ export function errorModal( error, noclose ) {
   theMsg.style.width = "90%";
 
   let email_link = "<a href='mailto:" + BUG_EMAIL + "'> Report Bug</a>";
-  theMsg.innerText = errorString + "<BR><BR>" + email_link;
+  theMsg.innerHTML = errorString + "<BR><BR>" + email_link;
 
 
   modal.style.display = "block";

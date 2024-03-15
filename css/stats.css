@@ -62,6 +62,19 @@ html {
 }
 
 
+
+#ca_anim img {
+
+  width:275px;
+  height:275px;
+  margin-bottom:20px;
+
+}
+
+
+
+
+
 @media screen and (min-width: 950px) {
     #page_title {
       margin-left:-4vw;

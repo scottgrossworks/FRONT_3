@@ -156,6 +156,7 @@ def buyer_receiptEmail( the_leed, the_buyer, the_seller ):
     
     SENDER = "theleedz.com@gmail.com" # must be verified in AWS SES Email
     RECIPIENT = the_buyer['em']
+    # BCC = "theleedz.com@gmail.com"
     SUBJECT = "Leedz Receipt: " + the_leed['ti']
     
 
@@ -188,7 +189,7 @@ def buyer_receiptEmail( the_leed, the_buyer, the_seller ):
     DISCLAIMER = "<BR><b>*</b> This leed is not a confirmed booking.  You must use the contact information provided to sell your service to the client.  The Leedz guarantees you exclusive access to this information, which will now be removed from the calendar.  For more information, please refer to our <a href='http://theleedz.com/leedz_tos.html'>Terms of Service</a>."
 
     # The HTML body of the email
-    BODY_START = "<html><head></head><body><h1>You bought a leed! " + leed_info + "</h1><BR>"
+    BODY_START = "<html><head></head><body><b>You bought a leed!</b><BR><BR>" + leed_info + "<BR>"
     CONTACT = "<BR>Square will debit your account shortly.  For any questions, please contact The Leedz - <a href='mailto:theleedz.com@gmail.com'>theleedz.com@gmail.com</a>"
     BODY_END = "<BR><BR>Thank you,<BR>The Leedz</body></html>"
     
@@ -202,7 +203,7 @@ def buyer_receiptEmail( the_leed, the_buyer, the_seller ):
             Destination={
                 'ToAddresses': [
                     RECIPIENT,
-                ],
+                ]
             },
             Message={
                 'Body': {
@@ -245,6 +246,7 @@ def seller_receiptEmail( the_leed, the_buyer, the_seller ):
     
     SENDER = "theleedz.com@gmail.com" # must be verified in AWS SES Email
     RECIPIENT = the_seller['em']
+    BCC = "theleedz.com@gmail.com"
     SUBJECT = "Leed Sold! " + leed_info
     
 
@@ -252,6 +254,8 @@ def seller_receiptEmail( the_leed, the_buyer, the_seller ):
     BODY_TEXT = ("Congratulations, you sold a Leed!"
                 + "\r\n" + 
                 leed_info
+                + "\r\n" + 
+                "Seller: " + the_seller['sk'] + " - " + the_seller['em']
                 + "\r\n" + 
                 "Buyer: " + the_buyer['sk'] + " - " + the_buyer['em']
                 + "\r\n" + "\r\n" + 
@@ -264,7 +268,7 @@ def seller_receiptEmail( the_leed, the_buyer, the_seller ):
 
                 
     # The HTML body of the email
-    BODY_START = "<html><head></head><body><h1>Congratulations, you sold a Leed!<BR>" + leed_info + "</h1><BR><BR>Buyer: " + the_buyer['sk'] + " - " + the_buyer['em']
+    BODY_START = "<html><head></head><body><b>Congratulations, you sold a Leed!</b><BR><BR>" + leed_info + "<BR><BR>Seller: " + the_seller['sk'] + " - " + the_seller['em'] + "<BR><BR>Buyer: " + the_buyer['sk'] + " - " + the_buyer['em']
     BODY_MID = "<BR><BR>Square will credit your account shortly.  For any questions, please contact The Leedz - <a href='mailto:theleedz.com@gmail.com'>theleedz.com@gmail.com</a>"
     BODY_END = "<BR><BR>Thank you,<BR>The Leedz</body></html>"
     
@@ -279,6 +283,9 @@ def seller_receiptEmail( the_leed, the_buyer, the_seller ):
                 'ToAddresses': [
                     RECIPIENT,
                 ],
+                'BccAddresses': [
+                    BCC,
+                ]
             },
             Message={
                 'Body': {
@@ -522,14 +529,15 @@ def leed_updatePurchaseInfo( table, tn, id, un ) :
                 ConditionExpression='attribute_exists(sk)',
                 ReturnValues="ALL_NEW"
             )
-            
+    
+        
         # throw an error
         #
         if 'Attributes' not in response:
             msg = tn + " leed not found: " + id
             logger.error(msg)
             raise ValueError(msg)
-            
+        
         
         # return just the user object
         #
@@ -656,31 +664,44 @@ def checkForExistingLeed( table, tn, id ):
 #
 def getLeedzInfo(body):
     
+    # check for errors
     if 'data' not in body:
-        raise Exception("Malformed Webhook response.  No data section")
-    
+        raise Exception("Malformed Square Webhook response: missing 'data'")
     if 'object' not in body['data']:
-        raise Exception("Malformed Webhook response.  No object section")
-    
-    if body['data']['object']['status'] in ['CANCELED', 'FAILED']:
-        raise Exception("Purchase has not been approved")
+        raise Exception("Malformed Square Webhook response: missing 'data.object'")
+    if 'payment' not in body['data']['object']:
+        raise Exception("Malformed Square Webhook response: missing 'data.object.payment'")
+    if 'status' not in body['data']['object']['payment']:
+        raise Exception("Malformed Square Webhook response: missing 'data.object.payment.status'")
+        
+        
+    #
+    # STATUS
+    #
+    payment = body['data']['object']['payment']
 
-    if 'note' not in body['data']['object']:
-        raise Exception("Malformed Webhook response.  Missing Leedz note")
- 
- 
-    note = body['data']['object']['note']
-    if note is not None:
-        note_parts = note.split('|')
-        # will be copied into vars above
-        if len(note_parts) == 3:
-            return note_parts
-        else:
-            raise Exception("Invalid Leedz note format: " + note)
-    else:
-        raise Exception("Leez note is undefined / empty")
-   
+    if payment['status'] in ['CANCELED', 'FAILED']:
+        raise Exception("Square purchase has not been approved: " + payment['status'])
     
+    #
+    # NOTE
+    #
+    if 'note' not in payment:
+        raise Exception("Malformed Square Webhook response: missing 'data.object.payment.note'")
+
+    # Extract the note
+    note = payment['note']
+    if not note:
+        raise Exception("Malformed Square Webhook response: empty 'data.object.payment.note'")
+
+    # Split and validate the note format
+    note_parts = note.split('|')
+    if len(note_parts) != 3:
+        raise Exception("Malformed Square Webhook 'data.object.payment.note' format: " + note)
+
+    return note_parts
+   
+
     
 
     
@@ -693,6 +714,7 @@ def getLeedzInfo(body):
         
 def lambda_handler(event, context):
 
+    
     the_json = ""
     TRUE = 1
     leed_id = "leed_id"
@@ -704,13 +726,11 @@ def lambda_handler(event, context):
         table = dynamodb_client.Table('Leedz_DB')
        
 
-        fromSQ = 0 # FALSE
-        body = event["body"]
-
         # COMING FROM SQUARE
-        fromSQ = (('type' in body) and body['type'] == "payment.created")
-        if (fromSQ):
+        if ( ('headers' in event) and ('x-square-signature' in event['headers']) ):
             
+            body = json.loads(event['body'])
+   
             # will throw Exception if body is missing Leedz 'note'
             leedz_info = getLeedzInfo(body)
             leed_id = leedz_info[0]
@@ -742,12 +762,10 @@ def lambda_handler(event, context):
         ## BOOKEEPING
         ##
         
-        # Find the leed -- will throw Exception if not found
         # increment leed bought date and buyer name
-        # the_leed = checkForExistingLeed(table, tn, id)
-        #
-        the_leed = leed_updatePurchaseInfo( table, tn, leed_id, un ) 
-        
+        # Call the asynchronous function using asyncio.run()
+        the_leed = leed_updatePurchaseInfo(table, tn, leed_id, un)
+
         
         # increment buyer and seller counters
         #
@@ -831,7 +849,7 @@ def lambda_handler(event, context):
 #
 def createHttpResponse( code, result ):
    
-    logger.info(result)
+    # logger.info(result)
     
     response = {
         'statusCode': code,

@@ -364,6 +364,10 @@ a#date_bought_3 {
 }
 
 
+#last_sale {
+  min-height: 250px;
+}
+
 
 #last_sale table {
   font-size:medium;

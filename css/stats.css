@@ -63,7 +63,12 @@ html {
 
 
 
-img#cal_anim {
+
+#cal_anim {
+  min-height:300px;
+}
+
+#cal_anim span img {
 
   width:275px;
   height:275px;

@@ -208,6 +208,12 @@ a {
 }
 
 
+
+#text_intro {
+  min-height:300px;
+}
+
+
 #top_trades {
   min-height:220px;
 }

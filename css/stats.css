@@ -265,7 +265,7 @@ div.item.leedz_text span {
 
 
 #leedz_live {
-  min-height:200px;
+  min-height:220px;
 }
 
 #leedz_live table {
@@ -321,7 +321,7 @@ div.item.leedz_text span {
 
 
 #square_item {
-  min-height:fit-content;
+  min-height:220px;
 }
 
 

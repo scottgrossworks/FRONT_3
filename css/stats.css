@@ -157,8 +157,7 @@ html {
 
   flex-basis: 180px;
   min-width: 300px;
-  height:fit-content;
-  min-height: 150px;
+  min-height:200px;
 
   line-height: 165%;
 
@@ -209,11 +208,6 @@ a {
 
 
 
-#text_intro {
-  min-height:250px;
-}
-
-
 #top_trades {
   min-height:220px;
 }
@@ -260,7 +254,7 @@ div.item.leedz_text span {
 
 
 #intro_text {
-  min-height:200px;
+  min-height:230px;
 }
 
 
@@ -362,6 +356,11 @@ div.item.leedz_text span {
   line-height: 115%;
 }
 
+
+#beta_text {
+
+  min-height:200px;
+}
 
 
 

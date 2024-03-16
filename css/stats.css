@@ -215,7 +215,7 @@ a {
 
 
 #top_trades {
-  min-height:200px;
+  min-height:220px;
 }
 
 #top_trades table {
@@ -245,6 +245,17 @@ div.item.leedz_text span {
   line-height: 115%;
   padding: 1vw 2vw;
 
+}
+
+
+
+#choose_text {
+  min-height:220px;
+}
+
+
+#reputation_text {
+  min-height:220px;
 }
 
 
@@ -371,7 +382,7 @@ a#date_bought_3 {
 
 
 #last_sale {
-  min-height: 220px;
+  min-height: 200px;
 }
 
 

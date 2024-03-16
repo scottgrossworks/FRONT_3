@@ -315,7 +315,8 @@ div.item.leedz_text span {
 
 
 #square_item {
-  min-height:250px;
+  margin-top:2vh;
+  min-height:240px;
 }
 
 

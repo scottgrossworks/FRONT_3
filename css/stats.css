@@ -375,6 +375,9 @@ a#date_bought_3 {
 }
 
 
+#last_sale {
+  min-height: 200px;
+}
 
 
 #last_sale table {
@@ -383,6 +386,10 @@ a#date_bought_3 {
   line-height: 175%;
 }
 
+
+#sale_price_2 {
+  font-size:large;
+}
 
 #contact_item {
   min-height:fit-content;

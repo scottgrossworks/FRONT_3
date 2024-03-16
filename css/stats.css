@@ -190,6 +190,7 @@ a {
 }
 
 .item .statsTable {
+  margin-top:10px;
   display:none;
 }
 
@@ -354,12 +355,6 @@ div.item.leedz_text span {
 
   font-size:medium;
   line-height: 115%;
-}
-
-
-#beta_text {
-
-  min-height:200px;
 }
 
 

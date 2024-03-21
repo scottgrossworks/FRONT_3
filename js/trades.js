@@ -285,7 +285,7 @@ async function showAllLeedz( currentUser, trade ) {
         // get the leedz for all trade names in subs and the dates showing
         const subs = [];
         subs[0] = trade;
-        results = await db_getLeedz( subs, START, END, currentUser.zh, currentUser.zr );
+        results = await db_getLeedz( subs, START, END, currentUser.zp, currentUser.zr );
 
 
     } catch (error) {   

@@ -2,12 +2,12 @@
  * 
  * 
  * 
- * 
+ * 3/2024 -- adding click-on-superscript feature
  */
 
 import { loadCacheLeedz, removeLeedzForTrade } from "./calendar.js";
-import { getCurrentUser, isGuestUser, saveCurrentUser } from "./user.js";
-import { db_getTrades } from "./dbTools.js";
+import { getCurrentUser, saveCurrentUser } from "./user.js";
+import { db_getTrades, db_getLeedz } from "./dbTools.js";
 import { printError, errorModal, throwError } from "./error.js";
 import { hideActionWindow } from "./action.js";
 
@@ -195,7 +195,13 @@ function initTradesColumn( tradeListener ) {
       // add num_leedz as an attribute
       newNode.setAttribute("nl", num_leedz);
       // set the leed count as a superscript
-      newNode.querySelector("sup").textContent = num_leedz;
+      let sup = newNode.querySelector("sup");
+      sup.textContent = num_leedz;
+
+      // showAllLeedz()
+      // 3/2024
+      // set the href for <sup> to trigger the JavaScript function
+      sup.setAttribute("href", "javascript:showAllLeedz(" + sub + ")");
 
     } else {
         return; // continue from top
@@ -256,6 +262,61 @@ function initTradesColumn( tradeListener ) {
 
 
 
+
+// FOOBAR
+/**
+ * Called from superscript in trades column
+ * Will load ALL leedz for given trade
+ * @param {String} trade name of trade 
+ */
+async function showAllLeedz( trade ) {
+
+    const currentUser = getCurrentUser(false);
+    if (! currentUser)
+      throwError("Show All Leedz", "No current user found");
+
+    // API request --> DB 
+    // load leedz for this trade and date range showing
+    //
+    const START = "0";
+    const END = "2000000000000";
+    let results = null;
+    try {
+        // 
+        //  client <---> API Gateway <===> DB
+        //
+        // get the leedz for all trade names in subs and the dates showing
+        results = await db_getLeedz( { trade }, START, END, currentUser.zh, currentUser.zr );
+
+
+    } catch (error) {   
+        printError( "showAllLeedz", error.message );
+        printError( "Received JSON", results);
+        
+        // EXIT FUNCTION HERE
+        // throwError( "loadLeedzFromDB", error);
+        errorModal("Cannot show all Leedz from DB: " + error.message, false); 
+        return;
+    }
+
+    console.log(results);
+
+    // query returns empty result set
+    if (results.length == 0) {
+
+    } else { 
+    
+    }
+
+
+}
+
+window.showAllLeedz = showAllLeedz;
+
+
+
+
+
 /**
  * Keep the trades column sorted by num_leedz
  * 
@@ -282,10 +343,16 @@ function addTradeSorted( list, node ) {
 
 
 
+
+
 /**
- * Helper function
+ * Callback function for the trade in the trades list
  * 
- * 
+ * @param {String} trade  name of trade 
+ * @param {*} checkBox   checkbox node
+ * @param {*} radioButton  colored radio button node
+ * @param {*} theLabel   text label
+ * @returns 
  */
 function tradeListener(trade, checkBox, radioButton, theLabel) {
 

@@ -202,7 +202,7 @@ function initTradesColumn( tradeListener ) {
       // 3/2024
       // set the href for <sup> to trigger the JavaScript function
       sup.addEventListener("click", () => {
-        console.log("hello");
+          showAllLeedz(current_user, sup);
       });
 
     } else {
@@ -264,18 +264,13 @@ function initTradesColumn( tradeListener ) {
 
 
 
-
-// FOOBAR
 /**
  * Called from superscript in trades column
  * Will load ALL leedz for given trade
+ * @param { Object } currentUser user object
  * @param {String} trade name of trade 
  */
-async function showAllLeedz( trade ) {
-
-    const currentUser = getCurrentUser(false);
-    if (! currentUser)
-      throwError("Show All Leedz", "No current user found");
+async function showAllLeedz( currentUser, trade ) {
 
     // API request --> DB 
     // load leedz for this trade and date range showing
@@ -309,10 +304,9 @@ async function showAllLeedz( trade ) {
     } else { 
     
     }
-
+    // FOOBAR FOOBAR FOOBAR
 
 }
-
 window.showAllLeedz = showAllLeedz;
 
 

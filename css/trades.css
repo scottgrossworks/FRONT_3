@@ -162,7 +162,9 @@
       padding-left:4px;
   }
   
-   
+  .each_trade > sup:hover {
+    cursor: pointer;
+  }
 
 
 .add_button {

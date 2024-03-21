@@ -201,7 +201,9 @@ function initTradesColumn( tradeListener ) {
       // showAllLeedz()
       // 3/2024
       // set the href for <sup> to trigger the JavaScript function
-      sup.setAttribute("href", "javascript:console.log('hello')");
+      sup.addEventListener("click", () => {
+        console.log("hello");
+      });
 
     } else {
         return; // continue from top

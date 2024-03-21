@@ -283,7 +283,9 @@ async function showAllLeedz( currentUser, trade ) {
         //  client <---> API Gateway <===> DB
         //
         // get the leedz for all trade names in subs and the dates showing
-        results = await db_getLeedz( [ trade ], START, END, currentUser.zh, currentUser.zr );
+        const subs = [];
+        subs[0] = trade;
+        results = await db_getLeedz( subs, START, END, currentUser.zh, currentUser.zr );
 
 
     } catch (error) {   

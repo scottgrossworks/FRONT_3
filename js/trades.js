@@ -202,7 +202,7 @@ function initTradesColumn( tradeListener ) {
       // 3/2024
       // set the href for <sup> to trigger the JavaScript function
       sup.addEventListener("click", () => {
-          showAllLeedz(current_user, sup);
+          showAllLeedz(current_user, sub);
       });
 
     } else {
@@ -283,9 +283,7 @@ async function showAllLeedz( currentUser, trade ) {
         //  client <---> API Gateway <===> DB
         //
         // get the leedz for all trade names in subs and the dates showing
-        const subs = [];
-        subs[0] = trade;
-        results = await db_getLeedz( subs, START, END, currentUser.zp, currentUser.zr );
+        results = await db_getLeedz( [ trade ], START, END, currentUser.zp, currentUser.zr );
 
 
     } catch (error) {   

@@ -275,7 +275,7 @@ async function showAllLeedz( currentUser, trade ) {
     // API request --> DB 
     // load leedz for this trade and date range showing
     //
-    const START = "0";
+    const START = "1";
     const END = "2000000000000";
     let results = null;
     try {

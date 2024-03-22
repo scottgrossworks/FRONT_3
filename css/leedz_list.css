@@ -83,7 +83,9 @@
     cursor:pointer;
   }
   
-
+  .user_posted {
+    background-color: lightskyblue;
+  }
 
   .each_leed {
   

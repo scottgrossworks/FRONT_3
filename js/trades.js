@@ -379,6 +379,10 @@ function showLeedzList( currentUser, the_trade, the_leedz ) {
       var theTitle = theNode.querySelector(".leed_label");
       theTitle.textContent = each_leed.ti;
 
+      // indicate that this is the current user's posted leed
+      if (each_leed.cr == currentUser.un) {
+        theNode.classList.add(".user_posted");
+      }
 
       ////////////////////////////////////////////////////////////////////////////////////
       // CLICK LEED --> 

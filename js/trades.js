@@ -301,7 +301,7 @@ async function showAllLeedz( currentUser, trade ) {
     }
 
     // console.log(results);
-    // call callback
+    //
     if (results.length != 0) {
       showLeedzList( trade, results );
 
@@ -334,6 +334,10 @@ function showLeedzList( the_trade, the_leedz ) {
     // import DOM elements from html
     const theList = document.querySelector("#leedz_list");
     const theTemplate = document.querySelector("#template_each_leed");
+
+    // remove all existing each_day children
+    // then put back the template
+    theList.replaceChildren( theTemplate );
 
     const trade_color = getColorForTrade( the_trade );
 

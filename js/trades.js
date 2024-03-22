@@ -12,7 +12,7 @@ import { printError, errorModal, modalClose } from "./error.js";
 import { hideActionWindow } from "./action.js";
 import { DTtoPretty, getTodayUTC } from "./dates.js";
 import { MAX_USER_SUBS } from "./user.js";
-import { showWaitingModal } from "./leed_edit.js";
+import { waitCursor, normalCursor, showWaitingModal } from "./leed_edit.js";
 
 
 
@@ -273,6 +273,7 @@ function initTradesColumn( tradeListener ) {
  */
 async function showAllLeedz( currentUser, trade ) {
 
+    waitCursor();
     showWaitingModal("Loading the Leedz . . .");
 
     // API request --> DB 
@@ -303,7 +304,16 @@ async function showAllLeedz( currentUser, trade ) {
     // call callback
     if (results.length != 0) {
       showLeedzList( trade, results );
+
+      const calendar_main = document.querySelector("#calendar_main");
+      const leedz_list_main = document.querySelector("#leedz_list_main");
+
+      calendar_main.style.display = "none";
+      leedz_list_main.style.display = "block";
     }
+    
+    modalClose(false);
+    normalCursor();
 
 }
 window.showAllLeedz = showAllLeedz;
@@ -350,8 +360,8 @@ function showLeedzList( the_trade, the_leedz ) {
 
       var thePrice = theNode.querySelector(".leed_price");
       thePrice.textContent = "$ " + each_leed.pr;
-      
-      // FOOBAR FOOBAR FOOBAR
+
+      // FIXME FIXME FIXME
       // add link to getDeetz action window
       // and close this window
     
@@ -359,13 +369,6 @@ function showLeedzList( the_trade, the_leedz ) {
       theList.appendChild( theNode );
     } 
     
-    const calendar_main = document.querySelector("#calendar_main");
-    const leedz_list_main = document.querySelector("#leedz_list_main");
-    
-    modalClose(false);
-
-    calendar_main.style.display = "none";
-    leedz_list_main.style.display = "block";
 }
 
 

@@ -24,12 +24,21 @@
  
 
  #leedz_list_trade {
+    float:left;
     margin:0 auto;
     padding:6px;
  }
 
 
+ #leedz_list_trade > .trade_radio {
+    float: left;
+    height:120%;
+    width:120%;
+ }
+
+
  .trade_label {
+    float:left;
     font-family: var(--FONT_1);
     font-size:1.4em;
     font-weight: bold;
@@ -42,6 +51,7 @@
 
     background-color: white;
     height:100vh;
+    margin-bottom:100px;
   }
 
 
@@ -54,19 +64,9 @@
     width:100%;
     
     left:0px;
-
-    margin-bottom:200px;
     overflow-y: scroll;    
 
   }
-
-  
-    @media screen and (max-width: 500px) {
-        #leedz_list {
-            margin-bottom:300px;
-        }
-    }
-
 
 
 
@@ -88,7 +88,7 @@
     padding: 6px;
 
     width:95%;
-    height:3vh;
+    height:4vh;
 
     font-family: var(--FONT_1);
     font-size:1em;

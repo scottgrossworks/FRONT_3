@@ -6,6 +6,8 @@
 
 #leedz_list_main {
 
+    display:none;
+    
     position: relative;
 
     align-self: flex-start;

@@ -344,6 +344,8 @@ function showLeedzList( the_trade, the_leedz ) {
     var trade_name = document.querySelector("#leedz_list_trade");
     var radioButton = trade_name.querySelector(".trade_radio");
     radioButton.style.backgroundColor = trade_color;
+    radioButton.style.width="25px";
+    radioButton.style.height="25px;";
 
     var theLabel = trade_name.querySelector(".trade_label");
     theLabel.textContent = the_trade;

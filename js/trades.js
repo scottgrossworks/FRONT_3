@@ -355,8 +355,8 @@ function showLeedzList( the_trade, the_leedz ) {
       theList.appendChild( theNode );
     } 
     
-    const calendar_main = document.getElementById("#calendar_main");
-    const leedz_list_main = document.getElementById("#leedz_list_main");
+    const calendar_main = document.querySelector("#calendar_main");
+    const leedz_list_main = document.querySelector("#leedz_list_main");
     
     modalClose(false);
 

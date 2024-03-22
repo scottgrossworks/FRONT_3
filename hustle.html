@@ -326,7 +326,7 @@
             <div class="column _8"><span class="trade_label"></span></div>
 
             <div class="column _3">
-              <a id="leedz_list_close" class="info_modal_close" href="#">X</a>
+              <a id="leedz_list_close" class="info_modal_close" href="javascript:hideLeedzList();">X</a>
             </div>
        
         </div>
@@ -526,7 +526,7 @@
   <script type="module" charset=”utf-8″>
 
     import { initUser, getUserLogin, guestUser, getCurrentUser, saveUserChanges, buySellReady, isGuestUser, isSubscribed } from "./js/user.js";      
-    import { initTrades } from "./js/trades.js";   
+    import { initTrades, hideLeedzList } from "./js/trades.js";   
     import { buildCalendar, loadCacheLeedz, loadDBLeedz } from "./js/calendar.js";
     import { initMonthChooser } from "./js/months.js";
     import { getCurrentLeed, clearCurrentLeed, buyCurrentLeed, deleteCurrentLeed, reportCurrentLeed  }  from "./js/leed.js";

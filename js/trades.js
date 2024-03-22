@@ -305,11 +305,6 @@ async function showAllLeedz( currentUser, trade ) {
     if (results.length != 0) {
       showLeedzList( currentUser, trade, results );
 
-      const calendar_main = document.querySelector("#calendar_main");
-      const leedz_list_main = document.querySelector("#leedz_list_main");
-
-      calendar_main.style.display = "none";
-      leedz_list_main.style.display = "block";
     }
     
     modalClose(false);
@@ -320,10 +315,28 @@ window.showAllLeedz = showAllLeedz;
 
 
 
+/**
+ * hide the leedz list column
+ * show the calendar column
+ */
+export function hideLeedzList() {
+  
+  const calendar_main = document.querySelector("#calendar_main");
+  const leedz_list_main = document.querySelector("#leedz_list_main");
+
+  calendar_main.style.display = "block";
+  leedz_list_main.style.display = "none";
+}
+window.hideLeedzList = hideLeedzList;
+
+
 
 
 /**
  * build the leedz_list UI
+ * set click listeners and callbacks
+ * hide the calendar column
+ * show the leedz list column
  * 
  * @param { String } the_trade name of trade
  * @param { Object[] } the_leedz list of leedz returned from DB
@@ -402,6 +415,13 @@ function showLeedzList( currentUser, the_trade, the_leedz ) {
       theList.appendChild( theNode );
     } 
     
+    // show / hide DOM elements
+    //
+    const calendar_main = document.querySelector("#calendar_main");
+    const leedz_list_main = document.querySelector("#leedz_list_main");
+
+    calendar_main.style.display = "none";
+    leedz_list_main.style.display = "block";
 }
 
 

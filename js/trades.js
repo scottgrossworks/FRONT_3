@@ -347,6 +347,10 @@ function showLeedzList( the_trade, the_leedz ) {
    
       var theTitle = theNode.querySelector(".leed_label");
       theTitle.textContent = each_leed.ti;
+
+      var thePrice = theNode.querySelector(".leed_price");
+      thePrice.textContent = "$ " + each_leed.pr;
+      
       // FOOBAR FOOBAR FOOBAR
       // add link to getDeetz action window
       // and close this window

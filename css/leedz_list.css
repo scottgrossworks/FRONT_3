@@ -54,6 +54,9 @@
     }
 
 
+
+
+
   
   .each_leed {
   
@@ -71,17 +74,30 @@
     padding: 6px;
 
     width:95%;
+
+    font-family: var(--FONT_1);
+    font-size:1.2em;
+    font-weight: bold;
+
   }
 
 
 
+  .leed_date {
+    float:left;
+    color:var(--LEEDZ_DARKGREEN);
+  }
 
-  button.trade_radio {
-    margin: 10px 10px 0 2px;
+
+  .leed_label {
+    color:black;
   }
 
 
 
-
+  .leed_price {
+    float: right;
+    color:midnightblue;
+  }
   
 

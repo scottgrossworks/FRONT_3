@@ -74,6 +74,46 @@ export function formatDTforInput( dateTime ) {
 
 
   /**
+   * @param { int } dateTime Date().getTime() long milliseconds
+   * returns pretty format Date/Time 
+   */
+
+export function DTtoPretty( dateTime ) {
+
+    
+    var the_d = new Date( dateTime );
+    
+    var year = the_d.getUTCFullYear();
+    var month = (the_d.getUTCMonth() + 1).toString().padStart(2, '0'); // getMonth returns a zero-based index of the month: 0-11
+    var day = the_d.getUTCDate().toString().padStart(2, '0'); // 1 - 31
+    var hours24 = the_d.getUTCHours().toString().padStart(2, '0'); // 0 - 23
+    var minutes = the_d.getUTCMinutes().toString().padStart(2, '0'); // 0 - 59
+  
+
+    var theHour = Number( hours24 );
+    var am_pm = "AM";
+    
+    if (theHour == 12) {
+        am_pm = "PM"
+
+    } else if (theHour > 12) {
+        am_pm = "PM";
+        theHour = theHour % 12;
+
+    } else if (theHour == 0) {
+        theHour = 12;
+    }
+
+
+    const the_date = `${month}-${day}-${year} at ${theHour}:${minutes} ${am_pm}`;
+    return the_date;
+
+}
+
+
+
+
+  /**
    * 
    * 2023-08-12T18:31 --> Saturday Aug 12, 2023 at 6:31PM
    */

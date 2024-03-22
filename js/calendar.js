@@ -18,6 +18,16 @@ let CURRENT_SELECTION = null;
 
 
 
+export function showLeedzList( the_leedz ) {
+
+    const calendar = document.getElementById("calendar_main");
+    calendar.style.display = "none";
+
+
+}
+
+
+
 
 /*
  * JUST build the calendar UI 

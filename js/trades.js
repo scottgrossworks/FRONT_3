@@ -5,12 +5,12 @@
  * 3/2024 -- adding click-on-superscript feature
  */
 
-import { loadCacheLeedz, removeLeedzForTrade } from "./calendar.js";
+import { loadCacheLeedz, removeLeedzForTrade, showLeedzList } from "./calendar.js";
 import { getCurrentUser, saveCurrentUser } from "./user.js";
 import { db_getTrades, db_getLeedz } from "./dbTools.js";
 import { printError, errorModal, throwError } from "./error.js";
 import { hideActionWindow } from "./action.js";
-
+import { DTtoPretty } from "./dates.js";
 import { MAX_USER_SUBS } from "./user.js";
 
 
@@ -296,20 +296,67 @@ async function showAllLeedz( currentUser, trade ) {
         return;
     }
 
-    console.log(results);
-
-    // query returns empty result set
-    if (results.length == 0) {
-
-    } else { 
-    
+    // console.log(results);
+    // call callback
+    if (results.length != 0) {
+      showLeedzList( trade, results );
     }
-    // FOOBAR FOOBAR FOOBAR
 
 }
 window.showAllLeedz = showAllLeedz;
 
 
+
+
+
+/**
+ * build the leedz_list UI
+ * 
+ * @param { String } the_trade name of trade
+ * @param { Object[] } the_leedz list of leedz returned from DB
+ */
+function showLeedzList( the_trade, the_leedz ) {
+     
+
+    // import DOM elements from html
+    const theList = document.querySelector("#leedz_list");
+    const theTemplate = document.querySelector("#template_each_leed");
+
+    const trade_color = getColorForTrade( the_trade );
+
+    var trade_name = document.querySelector("#leedz_list_trade");
+    var radioButton = trade_name.querySelector(".trade_radio");
+    radioButton.style.backgroundColor = trade_color;
+
+    var theLabel = trade_name.querySelector(".trade_label");
+    theLabel.textContent = the_trade;
+
+
+    for (each_leed in the_leedz) {
+
+      var theClone = theTemplate.content.cloneNode(true);
+      var theNode = theClone.querySelector(".each_leed");
+
+      var theDate = theNode.querySelector(".leed_date");
+      var formatted_date = DTtoPretty( each_leed.st );
+      theDate.textContent = formatted_date;
+   
+      var theTitle = theNode.querySelector(".leed_label");
+      theTitle.textContent = each_leed.ti;
+      // FOOBAR FOOBAR FOOBAR
+      // add link to getDeetz action window
+      // and close this window
+    
+    
+      theList.appendChild( theNode );
+    } 
+    
+    const calendar_main = document.getElementById("#calendar_main");
+    const leedz_list_main = document.getElementById("#leedz_list_main");
+    
+    calendar_main.classList.add(".hide_column");
+    leedz_list_main.classList.remove(".hide_column");
+}
 
 
 
@@ -382,6 +429,10 @@ function tradeListener(trade, checkBox, radioButton, theLabel) {
 
 }
 window.tradeListener = tradeListener;
+
+
+
+
 
 
 

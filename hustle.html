@@ -25,6 +25,7 @@
         <link rel="stylesheet" href="css/dropdown.css" type="text/css" />
         <link rel="stylesheet" href="css/trades.css" type="text/css" />
         <link rel="stylesheet" href="css/calendar.css" type="text/css" />
+        <link rel="stylesheet" href="css/leedz_list.css" type="text/css" />
         <link rel="stylesheet" href="css/month_chooser.css" type="text/css" />
         <link rel="stylesheet" href="css/distance_chooser.css" type="text/css" />
         <link rel="stylesheet" href="css/action_panel.css" type="text/css" />
@@ -253,7 +254,7 @@
                   </li>
                 </template>          
 
-              </ul>
+              </ul  >
 
 
 
@@ -274,7 +275,12 @@
 
 
        
-      <!-- CENTER COLUMN  -->      
+      <!-- 
+        -- CENTER COLUMNS  
+        -- 
+        -- 3/2024
+        -- 
+        -->      
       <div id="calendar_main" class="column _5">
 
            <!-- MONTH CHOOSER --> 
@@ -303,7 +309,39 @@
         </div>
         
       </div>
+  
+
+
+
+      <!--   
+        -- LEEDZ list results
+        -- FOOBAR
+        -->      
+      <div id="leedz_list_main" class="column hide_column _5">
+
+          <!-- TRADE NAME --> 
+          <div id="leedz_list_trade" class="row">
+            <button class="trade_radio"></button>
+            <span class="trade_label"></span>
+        </div>
+
+          <!-- LEEDZ LIST PANEL -->
+          <div id="leedz_list_panel" class="row calendar">
+              <ul id="leedz_list">
+                <template id="template_each_leed">
+                  <li class="each_leed">
+                    <span class="leed_date"></span>
+                    <span class="leed_label"></span>
+                  </li>
+                </template>          
+              </ul>
+          </div>
+
+        </div>
         
+     
+
+
 
 
 

@@ -98,11 +98,13 @@
 
     color:var(--LEEDZ_DARKGREEN);
     margin-right:10px;
+    
   }
 
 
   .leed_label {
     color:black;
+    margin:0 auto;
   }
 
 

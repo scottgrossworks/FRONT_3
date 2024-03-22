@@ -24,18 +24,20 @@
  
 
  #leedz_list_trade {
-    float:left;
+    margin:0 auto;
+    padding:6px;
  }
 
 
  .trade_label {
     font-family: var(--FONT_1);
-    font-size:1.2em;
+    font-size:1.4em;
     font-weight: bold;
+    align-content: baseline;
  }
 
 
- 
+
  #leedz_list_panel {
 
     background-color: white;
@@ -98,6 +100,7 @@
   .leed_date {
     float:left;
     color:var(--LEEDZ_DARKGREEN);
+    margin-right:10px;
   }
 
 
@@ -106,10 +109,5 @@
   }
 
 
-
-  .leed_price {
-    float: right;
-    color:midnightblue;
-  }
   
 

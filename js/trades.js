@@ -353,13 +353,14 @@ function showLeedzList( the_trade, the_leedz ) {
 
       var theDate = theNode.querySelector(".leed_date");
       var formatted_date = DTtoPretty( each_leed.st );
-      theDate.textContent = formatted_date;
+      if (formatted_date.startsWith('0'))
+        theDate.textContent = formatted_date.substring(1);
+      else
+        theDate.textContent = formatted_date;
    
       var theTitle = theNode.querySelector(".leed_label");
       theTitle.textContent = each_leed.ti;
 
-      var thePrice = theNode.querySelector(".leed_price");
-      thePrice.textContent = "$ " + each_leed.pr;
 
       // FIXME FIXME FIXME
       // add link to getDeetz action window

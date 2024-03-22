@@ -80,8 +80,12 @@
     border-color: var(--LEEDZ_DARKGRAY);
     background-color: var(--LEEDZ_GRAY);
 
+    padding-top:10px;
+    padding-left:2px;
+    
     margin: 6px 0;
 
+    width:96%;
     height:4vh;
 
     font-family: var(--FONT_1);

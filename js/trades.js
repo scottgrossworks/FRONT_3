@@ -5,7 +5,7 @@
  * 3/2024 -- adding click-on-superscript feature
  */
 
-import { loadCacheLeedz, removeLeedzForTrade, showLeedzList } from "./calendar.js";
+import { loadCacheLeedz, removeLeedzForTrade } from "./calendar.js";
 import { getCurrentUser, saveCurrentUser } from "./user.js";
 import { db_getTrades, db_getLeedz } from "./dbTools.js";
 import { printError, errorModal, modalClose } from "./error.js";

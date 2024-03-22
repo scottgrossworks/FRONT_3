@@ -381,7 +381,7 @@ function showLeedzList( currentUser, the_trade, the_leedz ) {
 
       // indicate that this is the current user's posted leed
       if (each_leed.cr == currentUser.un) {
-        theNode.style.backgroundColor = "lightskyblue";
+        theNode.style.backgroundColor = "azure";
         theNode.style.color = "darkslateblue";
       }
 

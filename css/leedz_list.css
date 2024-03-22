@@ -75,6 +75,7 @@
   .each_leed:hover {
     background-color: var(--LEEDZ_LIGHTGREEN);
     border-color: green;
+
     cursor:pointer;
   }
   
@@ -124,11 +125,7 @@
 
 
   .leed_label {
-    color:gray;
+    color:black;
     padding:4px;
   }
 
-
-  .leed_label:hover {
-    color:black;
-  }

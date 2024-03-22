@@ -30,12 +30,6 @@
  }
 
 
- #leedz_list_trade > .trade_radio {
-
-    height:120%;
-    width:120%;
- }
-
 
  .trade_label {
 
@@ -50,10 +44,10 @@
  #leedz_list_panel {
 
     background-color: white;
-    height:100vh;
+    height:100%;
+    max-height:600px;
     margin-bottom:100px;
-    
-    overflow-y: scroll;    
+     
   }
 
 
@@ -62,11 +56,12 @@
   #leedz_list {
     
     position:absolute;
-    height:85%;
+    height:fit-content;
     width:100%;
     
     left:0px;
 
+    overflow-y: scroll;   
   }
 
 

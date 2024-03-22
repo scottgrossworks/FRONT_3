@@ -95,15 +95,16 @@
     height:4vh;
 
     font-family: var(--FONT_1);
-    font-size:1.1em;
+    font-size:1em;
     font-weight: bold;
 
   }
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 600px) {
 
     .each_leed {
         font-size:0.9em;
+        height:5vh;
     }
   
   }

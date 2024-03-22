@@ -24,21 +24,21 @@
  
 
  #leedz_list_trade {
-    float:left;
+
     margin:0 auto;
-    padding:6px;
+    padding:5vw;
  }
 
 
  #leedz_list_trade > .trade_radio {
-    float: left;
+
     height:120%;
     width:120%;
  }
 
 
  .trade_label {
-    float:left;
+
     font-family: var(--FONT_1);
     font-size:1.4em;
     font-weight: bold;
@@ -100,7 +100,7 @@
 
 
   .leed_date {
-    float:left;
+
     color:var(--LEEDZ_DARKGREEN);
     margin-right:10px;
   }

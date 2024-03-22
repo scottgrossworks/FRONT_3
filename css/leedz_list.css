@@ -15,7 +15,7 @@
     left:0 !important;
     
     width:100%;
-    height:80vh;
+    height:88vh;
 
     text-align:left;
     
@@ -31,6 +31,7 @@
 
     width:100%;
     height:7vh;
+    align-items: baseline;
     padding:8px;
     margin:auto 30px;
  }
@@ -47,6 +48,8 @@
 
 
  #leedz_list_panel {
+
+    height:90%;
 
     background-color: white;
 
@@ -89,8 +92,8 @@
     border-color: var(--LEEDZ_DARKGRAY);
     background-color: var(--LEEDZ_GRAY);
 
-    padding-top:6px;
-    padding-left:2px;
+    align-items: center;
+    padding-left: 4px;
 
     margin: 6px 0;
 

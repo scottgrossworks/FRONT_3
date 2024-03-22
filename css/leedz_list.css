@@ -37,6 +37,15 @@
 
 
 
+ #leedz_list_trade > .trade_radio {
+
+    width:25px;
+    height:25px;
+
+ }
+
+
+
  span.trade_label {
 
     font-family: var(--FONT_1);

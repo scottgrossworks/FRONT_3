@@ -2,14 +2,14 @@
  * 
  * 
  * 
- * 3/2024 -- adding click-on-superscript feature
+ * 3/2024 -- added click-on-superscript --> Leedz List column --> action window
  */
-
+import { setCurrentLeed, clearCurrentLeed } from "./leed.js";
 import { loadCacheLeedz, removeLeedzForTrade } from "./calendar.js";
 import { getCurrentUser, saveCurrentUser } from "./user.js";
 import { db_getTrades, db_getLeedz } from "./dbTools.js";
 import { printError, errorModal, modalClose } from "./error.js";
-import { hideActionWindow } from "./action.js";
+import { hideActionWindow, showLeedAction } from "./action.js";
 import { DTtoPretty, getTodayUTC } from "./dates.js";
 import { MAX_USER_SUBS } from "./user.js";
 import { waitCursor, normalCursor, showWaitingModal } from "./leed_edit.js";
@@ -199,9 +199,9 @@ function initTradesColumn( tradeListener ) {
       let sup = newNode.querySelector("sup");
       sup.textContent = num_leedz;
 
-      // showAllLeedz()
+      // SUPERSCRIPT CLICK LISTENER
       // 3/2024
-      // set the href for <sup> to trigger the JavaScript function
+      // click <sup> -- trigger the JavaScript function
       sup.addEventListener("click", () => {
           showAllLeedz(current_user, sub);
       });
@@ -303,7 +303,7 @@ async function showAllLeedz( currentUser, trade ) {
     // console.log(results);
     //
     if (results.length != 0) {
-      showLeedzList( trade, results );
+      showLeedzList( currentUser, trade, results );
 
       const calendar_main = document.querySelector("#calendar_main");
       const leedz_list_main = document.querySelector("#leedz_list_main");
@@ -328,7 +328,7 @@ window.showAllLeedz = showAllLeedz;
  * @param { String } the_trade name of trade
  * @param { Object[] } the_leedz list of leedz returned from DB
  */
-function showLeedzList( the_trade, the_leedz ) {
+function showLeedzList( currentUser, the_trade, the_leedz ) {
      
 
     // import DOM elements from html
@@ -344,8 +344,7 @@ function showLeedzList( the_trade, the_leedz ) {
     var trade_name = document.querySelector("#leedz_list_trade");
     var radioButton = trade_name.querySelector(".trade_radio");
     radioButton.style.backgroundColor = trade_color;
-    radioButton.style.width="25px";
-    radioButton.style.height="25px;";
+
 
     var theLabel = trade_name.querySelector(".trade_label");
     theLabel.textContent = the_trade;
@@ -368,11 +367,38 @@ function showLeedzList( the_trade, the_leedz ) {
       theTitle.textContent = each_leed.ti;
 
 
-      // FIXME FIXME FIXME
-      // add link to getDeetz action window
-      // and close this window
-    
-    
+      ////////////////////////////////////////////////////////////////////////////////////
+      // CLICK LEED --> 
+      //
+      // open ACTION WINDOW
+      //
+      theNode.addEventListener("click", async function(event) {
+
+        waitCursor();
+        showWaitingModal("Loading Leed Details . . .");
+
+        // turn OFF old leed
+        clearCurrentLeed();
+
+        // turn ON new leed
+        setCurrentLeed( each_leed );
+        
+        // GOTO ACTION WINDOW WITH DETAILS INFO
+        try {
+            await showLeedAction( each_leed, true );
+
+        } catch (error) {
+            printError("showLeedAction", error);
+            errorModal("Error showing Action Window: " + error.message, true);
+        
+        } finally {
+            modalClose(false);
+        }
+
+      });
+
+
+      // add it to the list ...
       theList.appendChild( theNode );
     } 
     

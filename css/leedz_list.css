@@ -30,7 +30,7 @@
 
     width:100%;
     padding:8px;
-    margin-left:20px;
+    margin-left:40px;
  }
 
 
@@ -69,7 +69,8 @@
 
   .each_leed:hover {
     background-color: var(--LEEDZ_LIGHTGREEN);
-    border-color: gray;
+    border-color: green;
+    cursor:pointer;
   }
   
 

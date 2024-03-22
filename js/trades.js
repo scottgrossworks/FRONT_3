@@ -394,11 +394,12 @@ function showLeedzList( currentUser, the_trade, the_leedz ) {
         clearCurrentLeed();
 
         // turn ON new leed
-        setCurrentLeed( each_leed );
+        let current_leed = setCurrentLeed( each_leed );
         
         // GOTO ACTION WINDOW WITH DETAILS INFO
+        // use properly-formatted current_leed
         try {
-            await showLeedAction( each_leed, true );
+            await showLeedAction( current_leed, true );
 
         } catch (error) {
             printError("showLeedAction", error);

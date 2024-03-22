@@ -67,8 +67,13 @@
 
 
 
-
+  .each_leed:hover {
+    background-color: darkgray;
+    border-color: gray;
+  }
   
+
+
   .each_leed {
   
     display:inline-flex;
@@ -82,7 +87,7 @@
 
     padding-top:10px;
     padding-left:2px;
-    
+
     margin: 6px 0;
 
     width:96%;

@@ -28,6 +28,7 @@
 
  .trade_label {
 
+    padding-bottom:4px;
     font-family: var(--FONT_1);
     font-size:1.4em;
     font-weight: bold;

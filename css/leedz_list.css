@@ -52,7 +52,7 @@
     position:absolute;
     height:85%;
     width:100%;
- 
+    
     left:0px;
 
     margin-bottom:200px;
@@ -84,11 +84,11 @@
     border-color: var(--LEEDZ_DARKGRAY);
     background-color: var(--LEEDZ_GRAY);
 
-    margin: 4px 0px;
+    margin: 4px auto;
     padding: 6px;
 
     width:95%;
-    max-height:5vh;
+    height:3vh;
 
     font-family: var(--FONT_1);
     font-size:1em;

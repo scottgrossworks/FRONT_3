@@ -8,10 +8,11 @@
 import { loadCacheLeedz, removeLeedzForTrade, showLeedzList } from "./calendar.js";
 import { getCurrentUser, saveCurrentUser } from "./user.js";
 import { db_getTrades, db_getLeedz } from "./dbTools.js";
-import { printError, errorModal, throwError } from "./error.js";
+import { printError, errorModal, modalClose } from "./error.js";
 import { hideActionWindow } from "./action.js";
-import { DTtoPretty } from "./dates.js";
+import { DTtoPretty, getTodayUTC } from "./dates.js";
 import { MAX_USER_SUBS } from "./user.js";
+import { showWaitingModal } from "./leed_edit.js";
 
 
 
@@ -272,10 +273,12 @@ function initTradesColumn( tradeListener ) {
  */
 async function showAllLeedz( currentUser, trade ) {
 
+    showWaitingModal("Loading the Leedz . . .");
+
     // API request --> DB 
     // load leedz for this trade and date range showing
     //
-    const START = "1";
+    const START = `${getTodayUTC().getTime()}`;
     const END = "2000000000000";
     let results = null;
     try {
@@ -354,6 +357,8 @@ function showLeedzList( the_trade, the_leedz ) {
     const calendar_main = document.getElementById("#calendar_main");
     const leedz_list_main = document.getElementById("#leedz_list_main");
     
+    modalClose(false);
+
     calendar_main.classList.add(".hide_column");
     leedz_list_main.classList.remove(".hide_column");
 }

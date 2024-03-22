@@ -1,0 +1,87 @@
+/* 
+ * leedz_list
+ */
+
+ 
+
+#leedz_list_main {
+
+    position: relative;
+
+    align-self: flex-start;
+
+    top:0 !important;
+    left:0 !important;
+    width:100%;
+    
+    text-align:left;
+    
+    margin: 0;
+    
+    background-color: white;
+ }
+ 
+ 
+
+
+ #leedz_list_panel {
+
+    background-color: white;
+    height:100vh;
+  }
+
+
+
+
+  #leedz_list {
+    
+    position:absolute;
+    height:85%;
+    width:100%;
+ 
+    left:0px;
+
+    margin-bottom:200px;
+    overflow-y: scroll;    
+
+  }
+
+  
+    @media screen and (max-width: 500px) {
+        #leedz_list {
+            margin-bottom:300px;
+        }
+    }
+
+
+  
+  .each_leed {
+  
+    display:inline-flex;
+    align-items: center;
+
+
+    border-radius: 10px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--LEEDZ_DARKGRAY);
+    background-color: var(--LEEDZ_GRAY);
+
+    margin: 4px 0px;
+    padding: 6px;
+
+    width:95%;
+  }
+
+
+
+
+  button.trade_radio {
+    margin: 10px 10px 0 2px;
+  }
+
+
+
+
+  
+

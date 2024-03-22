@@ -88,6 +88,7 @@
     padding: 6px;
 
     width:95%;
+    max-height:5vh;
 
     font-family: var(--FONT_1);
     font-size:1em;

@@ -334,8 +334,9 @@ function showLeedzList( the_trade, the_leedz ) {
     var theLabel = trade_name.querySelector(".trade_label");
     theLabel.textContent = the_trade;
 
-
-    for (each_leed in the_leedz) {
+    // iterate through the list
+    // create a new list element from each leed
+    for (let each_leed of the_leedz) {
 
       var theClone = theTemplate.content.cloneNode(true);
       var theNode = theClone.querySelector(".each_leed");

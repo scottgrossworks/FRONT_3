@@ -23,7 +23,19 @@
  
  
 
+ #leedz_list_trade {
+    float:left;
+ }
 
+
+ .trade_label {
+    font-family: var(--FONT_1);
+    font-size:1.2em;
+    font-weight: bold;
+ }
+
+
+ 
  #leedz_list_panel {
 
     background-color: white;
@@ -76,7 +88,7 @@
     width:95%;
 
     font-family: var(--FONT_1);
-    font-size:1.2em;
+    font-size:1em;
     font-weight: bold;
 
   }

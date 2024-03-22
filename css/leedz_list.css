@@ -22,6 +22,9 @@
     margin: 0;
     
     background-color: white;
+
+    overflow-y:scroll;
+    overflow-x:hidden;
 }
  
  
@@ -67,7 +70,7 @@
   
     width:96%;
     margin:0 auto;
-    overflow-y: auto;   
+ 
   }
 
 
@@ -91,13 +94,13 @@
     border-color: var(--LEEDZ_DARKGRAY);
     background-color: var(--LEEDZ_GRAY);
 
-    padding-top:10px;
+    padding-top:6px;
     padding-left:2px;
 
     margin: 6px 0;
 
     width:97%;
-    height:4vh;
+    height:5vh;
 
     font-family: var(--FONT_1);
     font-size:1em;
@@ -109,7 +112,7 @@
 
     .each_leed {
         font-size:0.9em;
-        height:5vh;
+        height:7vh;
     }
   
   }

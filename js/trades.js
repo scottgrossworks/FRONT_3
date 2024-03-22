@@ -360,8 +360,8 @@ function showLeedzList( the_trade, the_leedz ) {
     
     modalClose(false);
 
-    calendar_main.classList.add(".hide_column");
-    leedz_list_main.classList.remove(".hide_column");
+    calendar_main.style.display = "none";
+    leedz_list_main.style.display = "block";
 }
 
 

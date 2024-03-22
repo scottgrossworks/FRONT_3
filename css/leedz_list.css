@@ -60,9 +60,9 @@
 
     position: absolute;
   
-    width:95%;
+    width:96%;
     margin:0 auto;
-    overflow-y: scroll;   
+    overflow-y: auto;   
   }
 
 
@@ -90,7 +90,7 @@
 
     margin: 6px 0;
 
-    width:96%;
+    width:97%;
     height:4vh;
 
     font-family: var(--FONT_1);

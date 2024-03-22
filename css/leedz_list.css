@@ -54,7 +54,7 @@
   }
 
 
-  #leedz_list_close {
+  a#leedz_list_close.info_modal_close {
     width:40px;
     height:40px;
     font-size:20px;

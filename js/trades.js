@@ -300,11 +300,11 @@ async function showAllLeedz( currentUser, trade ) {
         return;
     }
 
-    // console.log(results);
+    // sort the results by start time and display them in the leedz list
     //
     if (results.length != 0) {
+      results.sort((a,b) => a.st - b.st);
       showLeedzList( currentUser, trade, results );
-
     }
     
     modalClose(false);

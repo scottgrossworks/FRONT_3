@@ -80,7 +80,7 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     if (gotoDB) {
 
         await db_getDeetz( CURRENT_USER.un, leed_preview.tn, leed_preview.id, view_options )
-            .then(data => {
+            .then(data => { 
 
             if ( ! data ) throw new Error("null response from GET");
             leed_details = data;
@@ -105,12 +105,8 @@ export async function showLeedAction( leed_preview , gotoDB ) {
     }
 
     let CURRENT_LEED = getCurrentLeed();    
-    console.log(CURRENT_LEED);
+    // console.log(CURRENT_LEED);
     
-
-
-
-
 
     //
     // START DATE

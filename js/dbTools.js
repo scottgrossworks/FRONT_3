@@ -67,7 +67,7 @@ export async function db_updateUser( code, user_obj ) {
     switch (code) {
 
         case DEL_USER:
-            console.log("dbTools.db_updateUser() DEL_USER"); 
+            console.log("DELETE USER"); 
             break
         
         case CHG_USER:
@@ -580,7 +580,7 @@ export async function db_getDeetz( user_name, trade_name, leed_id, leed_op ) {
 
 
     // console.log("GOT --- DETAILS --- JSON!!!");
-    console.log(json_obj);
+    // console.log(json_obj);
 
 
     return json_obj;  // SHOULD NOT BE NULL

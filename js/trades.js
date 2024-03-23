@@ -247,7 +247,8 @@ function initTradesColumn( tradeListener ) {
     //
     theLabel.addEventListener("click", function( event ) {
 
-      tradeListener( sub, checkBox, radioButton, this );
+      showAllLeedz(current_user, sub);
+      // tradeListener( sub, checkBox, radioButton, this );
       
     });
 
